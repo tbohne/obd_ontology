@@ -77,6 +77,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#represents -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#represents">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#resolves -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#resolves">
