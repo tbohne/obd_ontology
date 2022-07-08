@@ -63,6 +63,28 @@ def query_symptoms_by_dtc(dtc, g):
     print_res(g.query(s))
 
 
+def query_corrective_actions_by_dtc(dtc, g):
+    print("####################################")
+    print("QUERY: corrective actions for", dtc)
+    print("####################################")
+    dtc_entry = complete_ontology_entry(dtc)
+    represents_entry = complete_ontology_entry('represents')
+    deletes_entry = complete_ontology_entry('deletes')
+    resolves_entry = complete_ontology_entry('resolves')
+    condition_entry = complete_ontology_entry('FaultCondition')
+    action_entry = complete_ontology_entry('CorrectiveAction')
+    s = f"""
+       SELECT ?action WHERE {{
+           {dtc_entry} {represents_entry} ?condition .
+           ?action {deletes_entry} {dtc_entry} .
+           ?action {resolves_entry} ?condition .
+           ?condition a {condition_entry} .
+           ?action a {action_entry} .
+       }}
+       """
+    print_res(g.query(s))
+
+
 if __name__ == '__main__':
     graph = rdflib.Graph()
     DTC = "P0138"
@@ -70,3 +92,4 @@ if __name__ == '__main__':
     query_fault_causes_by_dtc(DTC, graph)
     query_fault_condition_by_dtc(DTC, graph)
     query_symptoms_by_dtc(DTC, graph)
+    query_corrective_actions_by_dtc(DTC, graph)
