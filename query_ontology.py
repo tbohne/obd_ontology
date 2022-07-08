@@ -75,11 +75,11 @@ def query_corrective_actions_by_dtc(dtc, g):
     action_entry = complete_ontology_entry('CorrectiveAction')
     s = f"""
         SELECT ?action WHERE {{
-           {dtc_entry} {represents_entry} ?condition .
-           ?action {deletes_entry} {dtc_entry} .
-           ?action {resolves_entry} ?condition .
-           ?condition a {condition_entry} .
-           ?action a {action_entry} .
+            {dtc_entry} {represents_entry} ?condition .
+            ?action {deletes_entry} {dtc_entry} .
+            ?action {resolves_entry} ?condition .
+            ?condition a {condition_entry} .
+            ?action a {action_entry} .
         }}
         """
     print_res(g.query(s))
@@ -95,9 +95,27 @@ def query_fault_description_by_dtc(dtc, g):
     dtc_class = complete_ontology_entry('DTC')
     s = f"""
         SELECT ?description WHERE {{
-           {dtc_entry} {has_description_entry} ?description .
-           ?description a {fault_description} .
-           {dtc_entry} a {dtc_class}
+            {dtc_entry} {has_description_entry} ?description .
+            ?description a {fault_description} .
+            {dtc_entry} a {dtc_class}
+        }}
+        """
+    print_res(g.query(s))
+
+
+def query_fault_cat_by_dtc(dtc, g):
+    print("####################################")
+    print("QUERY: fault category for", dtc)
+    print("####################################")
+    dtc_entry = complete_ontology_entry(dtc)
+    has_cat_entry = complete_ontology_entry('hasCategory')
+    fault_cat = complete_ontology_entry('FaultCategory')
+    dtc_class = complete_ontology_entry('DTC')
+    s = f"""
+        SELECT ?cat WHERE {{
+            {dtc_entry} {has_cat_entry} ?cat .
+            ?cat a {fault_cat} .
+            {dtc_entry} a {dtc_class}
         }}
         """
     print_res(g.query(s))
@@ -112,3 +130,4 @@ if __name__ == '__main__':
     query_symptoms_by_dtc(DTC, graph)
     query_corrective_actions_by_dtc(DTC, graph)
     query_fault_description_by_dtc(DTC, graph)
+    query_fault_cat_by_dtc(DTC, graph)
