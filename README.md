@@ -1,6 +1,6 @@
 # OBDOntology
 
-Ontology for capturing knowledge about on-board diagnosis (DTCs).
+Ontology for capturing knowledge about [on-board diagnostics](https://en.wikipedia.org/wiki/On-board_diagnostics) (OBD), particularly [diagnostic trouble codes](https://en.wikipedia.org/wiki/OBD-II_PIDs) (DTCs).
 
 ![](img/obd_ontology.svg)
 
