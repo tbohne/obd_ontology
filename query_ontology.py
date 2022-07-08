@@ -139,10 +139,25 @@ def query_measuring_pos_by_dtc(dtc, g):
     print_res(g.query(s))
 
 
+def query_all_dtc_instances(g):
+    print("####################################")
+    print("QUERY: all DTC instances")
+    print("####################################")
+    instance_entry = complete_ontology_entry('DTC')
+    s = f"""
+        SELECT ?instance WHERE {{
+            ?instance a {instance_entry} .
+        }}
+        """
+    print_res(g.query(s))
+
+
 if __name__ == '__main__':
     graph = rdflib.Graph()
-    DTC = "P0138"
     graph = graph.parse(ONTOLOGY_FILE, format='xml')
+    query_all_dtc_instances(graph)
+
+    DTC = "P0138"
     query_fault_causes_by_dtc(DTC, graph)
     query_fault_condition_by_dtc(DTC, graph)
     query_symptoms_by_dtc(DTC, graph)
