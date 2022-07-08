@@ -151,6 +151,177 @@
     <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Antriebsstrang -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Antriebsstrang">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCategory"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Kühlmitteltemperatursensor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Kühlmitteltemperatursensor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Sauerstoffsensor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Sauerstoffsensor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Erhöhter_Spritverbrauch -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Erhöhter_Spritverbrauch">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Leerlauf_unruhig -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Leerlauf_unruhig">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Motorkontrollleuchte -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Motorkontrollleuchte">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Sauerstoffsensor_ersetzen -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Sauerstoffsensor_ersetzen">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#X -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#X">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Y -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Y">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Z -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Z">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Zu_hoher_Kraftstoffdruck -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Zu_hoher_Kraftstoffdruck">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Überprüfen_Sie_daher_zuerst_die_Verkabelung_des_Sauerstoffsensors_und_reparieren_oder_ersetzen_Sie_bei_Bedarf_beschädigte_Teile. -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Überprüfen_Sie_daher_zuerst_die_Verkabelung_des_Sauerstoffsensors_und_reparieren_oder_ersetzen_Sie_bei_Bedarf_beschädigte_Teile.">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein. -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein.">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultDescription"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kontrollieren_Sie_dann,_ob_der_Kühlmitteltemperatursensor_die_richtige_Temperatur_misst._Informationen_dazu_finden_Sie_in_Ihrem_Fahrzeughandbuch._Ersetzen_Sie_den_Sensor_gegebenenfalls._Messen_Sie_außerdem,_ob_sich_der_Kraftstoffdruck_innerhalb_der_vorgegebenen_Werte_befindet. -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kontrollieren_Sie_dann,_ob_der_Kühlmitteltemperatursensor_die_richtige_Temperatur_misst._Informationen_dazu_finden_Sie_in_Ihrem_Fahrzeughandbuch._Ersetzen_Sie_den_Sensor_gegebenenfalls._Messen_Sie_außerdem,_ob_sich_der_Kraftstoffdruck_innerhalb_der_vorgegebenen_Werte_befindet.">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Luft-Kraftstoffgemisch_„fett“ -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Luft-Kraftstoffgemisch_„fett“">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Prüfen:_Kurzschlüsse_im_Stromkreis_des_Sauerstoffsensorsignals -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Prüfen:_Kurzschlüsse_im_Stromkreis_des_Sauerstoffsensorsignals">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
