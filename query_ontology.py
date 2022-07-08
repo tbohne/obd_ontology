@@ -1,7 +1,7 @@
 import rdflib
 
 ONTOLOGY_FILE = "obd_ontology.owl"
-ONTOLOGY_PREFIX = "<http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#>"
+ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
 
 
 def complete_ontology_entry(entry):
