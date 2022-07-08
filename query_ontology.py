@@ -121,6 +121,24 @@ def query_fault_cat_by_dtc(dtc, g):
     print_res(g.query(s))
 
 
+def query_measuring_pos_by_dtc(dtc, g):
+    print("####################################")
+    print("QUERY: measuring pos for", dtc)
+    print("####################################")
+    dtc_entry = complete_ontology_entry(dtc)
+    implies_entry = complete_ontology_entry('implies')
+    measuring_pos = complete_ontology_entry('MeasuringPos')
+    dtc_class = complete_ontology_entry('DTC')
+    s = f"""
+        SELECT ?measuring_pos WHERE {{
+            {dtc_entry} {implies_entry} ?measuring_pos .
+            ?measuring_pos a {measuring_pos} .
+            {dtc_entry} a {dtc_class}
+        }}
+        """
+    print_res(g.query(s))
+
+
 if __name__ == '__main__':
     graph = rdflib.Graph()
     DTC = "P0138"
@@ -131,3 +149,4 @@ if __name__ == '__main__':
     query_corrective_actions_by_dtc(DTC, graph)
     query_fault_description_by_dtc(DTC, graph)
     query_fault_cat_by_dtc(DTC, graph)
+    query_measuring_pos_by_dtc(DTC, graph)
