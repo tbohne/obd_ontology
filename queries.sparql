@@ -5,7 +5,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 PREFIX eg: <http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#>
 
-// QUERY FAULT CAUSES BY DTC
+# QUERY FAULT CAUSES BY DTC
 
 SELECT ?cause ?condition WHERE {
     eg:P0138 eg:represents ?condition .
@@ -13,13 +13,13 @@ SELECT ?cause ?condition WHERE {
     ?condition eg:hasCause ?cause .
 }
 
-// QUERY FAULT CONDITION BY DTC
+# QUERY FAULT CONDITION BY DTC
 
 SELECT ?condition WHERE {
     eg:P0138 eg:represents ?condition .
 }
 
-// QUERY SYMPTOMS BY DTC
+# QUERY SYMPTOMS BY DTC
 
 SELECT ?symptom WHERE {
     eg:P0138 eg:represents ?condition .
@@ -27,7 +27,7 @@ SELECT ?symptom WHERE {
     ?condition eg:manifestedBy ?symptom .
 }
 
-// QUERY CORRECTIVE ACTIONS BY DTC
+# QUERY CORRECTIVE ACTIONS BY DTC
 
 SELECT ?action WHERE {
     eg:P0138 eg:represents ?condition .
@@ -37,7 +37,7 @@ SELECT ?action WHERE {
     ?action a eg:CorrectiveAction .
 }
 
-// QUERY FAULT DESCRIPTION BY DTC
+# QUERY FAULT DESCRIPTION BY DTC
 
 SELECT ?description WHERE {
     eg:P0138 eg:hasDescription ?description .
@@ -45,7 +45,7 @@ SELECT ?description WHERE {
     eg:P0138 a eg:DTC .
 }
 
-// QUERY FAULT CATEGORY BY DTC
+# QUERY FAULT CATEGORY BY DTC
 
 SELECT ?cat WHERE {
     eg:P0138 eg:hasCategory ?cat .
@@ -53,7 +53,7 @@ SELECT ?cat WHERE {
     eg:P0138 a eg:DTC .
 }
 
-// QUERY SUGG. MEASURING POS
+# QUERY SUGG. MEASURING POS
 
 SELECT ?measuring_pos WHERE {
     eg:P0138 eg:implies ?measuring_pos .
