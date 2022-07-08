@@ -5,8 +5,9 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-    <owl:Ontology rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:diag_ontology="http://www.semanticweb.org/diag_ontology#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/diag_ontology">
         <rdfs:comment>OBD ontology</rdfs:comment>
     </owl:Ontology>
     
@@ -23,74 +24,74 @@
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#deletes -->
+    <!-- http://www.semanticweb.org/diag_ontology#deletes -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#deletes">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#deletes">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#hasCategory -->
+    <!-- http://www.semanticweb.org/diag_ontology#hasCategory -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#hasCategory">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCategory"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#hasCategory">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#hasCause -->
+    <!-- http://www.semanticweb.org/diag_ontology#hasCause -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#hasCause">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#hasCause">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#hasDescription -->
+    <!-- http://www.semanticweb.org/diag_ontology#hasDescription -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#hasDescription">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultDescription"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#hasDescription">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultDescription"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#implies -->
+    <!-- http://www.semanticweb.org/diag_ontology#implies -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#implies">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#implies">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#manifestedBy -->
+    <!-- http://www.semanticweb.org/diag_ontology#manifestedBy -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#manifestedBy">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#manifestedBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#represents -->
+    <!-- http://www.semanticweb.org/diag_ontology#represents -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#represents">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#represents">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#resolves -->
+    <!-- http://www.semanticweb.org/diag_ontology#resolves -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#resolves">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#resolves">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
     </owl:ObjectProperty>
     
 
@@ -106,51 +107,51 @@
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction -->
+    <!-- http://www.semanticweb.org/diag_ontology#CorrectiveAction -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC -->
+    <!-- http://www.semanticweb.org/diag_ontology#DTC -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#DTC"/>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCategory -->
+    <!-- http://www.semanticweb.org/diag_ontology#FaultCategory -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCategory"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause -->
+    <!-- http://www.semanticweb.org/diag_ontology#FaultCause -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#FaultCause"/>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition -->
+    <!-- http://www.semanticweb.org/diag_ontology#FaultCondition -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultDescription -->
+    <!-- http://www.semanticweb.org/diag_ontology#FaultDescription -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultDescription"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#FaultDescription"/>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos -->
+    <!-- http://www.semanticweb.org/diag_ontology#MeasuringPos -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom -->
+    <!-- http://www.semanticweb.org/diag_ontology#Symptom -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#Symptom"/>
     
 
 
@@ -165,185 +166,185 @@
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Antriebsstrang -->
+    <!-- http://www.semanticweb.org/diag_ontology#Antriebsstrang -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Antriebsstrang">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCategory"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Antriebsstrang">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Kühlmitteltemperatursensor -->
+    <!-- http://www.semanticweb.org/diag_ontology#Defekter_Kühlmitteltemperatursensor -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Kühlmitteltemperatursensor">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Defekter_Kühlmitteltemperatursensor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Sauerstoffsensor -->
+    <!-- http://www.semanticweb.org/diag_ontology#Defekter_Sauerstoffsensor -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Sauerstoffsensor">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Defekter_Sauerstoffsensor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Erhöhter_Spritverbrauch -->
+    <!-- http://www.semanticweb.org/diag_ontology#Erhöhter_Spritverbrauch -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Erhöhter_Spritverbrauch">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Erhöhter_Spritverbrauch">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren -->
+    <!-- http://www.semanticweb.org/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors -->
+    <!-- http://www.semanticweb.org/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Leerlauf_unruhig -->
+    <!-- http://www.semanticweb.org/diag_ontology#Leerlauf_unruhig -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Leerlauf_unruhig">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Leerlauf_unruhig">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Motorkontrollleuchte -->
+    <!-- http://www.semanticweb.org/diag_ontology#Motorkontrollleuchte -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Motorkontrollleuchte">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Motorkontrollleuchte">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138 -->
+    <!-- http://www.semanticweb.org/diag_ontology#P0138 -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#DTC"/>
-        <hasCategory rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Antriebsstrang"/>
-        <hasDescription rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein."/>
-        <implies rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#X"/>
-        <implies rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Y"/>
-        <implies rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Z"/>
-        <represents rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#P0138">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <diag_ontology:hasCategory rdf:resource="http://www.semanticweb.org/diag_ontology#Antriebsstrang"/>
+        <diag_ontology:hasDescription rdf:resource="http://www.semanticweb.org/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein."/>
+        <diag_ontology:implies rdf:resource="http://www.semanticweb.org/diag_ontology#X"/>
+        <diag_ontology:implies rdf:resource="http://www.semanticweb.org/diag_ontology#Y"/>
+        <diag_ontology:implies rdf:resource="http://www.semanticweb.org/diag_ontology#Z"/>
+        <diag_ontology:represents rdf:resource="http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Sauerstoffsensor_ersetzen -->
+    <!-- http://www.semanticweb.org/diag_ontology#Sauerstoffsensor_ersetzen -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Sauerstoffsensor_ersetzen">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
-        <deletes rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138"/>
-        <resolves rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Sauerstoffsensor_ersetzen">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
+        <diag_ontology:deletes rdf:resource="http://www.semanticweb.org/diag_ontology#P0138"/>
+        <diag_ontology:resolves rdf:resource="http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#X -->
+    <!-- http://www.semanticweb.org/diag_ontology#X -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#X">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#X">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Y -->
+    <!-- http://www.semanticweb.org/diag_ontology#Y -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Y">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Y">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Z -->
+    <!-- http://www.semanticweb.org/diag_ontology#Z -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Z">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#MeasuringPos"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Z">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Zu_hoher_Kraftstoffdruck -->
+    <!-- http://www.semanticweb.org/diag_ontology#Zu_hoher_Kraftstoffdruck -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Zu_hoher_Kraftstoffdruck">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCause"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Zu_hoher_Kraftstoffdruck">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Überprüfen_Sie_daher_zuerst_die_Verkabelung_des_Sauerstoffsensors_und_reparieren_oder_ersetzen_Sie_bei_Bedarf_beschädigte_Teile. -->
+    <!-- http://www.semanticweb.org/diag_ontology#Überprüfen_Sie_daher_zuerst_die_Verkabelung_des_Sauerstoffsensors_und_reparieren_oder_ersetzen_Sie_bei_Bedarf_beschädigte_Teile. -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Überprüfen_Sie_daher_zuerst_die_Verkabelung_des_Sauerstoffsensors_und_reparieren_oder_ersetzen_Sie_bei_Bedarf_beschädigte_Teile.">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
-        <deletes rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138"/>
-        <resolves rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Überprüfen_Sie_daher_zuerst_die_Verkabelung_des_Sauerstoffsensors_und_reparieren_oder_ersetzen_Sie_bei_Bedarf_beschädigte_Teile.">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
+        <diag_ontology:deletes rdf:resource="http://www.semanticweb.org/diag_ontology#P0138"/>
+        <diag_ontology:resolves rdf:resource="http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2 -->
+    <!-- http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2 -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultCondition"/>
-        <hasCause rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Kühlmitteltemperatursensor"/>
-        <hasCause rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Defekter_Sauerstoffsensor"/>
-        <hasCause rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren"/>
-        <hasCause rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors"/>
-        <hasCause rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Zu_hoher_Kraftstoffdruck"/>
-        <manifestedBy rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Erhöhter_Spritverbrauch"/>
-        <manifestedBy rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Leerlauf_unruhig"/>
-        <manifestedBy rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Motorkontrollleuchte"/>
-        <manifestedBy rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Luft-Kraftstoffgemisch_„fett“"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
+        <diag_ontology:hasCause rdf:resource="http://www.semanticweb.org/diag_ontology#Defekter_Kühlmitteltemperatursensor"/>
+        <diag_ontology:hasCause rdf:resource="http://www.semanticweb.org/diag_ontology#Defekter_Sauerstoffsensor"/>
+        <diag_ontology:hasCause rdf:resource="http://www.semanticweb.org/diag_ontology#Korrodierte_oder_beschädigte_Verkabelung_der_Sensoren"/>
+        <diag_ontology:hasCause rdf:resource="http://www.semanticweb.org/diag_ontology#Kurzschluss_im_Stromkreis_des_Signals_des_Sauerstoffsensors"/>
+        <diag_ontology:hasCause rdf:resource="http://www.semanticweb.org/diag_ontology#Zu_hoher_Kraftstoffdruck"/>
+        <diag_ontology:manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#Erhöhter_Spritverbrauch"/>
+        <diag_ontology:manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#Leerlauf_unruhig"/>
+        <diag_ontology:manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#Motorkontrollleuchte"/>
+        <diag_ontology:manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#Luft-Kraftstoffgemisch_„fett“"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein. -->
+    <!-- http://www.semanticweb.org/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein. -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein.">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#FaultDescription"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Der_Sauerstoffsensor_2_ist_dem_Katalysator_nachgeschaltet._Er_misst,_wieviel_Luft_und_Kraftstoff_aus_dem_Katalysator_kommt,_um_dadurch_sicherzustellen,_dass_dieser_ordnungsgemäß_funktioniert._Das_elektronische_Motorsteuergerät_erhält_von_diesem_Sensor_ein_Signal._Wenn_für_eine_gewisse,_festgelegte_Zeit_konstant_eine_zu_hohe_Spannung_von_über_0,9_V_ausgeht_–_anstelle_der_korrekten_0,45_V_–_von_dem_Sensor_ausgeht,_wird_der_Code_P0138_gesetzt._Das_kann_ein_Hinweis_auf_zu_wenig_Luft_im_Abgasstrom_und_zu_viel_Kraftstoff_bei_Sensor_2_in_Bank_1_sein.">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultDescription"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kontrollieren_Sie_dann,_ob_der_Kühlmitteltemperatursensor_die_richtige_Temperatur_misst._Informationen_dazu_finden_Sie_in_Ihrem_Fahrzeughandbuch._Ersetzen_Sie_den_Sensor_gegebenenfalls._Messen_Sie_außerdem,_ob_sich_der_Kraftstoffdruck_innerhalb_der_vorgegebenen_Werte_befindet. -->
+    <!-- http://www.semanticweb.org/diag_ontology#Kontrollieren_Sie_dann,_ob_der_Kühlmitteltemperatursensor_die_richtige_Temperatur_misst._Informationen_dazu_finden_Sie_in_Ihrem_Fahrzeughandbuch._Ersetzen_Sie_den_Sensor_gegebenenfalls._Messen_Sie_außerdem,_ob_sich_der_Kraftstoffdruck_innerhalb_der_vorgegebenen_Werte_befindet. -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Kontrollieren_Sie_dann,_ob_der_Kühlmitteltemperatursensor_die_richtige_Temperatur_misst._Informationen_dazu_finden_Sie_in_Ihrem_Fahrzeughandbuch._Ersetzen_Sie_den_Sensor_gegebenenfalls._Messen_Sie_außerdem,_ob_sich_der_Kraftstoffdruck_innerhalb_der_vorgegebenen_Werte_befindet.">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
-        <deletes rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138"/>
-        <resolves rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Kontrollieren_Sie_dann,_ob_der_Kühlmitteltemperatursensor_die_richtige_Temperatur_misst._Informationen_dazu_finden_Sie_in_Ihrem_Fahrzeughandbuch._Ersetzen_Sie_den_Sensor_gegebenenfalls._Messen_Sie_außerdem,_ob_sich_der_Kraftstoffdruck_innerhalb_der_vorgegebenen_Werte_befindet.">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
+        <diag_ontology:deletes rdf:resource="http://www.semanticweb.org/diag_ontology#P0138"/>
+        <diag_ontology:resolves rdf:resource="http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Luft-Kraftstoffgemisch_„fett“ -->
+    <!-- http://www.semanticweb.org/diag_ontology#Luft-Kraftstoffgemisch_„fett“ -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Luft-Kraftstoffgemisch_„fett“">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Symptom"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Luft-Kraftstoffgemisch_„fett“">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Prüfen:_Kurzschlüsse_im_Stromkreis_des_Sauerstoffsensorsignals -->
+    <!-- http://www.semanticweb.org/diag_ontology#Prüfen:_Kurzschlüsse_im_Stromkreis_des_Sauerstoffsensorsignals -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Prüfen:_Kurzschlüsse_im_Stromkreis_des_Sauerstoffsensorsignals">
-        <rdf:type rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#CorrectiveAction"/>
-        <deletes rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#P0138"/>
-        <resolves rdf:resource="http://www.semanticweb.org/tbohne-p15s/ontologies/2022/6/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Prüfen:_Kurzschlüsse_im_Stromkreis_des_Sauerstoffsensorsignals">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
+        <diag_ontology:deletes rdf:resource="http://www.semanticweb.org/diag_ontology#P0138"/>
+        <diag_ontology:resolves rdf:resource="http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
     </owl:NamedIndividual>
 </rdf:RDF>
 
