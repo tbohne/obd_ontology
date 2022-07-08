@@ -42,9 +42,29 @@ def query_fault_condition_by_dtc(dtc, g):
         print("--> ", str(row).split(ONTOLOGY_PREFIX.replace("<", "").replace(">", ""))[1].replace("'),)", ""))
 
 
+def query_symptoms_by_dtc(dtc, g):
+    print("####################################")
+    print("QUERY: symptoms for", dtc)
+    print("####################################")
+    dtc_entry = complete_ontology_entry(dtc)
+    represents_entry = complete_ontology_entry('represents')
+    symptom_entry = complete_ontology_entry('Symptom')
+    manifested_by_entry = complete_ontology_entry('manifestedBy')
+    s = f"""
+        SELECT ?symptom WHERE {{
+            {dtc_entry} {represents_entry} ?condition .
+            ?symptom a {symptom_entry} .
+            ?condition {manifested_by_entry} ?symptom .
+        }}
+        """
+    for row in g.query(s):
+        print("--> ", str(row).split(ONTOLOGY_PREFIX.replace("<", "").replace(">", ""))[1].replace("'),)", ""))
+
+
 if __name__ == '__main__':
     graph = rdflib.Graph()
     DTC = "P0138"
     graph = graph.parse(ONTOLOGY_FILE, format='xml')
     query_fault_causes_by_dtc(DTC, graph)
     query_fault_condition_by_dtc(DTC, graph)
+    query_symptoms_by_dtc(DTC, graph)
