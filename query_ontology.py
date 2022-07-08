@@ -8,6 +8,11 @@ def complete_ontology_entry(entry):
     return ONTOLOGY_PREFIX.replace('#', '#' + entry)
 
 
+def print_res(res):
+    for row in res:
+        print("--> ", str(row).split(ONTOLOGY_PREFIX.replace("<", "").replace(">", ""))[1].replace("'),)", ""))
+
+
 def query_fault_causes_by_dtc(dtc, g):
     print("####################################")
     print("QUERY: fault causes for", dtc)
@@ -23,8 +28,7 @@ def query_fault_causes_by_dtc(dtc, g):
             ?condition {has_cause_entry} ?cause .
         }}
         """
-    for row in g.query(s):
-        print("--> ", str(row).split(ONTOLOGY_PREFIX.replace("<", "").replace(">", ""))[1].replace("'),)", ""))
+    print_res(g.query(s))
 
 
 def query_fault_condition_by_dtc(dtc, g):
@@ -38,8 +42,7 @@ def query_fault_condition_by_dtc(dtc, g):
             {dtc_entry} {represents_entry} ?condition .
         }}
         """
-    for row in g.query(s):
-        print("--> ", str(row).split(ONTOLOGY_PREFIX.replace("<", "").replace(">", ""))[1].replace("'),)", ""))
+    print_res(g.query(s))
 
 
 def query_symptoms_by_dtc(dtc, g):
@@ -57,8 +60,7 @@ def query_symptoms_by_dtc(dtc, g):
             ?condition {manifested_by_entry} ?symptom .
         }}
         """
-    for row in g.query(s):
-        print("--> ", str(row).split(ONTOLOGY_PREFIX.replace("<", "").replace(">", ""))[1].replace("'),)", ""))
+    print_res(g.query(s))
 
 
 if __name__ == '__main__':
