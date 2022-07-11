@@ -3,6 +3,7 @@
 # @author Tim Bohne
 
 import rdflib
+import pathlib
 
 ONTOLOGY_FILE = "obd_ontology.owl"
 ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
@@ -13,7 +14,7 @@ class OntologyQueryTool:
     def __init__(self):
         self.ontology_prefix = ONTOLOGY_PREFIX
         self.graph = rdflib.Graph()
-        self.graph = self.graph.parse(ONTOLOGY_FILE, format='xml')
+        self.graph = self.graph.parse(str(pathlib.Path(__file__).parent.resolve()) + "/" + ONTOLOGY_FILE, format='xml')
 
     def complete_ontology_entry(self, entry):
         return self.ontology_prefix.replace('#', '#' + entry)
