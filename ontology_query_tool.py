@@ -19,9 +19,8 @@ class OntologyQueryTool:
     def complete_ontology_entry(self, entry):
         return self.ontology_prefix.replace('#', '#' + entry)
 
-    def print_res(self, res):
-        for row in res:
-            print("--> ", str(row).split(self.ontology_prefix.replace("<", "").replace(">", ""))[1].replace("'),)", ""))
+    def process_res(self, res):
+        return [str(row).split(self.ontology_prefix.replace("<", "").replace(">", ""))[1].replace("'),)", "") for row in res]
 
     def query_fault_causes_by_dtc(self, dtc):
         print("####################################")
@@ -38,7 +37,7 @@ class OntologyQueryTool:
                 ?condition {has_cause_entry} ?cause .
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
 
     def query_fault_condition_by_dtc(self, dtc):
         print("####################################")
@@ -51,7 +50,7 @@ class OntologyQueryTool:
                 {dtc_entry} {represents_entry} ?condition .
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
 
     def query_symptoms_by_dtc(self, dtc):
         print("####################################")
@@ -68,7 +67,7 @@ class OntologyQueryTool:
                 ?condition {manifested_by_entry} ?symptom .
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
 
     def query_corrective_actions_by_dtc(self, dtc):
         print("####################################")
@@ -89,7 +88,7 @@ class OntologyQueryTool:
                 ?action a {action_entry} .
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
 
     def query_fault_description_by_dtc(self, dtc):
         print("####################################")
@@ -106,7 +105,7 @@ class OntologyQueryTool:
                 {dtc_entry} a {dtc_class}
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
 
     def query_fault_cat_by_dtc(self, dtc):
         print("####################################")
@@ -123,7 +122,7 @@ class OntologyQueryTool:
                 {dtc_entry} a {dtc_class}
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
 
     def query_measuring_pos_by_dtc(self, dtc):
         print("####################################")
@@ -140,7 +139,7 @@ class OntologyQueryTool:
                 {dtc_entry} a {dtc_class}
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
 
     def query_all_dtc_instances(self):
         print("####################################")
@@ -152,17 +151,22 @@ class OntologyQueryTool:
                 ?instance a {instance_entry} .
             }}
             """
-        self.print_res(self.graph.query(s))
+        return self.process_res(self.graph.query(s))
+
+    @staticmethod
+    def print_res(res):
+        for row in res:
+            print("--> ", row)
 
 
 if __name__ == '__main__':
     oqt = OntologyQueryTool()
-    oqt.query_all_dtc_instances()
+    oqt.print_res(oqt.query_all_dtc_instances())
     dtc = "P0138"
-    oqt.query_fault_causes_by_dtc(dtc)
-    oqt.query_fault_condition_by_dtc(dtc)
-    oqt.query_symptoms_by_dtc(dtc)
-    oqt.query_corrective_actions_by_dtc(dtc)
-    oqt.query_fault_description_by_dtc(dtc)
-    oqt.query_fault_cat_by_dtc(dtc)
-    oqt.query_measuring_pos_by_dtc(dtc)
+    oqt.print_res(oqt.query_fault_causes_by_dtc(dtc))
+    oqt.print_res(oqt.query_fault_condition_by_dtc(dtc))
+    oqt.print_res(oqt.query_symptoms_by_dtc(dtc))
+    oqt.print_res(oqt.query_corrective_actions_by_dtc(dtc))
+    oqt.print_res(oqt.query_fault_description_by_dtc(dtc))
+    oqt.print_res(oqt.query_fault_cat_by_dtc(dtc))
+    oqt.print_res(oqt.query_measuring_pos_by_dtc(dtc))
