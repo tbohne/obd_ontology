@@ -62,3 +62,11 @@ SELECT ?measuring_pos WHERE {
     ?measuring_pos a eg:MeasuringPos .
     eg:P0138 a eg:DTC .
 }
+
+# QUERY ALL DTC THAT IMPLY MEASURING POS X
+
+SELECT ?dtc WHERE {
+    ?dtc a eg:DTC .
+    eg:X a eg:MeasuringPos .
+    ?dtc eg:implies eg:X .
+}
