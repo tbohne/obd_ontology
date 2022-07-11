@@ -4,13 +4,16 @@
 
 import rdflib
 
+ONTOLOGY_FILE = "obd_ontology.owl"
+ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
+
 
 class OntologyQueryTool:
 
-    def __init__(self, ontology_file, ontology_prefix):
-        self.ontology_prefix = ontology_prefix
+    def __init__(self):
+        self.ontology_prefix = ONTOLOGY_PREFIX
         self.graph = rdflib.Graph()
-        self.graph = self.graph.parse(ontology_file, format='xml')
+        self.graph = self.graph.parse(ONTOLOGY_FILE, format='xml')
 
     def complete_ontology_entry(self, entry):
         return self.ontology_prefix.replace('#', '#' + entry)
@@ -152,7 +155,7 @@ class OntologyQueryTool:
 
 
 if __name__ == '__main__':
-    oqt = OntologyQueryTool("obd_ontology.owl", "<http://www.semanticweb.org/diag_ontology#>")
+    oqt = OntologyQueryTool()
     oqt.query_all_dtc_instances()
     dtc = "P0138"
     oqt.query_fault_causes_by_dtc(dtc)
