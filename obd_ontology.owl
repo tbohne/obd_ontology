@@ -282,6 +282,14 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#Kühlmitteltemperatursensor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Kühlmitteltemperatursensor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#Leerlauf_unruhig -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Leerlauf_unruhig">
@@ -298,6 +306,14 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#P0123 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#P0123">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#P0138 -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#P0138">
@@ -307,7 +323,27 @@
         <implies rdf:resource="http://www.semanticweb.org/diag_ontology#X"/>
         <implies rdf:resource="http://www.semanticweb.org/diag_ontology#Y"/>
         <implies rdf:resource="http://www.semanticweb.org/diag_ontology#Z"/>
+        <occursWith rdf:resource="http://www.semanticweb.org/diag_ontology#P0123"/>
+        <occursWith rdf:resource="http://www.semanticweb.org/diag_ontology#P0234"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#Kühlmitteltemperatursensor"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#Sauerstoffsensor"/>
         <represents rdf:resource="http://www.semanticweb.org/diag_ontology#Beheizte_Lambdasonde_2,_Zylinderreihe_1_–_Spannung_zu_hoch_Lambdasonde_2"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#P0234 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#P0234">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#Sauerstoffsensor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#Sauerstoffsensor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
     </owl:NamedIndividual>
     
 
