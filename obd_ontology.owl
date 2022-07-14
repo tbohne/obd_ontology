@@ -87,6 +87,24 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#occursWith -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#occursWith">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#pointsTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#pointsTo">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#represents -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#represents">
@@ -184,6 +202,12 @@
     <!-- http://www.semanticweb.org/diag_ontology#MeasuringPos -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#SuspectComponent -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
     
 
 
