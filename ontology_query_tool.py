@@ -141,6 +141,23 @@ class OntologyQueryTool:
             """
         return self.process_res(self.graph.query(s))
 
+    def query_suspect_component_by_dtc(self, dtc):
+        print("####################################")
+        print("QUERY: suspect components for", dtc)
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry(dtc)
+        points_to_entry = self.complete_ontology_entry('pointsTo')
+        suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
+        dtc_class = self.complete_ontology_entry('DTC')
+        s = f"""
+            SELECT ?comp WHERE {{
+                {dtc_entry} {points_to_entry} ?comp .
+                ?comp a {suspect_comp_entry} .
+                {dtc_entry} a {dtc_class}
+            }}
+            """
+        return self.process_res(self.graph.query(s))
+
     def query_all_dtc_instances(self):
         print("####################################")
         print("QUERY: all DTC instances")
@@ -170,3 +187,4 @@ if __name__ == '__main__':
     oqt.print_res(oqt.query_fault_description_by_dtc(dtc))
     oqt.print_res(oqt.query_fault_cat_by_dtc(dtc))
     oqt.print_res(oqt.query_measuring_pos_by_dtc(dtc))
+    oqt.print_res(oqt.query_suspect_component_by_dtc(dtc))
