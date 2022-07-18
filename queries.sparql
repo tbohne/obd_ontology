@@ -86,3 +86,14 @@ SELECT ?dtc WHERE {
     ?dtc a eg:DTC .
     eg:P0138 a eg:DTC .
 }
+
+# QUERY VEHICLE (+ HSN / TSN) BY DTC
+
+SELECT ?vehicle ?hsn ?tsn WHERE {
+    ?fc eg:occurredIn ?vehicle .
+    ?fc a eg:FaultCondition .
+    ?vehicle a eg:Vehicle .
+    eg:P0138 eg:represents ?fc .
+    ?vehicle eg:HSN ?hsn .
+    ?vehicle eg:TSN ?tsn .
+}
