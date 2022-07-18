@@ -174,6 +174,29 @@ class OntologyQueryTool:
             """
         return self.process_res(self.graph.query(s))
 
+    def query_vehicle_by_dtc(self, dtc):
+        print("####################################")
+        print("QUERY: vehicle associated with DTC ", dtc)
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry(dtc)
+        occurred_in_entry = self.complete_ontology_entry('occurredIn')
+        fault_cond_class = self.complete_ontology_entry('FaultCondition')
+        vehicle_class = self.complete_ontology_entry('Vehicle')
+        represents_entry = self.complete_ontology_entry('represents')
+        hsn_entry = self.complete_ontology_entry('HSN')
+        tsn_entry = self.complete_ontology_entry('TSN')
+        s = f"""
+            SELECT ?vehicle ?hsn ?tsn WHERE {{
+                ?fc {occurred_in_entry} ?vehicle .
+                ?fc a {fault_cond_class} .
+                ?vehicle a {vehicle_class} .
+                {dtc_entry} {represents_entry} ?fc .
+                ?vehicle {hsn_entry} ?hsn .
+                ?vehicle {tsn_entry} ?tsn .
+            }}
+            """
+        return self.process_res(self.graph.query(s))
+
     def query_all_dtc_instances(self):
         print("####################################")
         print("QUERY: all DTC instances")
@@ -205,3 +228,4 @@ if __name__ == '__main__':
     oqt.print_res(oqt.query_measuring_pos_by_dtc(dtc))
     oqt.print_res(oqt.query_suspect_component_by_dtc(dtc))
     oqt.print_res(oqt.query_dtc_occurring_with_the_specified_dtc(dtc))
+    oqt.print_res(oqt.query_vehicle_by_dtc(dtc))
