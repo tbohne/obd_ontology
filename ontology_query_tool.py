@@ -158,6 +158,22 @@ class OntologyQueryTool:
             """
         return self.process_res(self.graph.query(s))
 
+    def query_dtc_occurring_with_the_specified_dtc(self, dtc):
+        print("####################################")
+        print("QUERY: DTCs occurring with", dtc)
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry(dtc)
+        occurs_with_entry = self.complete_ontology_entry('occursWith')
+        dtc_class = self.complete_ontology_entry('DTC')
+        s = f"""
+            SELECT ?dtc WHERE {{
+                {dtc_entry} {occurs_with_entry} ?dtc .
+                ?dtc a {dtc_class} .
+                {dtc_entry} a {dtc_class}
+            }}
+            """
+        return self.process_res(self.graph.query(s))
+
     def query_all_dtc_instances(self):
         print("####################################")
         print("QUERY: all DTC instances")
@@ -188,3 +204,4 @@ if __name__ == '__main__':
     oqt.print_res(oqt.query_fault_cat_by_dtc(dtc))
     oqt.print_res(oqt.query_measuring_pos_by_dtc(dtc))
     oqt.print_res(oqt.query_suspect_component_by_dtc(dtc))
+    oqt.print_res(oqt.query_dtc_occurring_with_the_specified_dtc(dtc))
