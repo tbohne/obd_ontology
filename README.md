@@ -4,6 +4,10 @@ Ontology for capturing knowledge about [on-board diagnostics](https://en.wikiped
 
 ![](img/obd_ontology_v5.svg)
 
+## Sample Instance
+
+![](img/sample_instance.png)
+
 ## Dependencies
 
 - [**rdflib**](https://rdflib.readthedocs.io/en/stable/): pure Python package for working with RDF
