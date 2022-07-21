@@ -5,7 +5,7 @@
 import rdflib
 import pathlib
 
-ONTOLOGY_FILE = "ontology_instance_849357984_453948539_2022-07-19.owl"
+ONTOLOGY_FILE = "ontology_instance_849357984_453948539_1234567890ABCDEFGHJKLMNPRSTUVWXYZ_2022-07-21.owl"
 ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
 
 
@@ -201,19 +201,21 @@ class OntologyQueryTool:
         represents_entry = self.complete_ontology_entry('represents')
         hsn_entry = self.complete_ontology_entry('HSN')
         tsn_entry = self.complete_ontology_entry('TSN')
+        vin_entry = self.complete_ontology_entry('VIN')
         model_entry = self.complete_ontology_entry('model')
         s = f"""
-            SELECT ?model ?hsn ?tsn WHERE {{
+            SELECT ?model ?hsn ?tsn ?vin WHERE {{
                 ?fc {occurred_in_entry} ?vehicle .
                 ?fc a {fault_cond_class} .
                 ?vehicle a {vehicle_class} .
                 {dtc_entry} {represents_entry} ?fc .
                 ?vehicle {hsn_entry} ?hsn .
                 ?vehicle {tsn_entry} ?tsn .
+                ?vehicle {vin_entry} ?vin .
                 ?vehicle {model_entry} ?model .
             }}
             """
-        return [(row.model, row.hsn, row.tsn) for row in self.graph.query(s)]
+        return [(row.model, row.hsn, row.tsn, row.vin) for row in self.graph.query(s)]
 
     def query_all_dtc_instances(self):
         print("####################################")
