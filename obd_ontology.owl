@@ -86,16 +86,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#occursWith -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#occursWith">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
-    </owl:ObjectProperty>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#pointsTo -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#pointsTo">
@@ -188,6 +178,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#code -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#code">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#component_name -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#component_name">
@@ -219,6 +218,15 @@
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#model">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#Vehicle"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#occurs_with_DTC -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#occurs_with_DTC">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
