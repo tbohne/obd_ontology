@@ -26,17 +26,21 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: fault causes for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         fault_cause_entry = self.complete_ontology_entry('FaultCause')
         has_cause_entry = self.complete_ontology_entry('hasCause')
         cause_desc_entry = self.complete_ontology_entry('cause_description')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?cause_desc WHERE {{
-                {dtc_entry} {represents_entry} ?condition .
+                ?dtc a {dtc_entry} .
+                ?dtc {represents_entry} ?condition .
+                ?dtc {code_entry} ?dtc_code .
                 ?cause a {fault_cause_entry} .
                 ?condition {has_cause_entry} ?cause .
                 ?cause {cause_desc_entry} ?cause_desc .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.cause_desc for row in self.graph.query(s)]
@@ -45,13 +49,17 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: fault condition for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         condition_desc_entry = self.complete_ontology_entry('condition_description')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?condition_desc WHERE {{
-                {dtc_entry} {represents_entry} ?condition .
+                ?dtc a {dtc_entry} .
+                ?dtc {represents_entry} ?condition .
+                ?dtc {code_entry} ?dtc_code .
                 ?condition {condition_desc_entry} ?condition_desc .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.condition_desc for row in self.graph.query(s)]
@@ -60,17 +68,21 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: symptoms for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         symptom_entry = self.complete_ontology_entry('Symptom')
         manifested_by_entry = self.complete_ontology_entry('manifestedBy')
         symptom_desc_entry = self.complete_ontology_entry('symptom_description')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?symptom_desc WHERE {{
-                {dtc_entry} {represents_entry} ?condition .
+                ?dtc a {dtc_entry} .
+                ?dtc {represents_entry} ?condition .
+                ?dtc {code_entry} ?dtc_code .
                 ?symptom a {symptom_entry} .
                 ?condition {manifested_by_entry} ?symptom .
                 ?symptom {symptom_desc_entry} ?symptom_desc .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.symptom_desc for row in self.graph.query(s)]
@@ -79,21 +91,25 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: corrective actions for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         deletes_entry = self.complete_ontology_entry('deletes')
         resolves_entry = self.complete_ontology_entry('resolves')
         condition_entry = self.complete_ontology_entry('FaultCondition')
         action_entry = self.complete_ontology_entry('CorrectiveAction')
         action_desc_entry = self.complete_ontology_entry('action_description')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?action_desc WHERE {{
-                {dtc_entry} {represents_entry} ?condition .
-                ?action {deletes_entry} {dtc_entry} .
+                ?dtc a {dtc_entry} .
+                ?dtc {represents_entry} ?condition .
+                ?dtc {code_entry} ?dtc_code .
+                ?action {deletes_entry} ?dtc .
                 ?action {resolves_entry} ?condition .
                 ?condition a {condition_entry} .
                 ?action a {action_entry} .
                 ?action {action_desc_entry} ?action_desc .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.action_desc for row in self.graph.query(s)]
@@ -102,17 +118,19 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: fault description for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         has_description_entry = self.complete_ontology_entry('hasDescription')
         fault_description = self.complete_ontology_entry('FaultDescription')
-        dtc_class = self.complete_ontology_entry('DTC')
         fault_desc_entry = self.complete_ontology_entry('fault_description')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?description_data WHERE {{
-                {dtc_entry} {has_description_entry} ?description .
+                ?dtc a {dtc_entry} .
+                ?dtc {has_description_entry} ?description .
+                ?dtc {code_entry} ?dtc_code .
                 ?description a {fault_description} .
-                {dtc_entry} a {dtc_class} .
                 ?description {fault_desc_entry} ?description_data .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.description_data for row in self.graph.query(s)]
@@ -121,17 +139,19 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: fault category for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         has_cat_entry = self.complete_ontology_entry('hasCategory')
         fault_cat = self.complete_ontology_entry('FaultCategory')
-        dtc_class = self.complete_ontology_entry('DTC')
         cat_name_entry = self.complete_ontology_entry('category_name')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?cat_name WHERE {{
-                {dtc_entry} {has_cat_entry} ?cat .
+                ?dtc a {dtc_entry} .
+                ?dtc {has_cat_entry} ?cat .
+                ?dtc {code_entry} ?dtc_code .
                 ?cat a {fault_cat} .
-                {dtc_entry} a {dtc_class} .
                 ?cat {cat_name_entry} ?cat_name .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.cat_name for row in self.graph.query(s)]
@@ -140,17 +160,19 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: measuring pos for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         implies_entry = self.complete_ontology_entry('implies')
         measuring_pos = self.complete_ontology_entry('MeasuringPos')
-        dtc_class = self.complete_ontology_entry('DTC')
         pos_desc_entry = self.complete_ontology_entry('position_description')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?measuring_pos_desc WHERE {{
-                {dtc_entry} {implies_entry} ?measuring_pos .
+                ?dtc a {dtc_entry} .
+                ?dtc  {implies_entry} ?measuring_pos .
+                ?dtc {code_entry} ?dtc_code .
                 ?measuring_pos a {measuring_pos} .
-                {dtc_entry} a {dtc_class} .
                 ?measuring_pos {pos_desc_entry} ?measuring_pos_desc .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.measuring_pos_desc for row in self.graph.query(s)]
@@ -159,17 +181,19 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: suspect components for", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         points_to_entry = self.complete_ontology_entry('pointsTo')
         suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
-        dtc_class = self.complete_ontology_entry('DTC')
         component_name_entry = self.complete_ontology_entry('component_name')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?comp_name WHERE {{
-                {dtc_entry} {points_to_entry} ?comp .
+                ?dtc a {dtc_entry} .
+                ?dtc {points_to_entry} ?comp .
+                ?dtc {code_entry} ?dtc_code .
                 ?comp a {suspect_comp_entry} .
-                {dtc_entry} a {dtc_class} .
                 ?comp {component_name_entry} ?comp_name .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [row.comp_name for row in self.graph.query(s)]
@@ -178,23 +202,24 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: DTCs occurring with", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
-        occurs_with_entry = self.complete_ontology_entry('occursWith')
-        dtc_class = self.complete_ontology_entry('DTC')
+        dtc_entry = self.complete_ontology_entry('DTC')
+        occurs_with_dtc_entry = self.complete_ontology_entry('occurs_with_DTC')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
-            SELECT ?dtc WHERE {{
-                {dtc_entry} {occurs_with_entry} ?dtc .
-                ?dtc a {dtc_class} .
-                {dtc_entry} a {dtc_class}
+            SELECT ?other WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {occurs_with_dtc_entry} ?other .
+                ?dtc {code_entry} ?dtc_code .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return self.process_res(self.graph.query(s))
+        return [row.other for row in self.graph.query(s)]
 
     def query_vehicle_by_dtc(self, dtc):
         print("####################################")
         print("QUERY: vehicle associated with DTC ", dtc)
         print("####################################")
-        dtc_entry = self.complete_ontology_entry(dtc)
+        dtc_entry = self.complete_ontology_entry('DTC')
         occurred_in_entry = self.complete_ontology_entry('occurredIn')
         fault_cond_class = self.complete_ontology_entry('FaultCondition')
         vehicle_class = self.complete_ontology_entry('Vehicle')
@@ -203,16 +228,20 @@ class OntologyQueryTool:
         tsn_entry = self.complete_ontology_entry('TSN')
         vin_entry = self.complete_ontology_entry('VIN')
         model_entry = self.complete_ontology_entry('model')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?model ?hsn ?tsn ?vin WHERE {{
                 ?fc {occurred_in_entry} ?vehicle .
                 ?fc a {fault_cond_class} .
                 ?vehicle a {vehicle_class} .
-                {dtc_entry} {represents_entry} ?fc .
+                ?dtc {represents_entry} ?fc .
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} ?dtc_code .
                 ?vehicle {hsn_entry} ?hsn .
                 ?vehicle {tsn_entry} ?tsn .
                 ?vehicle {vin_entry} ?vin .
                 ?vehicle {model_entry} ?model .
+                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         return [(str(row.model), str(row.hsn), str(row.tsn), str(row.vin)) for row in self.graph.query(s)]
@@ -221,13 +250,15 @@ class OntologyQueryTool:
         print("####################################")
         print("QUERY: all DTC instances")
         print("####################################")
-        instance_entry = self.complete_ontology_entry('DTC')
+        dtc_entry = self.complete_ontology_entry('DTC')
+        code_entry = self.complete_ontology_entry('code')
         s = f"""
-            SELECT ?instance WHERE {{
-                ?instance a {instance_entry} .
+            SELECT ?dtc WHERE {{
+                ?instance a {dtc_entry} .
+                ?instance {code_entry} ?dtc .
             }}
             """
-        return self.process_res(self.graph.query(s))
+        return [row.dtc for row in self.graph.query(s)]
 
     @staticmethod
     def print_res(res):
