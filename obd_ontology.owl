@@ -152,6 +152,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#VIN -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#VIN">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#Vehicle"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#action_description -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#action_description">
