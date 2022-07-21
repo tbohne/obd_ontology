@@ -215,7 +215,7 @@ class OntologyQueryTool:
                 ?vehicle {model_entry} ?model .
             }}
             """
-        return [(row.model, row.hsn, row.tsn, row.vin) for row in self.graph.query(s)]
+        return [(str(row.model), str(row.hsn), str(row.tsn), str(row.vin)) for row in self.graph.query(s)]
 
     def query_all_dtc_instances(self):
         print("####################################")
