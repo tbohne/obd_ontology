@@ -436,6 +436,86 @@
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a"/>
+        <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P25630</code>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P00AF0</occurs_with_DTC>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P226C0</occurs_with_DTC>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P25640</occurs_with_DTC>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P25650</occurs_with_DTC>
+        <rdfs:label xml:lang="en">code0</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b"/>
+        <condition_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedrucksteller-Positionssensor / Signal unplausibel</condition_description>
+        <rdfs:label xml:lang="en">cond0</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
+        <symptom_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Anzeige Bordcomputer: Fehler Start-Stopp-System</symptom_description>
+        <rdfs:label xml:lang="en">symp1</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
+        <symptom_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fz. erreicht maximal eine Geschwindigkeit von 80 km/h</symptom_description>
+        <rdfs:label xml:lang="en">symp0</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
+        <symptom_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glühkontrollleuchte leuchtet</symptom_description>
+        <rdfs:label xml:lang="en">symp2</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
+        <symptom_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glühkontrollleuchte blinkt</symptom_description>
+        <rdfs:label xml:lang="en">symp3</rdfs:label>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
