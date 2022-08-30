@@ -124,6 +124,16 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:label xml:lang="en">use_oscilloscope</rdfs:label>
+    </owl:DatatypeProperty>
+
+
+
     <!-- http://www.semanticweb.org/diag_ontology#TSN -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#TSN">
