@@ -492,6 +492,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
         <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Motor-Steuergerät</component_name>
         <rdfs:label xml:lang="en">sus2</rdfs:label>
@@ -503,6 +504,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
         <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedruck-Magnetventil</component_name>
         <rdfs:label xml:lang="en">sus3</rdfs:label>
@@ -534,6 +536,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
         <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedrucksteller-Positionssensor</component_name>
         <rdfs:label xml:lang="en">sus0</rdfs:label>
@@ -555,6 +558,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
         <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedruck-Regelventil</component_name>
         <rdfs:label xml:lang="en">sus4</rdfs:label>
@@ -566,6 +570,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
         <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VTG-Abgasturbolader</component_name>
         <rdfs:label xml:lang="en">sus1</rdfs:label>
