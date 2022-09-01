@@ -454,11 +454,11 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
         <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a"/>
-        <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P25630</code>
-        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P00AF0</occurs_with_DTC>
-        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P226C0</occurs_with_DTC>
-        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P25640</occurs_with_DTC>
-        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P25650</occurs_with_DTC>
+        <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2563</code>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P00AF</occurs_with_DTC>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P226C</occurs_with_DTC>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2564</occurs_with_DTC>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2565</occurs_with_DTC>
         <rdfs:label xml:lang="en">code0</rdfs:label>
     </owl:NamedIndividual>
     
