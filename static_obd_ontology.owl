@@ -494,6 +494,20 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865"/>
+        <manifestedBy rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b"/>
+        <condition_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Abgasturbolader-Steuereinheit 1 / Mechanischer Fehler</condition_description>
+        <rdfs:label xml:lang="en">cond1</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee">
@@ -544,6 +558,32 @@
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
         <category_name>{powertrain (engine, transmission, and associated accessories), ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}</category_name>
         <rdfs:label xml:lang="en">cat0</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
+        <category_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">{powertrain (engine, transmission, and associated accessories), standardized (SAE) code, aka generic code, fuel and air metering and auxiliary emission controls, turbocharger/supercharger boost control &apos;a&apos; module performance}</category_name>
+        <rdfs:label xml:lang="en">cat1</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <hasCategory rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e"/>
+        <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b"/>
+        <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P00AF</code>
+        <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2563</occurs_with_DTC>
+        <rdfs:label xml:lang="en">code1</rdfs:label>
     </owl:NamedIndividual>
     
 
