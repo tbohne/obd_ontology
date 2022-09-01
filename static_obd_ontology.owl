@@ -453,6 +453,12 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <hasCategory rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e"/>
         <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a"/>
         <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2563</code>
         <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P00AF</occurs_with_DTC>
@@ -528,6 +534,16 @@
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
         <symptom_description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glühkontrollleuchte leuchtet</symptom_description>
         <rdfs:label xml:lang="en">symp2</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
+        <category_name>{powertrain (engine, transmission, and associated accessories), ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}</category_name>
+        <rdfs:label xml:lang="en">cat0</rdfs:label>
     </owl:NamedIndividual>
     
 
