@@ -18,3 +18,9 @@ vehicle_diag_smach ](https://github.com/tbohne/vehicle_diag_smach))
 ## Dependencies
 
 - [**rdflib**](https://rdflib.readthedocs.io/en/stable/): pure Python package for working with RDF
+
+## Interpretation of non-obvious aspects modeled in the ontology
+
+- `use_oscilloscope`: `true` means that it is generally possible to diagnose faults on this component using an oscilloscope
+- `priority_id`: important because we suggest the components to be checked in a certain order, starting with the lowest ID, then ascending
+- it's also essential to note that `Symptom`s associated with a `FaultCondition` are always optional - they do not have to be present, it is only possible for them to be present
