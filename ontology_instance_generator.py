@@ -139,6 +139,6 @@ class OntologyInstanceGenerator:
 
 if __name__ == '__main__':
     instance_gen = OntologyInstanceGenerator(
-        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHJKLMNPRSTUVWXYZ", "P1111", "../OBDOntology", "obd_ontology.owl"
+        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHJKLMNPRSTUVWXYZ", "P1111", ".", "static_obd_ontology.owl"
     )
     instance_gen.create_ontology_instance()
