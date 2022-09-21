@@ -20,6 +20,7 @@ All three levels combined constitute the knowledge graph (`obd_knowledge_graph.o
 ## Dependencies
 
 - [**rdflib**](https://rdflib.readthedocs.io/en/stable/): pure Python package for working with RDF
+- [**owlready2**](https://pypi.org/project/Owlready2/): package for ontology-oriented programming in Python
 
 ## Interpretation of non-obvious aspects modeled in the ontology
 
