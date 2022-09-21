@@ -5,22 +5,24 @@
 import rdflib
 import pathlib
 
-ONTOLOGY_FILE = "ontology_instance_849357984_453948539_1234567890ABCDEFGHJKLMNPRSTUVWXYZ_2022-07-21.owl"
+KNOWLEDGE_GRAPH_FILE = "obd_knowledge_graph.owl"
 ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
 
 
-class OntologyQueryTool:
+class KnowledgeGraphQueryTool:
 
     def __init__(self):
         self.ontology_prefix = ONTOLOGY_PREFIX
         self.graph = rdflib.Graph()
-        self.graph = self.graph.parse(str(pathlib.Path(__file__).parent.resolve()) + "/" + ONTOLOGY_FILE, format='xml')
+        self.graph = self.graph.parse(str(pathlib.Path(__file__).parent.resolve()) + "/" + KNOWLEDGE_GRAPH_FILE,
+                                      format='xml')
 
     def complete_ontology_entry(self, entry):
         return self.ontology_prefix.replace('#', '#' + entry)
 
     def process_res(self, res):
-        return [str(row).split(self.ontology_prefix.replace("<", "").replace(">", ""))[1].replace("'),)", "") for row in res]
+        return [str(row).split(self.ontology_prefix.replace("<", "").replace(">", ""))[1].replace("'),)", "") for row in
+                res]
 
     def query_fault_causes_by_dtc(self, dtc):
         print("####################################")
@@ -267,16 +269,16 @@ class OntologyQueryTool:
 
 
 if __name__ == '__main__':
-    oqt = OntologyQueryTool()
-    oqt.print_res(oqt.query_all_dtc_instances())
+    qt = KnowledgeGraphQueryTool()
+    qt.print_res(qt.query_all_dtc_instances())
     dtc = "P1111"
-    oqt.print_res(oqt.query_fault_causes_by_dtc(dtc))
-    oqt.print_res(oqt.query_fault_condition_by_dtc(dtc))
-    oqt.print_res(oqt.query_symptoms_by_dtc(dtc))
-    oqt.print_res(oqt.query_corrective_actions_by_dtc(dtc))
-    oqt.print_res(oqt.query_fault_description_by_dtc(dtc))
-    oqt.print_res(oqt.query_fault_cat_by_dtc(dtc))
-    oqt.print_res(oqt.query_measuring_pos_by_dtc(dtc))
-    oqt.print_res(oqt.query_suspect_component_by_dtc(dtc))
-    oqt.print_res(oqt.query_dtc_occurring_with_the_specified_dtc(dtc))
-    oqt.print_res(oqt.query_vehicle_by_dtc(dtc))
+    qt.print_res(qt.query_fault_causes_by_dtc(dtc))
+    qt.print_res(qt.query_fault_condition_by_dtc(dtc))
+    qt.print_res(qt.query_symptoms_by_dtc(dtc))
+    qt.print_res(qt.query_corrective_actions_by_dtc(dtc))
+    qt.print_res(qt.query_fault_description_by_dtc(dtc))
+    qt.print_res(qt.query_fault_cat_by_dtc(dtc))
+    qt.print_res(qt.query_measuring_pos_by_dtc(dtc))
+    qt.print_res(qt.query_suspect_component_by_dtc(dtc))
+    qt.print_res(qt.query_dtc_occurring_with_the_specified_dtc(dtc))
+    qt.print_res(qt.query_vehicle_by_dtc(dtc))
