@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
-import rdflib
 import pathlib
+
+import rdflib
+
+from connection_controller import ConnectionController
 
 KNOWLEDGE_GRAPH_FILE = "obd_knowledge_graph.owl"
 ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
@@ -11,9 +14,16 @@ ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
 
 class KnowledgeGraphQueryTool:
 
-    def __init__(self):
+    def __init__(self, local_kb=False):
         self.ontology_prefix = ONTOLOGY_PREFIX
         self.graph = rdflib.Graph()
+        self.local_kb = local_kb
+        if local_kb:
+            self.init_local_knowledge_base()
+        else:
+            self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
+
+    def init_local_knowledge_base(self):
         self.graph = self.graph.parse(str(pathlib.Path(__file__).parent.resolve()) + "/" + KNOWLEDGE_GRAPH_FILE,
                                       format='xml')
 
@@ -45,7 +55,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.cause_desc for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.cause_desc for row in self.graph.query(s)]
+        return [row['cause_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_fault_condition_by_dtc(self, dtc):
         print("####################################")
@@ -64,7 +76,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.condition_desc for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.condition_desc for row in self.graph.query(s)]
+        return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_symptoms_by_dtc(self, dtc):
         print("####################################")
@@ -87,7 +101,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.symptom_desc for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.symptom_desc for row in self.graph.query(s)]
+        return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_corrective_actions_by_dtc(self, dtc):
         print("####################################")
@@ -114,7 +130,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.action_desc for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.action_desc for row in self.graph.query(s)]
+        return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_fault_description_by_dtc(self, dtc):
         print("####################################")
@@ -135,7 +153,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.description_data for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.description_data for row in self.graph.query(s)]
+        return [row['description_data']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_fault_cat_by_dtc(self, dtc):
         print("####################################")
@@ -156,7 +176,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.cat_name for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.cat_name for row in self.graph.query(s)]
+        return [row['cat_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_measuring_pos_by_dtc(self, dtc):
         print("####################################")
@@ -177,7 +199,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.measuring_pos_desc for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.measuring_pos_desc for row in self.graph.query(s)]
+        return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_suspect_component_by_dtc(self, dtc):
         print("####################################")
@@ -198,7 +222,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.comp_name for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.comp_name for row in self.graph.query(s)]
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_dtc_occurring_with_the_specified_dtc(self, dtc):
         print("####################################")
@@ -215,7 +241,9 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [row.other for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.other for row in self.graph.query(s)]
+        return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_vehicle_by_dtc(self, dtc):
         print("####################################")
@@ -246,7 +274,10 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        return [(str(row.model), str(row.hsn), str(row.tsn), str(row.vin)) for row in self.graph.query(s)]
+        if self.local_kb:
+            return [(str(row.model), str(row.hsn), str(row.tsn), str(row.vin)) for row in self.graph.query(s)]
+        return [(row['model']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value']) for row in
+                self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_all_dtc_instances(self):
         print("####################################")
@@ -260,7 +291,9 @@ class KnowledgeGraphQueryTool:
                 ?instance {code_entry} ?dtc .
             }}
             """
-        return [row.dtc for row in self.graph.query(s)]
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     @staticmethod
     def print_res(res):
@@ -269,9 +302,9 @@ class KnowledgeGraphQueryTool:
 
 
 if __name__ == '__main__':
-    qt = KnowledgeGraphQueryTool()
+    qt = KnowledgeGraphQueryTool(local_kb=True)
     qt.print_res(qt.query_all_dtc_instances())
-    dtc = "P1111"
+    dtc = "P2563"
     qt.print_res(qt.query_fault_causes_by_dtc(dtc))
     qt.print_res(qt.query_fault_condition_by_dtc(dtc))
     qt.print_res(qt.query_symptoms_by_dtc(dtc))
