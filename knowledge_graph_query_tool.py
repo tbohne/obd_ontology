@@ -134,29 +134,6 @@ class KnowledgeGraphQueryTool:
             return [row.action_desc for row in self.graph.query(s)]
         return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_fault_description_by_dtc(self, dtc):
-        print("####################################")
-        print("QUERY: fault description for", dtc)
-        print("####################################")
-        dtc_entry = self.complete_ontology_entry('DTC')
-        has_description_entry = self.complete_ontology_entry('hasDescription')
-        fault_description = self.complete_ontology_entry('FaultDescription')
-        fault_desc_entry = self.complete_ontology_entry('fault_description')
-        code_entry = self.complete_ontology_entry('code')
-        s = f"""
-            SELECT ?description_data WHERE {{
-                ?dtc a {dtc_entry} .
-                ?dtc {has_description_entry} ?description .
-                ?dtc {code_entry} ?dtc_code .
-                ?description a {fault_description} .
-                ?description {fault_desc_entry} ?description_data .
-                FILTER(STR(?dtc_code) = "{dtc}")
-            }}
-            """
-        if self.local_kb:
-            return [row.description_data for row in self.graph.query(s)]
-        return [row['description_data']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
-
     def query_fault_cat_by_dtc(self, dtc):
         print("####################################")
         print("QUERY: fault category for", dtc)
@@ -302,14 +279,13 @@ class KnowledgeGraphQueryTool:
 
 
 if __name__ == '__main__':
-    qt = KnowledgeGraphQueryTool(local_kb=True)
+    qt = KnowledgeGraphQueryTool(local_kb=False)
     qt.print_res(qt.query_all_dtc_instances())
     dtc = "P2563"
     qt.print_res(qt.query_fault_causes_by_dtc(dtc))
     qt.print_res(qt.query_fault_condition_by_dtc(dtc))
     qt.print_res(qt.query_symptoms_by_dtc(dtc))
     qt.print_res(qt.query_corrective_actions_by_dtc(dtc))
-    qt.print_res(qt.query_fault_description_by_dtc(dtc))
     qt.print_res(qt.query_fault_cat_by_dtc(dtc))
     qt.print_res(qt.query_measuring_pos_by_dtc(dtc))
     qt.print_res(qt.query_suspect_component_by_dtc(dtc))
