@@ -5,10 +5,10 @@
 import re
 
 import requests
-from rdflib import Graph, URIRef
-from rdflib.namespace import Namespace, RDF
+from rdflib import Namespace, RDF, Literal, Graph, URIRef
 
 from config import ONTOLOGY_PREFIX, FUSEKI_URL
+from fact import Fact
 
 
 class ConnectionController:
@@ -31,9 +31,12 @@ class ConnectionController:
     def extend_knowledge_graph(self, facts: list) -> None:
         print("extend knowledge graph..")
         graph = Graph()
-        for triple in facts:
-            print("fact:", triple)
-            graph.add((self.get_uri(triple[0]), self.get_uri(triple[1]), self.get_uri(triple[2])))
+        for fact in facts:
+            print("fact:", fact)
+            if fact.property_fact:
+                graph.add((self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), Literal(fact.triple[2])))
+            else:
+                graph.add((self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2])))
 
         res = requests.post(self.fuseki_url + "/OBD/data", data=graph.serialize(format="ttl"),
                             headers={'Content-Type': 'text/turtle'})
@@ -66,9 +69,12 @@ if __name__ == '__main__':
 
     onto_namespace = Namespace(ONTOLOGY_PREFIX)
 
-    dummy_object = ('car_1', RDF.type, onto_namespace["Vehicle"].toPython())
-    dummy_fact = ("OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a",
-                  onto_namespace.occurredIn, 'car_1')
+    dummy_object = Fact(('car_1', RDF.type, onto_namespace["Vehicle"].toPython()))
 
-    fact_list = [dummy_object, dummy_fact]
+    dummy_fact_0 = Fact(("car_1", onto_namespace.model, 'Mazda3'), property_fact=True)
+
+    dummy_fact = Fact(("OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a",
+                       onto_namespace.occurredIn, 'car_1'))
+
+    fact_list = [dummy_object, dummy_fact_0, dummy_fact]
     connection.extend_knowledge_graph(fact_list)
