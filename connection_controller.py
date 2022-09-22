@@ -69,12 +69,13 @@ if __name__ == '__main__':
 
     onto_namespace = Namespace(ONTOLOGY_PREFIX)
 
-    dummy_object = Fact(('car_1', RDF.type, onto_namespace["Vehicle"].toPython()))
+    fact_list = [
+        Fact(('car_1', RDF.type, onto_namespace["Vehicle"].toPython())),
+        Fact(("car_1", onto_namespace.model, 'Mazda3'), property_fact=True),
+        Fact(("car_1", onto_namespace.HSN, '847984'), property_fact=True),
+        Fact(("car_1", onto_namespace.TSN, '45539'), property_fact=True),
+        Fact(("car_1", onto_namespace.VIN, '1234567890ABCDEFGHJKLMNPRSTUVWXYZ'), property_fact=True),
+        Fact(("OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a", onto_namespace.occurredIn, 'car_1'))
+    ]
 
-    dummy_fact_0 = Fact(("car_1", onto_namespace.model, 'Mazda3'), property_fact=True)
-
-    dummy_fact = Fact(("OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a",
-                       onto_namespace.occurredIn, 'car_1'))
-
-    fact_list = [dummy_object, dummy_fact_0, dummy_fact]
     connection.extend_knowledge_graph(fact_list)
