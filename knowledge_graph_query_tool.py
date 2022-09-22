@@ -26,11 +26,7 @@ class KnowledgeGraphQueryTool:
                                       format='xml')
 
     def complete_ontology_entry(self, entry):
-        return self.ontology_prefix.replace('#', '#' + entry)
-
-    def process_res(self, res):
-        return [str(row).split(self.ontology_prefix.replace("<", "").replace(">", ""))[1].replace("'),)", "") for row in
-                res]
+        return "<" + self.ontology_prefix.replace('#', '#' + entry) + ">"
 
     def query_fault_causes_by_dtc(self, dtc):
         print("####################################")
