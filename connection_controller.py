@@ -2,13 +2,15 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
-from rdflib import Graph
 import requests
+from rdflib import Graph
+
+from config import ONTOLOGY_PREFIX, FUSEKI_URL
 
 
 class ConnectionController:
 
-    def __init__(self, namespace, fuseki_url="http://127.0.0.1:3030") -> None:
+    def __init__(self, namespace, fuseki_url=FUSEKI_URL) -> None:
         self.namespace = namespace
         self.fuseki_url = fuseki_url
         self.graph = Graph()
@@ -19,12 +21,11 @@ class ConnectionController:
         print(query)
         res = requests.post(self.fuseki_url + "/OBD/sparql", query,
                             headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'})
-
         return res.json()["results"]["bindings"]
 
 
 if __name__ == '__main__':
-    connection = ConnectionController("http://www.semanticweb.org/diag_ontology#")
+    connection = ConnectionController(ONTOLOGY_PREFIX)
 
     q = """
         SELECT ?s ?p ?o

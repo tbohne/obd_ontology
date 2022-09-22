@@ -6,10 +6,8 @@ import pathlib
 
 import rdflib
 
+from config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
 from connection_controller import ConnectionController
-
-KNOWLEDGE_GRAPH_FILE = "obd_knowledge_graph.owl"
-ONTOLOGY_PREFIX = "<http://www.semanticweb.org/diag_ontology#>"
 
 
 class KnowledgeGraphQueryTool:
