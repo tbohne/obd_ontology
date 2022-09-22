@@ -11,6 +11,8 @@ class OntologyInstanceGenerator:
     """
     Facilitates ontology instance generation based on on-board diagnosis information.
 
+    Enhances the knowledge graph with vehicle-specific instance data.
+
     TODO: not yet clear whether this is still useful
         - based on the current state, we won't use live DB access
         - thus, the ontology instances are created 'manually' by experts (at least initially)
