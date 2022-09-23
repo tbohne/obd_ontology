@@ -6,6 +6,9 @@ from datetime import date
 
 from owlready2 import *
 
+from config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
+from connection_controller import ConnectionController
+
 
 class OntologyInstanceGenerator:
     """
@@ -18,18 +21,23 @@ class OntologyInstanceGenerator:
         - thus, the ontology instances are created 'manually' by experts (at least initially)
     """
 
-    def __init__(self, vehicle, hsn, tsn, vin, dtc, ontology_path, ontology_file):
+    def __init__(self, vehicle, hsn, tsn, vin, dtc, ontology_path, local_kb=False):
         self.vehicle = vehicle
         self.hsn = hsn
         self.tsn = tsn
         self.vin = vin
         self.dtc = dtc
         self.dtc_obj = None
+        self.local_kb = local_kb
 
-        # load ontology
-        onto_path.append(ontology_path)
-        self.onto = get_ontology(ontology_file)
-        self.onto.load()
+        if self.local_kb:
+            # load ontology
+            onto_path.append(ontology_path)
+            self.onto = get_ontology(KNOWLEDGE_GRAPH_FILE)
+            self.onto.load()
+        else:
+            # establish connection to Apache Jena Fuseki server
+            self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
 
     def create_ontology_instance(self):
         """
@@ -141,6 +149,6 @@ class OntologyInstanceGenerator:
 
 if __name__ == '__main__':
     instance_gen = OntologyInstanceGenerator(
-        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHJKLMNPRSTUVWXYZ", "P1111", ".", "static_obd_ontology.owl"
+        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHJKLMNPRSTUVWXYZ", "P1111", "."
     )
     instance_gen.create_ontology_instance()
