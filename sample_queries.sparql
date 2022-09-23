@@ -97,3 +97,16 @@ SELECT ?vehicle ?hsn ?tsn WHERE {
     ?vehicle eg:HSN ?hsn .
     ?vehicle eg:TSN ?tsn .
 }
+
+# QUERY ALL CARS WITH A FAULT CONDITION
+
+SELECT ?model ?hsn ?tsn ?vin ?cond_desc ?car WHERE {
+  ?car a eg:Vehicle .
+  ?cond a eg:FaultCondition .
+  ?cond eg:condition_description ?cond_desc .
+  ?car eg:HSN ?hsn .
+  ?car eg:TSN ?tsn .
+  ?car eg:VIN ?vin .
+  ?car eg:model ?model .
+  ?cond eg:occurredIn ?car .
+}
