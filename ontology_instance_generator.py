@@ -5,29 +5,24 @@
 from datetime import date
 
 from owlready2 import *
+from rdflib import Namespace, RDF
 
 from config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
 from connection_controller import ConnectionController
+from fact import Fact
+from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 
 class OntologyInstanceGenerator:
     """
-    Facilitates ontology instance generation based on on-board diagnosis information.
-
-    Enhances the knowledge graph with vehicle-specific instance data.
-
-    TODO: not yet clear whether this is still useful
-        - based on the current state, we won't use live DB access
-        - thus, the ontology instances are created 'manually' by experts (at least initially)
+    Enhances the knowledge graph with vehicle-specific instance data. Connects the on-board diagnosis data recorded in
+    a particular car with corresponding background knowledge stored in the knowledge graph.
+    E.g.: A particular DTC is recorded in a car:
+        - vehicle is added to knowledge graph (with all its properties)
+        - vehicle is connected to knowledge about the particular DTC (symptoms etc.) via the `occurredIn` relation
     """
 
-    def __init__(self, vehicle, hsn, tsn, vin, dtc, ontology_path, local_kb=False):
-        self.vehicle = vehicle
-        self.hsn = hsn
-        self.tsn = tsn
-        self.vin = vin
-        self.dtc = dtc
-
+    def __init__(self, ontology_path, local_kb=False):
         self.local_kb = local_kb
 
         if self.local_kb:
@@ -38,13 +33,43 @@ class OntologyInstanceGenerator:
         else:
             # establish connection to Apache Jena Fuseki server
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
+            self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
-    def create_ontology_instance(self):
+    def extend_knowledge_graph(self, model, hsn, tsn, vin, dtc):
         """
-        Creates an OBD ontology instance based on the present vehicle information and performs a consistency check.
+        Extends the knowledge graph based on the present vehicle information and performs a consistency check.
+
+        :param model: model of the specified car
+        :param hsn: manufacturer key ("Herstellerschlüsselnummer")
+        :param tsn:  type number ("Typschlüsselnummer")
+        :param vin: vehicle identification number
+        :param dtc: specified diagnostic trouble code
         """
-        self.add_vehicle()
-        self.check_consistency_and_save_to_file()
+        if self.local_kb:
+            # TODO: to be implemented..
+            pass
+            # fault_condition = list(self.dtc_obj.represents)[0]
+            # vehicle = self.onto.Vehicle()
+            # vehicle.model.append(self.model)
+            # vehicle.HSN.append(self.hsn)
+            # vehicle.TSN.append(self.tsn)
+            # vehicle.VIN.append(self.vin)
+            # fault_condition.occurredIn.append(vehicle)
+            # self.check_consistency_and_save_to_file()
+        else:
+            onto_namespace = Namespace(ONTOLOGY_PREFIX)
+            # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
+            fault_condition_id = self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)[0].split("#")[1]
+
+            fact_list = [
+                Fact(('car_1', RDF.type, onto_namespace["Vehicle"].toPython())),
+                Fact(("car_1", onto_namespace.model, model), property_fact=True),
+                Fact(("car_1", onto_namespace.HSN, hsn), property_fact=True),
+                Fact(("car_1", onto_namespace.TSN, tsn), property_fact=True),
+                Fact(("car_1", onto_namespace.VIN, vin), property_fact=True),
+                Fact((fault_condition_id, onto_namespace.occurredIn, 'car_1'))
+            ]
+            self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def check_consistency_and_save_to_file(self):
         """
@@ -61,18 +86,7 @@ class OntologyInstanceGenerator:
         file = "ontology_instance_{}_{}_{}_{}.owl".format(self.hsn, self.tsn, self.vin, date.today())
         self.onto.save(file)
 
-    def add_vehicle(self):
-        fault_condition = list(self.dtc_obj.represents)[0]
-        vehicle = self.onto.Vehicle()
-        vehicle.model.append(self.vehicle)
-        vehicle.HSN.append(self.hsn)
-        vehicle.TSN.append(self.tsn)
-        vehicle.VIN.append(self.vin)
-        fault_condition.occurredIn.append(vehicle)
-
 
 if __name__ == '__main__':
-    instance_gen = OntologyInstanceGenerator(
-        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHJKLMNPRSTUVWXYZ", "P1111", "."
-    )
-    instance_gen.create_ontology_instance()
+    instance_gen = OntologyInstanceGenerator(".", local_kb=False)
+    instance_gen.extend_knowledge_graph("Mazda 3", "847984", "45539", "1234567890ABCDEFGHJKLMNPRSTUVWXYZ", "P2563")
