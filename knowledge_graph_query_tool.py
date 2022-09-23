@@ -266,6 +266,22 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_dtc_instance_by_code(self, code):
+        print("####################################")
+        print("QUERY: DTC instance by code")
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        code_entry = self.complete_ontology_entry('code')
+        s = f"""
+            SELECT ?dtc WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} "{code}" .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     @staticmethod
     def print_res(res):
         for row in res:
@@ -285,3 +301,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_suspect_component_by_dtc(dtc))
     qt.print_res(qt.query_dtc_occurring_with_the_specified_dtc(dtc))
     qt.print_res(qt.query_vehicle_by_dtc(dtc))
+    qt.print_res(qt.query_dtc_instance_by_code(dtc))
