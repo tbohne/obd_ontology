@@ -266,21 +266,23 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_dtc_instance_by_code(self, code):
+    def query_fault_condition_instance_by_code(self, code):
         print("####################################")
-        print("QUERY: DTC instance by code")
+        print("QUERY: fault condition instance by code")
         print("####################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         code_entry = self.complete_ontology_entry('code')
+        represents_entry = self.complete_ontology_entry('represents')
         s = f"""
-            SELECT ?dtc WHERE {{
+            SELECT ?fault_cond WHERE {{
                 ?dtc a {dtc_entry} .
                 ?dtc {code_entry} "{code}" .
+                ?dtc {represents_entry} ?fault_cond .
             }}
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     @staticmethod
     def print_res(res):
@@ -301,4 +303,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_suspect_component_by_dtc(dtc))
     qt.print_res(qt.query_dtc_occurring_with_the_specified_dtc(dtc))
     qt.print_res(qt.query_vehicle_by_dtc(dtc))
-    qt.print_res(qt.query_dtc_instance_by_code(dtc))
+    qt.print_res(qt.query_fault_condition_instance_by_code(dtc))
