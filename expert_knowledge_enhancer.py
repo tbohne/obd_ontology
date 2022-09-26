@@ -2,9 +2,15 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
+import uuid
+
+from dtc_parser.parser import DTCParser
+from rdflib import Namespace, RDF
+
 from config import ONTOLOGY_PREFIX
 from connection_controller import ConnectionController
 from expert_knowledge_parser import ExpertKnowledgeParser
+from fact import Fact
 
 
 class ExpertKnowledgeEnhancer:
@@ -13,89 +19,58 @@ class ExpertKnowledgeEnhancer:
         self.knowledge_parser = ExpertKnowledgeParser(knowledge_file)
         # establish connection to Apache Jena Fuseki server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
+        self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
 
     def extend_knowledge_graph(self):
         self.knowledge_parser.parse_knowledge()
+        print("parsed expert knowledge..")
         print(self.knowledge_parser)
 
-    def enhance_expert_knowledge(self):
-        self.add_dtc()
-        self.add_fault_condition()
-        self.add_fault_causes()
-        self.add_fault_symptoms()
-        self.add_suspect_components()
-        self.add_fault_category()
-        self.add_measuring_positions()
-        self.add_corrective_actions()
+        dtc_uuid = "dtc_" + uuid.uuid4().hex
+        fault_cat_uuid = "fault_cat_" + uuid.uuid4().hex
+        fault_cond_uuid = "fault_cond_" + uuid.uuid4().hex
+        dtc_parser = DTCParser()
+        category_name = dtc_parser.parse_code_machine_readable(self.knowledge_parser.dtc)
 
-    def add_dtc(self):
-        self.dtc_obj = self.onto.DTC()
-        self.dtc_obj.code.append(self.dtc)
-        # TODO: retrieve from DB
-        dtc_occurring_with = ["PXXXX", "PYYYY"]
-        for other_dtc in dtc_occurring_with:
-            self.dtc_obj.occurs_with_DTC.append(other_dtc)
+        fact_list = [
+            Fact((dtc_uuid, RDF.type, self.onto_namespace["DTC"].toPython())),
+            Fact((fault_cat_uuid, RDF.type, self.onto_namespace["FaultCategory"].toPython())),
+            Fact((fault_cond_uuid, RDF.type, self.onto_namespace["FaultCondition"].toPython())),
+            Fact((dtc_uuid, self.onto_namespace.code, self.knowledge_parser.dtc), property_fact=True),
+            Fact((fault_cat_uuid, self.onto_namespace.category_name, category_name), property_fact=True),
+            Fact((fault_cond_uuid, self.onto_namespace.condition_description, self.knowledge_parser.fault_condition),
+                 property_fact=True),
+            Fact((dtc_uuid, self.onto_namespace.hasCategory, fault_cat_uuid)),
+            Fact((dtc_uuid, self.onto_namespace.represents, fault_cond_uuid))
+        ]
+        for code in self.knowledge_parser.occurs_with:
+            fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
 
-    def add_fault_condition(self):
-        # TODO: retrieve from DB
-        fault_condition = "Dummy fault condition.."
-        fc = self.onto.FaultCondition()
-        fc.condition_description.append(fault_condition)
-        self.dtc_obj.represents.append(fc)
+        # there can be more than one symptom instance per DTC
+        for symptom in self.knowledge_parser.symptoms:
+            symptom_uuid = "symptom_" + uuid.uuid4().hex
+            fact_list.append(Fact((symptom_uuid, RDF.type, self.onto_namespace["Symptom"].toPython())))
+            fact_list.append(Fact((symptom_uuid, self.onto_namespace.symptom_description, symptom), property_fact=True))
+            fact_list.append(Fact((fault_cond_uuid, self.onto_namespace.manifestedBy, symptom_uuid)))
 
-    def add_fault_causes(self):
-        # TODO: retrieve from DB
-        fault_causes = ["causeOne", "causeTwo", "causeThree"]
-        for fault in fault_causes:
-            cause = self.onto.FaultCause()
-            cause.cause_description.append(fault)
-            fault_condition = list(self.dtc_obj.represents)[0]
-            fault_condition.hasCause.append(cause)
+        # there can be more than one suspect component instance per DTC
+        for idx, comp in enumerate(self.knowledge_parser.suspect_components):
+            comp_name, use_oscilloscope = comp.split(" (")
+            comp_name = comp_name.strip()
+            use_oscilloscope = use_oscilloscope.replace(")", "").strip()
+            use_oscilloscope = True if "ja" in use_oscilloscope.lower() else False
 
-    def add_fault_symptoms(self):
-        # TODO: retrieve from DB
-        symptoms = ["sympOne", "sympTwo", "sympThree"]
-        for symptom in symptoms:
-            s = self.onto.Symptom()
-            s.symptom_description.append(symptom)
-            fault_condition = list(self.dtc_obj.represents)[0]
-            fault_condition.manifestedBy.append(s)
+            comp_uuid = "comp_" + uuid.uuid4().hex
+            fact_list.append(Fact((comp_uuid, RDF.type, self.onto_namespace["SuspectComponent"].toPython())))
+            fact_list.append(Fact((comp_uuid, self.onto_namespace.component_name, comp_name), property_fact=True))
+            fact_list.append(Fact((comp_uuid, self.onto_namespace.priority_id, idx), property_fact=True))
+            fact_list.append(
+                Fact((comp_uuid, self.onto_namespace.use_oscilloscope, use_oscilloscope), property_fact=True))
+            fact_list.append(Fact((dtc_uuid, self.onto_namespace.pointsTo, comp_uuid)))
 
-    def add_suspect_components(self):
-        # TODO: retrieve from DB
-        sus_components = ["susOne", "susTwo", "susThree"]
-        for sus in sus_components:
-            comp = self.onto.SuspectComponent()
-            comp.component_name.append(sus)
-            self.dtc_obj.pointsTo.append(comp)
-
-    def add_fault_category(self):
-        # TODO: retrieve from DB
-        fault_cat = "category_A"
-        cat = self.onto.FaultCategory()
-        cat.category_name.append(fault_cat)
-        self.dtc_obj.hasCategory.append(cat)
-
-    def add_measuring_positions(self):
-        # TODO: retrieve from DB
-        measuring_pos = ["pos_A", "pos_B", "pos_C"]
-        for pos in measuring_pos:
-            measuring_position = self.onto.MeasuringPos()
-            measuring_position.position_description.append(pos)
-            self.dtc_obj.implies.append(measuring_position)
-
-    def add_corrective_actions(self):
-        # TODO: retrieve from DB
-        corrective_actions = ["perform_test_A", "check_sensor_B", "apply_C"]
-        fault_condition = list(self.dtc_obj.represents)[0]
-        for act in corrective_actions:
-            action = self.onto.CorrectiveAction()
-            action.action_description.append(act)
-            action.deletes.append(self.dtc_obj)
-            action.resolves.append(fault_condition)
-            self.onto.CorrectiveAction(action)
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
 if __name__ == '__main__':
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/expert_knowledge_template.txt")
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/dummy.txt")
     expert_knowledge_enhancer.extend_knowledge_graph()
