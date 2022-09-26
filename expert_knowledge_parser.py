@@ -10,7 +10,7 @@ class ExpertKnowledgeParser:
     def __init__(self, knowledge_file):
         self.knowledge_file = knowledge_file
         self.dtc = ""
-        self.fault_description = ""
+        self.fault_condition = ""
         self.symptoms = []
         self.suspect_components = []
         self.occurs_with = []
@@ -37,7 +37,7 @@ class ExpertKnowledgeParser:
             if cat_cnt == 1:
                 self.dtc = line
             elif cat_cnt == 2:
-                self.fault_description = line
+                self.fault_condition = line
             elif cat_cnt == 3:
                 self.symptoms.append(line)
             elif cat_cnt == 4:
@@ -46,7 +46,7 @@ class ExpertKnowledgeParser:
                 self.occurs_with.append(line)
 
     def __str__(self):
-        return "DTC: " + self.dtc + "\nFault Description: " + self.fault_description + "\nSymptoms: " \
+        return "DTC: " + self.dtc + "\nFault Condition: " + self.fault_condition + "\nSymptoms: " \
                + str(self.symptoms) + "\nSuspect Components: " + str(self.suspect_components) + "\nOccurs With: " \
                + str(self.occurs_with)
 

@@ -7,7 +7,7 @@
 ### "DTC"
 - P2563
 
-### "FaultDescription" (kurze Fehlerbeschreibung)
+### "FaultCondition" (kurze Fehlerbeschreibung)
 - Ladedrucksteller-Positionssensor / Signal unplausibel
 
 ### "Symptom" (nicht notwendigerweise in jedem Fall präsent)
