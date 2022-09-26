@@ -1,0 +1,30 @@
+#############################################################################################
+#  Expert Knowledge Template - Beispiel für die Aufnahme von DTC-bezogenem Expertenwissen)  #
+#  Die Überschriften (eingeleitet durch "###") sollten unverändert bleiben.                 #
+#  Beispiel durch eigene Einträge ersetzen (jeder Eintrag beginnt mit "-")                  #
+#############################################################################################
+
+### "DTC"
+- P2563
+
+### "FaultDescription" (kurze Fehlerbeschreibung)
+- Ladedrucksteller-Positionssensor / Signal unplausibel
+
+### "Symptom" (nicht notwendigerweise in jedem Fall präsent)
+- Fz. erreicht maximal eine Geschwindigkeit von 80 km/h
+- Anzeige Bordcomputer: Fehler Start-Stopp-System
+- Glühkontrollleuchte leuchtet
+- Glühkontrollleuchte blinkt
+
+### "SuspectComponent" (zu prüfende Komponenten // Oszilloskop-Messung möglich: (ja bzw. nein) // in gegebener Reihenfolge empfehlen)
+- Ladedrucksteller-Positionssensor (ja)
+- VTG-Abgasturbolader (nein)
+- Motor-Steuergerät (ja)
+- Ladedruck-Magnetventil (ja)
+- Ladedruck-Regelventil (ja)
+
+### "occurs_with_DTC" (DTC tritt erfahrungsgemäß mit folgenden weiteren DTCs auf)
+- P2564
+- P2565
+- P226C
+- P00AF
