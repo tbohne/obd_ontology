@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
+import uuid
 from datetime import date
 
 from owlready2 import *
@@ -60,14 +61,15 @@ class OntologyInstanceGenerator:
             onto_namespace = Namespace(ONTOLOGY_PREFIX)
             # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
             fault_condition_id = self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)[0].split("#")[1]
+            vehicle_uuid = "vehicle_" + str(uuid.uuid4())
 
             fact_list = [
-                Fact(('car_1', RDF.type, onto_namespace["Vehicle"].toPython())),
-                Fact(("car_1", onto_namespace.model, model), property_fact=True),
-                Fact(("car_1", onto_namespace.HSN, hsn), property_fact=True),
-                Fact(("car_1", onto_namespace.TSN, tsn), property_fact=True),
-                Fact(("car_1", onto_namespace.VIN, vin), property_fact=True),
-                Fact((fault_condition_id, onto_namespace.occurredIn, 'car_1'))
+                Fact((vehicle_uuid, RDF.type, onto_namespace["Vehicle"].toPython())),
+                Fact((vehicle_uuid, onto_namespace.model, model), property_fact=True),
+                Fact((vehicle_uuid, onto_namespace.HSN, hsn), property_fact=True),
+                Fact((vehicle_uuid, onto_namespace.TSN, tsn), property_fact=True),
+                Fact((vehicle_uuid, onto_namespace.VIN, vin), property_fact=True),
+                Fact((fault_condition_id, onto_namespace.occurredIn, vehicle_uuid))
             ]
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
