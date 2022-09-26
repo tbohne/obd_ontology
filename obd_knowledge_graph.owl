@@ -124,26 +124,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-        <rdfs:label xml:lang="en">priority_id</rdfs:label>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-        <rdfs:label xml:lang="en">use_oscilloscope</rdfs:label>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#TSN -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#TSN">
@@ -243,11 +223,29 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#priority_id -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#priority_id">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#symptom_description -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#symptom_description">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#Symptom"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#use_oscilloscope -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#use_oscilloscope">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     </owl:DatatypeProperty>
     
 
@@ -366,23 +364,23 @@
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#SuspectComponent">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9"/>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#component_name"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#priority_id"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5"/>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#use_oscilloscope"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#component_name"/>
-                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -512,9 +510,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
-        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
-        <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Motor-Steuergerät</component_name>
+        <priority_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</priority_id>
+        <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus2</rdfs:label>
     </owl:NamedIndividual>
     
@@ -524,9 +522,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
-        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
-        <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedruck-Magnetventil</component_name>
+        <priority_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</priority_id>
+        <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus3</rdfs:label>
     </owl:NamedIndividual>
     
@@ -592,9 +590,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
-        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
-        <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedrucksteller-Positionssensor</component_name>
+        <priority_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</priority_id>
+        <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus0</rdfs:label>
     </owl:NamedIndividual>
     
@@ -614,9 +612,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
-        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
-        <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedruck-Regelventil</component_name>
+        <priority_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4</priority_id>
+        <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus4</rdfs:label>
     </owl:NamedIndividual>
     
@@ -626,9 +624,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
-        <OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9 rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</OWLDataProperty_97f83f5d_78c7_40b6_9cac_ca62708a9db9>
-        <OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5 rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</OWLDataProperty_d6955023_9359_4d24_b707_bd3a2ba0c5a5>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VTG-Abgasturbolader</component_name>
+        <priority_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</priority_id>
+        <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</use_oscilloscope>
         <rdfs:label xml:lang="en">sus1</rdfs:label>
     </owl:NamedIndividual>
 </rdf:RDF>
