@@ -7,7 +7,7 @@ class ExpertKnowledgeParser:
     Parses OBD-related expert knowledge from template file (cf. `templates/expert_knowledge_template.txt`).
     """
 
-    def __init__(self, knowledge_file):
+    def __init__(self, knowledge_file: str) -> None:
         self.knowledge_file = knowledge_file
         self.dtc = ""
         self.fault_condition = ""
@@ -15,7 +15,7 @@ class ExpertKnowledgeParser:
         self.suspect_components = []
         self.occurs_with = []
 
-    def parse_knowledge(self):
+    def parse_knowledge(self) -> None:
         """
         Parses the OBD-related expert knowledge.
         """
@@ -45,7 +45,7 @@ class ExpertKnowledgeParser:
             elif cat_cnt == 5:
                 self.occurs_with.append(line)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "DTC: " + self.dtc + "\nFault Condition: " + self.fault_condition + "\nSymptoms: " \
                + str(self.symptoms) + "\nSuspect Components: " + str(self.suspect_components) + "\nOccurs With: " \
                + str(self.occurs_with)
