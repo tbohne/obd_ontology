@@ -42,7 +42,7 @@ $ ./fuseki-server
     - select knowledge graph file, e.g., `obd_knowledge_graph.owl`
     - `upload now`
 
-Now the knowledge graph is hosted on the Fuseki server and can be queried or extended via the SPARQL endpoints `/OBD/sparql` and `/OBD/data`, respectively.
+Now the knowledge graph is hosted on the Fuseki server and can be queried or extended via the SPARQL endpoint `/OBD/sparql` and `/OBD/data`, respectively.
 
 **Backup knowledge graph:**
 - `manage` -> `backup`
