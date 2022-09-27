@@ -110,3 +110,21 @@ SELECT ?model ?hsn ?tsn ?vin ?cond_desc ?car WHERE {
   ?car eg:model ?model .
   ?cond eg:occurredIn ?car .
 }
+
+# QUERY ALL VEHICLE-AGNOSTIC INFO
+
+SELECT ?code ?occ ?cat_desc ?cond_desc ?symp_desc ?comp_name ?prio ?osci WHERE {
+    ?dtc a eg:DTC .
+    ?dtc eg:code ?code .
+    ?dtc eg:occurs_with_DTC ?occ .
+    ?dtc eg:hasCategory ?cat .
+    ?cat eg:category_name ?cat_desc .
+    ?dtc eg:represents ?cond .
+    ?cond eg:condition_description ?cond_desc .
+    ?cond eg:manifestedBy ?symp .
+    ?symp eg:symptom_description ?symp_desc .
+    ?dtc eg:pointsTo ?sus_comp .
+    ?sus_comp eg:component_name ?comp_name .
+    ?sus_comp eg:priority_id ?prio .
+    ?sus_comp eg:use_oscilloscope ?osci .
+}
