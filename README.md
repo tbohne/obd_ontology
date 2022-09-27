@@ -53,12 +53,31 @@ The `.nq.gz` file should be extracted and the resulting `data` should be renamed
 
 **Extend knowledge graph:**
 
-- `ExpertKnowledgeEnhancer` can be used to extend the knowledge graph hosted by the Fuseki server with vehicle-agnostic OBD knowledge (codes, symptoms, etc.) provided in the form of `templates/expert_knowledge_template.txt`
-- `OntologyInstanceGenerator` enhances the knowledge graph hosted by the Fuseki server with vehicle-specific instance data, i.e., connects the on-board diagnosis data recorded in a particular car with corresponding background knowledge stored in the knowledge graph
+The `ExpertKnowledgeEnhancer` can be used to extend the knowledge graph hosted by the Fuseki server with vehicle-agnostic OBD knowledge (codes, symptoms, etc.) provided in the form of `templates/expert_knowledge_template.txt`, e.g.:
+```
+expert_knowledge_enhancer = ExpertKnowledgeEnhancer("knowledge.txt")
+expert_knowledge_enhancer.extend_knowledge_graph()
+```
+The `OntologyInstanceGenerator` enhances the knowledge graph hosted by the Fuseki server with vehicle-specific instance data, i.e., connects the on-board diagnosis data recorded in a particular car with corresponding background knowledge stored in the knowledge graph, e.g.:
+```
+instance_gen = OntologyInstanceGenerator(".", local_kb=False)
+instance_gen.extend_knowledge_graph("Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", "P2563")
+```
 
 **Query knowledge graph:**
 
-The `KnowledgeGraphQueryTool` provides a library of predefined queries for accessing useful information stored in the knowledge graph.
+The `KnowledgeGraphQueryTool` provides a library of predefined queries for accessing useful information stored in the knowledge graph, e.g.:
+```
+qt = KnowledgeGraphQueryTool(local_kb=False)
+qt.print_res(qt.query_all_dtc_instances())
+dtc = "P2563"
+qt.print_res(qt.query_fault_condition_by_dtc(dtc))
+qt.print_res(qt.query_symptoms_by_dtc(dtc))
+qt.print_res(qt.query_fault_cat_by_dtc(dtc))
+qt.print_res(qt.query_suspect_component_by_dtc(dtc))
+qt.print_res(qt.query_dtc_occurring_with_the_specified_dtc(dtc))
+qt.print_res(qt.query_vehicle_by_dtc(dtc))
+```
 
 ## Interpretation of non-obvious aspects modeled in the ontology
 
