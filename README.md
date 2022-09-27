@@ -21,7 +21,35 @@ All three levels combined constitute the knowledge graph (`knowledge_base/obd_kn
 
 - [**rdflib**](https://rdflib.readthedocs.io/en/stable/): pure Python package for working with RDF
 - [**owlready2**](https://pypi.org/project/Owlready2/): package for ontology-oriented programming in Python
+- [**requests**](https://pypi.org/project/requests/): HTTP lib for Python
+- [**dtc_parser**](https://github.com/tbohne/dtc_parser): parser for diagnostic trouble codes (DTCs) used by vehicle onboard diagnosis (OBD)
 - [**Apache Jena Fuseki**](https://jena.apache.org/documentation/fuseki2/): SPARQL server hosting / maintaining the knowledge graph
+
+## Usage
+
+**Run server from Apache Jena Fuseki root directory (runs at `localhost:3030`):**
+```
+$ ./fuseki-server
+```
+
+**Launch knowledge graph from `.owl` / `.ttl` file:**
+- navigate to `localhost:3030`
+- `manage` -> `new dataset`
+    - Dataset name: `OBD`
+    - Dataset type: `Persistent (TDB2) – dataset will persist across Fuseki restarts`
+- `create dataset`
+- `add data` -> `select files`
+    - select knowledge graph file, e.g., `obd_knowledge_graph.owl`
+    - `upload now`
+
+Now the knowledge graph is hosted on the Fuseki server and can be queried / extended via the SPARQL endpoint `/OBD/sparql`.
+
+**Backup knowledge graph:**
+- `manage` -> `backup`
+
+Creates a backup in `fuseki_root/run/backups/`.
+
+The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.ttl` so that it can be interpreted directly, e.g., when launching it on the server (see above).
 
 ## Interpretation of non-obvious aspects modeled in the ontology
 
