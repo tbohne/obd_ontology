@@ -1,6 +1,6 @@
 # OBDOntology
 
-Ontology for capturing knowledge about [on-board diagnostics](https://en.wikipedia.org/wiki/On-board_diagnostics) (OBD), particularly [diagnostic trouble codes](https://en.wikipedia.org/wiki/OBD-II_PIDs) (DTCs). The objective is to build up a knowledge graph based on this ontology by populating it with large amounts of instance data (cf. `knowledge_base/obd_knowledge_graph.owl`). Additionally, the `KnowledgeGraphQueryTool` provides a library of predefined queries for accessing useful instance information and the `OntologyInstanceGenerator` provides functionality for enhancing the knowledge graph with vehicle-specific instance data recorded in car workshops.
+Ontology for capturing knowledge about [on-board diagnostics](https://en.wikipedia.org/wiki/On-board_diagnostics) (OBD), particularly [diagnostic trouble codes](https://en.wikipedia.org/wiki/OBD-II_PIDs) (DTCs). The objective is to build up a knowledge graph based on this ontology by populating it with large amounts of instance data (cf. `knowledge_base/obd_knowledge_graph.owl`).
 
 ![](img/obd_ontology_v10.svg)
 
@@ -42,7 +42,7 @@ $ ./fuseki-server
     - select knowledge graph file, e.g., `obd_knowledge_graph.owl`
     - `upload now`
 
-Now the knowledge graph is hosted on the Fuseki server and can be queried / extended via the SPARQL endpoint `/OBD/sparql`.
+Now the knowledge graph is hosted on the Fuseki server and can be queried or extended via the SPARQL endpoints `/OBD/sparql` and `/OBD/data`, respectively.
 
 **Backup knowledge graph:**
 - `manage` -> `backup`
@@ -50,6 +50,15 @@ Now the knowledge graph is hosted on the Fuseki server and can be queried / exte
 Creates a backup in `fuseki_root/run/backups/`.
 
 The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.ttl` so that it can be interpreted directly, e.g., when launching it on the server (see above).
+
+**Extend knowledge graph:**
+
+- `ExpertKnowledgeEnhancer` can be used to extend the knowledge graph hosted by the Fuseki server with vehicle-agnostic OBD knowledge (codes, symptoms, etc.) provided in the form of `templates/expert_knowledge_template.txt`
+- `OntologyInstanceGenerator` enhances the knowledge graph hosted by the Fuseki server with vehicle-specific instance data, i.e., connects the on-board diagnosis data recorded in a particular car with corresponding background knowledge stored in the knowledge graph
+
+**Query knowledge graph:**
+
+The `KnowledgeGraphQueryTool` provides a library of predefined queries for accessing useful information stored in the knowledge graph.
 
 ## Interpretation of non-obvious aspects modeled in the ontology
 
