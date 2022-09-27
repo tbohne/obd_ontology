@@ -66,7 +66,7 @@ class ConnectionController:
         :param triple_ele: triple element to get URI reference for
         :return: URI reference for triple element
         """
-        if re.match("(http|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])", triple_ele):
+        if re.match("(http|https)://([\w_-]+(?:\.[\w_-]+)+)([\w.,@?^=%&:/~+]*[\w@?^=%&/~+])", triple_ele):
             return URIRef(triple_ele)
         else:
             return URIRef(self.namespace[triple_ele])
