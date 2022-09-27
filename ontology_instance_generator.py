@@ -23,7 +23,7 @@ class OntologyInstanceGenerator:
         - vehicle is connected to knowledge about the particular DTC (symptoms etc.) via the `occurredIn` relation
     """
 
-    def __init__(self, ontology_path, local_kb=False):
+    def __init__(self, ontology_path: str, local_kb=False) -> None:
         self.local_kb = local_kb
 
         if self.local_kb:
@@ -36,7 +36,7 @@ class OntologyInstanceGenerator:
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
-    def extend_knowledge_graph(self, model, hsn, tsn, vin, dtc):
+    def extend_knowledge_graph(self, model: str, hsn: str, tsn: str, vin: str, dtc: str) -> None:
         """
         Extends the knowledge graph based on the present vehicle information and performs a consistency check.
 
@@ -47,20 +47,20 @@ class OntologyInstanceGenerator:
         :param dtc: specified diagnostic trouble code
         """
         if self.local_kb:
-            # TODO: to be implemented..
-            pass
-            # fault_condition = list(self.dtc_obj.represents)[0]
-            # vehicle = self.onto.Vehicle()
-            # vehicle.model.append(self.model)
-            # vehicle.HSN.append(self.hsn)
-            # vehicle.TSN.append(self.tsn)
-            # vehicle.VIN.append(self.vin)
-            # fault_condition.occurredIn.append(vehicle)
-            # self.check_consistency_and_save_to_file()
+            dtc_obj = self.onto.DTC()
+            fault_condition = list(dtc_obj.represents)[0]
+            vehicle = self.onto.Vehicle()
+            vehicle.model.append(model)
+            vehicle.HSN.append(hsn)
+            vehicle.TSN.append(tsn)
+            vehicle.VIN.append(vin)
+            fault_condition.occurredIn.append(vehicle)
+            self.check_consistency_and_save_to_file()
         else:
             onto_namespace = Namespace(ONTOLOGY_PREFIX)
             # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
-            fault_condition_id = self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)[0].split("#")[1]
+            fault_condition_id = \
+                self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)[0].split("#")[1]
             vehicle_uuid = "vehicle_" + str(uuid.uuid4())
 
             fact_list = [
@@ -73,7 +73,7 @@ class OntologyInstanceGenerator:
             ]
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def check_consistency_and_save_to_file(self):
+    def check_consistency_and_save_to_file(self) -> None:
         """
         Checks the consistency of the generated ontology instance and saves it to file.
         """
