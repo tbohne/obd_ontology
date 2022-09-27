@@ -11,8 +11,12 @@ from connection_controller import ConnectionController
 
 
 class KnowledgeGraphQueryTool:
+    """
+    Library of predefined queries for accessing useful information stored in the knowledge graph.
+    Works with both local knowledge graph (specified .owl file) and hosted knowledge graph on Fuseki server.
+    """
 
-    def __init__(self, local_kb=False):
+    def __init__(self, local_kb=False) -> None:
         self.ontology_prefix = ONTOLOGY_PREFIX
         self.graph = rdflib.Graph()
         self.local_kb = local_kb
@@ -21,14 +25,29 @@ class KnowledgeGraphQueryTool:
         else:
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
 
-    def init_local_knowledge_base(self):
+    def init_local_knowledge_base(self) -> None:
+        """
+        Initializes the local knowledge base (locally stored .owl file).
+        """
         self.graph = self.graph.parse(str(pathlib.Path(__file__).parent.resolve()) + "/" + KNOWLEDGE_GRAPH_FILE,
                                       format='xml')
 
-    def complete_ontology_entry(self, entry):
+    def complete_ontology_entry(self, entry: str) -> str:
+        """
+        Completes the ontology entry for the specified concept / relation.
+
+        :param entry: ontology entry (concept / relation) to be completed
+        :return: completed ontology entry
+        """
         return "<" + self.ontology_prefix.replace('#', '#' + entry) + ">"
 
-    def query_fault_causes_by_dtc(self, dtc):
+    def query_fault_causes_by_dtc(self, dtc: str) -> list:
+        """
+        Queries the fault causes for the specified DTC.
+
+        :param dtc: diagnostic trouble code to query fault causes for
+        :return: fault causes
+        """
         print("####################################")
         print("QUERY: fault causes for", dtc)
         print("####################################")
@@ -53,7 +72,13 @@ class KnowledgeGraphQueryTool:
             return [row.cause_desc for row in self.graph.query(s)]
         return [row['cause_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_fault_condition_by_dtc(self, dtc):
+    def query_fault_condition_by_dtc(self, dtc: str) -> list:
+        """
+        Queries the fault condition for the specified DTC.
+
+        :param dtc: diagnostic trouble code to query fault condition for
+        :return: fault condition
+        """
         print("####################################")
         print("QUERY: fault condition for", dtc)
         print("####################################")
@@ -74,7 +99,13 @@ class KnowledgeGraphQueryTool:
             return [row.condition_desc for row in self.graph.query(s)]
         return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_symptoms_by_dtc(self, dtc):
+    def query_symptoms_by_dtc(self, dtc: str) -> list:
+        """
+        Queries the symptoms for the specified DTC.
+
+        :param dtc: diagnostic trouble code to query symptoms for
+        :return: symptoms
+        """
         print("####################################")
         print("QUERY: symptoms for", dtc)
         print("####################################")
@@ -99,7 +130,13 @@ class KnowledgeGraphQueryTool:
             return [row.symptom_desc for row in self.graph.query(s)]
         return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_corrective_actions_by_dtc(self, dtc):
+    def query_corrective_actions_by_dtc(self, dtc: str) -> list:
+        """
+        Queries the corrective actions for the specified DTC.
+
+        :param dtc: diagnostic trouble code to query corrective actions for
+        :return: corrective actions
+        """
         print("####################################")
         print("QUERY: corrective actions for", dtc)
         print("####################################")
@@ -128,7 +165,13 @@ class KnowledgeGraphQueryTool:
             return [row.action_desc for row in self.graph.query(s)]
         return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_fault_cat_by_dtc(self, dtc):
+    def query_fault_cat_by_dtc(self, dtc: str) -> list:
+        """
+        Queries the fault category of the specified DTC.
+
+        :param dtc: diagnostic trouble code to query fault category for
+        :return: fault category
+        """
         print("####################################")
         print("QUERY: fault category for", dtc)
         print("####################################")
@@ -151,7 +194,13 @@ class KnowledgeGraphQueryTool:
             return [row.cat_name for row in self.graph.query(s)]
         return [row['cat_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_measuring_pos_by_dtc(self, dtc):
+    def query_measuring_pos_by_dtc(self, dtc: str) -> list:
+        """
+        Queries the measuring positions for the specified DTC.
+
+        :param dtc: diagnostic trouble code to query measuring positions for
+        :return: measuring positions
+        """
         print("####################################")
         print("QUERY: measuring pos for", dtc)
         print("####################################")
@@ -174,7 +223,13 @@ class KnowledgeGraphQueryTool:
             return [row.measuring_pos_desc for row in self.graph.query(s)]
         return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_suspect_component_by_dtc(self, dtc):
+    def query_suspect_component_by_dtc(self, dtc: str) -> list:
+        """
+        Queries the suspect components associated with the specified DTC.
+
+        :param dtc: diagnostic trouble codes to query suspect components for
+        :return: suspect components
+        """
         print("####################################")
         print("QUERY: suspect components for", dtc)
         print("####################################")
@@ -197,7 +252,13 @@ class KnowledgeGraphQueryTool:
             return [row.comp_name for row in self.graph.query(s)]
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_dtc_occurring_with_the_specified_dtc(self, dtc):
+    def query_co_occurring_trouble_codes(self, dtc: str) -> list:
+        """
+        Queries DTCs regularly occurring with the specified DTC.
+
+        :param dtc: diagnostic trouble code to query associated other DTCs for
+        :return: co-occurring DTCs
+        """
         print("####################################")
         print("QUERY: DTCs occurring with", dtc)
         print("####################################")
@@ -216,7 +277,13 @@ class KnowledgeGraphQueryTool:
             return [row.other for row in self.graph.query(s)]
         return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_vehicle_by_dtc(self, dtc):
+    def query_vehicle_by_dtc(self, dtc: str) -> list:
+        """
+        Queries vehicles where the specified DTC has occurred in the past.
+
+        :param dtc: diagnostic trouble code to query vehicles for
+        :return: vehicles
+        """
         print("####################################")
         print("QUERY: vehicle associated with DTC ", dtc)
         print("####################################")
@@ -250,7 +317,12 @@ class KnowledgeGraphQueryTool:
         return [(row['model']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value']) for row in
                 self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_all_dtc_instances(self):
+    def query_all_dtc_instances(self) -> list:
+        """
+        Queries all DTC instances stored in the knowledge graph.
+
+        :return: all DTCs stored in the knowledge graph
+        """
         print("####################################")
         print("QUERY: all DTC instances")
         print("####################################")
@@ -266,7 +338,13 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_fault_condition_instance_by_code(self, code):
+    def query_fault_condition_instance_by_code(self, dtc: str) -> list:
+        """
+        Queries the fault condition instance represented by the specified DTC.
+
+        :param dtc: diagnostic trouble code to query fault condition instance for
+        :return: fault condition instance
+        """
         print("####################################")
         print("QUERY: fault condition instance by code")
         print("####################################")
@@ -276,7 +354,7 @@ class KnowledgeGraphQueryTool:
         s = f"""
             SELECT ?fault_cond WHERE {{
                 ?dtc a {dtc_entry} .
-                ?dtc {code_entry} "{code}" .
+                ?dtc {code_entry} "{dtc}" .
                 ?dtc {represents_entry} ?fault_cond .
             }}
             """
@@ -285,7 +363,12 @@ class KnowledgeGraphQueryTool:
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     @staticmethod
-    def print_res(res):
+    def print_res(res: list) -> None:
+        """
+        Prints the specified query results.
+
+        :param res: list of query results
+        """
         for row in res:
             print("--> ", row)
 
@@ -293,14 +376,14 @@ class KnowledgeGraphQueryTool:
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     qt.print_res(qt.query_all_dtc_instances())
-    dtc = "P2563"
-    qt.print_res(qt.query_fault_causes_by_dtc(dtc))
-    qt.print_res(qt.query_fault_condition_by_dtc(dtc))
-    qt.print_res(qt.query_symptoms_by_dtc(dtc))
-    qt.print_res(qt.query_corrective_actions_by_dtc(dtc))
-    qt.print_res(qt.query_fault_cat_by_dtc(dtc))
-    qt.print_res(qt.query_measuring_pos_by_dtc(dtc))
-    qt.print_res(qt.query_suspect_component_by_dtc(dtc))
-    qt.print_res(qt.query_dtc_occurring_with_the_specified_dtc(dtc))
-    qt.print_res(qt.query_vehicle_by_dtc(dtc))
-    qt.print_res(qt.query_fault_condition_instance_by_code(dtc))
+    error_code = "P2563"
+    qt.print_res(qt.query_fault_causes_by_dtc(error_code))
+    qt.print_res(qt.query_fault_condition_by_dtc(error_code))
+    qt.print_res(qt.query_symptoms_by_dtc(error_code))
+    qt.print_res(qt.query_corrective_actions_by_dtc(error_code))
+    qt.print_res(qt.query_fault_cat_by_dtc(error_code))
+    qt.print_res(qt.query_measuring_pos_by_dtc(error_code))
+    qt.print_res(qt.query_suspect_component_by_dtc(error_code))
+    qt.print_res(qt.query_co_occurring_trouble_codes(error_code))
+    qt.print_res(qt.query_vehicle_by_dtc(error_code))
+    qt.print_res(qt.query_fault_condition_instance_by_code(error_code))
