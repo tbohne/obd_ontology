@@ -23,6 +23,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#contains -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#contains">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#deletes -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#deletes">
@@ -104,6 +113,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#verifies -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#verifies">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -151,9 +169,18 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#category_name -->
+    <!-- http://www.semanticweb.org/diag_ontology#affected_by -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#category_name">
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#affected_by">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#category_description -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#category_description">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
@@ -228,6 +255,15 @@
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#priority_id">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#subsystem_name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#subsystem_name">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
@@ -308,7 +344,7 @@
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#FaultCategory">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#category_name"/>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#category_description"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
             </owl:Restriction>
@@ -364,6 +400,13 @@
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#SuspectComponent">
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#affected_by"/>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">0</owl:minQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#component_name"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -381,6 +424,13 @@
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#use_oscilloscope"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#affected_by"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">50</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
@@ -428,6 +478,20 @@
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#model"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#VehicleSubsystem -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#VehicleSubsystem">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#subsystem_name"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
             </owl:Restriction>
