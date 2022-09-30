@@ -4,16 +4,21 @@
 #  Beispiel durch eigene Einträge ersetzen (jeder Eintrag beginnt mit "-")                          #
 #####################################################################################################
 
-### "SuspectComponent" (zu prüfende Komponenten // Oszilloskop-Messung möglich: (ja bzw. nein)
-###     "affected_by" [Liste der Komponenten, deren Fehlverhalten sich auf diese Komponente auswirken könnte]
+### "SuspectComponent" (zu prüfende Komponenten) // Oszilloskop-Messung möglich (ja bzw. nein)
+###     "affected_by" [Liste der Komponenten, deren Fehlverhalten das korrekte Funktionieren der betrachteten Komponente beeinträchtigen könnte]
+### Sämtliche "SuspectComponents", die in der "affected_by"-Liste vorkommen, müssen zunächst selbst definiert werden.
 
 - Ladedrucksteller-Positionssensor (ja)
-    - [andere Komponente A, andere Komponente B, andere Komponente C]
+    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+
 - VTG-Abgasturbolader (nein)
-    - [andere Komponente A, andere Komponente B, andere Komponente C]
+    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+
 - Motor-Steuergerät (ja)
-    - [andere Komponente A, andere Komponente B, andere Komponente C]
+    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+
 - Ladedruck-Magnetventil (ja)
-    - [andere Komponente A, andere Komponente B, andere Komponente C]
+    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+
 - Ladedruck-Regelventil (ja)
-    - [andere Komponente A, andere Komponente B, andere Komponente C]
+    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]

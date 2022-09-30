@@ -7,8 +7,8 @@
 ### "VehicleSubsystem"
 - SubsystemA
 
-### "contains" ("SuspectComponents", die diesem Subsystem zugeordnet werden (müssen in `component_expert_template.txt` definiert sein))
-### -> wenn ein Subsystem als nicht fehlerhaft verifiziert wurde, sind sämtliche Komponenten, die via "contains" damit assoziiert sind, ebenfalls i.O.
+### "contains" ("SuspectComponents", die diesem Subsystem zugeordnet werden (sollten in `component_expert_template.txt` definiert sein))
+### -> wenn ein Subsystem als nicht fehlerhaft verifiziert wurde, sind sämtliche Komponenten, welche via "contains" mit diesem assoziiert sind, ebenfalls i.O.
 ### -> vermeidet eine Menge redundanter Oszilloskop-Messungen
 - SuspectComponentA
 - SuspectComponentB
