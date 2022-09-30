@@ -1,0 +1,19 @@
+###################################################################################################
+#  Expert Knowledge Template - Beispiel für die Aufnahme von Subsystem-bezogenem Expertenwissen)  #
+#  Die Überschriften (eingeleitet durch "###") sollten unverändert bleiben.                       #
+#  Beispiel durch eigene Einträge ersetzen (jeder Eintrag beginnt mit "-")                        #
+###################################################################################################
+
+### "VehicleSubsystem"
+- SubsystemA
+
+### "contains" ("SuspectComponents", die diesem Subsystem zugeordnet werden (müssen in `component_expert_template.txt` definiert sein))
+### -> wenn ein Subsystem als nicht fehlerhaft verifiziert wurde, sind sämtliche Komponenten, die via "contains" damit assoziiert sind, ebenfalls i.O.
+### -> vermeidet eine Menge redundanter Oszilloskop-Messungen
+- SuspectComponentA
+- SuspectComponentB
+- SuspectComponentC
+- SuspectComponentD
+
+### "verified_by" (kann verifiziert werden durch Prüfung folgender "SuspectComponent" - zeigt, dass das Subsystem einwandfrei funktioniert)
+- SuspectComponentX
