@@ -5,20 +5,20 @@
 #####################################################################################################
 
 ### "SuspectComponent" (zu prüfende Komponenten) // Oszilloskop-Messung möglich (ja bzw. nein)
-###     "affected_by" [Liste der Komponenten, deren Fehlverhalten das korrekte Funktionieren der betrachteten Komponente beeinträchtigen könnte]
+###     "affected_by" (Liste der Komponenten, deren Fehlverhalten das korrekte Funktionieren der betrachteten Komponente beeinträchtigen könnte)
 ### Sämtliche "SuspectComponents", die in der "affected_by"-Liste vorkommen, müssen zunächst selbst definiert werden.
 
 - Ladedrucksteller-Positionssensor (ja)
-    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+    - SuspectComponentA, SuspectComponentB, SuspectComponentC
 
 - VTG-Abgasturbolader (nein)
-    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+    - SuspectComponentA, SuspectComponentB, SuspectComponentC
 
 - Motor-Steuergerät (ja)
-    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+    - SuspectComponentA, SuspectComponentB, SuspectComponentC
 
 - Ladedruck-Magnetventil (ja)
-    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+    - SuspectComponentA, SuspectComponentB, SuspectComponentC
 
 - Ladedruck-Regelventil (ja)
-    - [SuspectComponentA, SuspectComponentB, SuspectComponentC]
+    - SuspectComponentA, SuspectComponentB, SuspectComponentC
