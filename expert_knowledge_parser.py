@@ -4,6 +4,7 @@
 
 from dtc_knowledge import DTCKnowledge
 from component_knowledge import ComponentKnowledge
+from subsystem_knowledge import SubsystemKnowledge
 
 
 class ExpertKnowledgeParser:
@@ -75,8 +76,32 @@ class ExpertKnowledgeParser:
                 suspect_components.append(ComponentKnowledge(suspect_component.strip(), oscilloscope, affected_by))
         return suspect_components
 
-    def parse_subsystem_expert_template(self, lines: list) -> None:
-        pass
+    @staticmethod
+    def parse_subsystem_expert_template(lines: list) -> SubsystemKnowledge:
+        """
+        Parses the vehicle subsystem expert template.
+
+        :param lines: lines of the knowledge template
+        :return: parsed subsystem knowledge
+        """
+        subsystem = verified_by = ""
+        contains = []
+
+        title_cnt = 0
+        for line in lines:
+            if "###" in line:
+                title_cnt += 1  # next category
+                continue
+            line = line[2:].strip()
+
+            if title_cnt == 1:  # subsystem name
+                subsystem = line
+            elif title_cnt == 4:  # 'contains' entries
+                contains.append(line)
+            elif title_cnt == 5:  # 'verified_by' entry
+                verified_by = line
+
+        return SubsystemKnowledge(subsystem, contains, verified_by)
 
     def parse_knowledge(self, knowledge_file: str) -> None:
         """
@@ -100,7 +125,9 @@ class ExpertKnowledgeParser:
 
 if __name__ == '__main__':
     knowledge_parser = ExpertKnowledgeParser()
-    #print(knowledge_parser.parse_knowledge("templates/dtc_expert_template.txt"))
+    print(knowledge_parser.parse_knowledge("templates/dtc_expert_template.txt"))
+    print("----------------------------------------------------------------------------")
     for sus in knowledge_parser.parse_knowledge("templates/component_expert_template.txt"):
         print(sus)
-    #print(knowledge_parser.parse_knowledge("templates/subsystem_expert_template.txt"))
+    print("----------------------------------------------------------------------------")
+    print(knowledge_parser.parse_knowledge("templates/subsystem_expert_template.txt"))
