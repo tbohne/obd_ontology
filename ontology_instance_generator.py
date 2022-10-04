@@ -55,7 +55,7 @@ class OntologyInstanceGenerator:
             vehicle.TSN.append(tsn)
             vehicle.VIN.append(vin)
             fault_condition.occurredIn.append(vehicle)
-            self.check_consistency_and_save_to_file()
+            self.check_consistency_and_save_to_file(hsn, tsn, vin)
         else:
             onto_namespace = Namespace(ONTOLOGY_PREFIX)
             # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
@@ -73,9 +73,13 @@ class OntologyInstanceGenerator:
             ]
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def check_consistency_and_save_to_file(self) -> None:
+    def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
         """
         Checks the consistency of the generated ontology instance and saves it to file.
+
+        :param hsn: manufacturer key ("Herstellerschlüsselnummer")
+        :param tsn: type number ("Typschlüsselnummer")
+        :param vin: vehicle identification number
         """
         with self.onto:
             try:
@@ -85,7 +89,7 @@ class OntologyInstanceGenerator:
                 print(list(default_world.inconsistent_classes()))
                 print("-->", e)
 
-        file = "ontology_instance_{}_{}_{}_{}.owl".format(self.hsn, self.tsn, self.vin, date.today())
+        file = "ontology_instance_{}_{}_{}_{}.owl".format(hsn, tsn, vin, date.today())
         self.onto.save(file)
 
 
