@@ -11,7 +11,7 @@ from rdflib import Namespace, RDF
 import expert_knowledge_parser
 from config import ONTOLOGY_PREFIX
 from connection_controller import ConnectionController
-from expert_knowledge_parser import DTCKnowledge, ComponentKnowledge
+from expert_knowledge_parser import DTCKnowledge, ComponentKnowledge, SubsystemKnowledge
 from fact import Fact
 
 
@@ -140,6 +140,32 @@ class ExpertKnowledgeEnhancer:
             fact_list.append(Fact((comp_uuid, self.onto_namespace.affected_by, comp), property_fact=True))
         return fact_list
 
+    def generate_subsystem_facts(self, subsystem_knowledge: SubsystemKnowledge) -> list:
+        """
+        Generates vehicle subsystem facts to be entered into the knowledge graph.
+
+        :param subsystem_knowledge: parsed VehicleSubsystem knowledge
+        :return: generated fact list
+        """
+        subsystem_uuid = "subsystem_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((subsystem_uuid, RDF.type, self.onto_namespace["VehicleSubsystem"].toPython())),
+            Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_knowledge.vehicle_subsystem),
+                 property_fact=True)
+        ]
+        # TODO: contains relation -> query all the suspect components by name
+        for containing_comp in subsystem_knowledge.contains:
+            # TODO: find out UUID
+            comp_uuid = ""
+            fact_list.append(Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid)))
+
+        verifying_comp = subsystem_knowledge.verified_by
+        # TODO: query component by name
+        verifying_comp_uuid = ""
+        fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, subsystem_uuid)))
+
+        return fact_list
+
     def extend_knowledge_graph(self) -> None:
         """
         Parses the expert knowledge from the specified file and extends the knowledge graph with it.
@@ -163,6 +189,7 @@ class ExpertKnowledgeEnhancer:
 
         elif "subsystem" in self.knowledge_file:
             subsystem_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
+            fact_list = self.generate_subsystem_facts(subsystem_knowledge)
 
         # enter facts into knowledge graph
         self.fuseki_connection.extend_knowledge_graph(fact_list)
