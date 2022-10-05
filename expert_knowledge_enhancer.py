@@ -123,21 +123,26 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def generate_suspect_component_facts(self, comp_knowledge: ComponentKnowledge) -> list:
+    def generate_suspect_component_facts(self, comp_knowledge_list: list) -> list:
         """
         Generates the SuspectComponent-related facts to be entered into the knowledge graph.
 
-        :param comp_knowledge: parsed SuspectComponent knowledge
+        :param comp_knowledge_list: list of parsed SuspectComponents
         :return: generated fact list
         """
-        comp_uuid = "comp_" + uuid.uuid4().hex
-        fact_list = [
-            Fact((comp_uuid, RDF.type, self.onto_namespace["SuspectComponent"].toPython())),
-            Fact((comp_uuid, self.onto_namespace.component_name, comp_knowledge.suspect_component), property_fact=True),
-            Fact((comp_uuid, self.onto_namespace.use_oscilloscope, comp_knowledge.oscilloscope), property_fact=True)
-        ]
-        for comp in comp_knowledge.affected_by:
-            fact_list.append(Fact((comp_uuid, self.onto_namespace.affected_by, comp), property_fact=True))
+        fact_list = []
+        for comp_knowledge in comp_knowledge_list:
+            comp_uuid = "comp_" + uuid.uuid4().hex
+            fact_list.append(Fact((comp_uuid, RDF.type, self.onto_namespace["SuspectComponent"].toPython())))
+            fact_list.append(Fact((comp_uuid, self.onto_namespace.component_name, comp_knowledge.suspect_component),
+                                  property_fact=True))
+            fact_list.append(Fact((comp_uuid, self.onto_namespace.use_oscilloscope, comp_knowledge.oscilloscope),
+                                  property_fact=True))
+
+            # TODO: implement check -- all components in the affected_by list should be defined in the KG
+            for comp in comp_knowledge.affected_by:
+                fact_list.append(Fact((comp_uuid, self.onto_namespace.affected_by, comp), property_fact=True))
+
         return fact_list
 
     def generate_subsystem_facts(self, subsystem_knowledge: SubsystemKnowledge) -> list:
@@ -184,8 +189,8 @@ class ExpertKnowledgeEnhancer:
             fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
 
         elif "component" in self.knowledge_file:
-            comp_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            fact_list = self.generate_suspect_component_facts(comp_knowledge)
+            comp_knowledge_list = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
+            fact_list = self.generate_suspect_component_facts(comp_knowledge_list)
 
         elif "subsystem" in self.knowledge_file:
             subsystem_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
@@ -196,5 +201,5 @@ class ExpertKnowledgeEnhancer:
 
 
 if __name__ == '__main__':
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/dtc_expert_template.txt")
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/component_know0.txt")
     expert_knowledge_enhancer.extend_knowledge_graph()
