@@ -11,8 +11,9 @@ from rdflib import Namespace, RDF
 import expert_knowledge_parser
 from config import ONTOLOGY_PREFIX
 from connection_controller import ConnectionController
-from expert_knowledge_parser import DTCKnowledge, ComponentKnowledge, SubsystemKnowledge
+from expert_knowledge_parser import DTCKnowledge, SubsystemKnowledge
 from fact import Fact
+from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 
 class ExpertKnowledgeEnhancer:
@@ -27,6 +28,7 @@ class ExpertKnowledgeEnhancer:
         # establish connection to Apache Jena Fuseki server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
         self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
+        self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
     def generate_dtc_facts(self, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
         """
@@ -139,8 +141,9 @@ class ExpertKnowledgeEnhancer:
             fact_list.append(Fact((comp_uuid, self.onto_namespace.use_oscilloscope, comp_knowledge.oscilloscope),
                                   property_fact=True))
 
-            # TODO: implement check -- all components in the affected_by list should be defined in the KG
             for comp in comp_knowledge.affected_by:
+                # all components in the affected_by list should be defined in the KG, i.e., should have ex. 1 result
+                assert len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)) == 1
                 fact_list.append(Fact((comp_uuid, self.onto_namespace.affected_by, comp), property_fact=True))
 
         return fact_list
