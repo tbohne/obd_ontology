@@ -99,6 +99,29 @@ class KnowledgeGraphQueryTool:
             return [row.condition_desc for row in self.graph.query(s)]
         return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_fault_condition_by_description(self, desc: str) -> list:
+        """
+        Queries the fault condition instance for the specified description.
+
+        :param desc: description to query fault condition instance for
+        :return: fault condition instance
+        """
+        print("####################################")
+        print("QUERY: fault condition for", desc)
+        print("####################################")
+        fault_condition_entry = self.complete_ontology_entry('FaultCondition')
+        condition_desc_entry = self.complete_ontology_entry('condition_description')
+        s = f"""
+            SELECT ?fc WHERE {{
+                ?fc a {fault_condition_entry} .
+                ?fc {condition_desc_entry} ?desc
+                FILTER(STR(?desc) = "{desc}")
+            }}
+            """
+        if self.local_kb:
+            return [row.condition_desc for row in self.graph.query(s)]
+        return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     def query_symptoms_by_dtc(self, dtc: str) -> list:
         """
         Queries the symptoms for the specified DTC.
@@ -129,6 +152,29 @@ class KnowledgeGraphQueryTool:
         if self.local_kb:
             return [row.symptom_desc for row in self.graph.query(s)]
         return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
+    def query_symptoms_by_desc(self, desc: str) -> list:
+        """
+        Queries the symptom instance for the specified description.
+
+        :param desc: symptom description to query instance for
+        :return: symptom instance
+        """
+        print("####################################")
+        print("QUERY: symptom instance for", desc)
+        print("####################################")
+        symptom_entry = self.complete_ontology_entry('Symptom')
+        symptom_desc_entry = self.complete_ontology_entry('symptom_description')
+        s = f"""
+            SELECT ?symptom WHERE {{
+                ?symptom a {symptom_entry} .
+                ?symptom {symptom_desc_entry} ?symptom_desc .
+                FILTER(STR(?symptom_desc) = "{desc}")
+            }}
+            """
+        if self.local_kb:
+            return [row.symptom_desc for row in self.graph.query(s)]
+        return [row['symptom']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     def query_corrective_actions_by_dtc(self, dtc: str) -> list:
         """
@@ -472,6 +518,8 @@ if __name__ == '__main__':
     vehicle_subsystem_name = "SubsystemA"
     fault_category_desc = "{powertrain (engine, transmission, and associated accessories)," \
                           " ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}"
+    fault_cond_desc = "Ladedrucksteller-Positionssensor / Signal unplausibel"
+    symptom_desc = "Glühkontrollleuchte leuchtet"
     qt.print_res(qt.query_fault_causes_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_by_dtc(error_code))
     qt.print_res(qt.query_symptoms_by_dtc(error_code))
@@ -486,3 +534,5 @@ if __name__ == '__main__':
     qt.print_res(qt.query_vehicle_subsystem_by_name(vehicle_subsystem_name))
     qt.print_res(qt.query_dtc_instance_by_code(error_code))
     qt.print_res(qt.query_fault_cat_by_description(fault_category_desc))
+    qt.print_res(qt.query_fault_condition_by_description(fault_cond_desc))
+    qt.print_res(qt.query_symptoms_by_desc(symptom_desc))
