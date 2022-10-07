@@ -89,7 +89,7 @@ def parse_subsystem_expert_template(lines: list) -> SubsystemKnowledge:
             subsystem = line
         elif title_cnt == 4:  # 'contains' entries
             contains.append(line)
-        elif title_cnt == 5:  # 'verified_by' entry
+        elif title_cnt == 6:  # 'verified_by' entry
             verified_by = line
 
     return SubsystemKnowledge(subsystem, contains, verified_by)
