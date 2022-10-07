@@ -194,6 +194,29 @@ class KnowledgeGraphQueryTool:
             return [row.cat_name for row in self.graph.query(s)]
         return [row['cat_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_fault_cat_by_description(self, desc: str) -> list:
+        """
+        Queries the fault category instance by the specified fault description.
+
+        :param desc: fault description to query fault category instance for
+        :return: fault category instance
+        """
+        print("####################################")
+        print("QUERY: fault category instance for", desc)
+        print("####################################")
+        fault_cat = self.complete_ontology_entry('FaultCategory')
+        cat_desc_entry = self.complete_ontology_entry('category_description')
+        s = f"""
+            SELECT ?fc WHERE {{
+                ?fc a {fault_cat} .
+                ?fc {cat_desc_entry} ?fc_desc .
+                FILTER(STR(?fc_desc) = "{desc}")
+            }}
+            """
+        if self.local_kb:
+            return [row.cat_name for row in self.graph.query(s)]
+        return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     def query_measuring_pos_by_dtc(self, dtc: str) -> list:
         """
         Queries the measuring positions for the specified DTC.
@@ -447,6 +470,8 @@ if __name__ == '__main__':
     error_code = "P2563"
     suspect_comp_name = "Custom-Comp-B"
     vehicle_subsystem_name = "SubsystemA"
+    fault_category_desc = "{powertrain (engine, transmission, and associated accessories)," \
+                          " ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}"
     qt.print_res(qt.query_fault_causes_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_by_dtc(error_code))
     qt.print_res(qt.query_symptoms_by_dtc(error_code))
@@ -460,3 +485,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_suspect_component_by_name(suspect_comp_name))
     qt.print_res(qt.query_vehicle_subsystem_by_name(vehicle_subsystem_name))
     qt.print_res(qt.query_dtc_instance_by_code(error_code))
+    qt.print_res(qt.query_fault_cat_by_description(fault_category_desc))
