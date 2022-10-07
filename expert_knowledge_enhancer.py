@@ -38,12 +38,18 @@ class ExpertKnowledgeEnhancer:
         :return: [DTC UUID, generated fact list]
         """
         dtc_uuid = "dtc_" + uuid.uuid4().hex
-        fact_list = [
-            Fact((dtc_uuid, RDF.type, self.onto_namespace["DTC"].toPython())),
-            Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True)
-        ]
-        for code in dtc_knowledge.occurs_with:
-            fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
+        fact_list = []
+        # check whether DTC to be added is already part of the KG
+        if len(self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc_knowledge.dtc)) > 0:
+            print("Specified component (" + dtc_knowledge.dtc + ") already present in KG")
+        else:
+            fact_list = [
+                Fact((dtc_uuid, RDF.type, self.onto_namespace["DTC"].toPython())),
+                Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True)
+            ]
+            for code in dtc_knowledge.occurs_with:
+                fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
+
         return dtc_uuid, fact_list
 
     def generate_fault_cat_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
@@ -56,12 +62,17 @@ class ExpertKnowledgeEnhancer:
         """
         fault_cat_uuid = "fault_cat_" + uuid.uuid4().hex
         dtc_parser = DTCParser()
-        category_name = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)
-        fact_list = [
-            Fact((fault_cat_uuid, RDF.type, self.onto_namespace["FaultCategory"].toPython())),
-            Fact((fault_cat_uuid, self.onto_namespace.category_name, category_name), property_fact=True),
-            Fact((dtc_uuid, self.onto_namespace.hasCategory, fault_cat_uuid))
-        ]
+        cat_desc = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)
+        fact_list = []
+        # check whether fault category to be added is already part of the KG
+        if len(self.knowledge_graph_query_tool.query_fault_cat_by_description(cat_desc)) > 0:
+            print("Specified fault cat (" + cat_desc + ") already present in KG")
+        else:
+            fact_list = [
+                Fact((fault_cat_uuid, RDF.type, self.onto_namespace["FaultCategory"].toPython())),
+                Fact((fault_cat_uuid, self.onto_namespace.category_description, cat_desc), property_fact=True),
+                Fact((dtc_uuid, self.onto_namespace.hasCategory, fault_cat_uuid))
+            ]
         return fault_cat_uuid, fact_list
 
     def generate_fault_cond_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
@@ -73,12 +84,17 @@ class ExpertKnowledgeEnhancer:
         :return: [fault condition UUID, generated fact list]
         """
         fault_cond_uuid = "fault_cond_" + uuid.uuid4().hex
-        fact_list = [
-            Fact((fault_cond_uuid, RDF.type, self.onto_namespace["FaultCondition"].toPython())),
-            Fact((fault_cond_uuid, self.onto_namespace.condition_description, dtc_knowledge.fault_condition),
-                 property_fact=True),
-            Fact((dtc_uuid, self.onto_namespace.represents, fault_cond_uuid))
-        ]
+        fault_cond = dtc_knowledge.fault_condition
+        fact_list = []
+        # check whether fault condition to be added is already part of the KG
+        if len(self.knowledge_graph_query_tool.query_fault_condition_by_description(fault_cond)) > 0:
+            print("Specified fault condition (" + fault_cond + ") already present in KG")
+        else:
+            fact_list = [
+                Fact((fault_cond_uuid, RDF.type, self.onto_namespace["FaultCondition"].toPython())),
+                Fact((fault_cond_uuid, self.onto_namespace.condition_description, fault_cond), property_fact=True),
+                Fact((dtc_uuid, self.onto_namespace.represents, fault_cond_uuid))
+            ]
         return fault_cond_uuid, fact_list
 
     def generate_symptom_facts(self, fault_cond_uuid: str, dtc_knowledge: DTCKnowledge) -> list:
@@ -93,9 +109,14 @@ class ExpertKnowledgeEnhancer:
         # there can be more than one symptom instance per DTC
         for symptom in dtc_knowledge.symptoms:
             symptom_uuid = "symptom_" + uuid.uuid4().hex
-            fact_list.append(Fact((symptom_uuid, RDF.type, self.onto_namespace["Symptom"].toPython())))
-            fact_list.append(Fact((symptom_uuid, self.onto_namespace.symptom_description, symptom), property_fact=True))
-            fact_list.append(Fact((fault_cond_uuid, self.onto_namespace.manifestedBy, symptom_uuid)))
+            # check whether symptom to be added is already part of the KG
+            if len(self.knowledge_graph_query_tool.query_symptoms_by_desc(symptom)) > 0:
+                print("Specified symptom (" + symptom + ") already present in KG")
+            else:
+                fact_list.append(Fact((symptom_uuid, RDF.type, self.onto_namespace["Symptom"].toPython())))
+                fact_list.append(
+                    Fact((symptom_uuid, self.onto_namespace.symptom_description, symptom), property_fact=True))
+                fact_list.append(Fact((fault_cond_uuid, self.onto_namespace.manifestedBy, symptom_uuid)))
         return fact_list
 
     def generate_facts_to_connect_components_and_dtc(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> list:
