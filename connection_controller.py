@@ -32,7 +32,7 @@ class ConnectionController:
         """
         print("query knowledge graph..")
         print(query)
-        res = requests.post(self.fuseki_url + SPARQL_ENDPOINT, query,
+        res = requests.post(self.fuseki_url + SPARQL_ENDPOINT, query.encode(),
                             headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'})
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
@@ -54,7 +54,7 @@ class ConnectionController:
             else:
                 graph.add((self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2])))
 
-        res = requests.post(self.fuseki_url + DATA_ENDPOINT, data=graph.serialize(format="ttl"),
+        res = requests.post(self.fuseki_url + DATA_ENDPOINT, data=graph.serialize(format="ttl").encode(),
                             headers={'Content-Type': 'text/turtle'})
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
