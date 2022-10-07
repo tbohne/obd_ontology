@@ -134,17 +134,23 @@ class ExpertKnowledgeEnhancer:
         """
         fact_list = []
         for comp_knowledge in comp_knowledge_list:
-            comp_uuid = "comp_" + uuid.uuid4().hex
-            fact_list.append(Fact((comp_uuid, RDF.type, self.onto_namespace["SuspectComponent"].toPython())))
-            fact_list.append(Fact((comp_uuid, self.onto_namespace.component_name, comp_knowledge.suspect_component),
-                                  property_fact=True))
-            fact_list.append(Fact((comp_uuid, self.onto_namespace.use_oscilloscope, comp_knowledge.oscilloscope),
-                                  property_fact=True))
+            comp_name = comp_knowledge.suspect_component
+            # check whether component to be added is already part of the KG
+            if len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp_name)) > 0:
+                print("Specified component (" + comp_name + ") already present in KG")
+            else:
+                comp_uuid = "comp_" + uuid.uuid4().hex
+                fact_list.append(Fact((comp_uuid, RDF.type, self.onto_namespace["SuspectComponent"].toPython())))
+                fact_list.append(Fact((comp_uuid, self.onto_namespace.component_name, comp_name), property_fact=True))
+                fact_list.append(Fact((comp_uuid, self.onto_namespace.use_oscilloscope, comp_knowledge.oscilloscope),
+                                      property_fact=True))
 
-            for comp in comp_knowledge.affected_by:
-                # all components in the affected_by list should be defined in the KG, i.e., should have ex. 1 result
-                assert len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)) == 1
-                fact_list.append(Fact((comp_uuid, self.onto_namespace.affected_by, comp), property_fact=True))
+                for comp in comp_knowledge.affected_by:
+                    # all components in the affected_by list should be defined in the KG, i.e., should have ex. 1 result
+                    print("COMP:", comp)
+                    print(len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)))
+                    assert len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)) == 1
+                    fact_list.append(Fact((comp_uuid, self.onto_namespace.affected_by, comp), property_fact=True))
 
         return fact_list
 
