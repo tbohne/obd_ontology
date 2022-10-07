@@ -147,11 +147,8 @@ class ExpertKnowledgeEnhancer:
 
                 for comp in comp_knowledge.affected_by:
                     # all components in the affected_by list should be defined in the KG, i.e., should have ex. 1 result
-                    print("COMP:", comp)
-                    print(len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)))
                     assert len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)) == 1
                     fact_list.append(Fact((comp_uuid, self.onto_namespace.affected_by, comp), property_fact=True))
-
         return fact_list
 
     def generate_subsystem_facts(self, subsystem_knowledge: SubsystemKnowledge) -> list:
@@ -161,23 +158,30 @@ class ExpertKnowledgeEnhancer:
         :param subsystem_knowledge: parsed VehicleSubsystem knowledge
         :return: generated fact list
         """
-        subsystem_uuid = "subsystem_" + uuid.uuid4().hex
-        fact_list = [
-            Fact((subsystem_uuid, RDF.type, self.onto_namespace["VehicleSubsystem"].toPython())),
-            Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_knowledge.vehicle_subsystem),
-                 property_fact=True)
-        ]
-        # TODO: contains relation -> query all the suspect components by name
-        for containing_comp in subsystem_knowledge.contains:
-            # TODO: find out UUID
-            comp_uuid = ""
-            fact_list.append(Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid)))
+        fact_list = []
+        subsystem_name = subsystem_knowledge.vehicle_subsystem
+        # check whether subsystem to be added is already part of the KG
+        if len(self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)) > 0:
+            print("Specified subsystem (" + subsystem_name + ") already present in KG")
+        else:
+            subsystem_uuid = "subsystem_" + uuid.uuid4().hex
+            fact_list = [
+                Fact((subsystem_uuid, RDF.type, self.onto_namespace["VehicleSubsystem"].toPython())),
+                Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_name), property_fact=True)
+            ]
+            for containing_comp in subsystem_knowledge.contains:
+                # relate knowledge to already existing facts
+                sus_comp = self.knowledge_graph_query_tool.query_suspect_component_by_name(containing_comp)
+                assert len(sus_comp) == 1
+                comp_uuid = sus_comp[0].split("#")[1]
+                fact_list.append(Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid)))
 
-        verifying_comp = subsystem_knowledge.verified_by
-        # TODO: query component by name
-        verifying_comp_uuid = ""
-        fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, subsystem_uuid)))
-
+            verifying_comp = subsystem_knowledge.verified_by
+            # relate knowledge to already existing facts
+            verifying_comp_instance = self.knowledge_graph_query_tool.query_suspect_component_by_name(verifying_comp)
+            assert len(verifying_comp_instance) == 1
+            verifying_comp_uuid = verifying_comp_instance[0].split("#")[1]
+            fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, subsystem_uuid)))
         return fact_list
 
     def extend_knowledge_graph(self) -> None:
@@ -210,5 +214,5 @@ class ExpertKnowledgeEnhancer:
 
 
 if __name__ == '__main__':
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/component_know0.txt")
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/subsystem_expert_0.txt")
     expert_knowledge_enhancer.extend_knowledge_graph()
