@@ -408,6 +408,28 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_dtc_instance_by_code(self, code: str) -> list:
+        """
+        Queries the DTC instance for the specified code.
+
+        :param code: code to query DTC instance for
+        :return: DTC instance
+        """
+        print("####################################")
+        print("QUERY: DTC instance by code")
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        code_entry = self.complete_ontology_entry('code')
+        s = f"""
+            SELECT ?dtc WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} "{code}" .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """
@@ -437,3 +459,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_fault_condition_instance_by_code(error_code))
     qt.print_res(qt.query_suspect_component_by_name(suspect_comp_name))
     qt.print_res(qt.query_vehicle_subsystem_by_name(vehicle_subsystem_name))
+    qt.print_res(qt.query_dtc_instance_by_code(error_code))
