@@ -110,11 +110,10 @@ class ExpertKnowledgeEnhancer:
         fact_list = []
         # there can be more than one suspect component instance per DTC
         for idx, comp in enumerate(dtc_knowledge.suspect_components):
-            # TODO: assumes that all the suspect components considered here are already part of the knowledge graph
-            #       --> CHECK THAT
-            print("COMP:", comp)
-            # TODO: query component instance by name
-            comp_uuid = ""
+            component_by_name = self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)
+            # ensure that all the suspect components considered here are already part of the KG
+            assert len(component_by_name) == 1
+            comp_uuid = component_by_name[0].split("#")[1]
             # creating diagnostic association between DTC and SuspectComponents
             diag_association_uuid = "diag_association_" + uuid.uuid4().hex
             fact_list.append(
@@ -122,7 +121,6 @@ class ExpertKnowledgeEnhancer:
             fact_list.append(Fact((dtc_uuid, self.onto_namespace.has, diag_association_uuid)))
             fact_list.append(Fact((diag_association_uuid, self.onto_namespace.priority_id, idx), property_fact=True))
             fact_list.append(Fact((diag_association_uuid, self.onto_namespace.pointsTo, comp_uuid)))
-
         return fact_list
 
     def generate_suspect_component_facts(self, comp_knowledge_list: list) -> list:
@@ -214,5 +212,5 @@ class ExpertKnowledgeEnhancer:
 
 
 if __name__ == '__main__':
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/subsystem_expert_0.txt")
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/dtc_expert_template.txt")
     expert_knowledge_enhancer.extend_knowledge_graph()
