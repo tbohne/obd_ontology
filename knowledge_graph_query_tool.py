@@ -275,6 +275,29 @@ class KnowledgeGraphQueryTool:
             return [row.comp_name for row in self.graph.query(s)]
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_vehicle_subsystem_by_name(self, subsystem_name: str) -> list:
+        """
+        Queries a vehicle subsystem by its name.
+
+        :param subsystem_name: name to query subsystem for
+        :return: subsystem
+        """
+        print("####################################")
+        print("QUERY: vehicle subsystem by name -", subsystem_name)
+        print("####################################")
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        subsystem_name_entry = self.complete_ontology_entry('subsystem_name')
+        s = f"""
+            SELECT ?subsystem WHERE {{
+                ?subsystem a {subsystem_entry} .
+                ?subsystem {subsystem_name_entry} ?subsystem_name .
+                FILTER(STR(?subsystem_name) = "{subsystem_name}")
+            }}
+            """
+        if self.local_kb:
+            return [row.comp_name for row in self.graph.query(s)]
+        return [row['subsystem']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     def query_co_occurring_trouble_codes(self, dtc: str) -> list:
         """
         Queries DTCs regularly occurring with the specified DTC.
@@ -401,6 +424,7 @@ if __name__ == '__main__':
     qt.print_res(qt.query_all_dtc_instances())
     error_code = "P2563"
     suspect_comp_name = "Custom-Comp-B"
+    vehicle_subsystem_name = "SubsystemA"
     qt.print_res(qt.query_fault_causes_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_by_dtc(error_code))
     qt.print_res(qt.query_symptoms_by_dtc(error_code))
@@ -412,3 +436,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_vehicle_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_instance_by_code(error_code))
     qt.print_res(qt.query_suspect_component_by_name(suspect_comp_name))
+    qt.print_res(qt.query_vehicle_subsystem_by_name(vehicle_subsystem_name))
