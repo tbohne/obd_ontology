@@ -477,7 +477,7 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_fault_condition_instance_by_symptom(self, symptom: str) -> list:
+    def query_fault_condition_instances_by_symptom(self, symptom: str) -> list:
         """
         Queries the fault condition instances manifested by the specified symptom.
 
@@ -563,4 +563,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_fault_cat_by_description(fault_category_desc))
     qt.print_res(qt.query_fault_condition_by_description(fault_cond_desc))
     qt.print_res(qt.query_symptoms_by_desc(symptom_desc))
-    qt.print_res(qt.query_fault_condition_instance_by_symptom(symptom_desc))
+    qt.print_res(qt.query_fault_condition_instances_by_symptom(symptom_desc))
