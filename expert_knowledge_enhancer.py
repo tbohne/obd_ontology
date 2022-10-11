@@ -39,15 +39,24 @@ class ExpertKnowledgeEnhancer:
         """
         dtc_uuid = "dtc_" + uuid.uuid4().hex
         fact_list = []
+        co_occurring_codes_already_present = []
         # check whether DTC to be added is already part of the KG
-        if len(self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc_knowledge.dtc)) > 0:
-            print("Specified component (" + dtc_knowledge.dtc + ") already present in KG")
+        dtc_instance = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc_knowledge.dtc)
+        if len(dtc_instance) > 0:
+            print("Specified DTC (" + dtc_knowledge.dtc + ") already present in KG")
+            dtc_uuid = dtc_instance[0].split("#")[1]
+            co_occurring_codes_already_present = \
+                self.knowledge_graph_query_tool.query_co_occurring_trouble_codes(dtc_knowledge.dtc)
         else:
             fact_list = [
                 Fact((dtc_uuid, RDF.type, self.onto_namespace["DTC"].toPython())),
                 Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True)
             ]
-            for code in dtc_knowledge.occurs_with:
+
+        for code in dtc_knowledge.occurs_with:
+            if code in co_occurring_codes_already_present:
+                print(code + " already part of the KG as co-occurring code for DTC " + dtc_knowledge.dtc)
+            else:
                 fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
 
         return dtc_uuid, fact_list
