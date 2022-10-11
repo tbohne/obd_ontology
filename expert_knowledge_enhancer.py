@@ -74,8 +74,10 @@ class ExpertKnowledgeEnhancer:
         cat_desc = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)
         fact_list = []
         # check whether fault category to be added is already part of the KG
-        if len(self.knowledge_graph_query_tool.query_fault_cat_by_description(cat_desc)) > 0:
+        fault_cat_instance = self.knowledge_graph_query_tool.query_fault_cat_by_description(cat_desc)
+        if len(fault_cat_instance) > 0:
             print("Specified fault cat (" + cat_desc + ") already present in KG")
+            fault_cat_uuid = fault_cat_instance[0].split("#")[1]
         else:
             fact_list = [
                 Fact((fault_cat_uuid, RDF.type, self.onto_namespace["FaultCategory"].toPython())),
@@ -96,8 +98,10 @@ class ExpertKnowledgeEnhancer:
         fault_cond = dtc_knowledge.fault_condition
         fact_list = []
         # check whether fault condition to be added is already part of the KG
-        if len(self.knowledge_graph_query_tool.query_fault_condition_by_description(fault_cond)) > 0:
+        fault_cond_instance = self.knowledge_graph_query_tool.query_fault_condition_by_description(fault_cond)
+        if len(fault_cond_instance) > 0:
             print("Specified fault condition (" + fault_cond + ") already present in KG")
+            fault_cond_uuid = fault_cond_instance[0].split("#")[1]
         else:
             fact_list = [
                 Fact((fault_cond_uuid, RDF.type, self.onto_namespace["FaultCondition"].toPython())),
@@ -119,13 +123,23 @@ class ExpertKnowledgeEnhancer:
         for symptom in dtc_knowledge.symptoms:
             symptom_uuid = "symptom_" + uuid.uuid4().hex
             # check whether symptom to be added is already part of the KG
-            if len(self.knowledge_graph_query_tool.query_symptoms_by_desc(symptom)) > 0:
+            symptom_instance = self.knowledge_graph_query_tool.query_symptoms_by_desc(symptom)
+            if len(symptom_instance) > 0:
                 print("Specified symptom (" + symptom + ") already present in KG")
+                symptom_uuid = symptom_instance[0].split("#")[1]
             else:
                 fact_list.append(Fact((symptom_uuid, RDF.type, self.onto_namespace["Symptom"].toPython())))
                 fact_list.append(
                     Fact((symptom_uuid, self.onto_namespace.symptom_description, symptom), property_fact=True))
+
+            # there can be more than one `manifestedBy` relation per symptom
+            fault_condition_instances_already_present = \
+                self.knowledge_graph_query_tool.query_fault_condition_instances_by_symptom(symptom)
+
+            if fault_cond_uuid not in [fc.split("#")[1] for fc in fault_condition_instances_already_present]:
+                # symptom can already be present, but not associated with this fault condition
                 fact_list.append(Fact((fault_cond_uuid, self.onto_namespace.manifestedBy, symptom_uuid)))
+
         return fact_list
 
     def generate_facts_to_connect_components_and_dtc(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> list:
