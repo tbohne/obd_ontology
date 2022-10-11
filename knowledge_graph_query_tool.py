@@ -477,6 +477,33 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_fault_condition_instance_by_symptom(self, symptom: str) -> list:
+        """
+        Queries the fault condition instances manifested by the specified symptom.
+
+        :param symptom: symptom to query fault condition instances for
+        :return: fault condition instances
+        """
+        print("####################################")
+        print("QUERY: fault condition instances by symptom")
+        print("####################################")
+        symptom_entry = self.complete_ontology_entry('Symptom')
+        fault_cond_entry = self.complete_ontology_entry('FaultCondition')
+        manifested_by_entry = self.complete_ontology_entry('manifestedBy')
+        symptom_desc_entry = self.complete_ontology_entry('symptom_description')
+        cond_desc_entry = self.complete_ontology_entry('condition_description')
+        s = f"""
+            SELECT ?fault_cond WHERE {{
+                ?fault_cond a {fault_cond_entry} .
+                ?symptom a {symptom_entry} .
+                ?fault_cond {manifested_by_entry} ?symptom .
+                ?symptom {symptom_desc_entry} "{symptom}" .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     def query_dtc_instance_by_code(self, code: str) -> list:
         """
         Queries the DTC instance for the specified code.
@@ -536,3 +563,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_fault_cat_by_description(fault_category_desc))
     qt.print_res(qt.query_fault_condition_by_description(fault_cond_desc))
     qt.print_res(qt.query_symptoms_by_desc(symptom_desc))
+    qt.print_res(qt.query_fault_condition_instance_by_symptom(symptom_desc))
