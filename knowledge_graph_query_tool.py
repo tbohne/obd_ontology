@@ -526,6 +526,39 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_diagnostic_association_by_dtc_and_sus_comp(self, dtc: str, comp: str) -> list:
+        """
+        Queries the diagnostic association instance for the specified code and suspect component.
+
+        :param dtc: diagnostic trouble code to query diagnostic association for
+        :param comp: suspect component to query diagnostic association for
+        :return: diagnostic association instance
+        """
+        print("####################################")
+        print("QUERY: diagnostic association instance by dtc + suspect component")
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
+        suspect_component_entry = self.complete_ontology_entry('SuspectComponent')
+        code_entry = self.complete_ontology_entry('code')
+        has_entry = self.complete_ontology_entry('has')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        points_to_entry = self.complete_ontology_entry('pointsTo')
+        s = f"""
+            SELECT ?diag_association WHERE {{
+                ?diag_association a {diag_association_entry} .
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} "{dtc}" .
+                ?dtc {has_entry} ?diag_association .
+                ?sus a {suspect_component_entry} .
+                ?sus {comp_name_entry} "{comp}" .
+                ?diag_association {points_to_entry} ?sus .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """
@@ -564,3 +597,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_fault_condition_by_description(fault_cond_desc))
     qt.print_res(qt.query_symptoms_by_desc(symptom_desc))
     qt.print_res(qt.query_fault_condition_instances_by_symptom(symptom_desc))
+    qt.print_res(qt.query_diagnostic_association_by_dtc_and_sus_comp(error_code, suspect_comp_name))
