@@ -158,13 +158,24 @@ class ExpertKnowledgeEnhancer:
             # ensure that all the suspect components considered here are already part of the KG
             assert len(component_by_name) == 1
             comp_uuid = component_by_name[0].split("#")[1]
-            # creating diagnostic association between DTC and SuspectComponents
-            diag_association_uuid = "diag_association_" + uuid.uuid4().hex
-            fact_list.append(
-                Fact((diag_association_uuid, RDF.type, self.onto_namespace["DiagnosticAssociation"].toPython())))
-            fact_list.append(Fact((dtc_uuid, self.onto_namespace.has, diag_association_uuid)))
-            fact_list.append(Fact((diag_association_uuid, self.onto_namespace.priority_id, idx), property_fact=True))
-            fact_list.append(Fact((diag_association_uuid, self.onto_namespace.pointsTo, comp_uuid)))
+
+            # making sure that there is only one diagnostic association, i.e. one priority ID, between any pair
+            # of DTC and suspect component
+            diag_association = self.knowledge_graph_query_tool.query_diagnostic_association_by_dtc_and_sus_comp(
+                dtc_knowledge.dtc, comp
+            )
+            if len(diag_association) > 0:
+                print("Diagnostic association between", dtc_knowledge.dtc, "and", comp, "already defined in KG")
+            else:
+                # creating diagnostic association between DTC and SuspectComponent
+                diag_association_uuid = "diag_association_" + uuid.uuid4().hex
+                fact_list.append(
+                    Fact((diag_association_uuid, RDF.type, self.onto_namespace["DiagnosticAssociation"].toPython())))
+                fact_list.append(Fact((dtc_uuid, self.onto_namespace.has, diag_association_uuid)))
+                fact_list.append(
+                    Fact((diag_association_uuid, self.onto_namespace.priority_id, idx), property_fact=True))
+                fact_list.append(Fact((diag_association_uuid, self.onto_namespace.pointsTo, comp_uuid)))
+
         return fact_list
 
     def generate_suspect_component_facts(self, comp_knowledge_list: list) -> list:
