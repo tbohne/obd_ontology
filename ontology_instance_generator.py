@@ -62,15 +62,21 @@ class OntologyInstanceGenerator:
             fault_condition_id = \
                 self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)[0].split("#")[1]
             vehicle_uuid = "vehicle_" + str(uuid.uuid4())
-
-            fact_list = [
-                Fact((vehicle_uuid, RDF.type, onto_namespace["Vehicle"].toPython())),
-                Fact((vehicle_uuid, onto_namespace.model, model), property_fact=True),
-                Fact((vehicle_uuid, onto_namespace.HSN, hsn), property_fact=True),
-                Fact((vehicle_uuid, onto_namespace.TSN, tsn), property_fact=True),
-                Fact((vehicle_uuid, onto_namespace.VIN, vin), property_fact=True),
-                Fact((fault_condition_id, onto_namespace.occurredIn, vehicle_uuid))
-            ]
+            fact_list = []
+            vehicle_instance = self.knowledge_graph_query_tool.query_vehicle_instance_by_vin(vin)
+            if len(vehicle_instance) > 0:
+                print("Vehicle (" + vin + ") already part of the KG")
+                vehicle_uuid = vehicle_instance[0].split("#")[1]
+            else:
+                fact_list = [
+                    Fact((vehicle_uuid, RDF.type, onto_namespace["Vehicle"].toPython())),
+                    Fact((vehicle_uuid, onto_namespace.model, model), property_fact=True),
+                    Fact((vehicle_uuid, onto_namespace.HSN, hsn), property_fact=True),
+                    Fact((vehicle_uuid, onto_namespace.TSN, tsn), property_fact=True),
+                    Fact((vehicle_uuid, onto_namespace.VIN, vin), property_fact=True)
+                ]
+            # the "occurred in" relation should be entered either way
+            fact_list.append(Fact((fault_condition_id, onto_namespace.occurredIn, vehicle_uuid)))
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
