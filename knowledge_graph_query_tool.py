@@ -367,6 +367,28 @@ class KnowledgeGraphQueryTool:
             return [row.comp_name for row in self.graph.query(s)]
         return [row['subsystem']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_vehicle_instance_by_vin(self, vin: str) -> list:
+        """
+        Queries a vehicle instance by the vehicle identification number.
+
+        :param vin: vehicle identification number to query specific instance for
+        :return: vehicle instance
+        """
+        print("####################################")
+        print("QUERY: vehicle instance by VIN -", vin)
+        print("####################################")
+        vehicle_entry = self.complete_ontology_entry('Vehicle')
+        vin_entry = self.complete_ontology_entry('VIN')
+        s = f"""
+            SELECT ?car WHERE {{
+                ?car a {vehicle_entry} .
+                ?car {vin_entry} "{vin}" .
+            }}
+            """
+        if self.local_kb:
+            return [row.comp_name for row in self.graph.query(s)]
+        return [row['car']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     def query_co_occurring_trouble_codes(self, dtc: str) -> list:
         """
         Queries DTCs regularly occurring with the specified DTC.
@@ -598,3 +620,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_symptoms_by_desc(symptom_desc))
     qt.print_res(qt.query_fault_condition_instances_by_symptom(symptom_desc))
     qt.print_res(qt.query_diagnostic_association_by_dtc_and_sus_comp(error_code, suspect_comp_name))
+    qt.print_res(qt.query_vehicle_instance_by_vin("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
