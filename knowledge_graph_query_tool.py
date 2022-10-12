@@ -5,9 +5,8 @@
 import pathlib
 
 import rdflib
-
-from config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
-from connection_controller import ConnectionController
+from OBDOntology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
+from OBDOntology.connection_controller import ConnectionController
 
 
 class KnowledgeGraphQueryTool:

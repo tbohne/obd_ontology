@@ -5,10 +5,9 @@
 import re
 
 import requests
+from OBDOntology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT
+from OBDOntology.fact import Fact
 from rdflib import Namespace, RDF, Literal, Graph, URIRef
-
-from config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT
-from fact import Fact
 
 
 class ConnectionController:

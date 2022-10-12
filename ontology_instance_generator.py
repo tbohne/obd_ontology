@@ -5,13 +5,12 @@
 import uuid
 from datetime import date
 
+from OBDOntology.config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
+from OBDOntology.connection_controller import ConnectionController
+from OBDOntology.fact import Fact
+from OBDOntology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 from owlready2 import *
 from rdflib import Namespace, RDF
-
-from config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
-from connection_controller import ConnectionController
-from fact import Fact
-from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 
 class OntologyInstanceGenerator:
