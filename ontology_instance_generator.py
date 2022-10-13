@@ -57,9 +57,15 @@ class OntologyInstanceGenerator:
             self.check_consistency_and_save_to_file(hsn, tsn, vin)
         else:
             onto_namespace = Namespace(ONTOLOGY_PREFIX)
-            # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
-            fault_condition_id = \
-                self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)[0].split("#")[1]
+
+            fault_condition_instance = self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)
+            fault_condition_id = ""
+            if len(fault_condition_instance) > 0:
+                # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
+                fault_condition_id = fault_condition_instance[0].split("#")[1]
+            else:
+                print("Presented fault condition (" + dtc + ") not yet part of KG -- should be entered in advance")
+
             vehicle_uuid = "vehicle_" + str(uuid.uuid4())
             fact_list = []
             vehicle_instance = self.knowledge_graph_query_tool.query_vehicle_instance_by_vin(vin)
@@ -74,8 +80,10 @@ class OntologyInstanceGenerator:
                     Fact((vehicle_uuid, onto_namespace.TSN, tsn), property_fact=True),
                     Fact((vehicle_uuid, onto_namespace.VIN, vin), property_fact=True)
                 ]
-            # the "occurred in" relation should be entered either way
-            fact_list.append(Fact((fault_condition_id, onto_namespace.occurredIn, vehicle_uuid)))
+            # the "occurred in" relation should be entered either way (if the fault condition is part of the KG)
+            if fault_condition_id != "":
+                fact_list.append(Fact((fault_condition_id, onto_namespace.occurredIn, vehicle_uuid)))
+
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
