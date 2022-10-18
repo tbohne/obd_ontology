@@ -606,6 +606,32 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_dtcs_by_model(self, model: str) -> list:
+        """
+        Queries the DTCs (diagnostic trouble codes) for the specified car model.
+
+        :param model: car model to retrieve recorded DTCs for
+        :return: DTCs
+        """
+        print("####################################")
+        print("QUERY: DTCs by car model")
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        vehicle_entry = self.complete_ontology_entry('Vehicle')
+        code_entry = self.complete_ontology_entry('code')
+        model_entry = self.complete_ontology_entry('model')
+        s = f"""
+            SELECT ?code WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} ?code .
+                ?vehicle a {vehicle_entry} .
+                ?vehicle {model_entry} "{model}" .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """
@@ -628,6 +654,7 @@ if __name__ == '__main__':
     fault_cond_desc = "Ladedrucksteller-Positionssensor / Signal unplausibel"
     symptom_desc = "Glühkontrollleuchte leuchtet"
     vin = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    model = "Mazda 3"
     qt.print_res(qt.query_fault_causes_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_by_dtc(error_code))
     qt.print_res(qt.query_symptoms_by_dtc(error_code))
@@ -648,3 +675,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_diagnostic_association_by_dtc_and_sus_comp(error_code, suspect_comp_name))
     qt.print_res(qt.query_vehicle_instance_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_vin(vin))
+    qt.print_res(qt.query_dtcs_by_model(model))
