@@ -580,6 +580,32 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_dtcs_by_vin(self, vin: str) -> list:
+        """
+        Queries the DTCs (diagnostic trouble codes) for the specified VIN (vehicle identification number).
+
+        :param vin: VIN to query DTCs for
+        :return: DTCs
+        """
+        print("####################################")
+        print("QUERY: DTCs by VIN")
+        print("####################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        vehicle_entry = self.complete_ontology_entry('Vehicle')
+        code_entry = self.complete_ontology_entry('code')
+        vin_entry = self.complete_ontology_entry('VIN')
+        s = f"""
+            SELECT ?code WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} ?code .
+                ?vehicle a {vehicle_entry} .
+                ?vehicle {vin_entry} "{vin}" .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """
@@ -601,6 +627,7 @@ if __name__ == '__main__':
                           " ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}"
     fault_cond_desc = "Ladedrucksteller-Positionssensor / Signal unplausibel"
     symptom_desc = "Glühkontrollleuchte leuchtet"
+    vin = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     qt.print_res(qt.query_fault_causes_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_by_dtc(error_code))
     qt.print_res(qt.query_symptoms_by_dtc(error_code))
@@ -619,4 +646,5 @@ if __name__ == '__main__':
     qt.print_res(qt.query_symptoms_by_desc(symptom_desc))
     qt.print_res(qt.query_fault_condition_instances_by_symptom(symptom_desc))
     qt.print_res(qt.query_diagnostic_association_by_dtc_and_sus_comp(error_code, suspect_comp_name))
-    qt.print_res(qt.query_vehicle_instance_by_vin("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+    qt.print_res(qt.query_vehicle_instance_by_vin(vin))
+    qt.print_res(qt.query_dtcs_by_vin(vin))
