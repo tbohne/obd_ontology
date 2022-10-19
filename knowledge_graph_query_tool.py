@@ -635,6 +635,30 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_oscilloscope_usage_by_suspect_component(self, component_name: str) -> list:
+        """
+        Queries whether an oscilloscope should be used to diagnose the specified component.
+
+        :param component_name: suspect component to determine oscilloscope usage for
+        :return: true / false
+        """
+        print("####################################")
+        print("QUERY: oscilloscope usage by component name")
+        print("####################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        oscilloscope_entry = self.complete_ontology_entry('use_oscilloscope')
+        s = f"""
+            SELECT ?use_oscilloscope WHERE {{
+                ?comp a {comp_entry} .
+                ?comp {name_entry} "{component_name}" .
+                ?comp {oscilloscope_entry} ?use_oscilloscope .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['use_oscilloscope']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """
@@ -650,7 +674,7 @@ if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     qt.print_res(qt.query_all_dtc_instances())
     error_code = "P2563"
-    suspect_comp_name = "Custom-Comp-B"
+    suspect_comp_name = "Ladedruck-Regelventil"
     vehicle_subsystem_name = "SubsystemA"
     fault_category_desc = "{powertrain (engine, transmission, and associated accessories)," \
                           " ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}"
@@ -679,3 +703,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_vehicle_instance_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_model(model))
+    qt.print_res(qt.query_oscilloscope_usage_by_suspect_component(suspect_comp_name))
