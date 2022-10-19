@@ -302,18 +302,21 @@ class KnowledgeGraphQueryTool:
         print("QUERY: suspect components for", dtc)
         print("####################################")
         dtc_entry = self.complete_ontology_entry('DTC')
-        points_to_entry = self.complete_ontology_entry('pointsTo')
         suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
+        diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
+        points_to_entry = self.complete_ontology_entry('pointsTo')
+        has_entry = self.complete_ontology_entry('has')
         component_name_entry = self.complete_ontology_entry('component_name')
         code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?comp_name WHERE {{
                 ?dtc a {dtc_entry} .
-                ?dtc {points_to_entry} ?comp .
-                ?dtc {code_entry} ?dtc_code .
                 ?comp a {suspect_comp_entry} .
                 ?comp {component_name_entry} ?comp_name .
-                FILTER(STR(?dtc_code) = "{dtc}")
+                ?da a {diag_association_entry} .
+                ?dtc {code_entry} "{dtc}" .
+                ?da {points_to_entry} ?comp .
+                ?dtc {has_entry} ?da .
             }}
             """
         if self.local_kb:
