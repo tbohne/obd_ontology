@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Components</title>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+
+</head>
+<body>
+  <form method="POST">
+      {{ form.csrf_token }}
+      <br>
+      <h2>Add a new component instance to the ontology:</h2>
+      <br>
+      {{ form.component_name.label }} {{ form.component_name(size=20) }} <br>
+      <br>
+      Are oscilloscope measurements possible for this component?
+      {{form.measurements_possible}} <br>
+      <br>
+      Please select other components whose malfunctions can affect the current component (you can select multiple by pressing ctrl):
+      <br>
+      <div>{{ form.component_selectfield}} </div>
+      <br>
+      {{form.final_submit}}
+  </form>
+</body>
+</html>
