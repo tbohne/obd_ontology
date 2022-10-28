@@ -657,7 +657,8 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['use_oscilloscope']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [True if row['use_oscilloscope']['value'] == "true" else False
+                for row in self.fuseki_connection.query_knowledge_graph(s)]
 
     @staticmethod
     def print_res(res: list) -> None:
