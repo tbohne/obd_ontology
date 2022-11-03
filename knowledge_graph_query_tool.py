@@ -377,7 +377,7 @@ class KnowledgeGraphQueryTool:
         :return: vehicle instance
         """
         print("####################################")
-        print("QUERY: vehicle instance by VIN -", vin)
+        print("QUERY: vehicle instance by VIN", vin)
         print("####################################")
         vehicle_entry = self.complete_ontology_entry('Vehicle')
         vin_entry = self.complete_ontology_entry('VIN')
@@ -485,7 +485,7 @@ class KnowledgeGraphQueryTool:
         :return: fault condition instance
         """
         print("####################################")
-        print("QUERY: fault condition instance by code")
+        print("QUERY: fault condition instance by code", dtc)
         print("####################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         code_entry = self.complete_ontology_entry('code')
@@ -591,7 +591,7 @@ class KnowledgeGraphQueryTool:
         :return: DTCs
         """
         print("####################################")
-        print("QUERY: DTCs by VIN")
+        print("QUERY: DTCs by VIN", vin)
         print("####################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         vehicle_entry = self.complete_ontology_entry('Vehicle')
