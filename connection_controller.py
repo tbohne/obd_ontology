@@ -35,7 +35,6 @@ class ConnectionController:
                             headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'})
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
-        print(type(res.json()["results"]["bindings"]))
         return res.json()["results"]["bindings"]
 
     def extend_knowledge_graph(self, facts: list) -> None:
