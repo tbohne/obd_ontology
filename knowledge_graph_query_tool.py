@@ -660,6 +660,30 @@ class KnowledgeGraphQueryTool:
         return [True if row['use_oscilloscope']['value'] == "true" else False
                 for row in self.fuseki_connection.query_knowledge_graph(s)]
 
+    def query_affected_by_relations_by_suspect_component(self, component_name: str) -> list:
+        """
+        Queries the affecting components for the specified suspect component.
+
+        :param component_name: suspect component to query affected_by relations for
+        :return: affecting components
+        """
+        print("####################################")
+        print("QUERY: affecting components by component name")
+        print("####################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        affected_by_entry = self.complete_ontology_entry('affected_by')
+        s = f"""
+            SELECT ?affected_by WHERE {{
+                ?comp a {comp_entry} .
+                ?comp {name_entry} "{component_name}" .
+                ?comp {affected_by_entry} ?affected_by .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """
@@ -705,3 +729,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_dtcs_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_model(model))
     qt.print_res(qt.query_oscilloscope_usage_by_suspect_component(suspect_comp_name))
+    qt.print_res(qt.query_affected_by_relations_by_suspect_component(suspect_comp_name))
