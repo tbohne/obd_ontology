@@ -590,6 +590,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <affected_by rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedrucksteller-Positionssensor</affected_by>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Motor-Steuergerät</component_name>
         <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus2</rdfs:label>
@@ -601,6 +602,9 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <affected_by rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedruck-Regelventil</affected_by>
+        <affected_by rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Motor-Steuergerät</affected_by>
+        <affected_by rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VTG-Abgasturbolader</affected_by>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedruck-Magnetventil</component_name>
         <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus3</rdfs:label>
@@ -689,6 +693,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <affected_by rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedrucksteller-Positionssensor</affected_by>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedruck-Regelventil</component_name>
         <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus4</rdfs:label>
@@ -700,6 +705,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <affected_by rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ladedrucksteller-Positionssensor</affected_by>
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VTG-Abgasturbolader</component_name>
         <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</use_oscilloscope>
         <rdfs:label xml:lang="en">sus1</rdfs:label>
