@@ -668,7 +668,7 @@ class KnowledgeGraphQueryTool:
         :return: affecting components
         """
         print("####################################")
-        print("QUERY: affecting components by component name")
+        print("QUERY: affecting components by component name", component_name)
         print("####################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
