@@ -5,40 +5,62 @@ from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 
+from OBDOntology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
+from OBDOntology.subsystem_knowledge import SubsystemKnowledge
+from OBDOntology.component_knowledge import ComponentKnowledge
+from OBDOntology.dtc_knowledge import DTCKnowledge
+from OBDOntology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+
+app = Flask(__name__, template_folder="flask_templates")
+app.debug = True
+app.config['SECRET_KEY'] = "3847850"
+app.app_context()
+
+csrf = CSRFProtect(app)
+csrf.init_app(app)
+
+logging.basicConfig(level=logging.DEBUG)
+
 
 def get_component_list():
     """
-    returns a list of all instances of components that are in the ontology.
+    returns a list of all instances of components that are in the knowledge graph.
     """
-    return ["Component A", "Component B", "Component C"]
+    kg_query_tool = KnowledgeGraphQueryTool()
+    return kg_query_tool.query_all_component_instances()
 
 
 def get_dtcs():
     """
-    returns a list of all instances of DTC that are in the ontology.
+    returns a list of all instances of DTC that are in the knowledge graph.
     """
-    return ["P012345", "P0123466"]
+    kg_query_tool = KnowledgeGraphQueryTool()
+    return kg_query_tool.query_all_dtc_instances()
 
 
 def get_faultconditions():
     """
-    returns a list of all instances of fault condition that are in the ontology.
+    returns a list of all instances of fault condition that are in the knowledge graph.
     """
-    return ["Faultcondition A", "Faultcondition B"]
+    # ToDo: check if this function is actually needed
+    kg_query_tool = KnowledgeGraphQueryTool()
+    return kg_query_tool.query_all_faultcondition_instances()
 
 
 def get_symptoms():
     """
-    returns a list of all instances of symptoms that are in the ontology.
+    returns a list of all instances of symptoms that are in the knowledge graph.
     """
-    return ["Motor does not start", "Strange noises"]
+    kg_query_tool = KnowledgeGraphQueryTool()
+    return kg_query_tool.query_all_symptom_instances()
 
 
 def get_vehicle_subsystems():
     """
-    returns a list of all instances of vehicle subsystems that are in the ontology.
+    returns a list of all instances of vehicle subsystems that are in the knowledge graph.
     """
-    return ["Subsystem A", "Subsystem B", "Subsystem C"]
+    kg_query_tool = KnowledgeGraphQueryTool()
+    return kg_query_tool.query_all_vehicle_subsystem_instances()
 
 
 def make_tuple_list(some_list):
@@ -85,9 +107,12 @@ class SubsystemForm(FlaskForm):
     Form for the subsystem page.
     """
     subsystem_name = StringField("Name of the subsystem", validators=[InputRequired()])
+
     suspectcomponents = SelectMultipleField("Suspect components", choices=make_tuple_list(get_component_list()),
                                             validators=[InputRequired()])
+
     veryfied_by = SelectField("component", choices=get_component_list())
+
     final_submit = SubmitField("Submit")
 
 
@@ -102,51 +127,47 @@ class SuspectComponentsForm(FlaskForm):
     component_selectfield = SelectMultipleField("Add further component", choices=make_tuple_list(get_component_list()))
 
 
-app = Flask(__name__, template_folder="flask_templates")
-app.debug = True
-app.config['SECRET_KEY'] = "3847850"
-
-csrf = CSRFProtect(app)
-csrf.init_app(app)
-
-logging.basicConfig(level=logging.DEBUG)
-
-
 @app.route('/', methods=['POST', 'GET'])
 def main():
     return render_template('index.html')
 
 
-def add_component_to_ontology(name, affected_by, oscilloscope_useful):
+def add_component_to_knowledge_graph(name, affected_by, oscilloscope_useful):
     """
-    Adds a component instance with the given properties to the ontology.
+    Adds a component instance with the given properties to the knowledge graph.
     """
-    #ToDo
-    print("ToDo")
+
+    new_component_knowledge = ComponentKnowledge(name, oscilloscope_useful, affected_by)
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
+    fact_list = expert_knowledge_enhancer.generate_suspect_component_facts([new_component_knowledge])
+    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
-def add_dtc_to_ontology(dtc_name, occurs_with, faultcondition, symptoms, suspect_components):
+def add_dtc_to_knowledge_graph(dtc_name, occurs_with, faultcondition, symptoms, suspect_components):
     """
-    Adds a DTC instance with the given properties to the ontology.
+    Adds a DTC instance with the given properties to the knowledge graph.
     """
-    #ToDo
-    print("ToDo")
-    print("Submitted DTC")
-    print("DTC name", dtc_name)
-    print("occurs with", occurs_with)
-    print("fault condition", faultcondition)
-    print("symptoms", symptoms)
-    print("suspect components", suspect_components)
+    new_dtc_knowledge = DTCKnowledge(dtc_name, occurs_with, faultcondition, symptoms, suspect_components)
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
+    dtc_uuid, dtc_facts = expert_knowledge_enhancer.generate_dtc_facts(new_dtc_knowledge)
+    _, fault_cat_facts = expert_knowledge_enhancer.generate_fault_cat_facts(dtc_uuid, new_dtc_knowledge)
+    fault_cond_uuid, fault_cond_facts = expert_knowledge_enhancer.generate_fault_cond_facts(dtc_uuid, new_dtc_knowledge)
+    symptom_facts = expert_knowledge_enhancer.generate_symptom_facts(fault_cond_uuid, new_dtc_knowledge)
+    diag_association_facts = expert_knowledge_enhancer.generate_facts_to_connect_components_and_dtc(dtc_uuid,
+                                                                                                    new_dtc_knowledge)
+    print("diag facts", diag_association_facts)
+    fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
+    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
-def add_subsystem_to_ontology(subsystem_name, components, veryfied_by):
+def add_subsystem_to_knowledge_graph(subsystem_name, components, veryfied_by):
     """
-    Adds a subsystem instance to the ontology.
+    Adds a subsystem instance to the knowledge graph.
     """
-    #ToDo
-    print("Name", subsystem_name)
-    print("Suspect components", components)
-    print("veryfied by", veryfied_by)
+    new_subsystem_knowledge = SubsystemKnowledge(subsystem_name, components, veryfied_by)
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
+    fact_list = expert_knowledge_enhancer.generate_subsystem_facts(new_subsystem_knowledge)
+    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
 @app.route('/suspectcomponents', methods=['GET', 'POST'])
@@ -163,9 +184,11 @@ def suspectcomponents():
                         "please click the submit button one more time.")
                     session["component_name"] = form.component_name.data
                 else:
-                    add_component_to_ontology(name=form.component_name.data,
-                                              affected_by=form.component_selectfield.data,
-                                              oscilloscope_useful=form.measurements_possible.data)
+                    add_component_to_knowledge_graph(name=form.component_name.data,
+                                                     affected_by=form.component_selectfield.data,
+                                                     oscilloscope_useful=form.measurements_possible.data)
+                    # Todo: see why the component selectfield does not update right away
+                    form.component_selectfield.choices = get_component_list()
                     if form.component_name.data == session.get("component_name"):
                         flash("The component {name} has successfully been overwritten.".format(
                             name=form.component_name.data))
@@ -189,6 +212,8 @@ def suspectcomponents():
 def dtc():
     form = DTCForm()
 
+    form.suspectComponents_selectField.choices = get_component_list()
+
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.dtc_name.data:
@@ -198,9 +223,9 @@ def dtc():
                         "click the submit button one more time.")
                     session["dtc_name"] = form.dtc_name.data
                 else:
-                    add_dtc_to_ontology(dtc_name=form.dtc_name.data, occurs_with=form.occurs_with.data,
-                                        faultcondition=form.faultcondition.data, symptoms=form.symptoms.data,
-                                        suspect_components=session.get("component_list"))
+                    add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data, occurs_with=form.occurs_with.data,
+                                               faultcondition=form.faultcondition.data, symptoms=form.symptoms.data,
+                                               suspect_components=session.get("component_list"))
                     session.get("component_list").clear()
                     if form.dtc_name.data == session.get("dtc_name"):
                         flash("The DTC {name} has successfully been overwritten.".format(name=form.dtc_name.data))
@@ -254,8 +279,8 @@ def subsystem():
                         " please click the submit button one more time.")
                     session["subsystem_name"] = form.subsystem_name.data
                 else:
-                    add_subsystem_to_ontology(subsystem_name=form.subsystem_name.data,
-                                              components=form.suspectcomponents.data, veryfied_by=form.veryfied_by.data)
+                    add_subsystem_to_knowledge_graph(subsystem_name=form.subsystem_name.data,
+                                                     components=form.suspectcomponents.data, veryfied_by=form.veryfied_by.data)
                     if form.subsystem_name.data == session.get("subsystem_name"):
                         flash("The vehicle subsystem called {name} has successfully been overwritten.".format(
                             name=form.subsystem_name.data))
