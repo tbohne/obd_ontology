@@ -7,6 +7,7 @@ import pathlib
 import rdflib
 from OBDOntology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
 from OBDOntology.connection_controller import ConnectionController
+from termcolor import colored
 
 
 class KnowledgeGraphQueryTool:
@@ -47,9 +48,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query fault causes for
         :return: fault causes
         """
-        print("####################################")
-        print("QUERY: fault causes for", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: fault causes for " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         fault_cause_entry = self.complete_ontology_entry('FaultCause')
@@ -78,9 +79,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query fault condition for
         :return: fault condition
         """
-        print("####################################")
-        print("QUERY: fault condition for", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: fault condition for " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         condition_desc_entry = self.complete_ontology_entry('condition_description')
@@ -105,9 +106,9 @@ class KnowledgeGraphQueryTool:
         :param desc: description to query fault condition instance for
         :return: fault condition instance
         """
-        print("####################################")
-        print("QUERY: fault condition for", desc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: fault condition for " + desc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         fault_condition_entry = self.complete_ontology_entry('FaultCondition')
         condition_desc_entry = self.complete_ontology_entry('condition_description')
         s = f"""
@@ -128,9 +129,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query symptoms for
         :return: symptoms
         """
-        print("####################################")
-        print("QUERY: symptoms for", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: symptoms for " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         symptom_entry = self.complete_ontology_entry('Symptom')
@@ -159,9 +160,9 @@ class KnowledgeGraphQueryTool:
         :param desc: symptom description to query instance for
         :return: symptom instance
         """
-        print("####################################")
-        print("QUERY: symptom instance for", desc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: symptom instance for " + desc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         symptom_entry = self.complete_ontology_entry('Symptom')
         symptom_desc_entry = self.complete_ontology_entry('symptom_description')
         s = f"""
@@ -182,9 +183,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query corrective actions for
         :return: corrective actions
         """
-        print("####################################")
-        print("QUERY: corrective actions for", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: corrective actions for " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         deletes_entry = self.complete_ontology_entry('deletes')
@@ -217,9 +218,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query fault category for
         :return: fault category
         """
-        print("####################################")
-        print("QUERY: fault category for", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: fault category for " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         has_cat_entry = self.complete_ontology_entry('hasCategory')
         fault_cat = self.complete_ontology_entry('FaultCategory')
@@ -246,9 +247,9 @@ class KnowledgeGraphQueryTool:
         :param desc: fault description to query fault category instance for
         :return: fault category instance
         """
-        print("####################################")
-        print("QUERY: fault category instance for", desc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: fault category instance for " + desc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         fault_cat = self.complete_ontology_entry('FaultCategory')
         cat_desc_entry = self.complete_ontology_entry('category_description')
         s = f"""
@@ -269,9 +270,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query measuring positions for
         :return: measuring positions
         """
-        print("####################################")
-        print("QUERY: measuring pos for", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: measuring pos for " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         implies_entry = self.complete_ontology_entry('implies')
         measuring_pos = self.complete_ontology_entry('MeasuringPos')
@@ -298,9 +299,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble codes to query suspect components for
         :return: suspect components
         """
-        print("####################################")
-        print("QUERY: suspect components for", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: suspect components for " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
         diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
@@ -330,9 +331,9 @@ class KnowledgeGraphQueryTool:
         :param component_name: name to query suspect component for
         :return: suspect component
         """
-        print("####################################")
-        print("QUERY: suspect components by name -", component_name)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: suspect components by name - " + component_name, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
         component_name_entry = self.complete_ontology_entry('component_name')
         s = f"""
@@ -353,9 +354,9 @@ class KnowledgeGraphQueryTool:
         :param subsystem_name: name to query subsystem for
         :return: subsystem
         """
-        print("####################################")
-        print("QUERY: vehicle subsystem by name -", subsystem_name)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: vehicle subsystem by name - " + subsystem_name, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
         subsystem_name_entry = self.complete_ontology_entry('subsystem_name')
         s = f"""
@@ -376,9 +377,9 @@ class KnowledgeGraphQueryTool:
         :param vin: vehicle identification number to query specific instance for
         :return: vehicle instance
         """
-        print("####################################")
-        print("QUERY: vehicle instance by VIN", vin)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: vehicle instance by VIN " + vin, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         vehicle_entry = self.complete_ontology_entry('Vehicle')
         vin_entry = self.complete_ontology_entry('VIN')
         s = f"""
@@ -398,9 +399,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query associated other DTCs for
         :return: co-occurring DTCs
         """
-        print("####################################")
-        print("QUERY: DTCs occurring with", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: DTCs occurring with " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         occurs_with_dtc_entry = self.complete_ontology_entry('occurs_with_DTC')
         code_entry = self.complete_ontology_entry('code')
@@ -423,9 +424,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query vehicles for
         :return: vehicles
         """
-        print("####################################")
-        print("QUERY: vehicle associated with DTC ", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: vehicle associated with DTC " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         occurred_in_entry = self.complete_ontology_entry('occurredIn')
         fault_cond_class = self.complete_ontology_entry('FaultCondition')
@@ -462,9 +463,9 @@ class KnowledgeGraphQueryTool:
 
         :return: all DTCs stored in the knowledge graph
         """
-        print("####################################")
-        print("QUERY: all DTC instances")
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: all DTC instances:", "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         code_entry = self.complete_ontology_entry('code')
         s = f"""
@@ -484,9 +485,9 @@ class KnowledgeGraphQueryTool:
         :param dtc: diagnostic trouble code to query fault condition instance for
         :return: fault condition instance
         """
-        print("####################################")
-        print("QUERY: fault condition instance by code", dtc)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: fault condition instance by code " + dtc, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         code_entry = self.complete_ontology_entry('code')
         represents_entry = self.complete_ontology_entry('represents')
@@ -508,9 +509,9 @@ class KnowledgeGraphQueryTool:
         :param symptom: symptom to query fault condition instances for
         :return: fault condition instances
         """
-        print("####################################")
-        print("QUERY: fault condition instances by symptom")
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: fault condition instances by symptom " + symptom, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         symptom_entry = self.complete_ontology_entry('Symptom')
         fault_cond_entry = self.complete_ontology_entry('FaultCondition')
         manifested_by_entry = self.complete_ontology_entry('manifestedBy')
@@ -535,9 +536,9 @@ class KnowledgeGraphQueryTool:
         :param code: code to query DTC instance for
         :return: DTC instance
         """
-        print("####################################")
-        print("QUERY: DTC instance by code")
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: DTC instance by code " + code, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         code_entry = self.complete_ontology_entry('code')
         s = f"""
@@ -558,9 +559,10 @@ class KnowledgeGraphQueryTool:
         :param comp: suspect component to query diagnostic association for
         :return: diagnostic association instance
         """
-        print("####################################")
-        print("QUERY: diagnostic association instance by dtc + suspect component")
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: diagnostic association instance by dtc + suspect component: " + dtc + ", " +
+                      comp, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
         suspect_component_entry = self.complete_ontology_entry('SuspectComponent')
@@ -590,9 +592,9 @@ class KnowledgeGraphQueryTool:
         :param vin: VIN to query DTCs for
         :return: DTCs
         """
-        print("####################################")
-        print("QUERY: DTCs by VIN", vin)
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: DTCs by VIN " + vin, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         vehicle_entry = self.complete_ontology_entry('Vehicle')
         code_entry = self.complete_ontology_entry('code')
@@ -616,9 +618,9 @@ class KnowledgeGraphQueryTool:
         :param model: car model to retrieve recorded DTCs for
         :return: DTCs
         """
-        print("####################################")
-        print("QUERY: DTCs by car model")
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: DTCs by car model " + model, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         vehicle_entry = self.complete_ontology_entry('Vehicle')
         code_entry = self.complete_ontology_entry('code')
@@ -642,9 +644,9 @@ class KnowledgeGraphQueryTool:
         :param component_name: suspect component to determine oscilloscope usage for
         :return: true / false
         """
-        print("####################################")
-        print("QUERY: oscilloscope usage by component name")
-        print("####################################")
+        print("########################################################################")
+        print(colored("QUERY: oscilloscope usage by component name " + component_name, "green", "on_grey", ["bold"]))
+        print("########################################################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
         oscilloscope_entry = self.complete_ontology_entry('use_oscilloscope')
@@ -669,9 +671,10 @@ class KnowledgeGraphQueryTool:
         :return: affecting components
         """
         if verbose:
-            print("####################################")
-            print("QUERY: affecting components by component name", component_name)
-            print("####################################")
+            print("########################################################################")
+            print(colored("QUERY: affecting components by component name "
+                          + component_name, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
         affected_by_entry = self.complete_ontology_entry('affected_by')
