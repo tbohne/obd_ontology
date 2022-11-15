@@ -660,16 +660,18 @@ class KnowledgeGraphQueryTool:
         return [True if row['use_oscilloscope']['value'] == "true" else False
                 for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_affected_by_relations_by_suspect_component(self, component_name: str) -> list:
+    def query_affected_by_relations_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
         """
         Queries the affecting components for the specified suspect component.
 
         :param component_name: suspect component to query affected_by relations for
+        :param verbose: if true, logging is activated
         :return: affecting components
         """
-        print("####################################")
-        print("QUERY: affecting components by component name", component_name)
-        print("####################################")
+        if verbose:
+            print("####################################")
+            print("QUERY: affecting components by component name", component_name)
+            print("####################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
         affected_by_entry = self.complete_ontology_entry('affected_by')

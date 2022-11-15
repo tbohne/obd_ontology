@@ -30,8 +30,8 @@ class ConnectionController:
         :param verbose: if true, queries are logged
         :return: query results
         """
-        print("query knowledge graph..")
         if verbose:
+            print("query knowledge graph..")
             print(query)
         res = requests.post(self.fuseki_url + SPARQL_ENDPOINT, query.encode(),
                             headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'})
