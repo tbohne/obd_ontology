@@ -69,7 +69,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.cause_desc for row in self.graph.query(s)]
-        return [row['cause_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['cause_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_condition_by_dtc(self, dtc: str) -> list:
         """
@@ -96,7 +96,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.condition_desc for row in self.graph.query(s)]
-        return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_condition_by_description(self, desc: str) -> list:
         """
@@ -119,7 +119,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.condition_desc for row in self.graph.query(s)]
-        return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_symptoms_by_dtc(self, dtc: str) -> list:
         """
@@ -150,7 +150,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.symptom_desc for row in self.graph.query(s)]
-        return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_symptoms_by_desc(self, desc: str) -> list:
         """
@@ -173,7 +173,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.symptom_desc for row in self.graph.query(s)]
-        return [row['symptom']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['symptom']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_corrective_actions_by_dtc(self, dtc: str) -> list:
         """
@@ -208,7 +208,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.action_desc for row in self.graph.query(s)]
-        return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_cat_by_dtc(self, dtc: str) -> list:
         """
@@ -237,7 +237,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.cat_name for row in self.graph.query(s)]
-        return [row['cat_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['cat_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_cat_by_description(self, desc: str) -> list:
         """
@@ -260,7 +260,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.cat_name for row in self.graph.query(s)]
-        return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_measuring_pos_by_dtc(self, dtc: str) -> list:
         """
@@ -289,7 +289,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.measuring_pos_desc for row in self.graph.query(s)]
-        return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_suspect_component_by_dtc(self, dtc: str) -> list:
         """
@@ -321,7 +321,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.comp_name for row in self.graph.query(s)]
-        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_suspect_component_by_name(self, component_name: str) -> list:
         """
@@ -344,7 +344,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.comp_name for row in self.graph.query(s)]
-        return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_vehicle_subsystem_by_name(self, subsystem_name: str) -> list:
         """
@@ -367,7 +367,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.comp_name for row in self.graph.query(s)]
-        return [row['subsystem']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['subsystem']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_vehicle_instance_by_vin(self, vin: str) -> list:
         """
@@ -389,7 +389,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.comp_name for row in self.graph.query(s)]
-        return [row['car']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['car']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_co_occurring_trouble_codes(self, dtc: str) -> list:
         """
@@ -414,7 +414,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.other for row in self.graph.query(s)]
-        return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_vehicle_by_dtc(self, dtc: str) -> list:
         """
@@ -454,7 +454,7 @@ class KnowledgeGraphQueryTool:
         if self.local_kb:
             return [(str(row.model), str(row.hsn), str(row.tsn), str(row.vin)) for row in self.graph.query(s)]
         return [(row['model']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value']) for row in
-                self.fuseki_connection.query_knowledge_graph(s)]
+                self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_all_dtc_instances(self) -> list:
         """
@@ -475,7 +475,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_condition_instance_by_code(self, dtc: str) -> list:
         """
@@ -499,7 +499,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_condition_instances_by_symptom(self, symptom: str) -> list:
         """
@@ -526,7 +526,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_dtc_instance_by_code(self, code: str) -> list:
         """
@@ -548,7 +548,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_diagnostic_association_by_dtc_and_sus_comp(self, dtc: str, comp: str) -> list:
         """
@@ -581,7 +581,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_dtcs_by_vin(self, vin: str) -> list:
         """
@@ -607,7 +607,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_dtcs_by_model(self, model: str) -> list:
         """
@@ -633,7 +633,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_oscilloscope_usage_by_suspect_component(self, component_name: str) -> list:
         """
@@ -658,7 +658,7 @@ class KnowledgeGraphQueryTool:
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
         return [True if row['use_oscilloscope']['value'] == "true" else False
-                for row in self.fuseki_connection.query_knowledge_graph(s)]
+                for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_affected_by_relations_by_suspect_component(self, component_name: str) -> list:
         """
@@ -682,7 +682,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     @staticmethod
     def print_res(res: list) -> None:

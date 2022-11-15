@@ -22,15 +22,17 @@ class ConnectionController:
         self.graph = Graph()
         self.graph.bind("", self.namespace)
 
-    def query_knowledge_graph(self, query: str) -> list:
+    def query_knowledge_graph(self, query: str, verbose: bool) -> list:
         """
         Sends an HTTP request containing the specified query to the knowledge graph server.
 
         :param query: query to be sent to knowledge graph server
+        :param verbose: if true, queries are logged
         :return: query results
         """
         print("query knowledge graph..")
-        print(query)
+        if verbose:
+            print(query)
         res = requests.post(self.fuseki_url + SPARQL_ENDPOINT, query.encode(),
                             headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'})
         if res.status_code != 200:
@@ -75,7 +77,7 @@ if __name__ == '__main__':
 
     # query example
     q = "SELECT ?s ?p ?o WHERE { ?s ?p ?o } LIMIT 25"
-    response = connection.query_knowledge_graph(q)
+    response = connection.query_knowledge_graph(q, True)
     print(response)
 
     # extension example
