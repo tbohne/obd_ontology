@@ -80,7 +80,7 @@ class KnowledgeGraphQueryTool:
         :return: fault condition
         """
         print("########################################################################")
-        print(colored("QUERY: fault condition for " + dtc, "green", "on_grey", ["bold"]))
+        print(colored("QUERY: fault condition description for " + dtc, "green", "on_grey", ["bold"]))
         print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')

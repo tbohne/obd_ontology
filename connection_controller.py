@@ -8,6 +8,7 @@ import requests
 from OBDOntology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT
 from OBDOntology.fact import Fact
 from rdflib import Namespace, RDF, Literal, Graph, URIRef
+from termcolor import colored
 
 
 class ConnectionController:
@@ -45,7 +46,7 @@ class ConnectionController:
 
         :param facts: facts to be entered into the knowledge graph
         """
-        print("extend knowledge graph..")
+        print(colored("\nextending knowledge graph..", "green", "on_grey", ["bold"]))
         graph = Graph()
         for fact in facts:
             print("fact:", fact)

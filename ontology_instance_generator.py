@@ -63,6 +63,9 @@ class OntologyInstanceGenerator:
             if len(fault_condition_instance) > 0:
                 # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
                 fault_condition_id = fault_condition_instance[0].split("#")[1]
+                # TODO: deactivated for demo, should be activated again later
+                # fault_condition = self.knowledge_graph_query_tool.query_fault_condition_by_dtc(dtc)
+                # print("FAULT CONDITION:", fault_condition[0])
             else:
                 print("Presented fault condition (" + dtc + ") not yet part of KG -- should be entered in advance")
 
