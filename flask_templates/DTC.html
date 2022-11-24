@@ -14,6 +14,7 @@
     {% endwith %}
     {% block body %}{% endblock %}
 
+    Site navigation: <a href="/">Start page</a> | <a href="subsystem">Add a vehicle subsystems</a> | <a href="suspectcomponents">Add a component</a>.
 </head>
 <body>
   <form method="POST">
@@ -27,7 +28,7 @@
       <br>
       <div>{{form.occurs_with(multiple=True)}} </div>
       <br>
-      Please choose the fault condition for the DTC:
+      Please describe the fault condition for the DTC:
       {{form.faultcondition}}
       <br> <br>
       {%for i in form.chosen_symptoms%}
@@ -42,7 +43,7 @@
       <br>
       <div>{{ form.new_symptom.label }} {{form.new_symptom}} {{form.new_symptom_submit}}</div>
       <br><br>
-      Please list the components that should be checked. Please list them in the right order - the ones that come first in the list should be the ones that should be checked first:
+      Please list the components that should be checked. Please list them in the right order - the ones that come first in the list should be the ones that should be checked first. If you want to add a component that is not in this list, please add it via <a href="suspectcomponents">this</a> form and afterwards select it in the list here.
       <br>
       <p color=blue style>
       {%for i in suspectComponents%}
