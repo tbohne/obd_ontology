@@ -208,24 +208,27 @@ def dtc():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.dtc_name.data:
-                if form.dtc_name.data in get_dtcs() and form.dtc_name.data != session.get("dtc_name"):
-                    flash(
-                        "WARNING: This DTC already exists! If you are sure that you want to overwrite it, please "
-                        "click the submit button one more time.")
-                    session["dtc_name"] = form.dtc_name.data
-                else:
-                    add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data, occurs_with=form.occurs_with.data,
-                                               faultcondition=form.faultcondition.data, symptoms=form.symptoms.data,
-                                               suspect_components=session.get("component_list"))
-                    session.get("component_list").clear()
-                    if form.dtc_name.data == session.get("dtc_name"):
-                        flash("The DTC {name} has successfully been overwritten.".format(name=form.dtc_name.data))
+                if form.faultcondition.data:
+                    if form.dtc_name.data in get_dtcs() and form.dtc_name.data != session.get("dtc_name"):
+                        flash(
+                            "WARNING: This DTC already exists! If you are sure that you want to overwrite it, please "
+                            "click the submit button one more time.")
+                        session["dtc_name"] = form.dtc_name.data
                     else:
-                        flash("The DTC {name} has successfully been added.".format(name=form.dtc_name.data))
+                        add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data, occurs_with=form.occurs_with.data,
+                                                   faultcondition=form.faultcondition.data, symptoms=form.symptoms.data,
+                                                   suspect_components=session.get("component_list"))
+                        session.get("component_list").clear()
+                        if form.dtc_name.data == session.get("dtc_name"):
+                            flash("The DTC {name} has successfully been overwritten.".format(name=form.dtc_name.data))
+                        else:
+                            flash("The DTC {name} has successfully been added.".format(name=form.dtc_name.data))
 
-                    return redirect(url_for('dtc'))
+                        return redirect(url_for('dtc'))
+                else:
+                    flash("Please enter a fault condition description!")
             else:
-                flash("Please enter DTC!")
+                flash("Please enter a DTC code!")
 
         elif form.add_component_submit.data:
             if isinstance(session.get("component_list"), list):
