@@ -38,15 +38,6 @@ def get_dtcs():
     return kg_query_tool.query_all_dtc_instances()
 
 
-def get_faultconditions():
-    """
-    returns a list of all instances of fault condition that are in the knowledge graph.
-    """
-    # ToDo: check if this function is actually needed
-    kg_query_tool = KnowledgeGraphQueryTool()
-    return kg_query_tool.query_all_faultcondition_instances()
-
-
 def get_symptoms():
     """
     returns a list of all instances of symptoms that are in the knowledge graph.
@@ -83,7 +74,7 @@ class DTCForm(FlaskForm):
 
     occurs_with = SelectMultipleField("Select DTCs that occur with this DTC", choices=make_tuple_list(get_dtcs()))
 
-    faultcondition = SelectField("Faultcondition", choices=get_faultconditions())
+    faultcondition = StringField("Faultcondition")
 
     symptoms_list = make_tuple_list(get_symptoms())
 

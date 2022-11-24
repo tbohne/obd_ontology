@@ -682,28 +682,6 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
 
-    def query_all_faultcondition_instances(self) -> list:
-        """
-        Queries all fault condition instances stored in the knowledge graph.
-
-        :return: all fault conditions stored in the knowledge graph
-        """
-        print("####################################")
-        print("QUERY: all faultcondition instances")
-        print("####################################")
-        fault_cond_entry = self.complete_ontology_entry('FaultCondition')
-        cond_desc_entry = self.complete_ontology_entry('condition_description')
-
-        s = f"""
-        SELECT ?desc WHERE {{
-            ?fault_cond a {fault_cond_entry} .
-            ?fault_cond {cond_desc_entry} ?desc.
-        }}
-        """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
-        return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
-
     def query_all_symptom_instances(self) -> list:
         """
         Queries all symptom instances stored in the knowledge graph.
