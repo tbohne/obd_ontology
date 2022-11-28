@@ -1,0 +1,4 @@
+rdflib==6.2.0 
+Owlready2==0.39
+requests==2.28.1
+git+https://github.com/tbohne/dtc_parser.git
