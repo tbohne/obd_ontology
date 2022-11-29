@@ -5,10 +5,10 @@
 import uuid
 from datetime import date
 
-from OBDOntology.config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
-from OBDOntology.connection_controller import ConnectionController
-from OBDOntology.fact import Fact
-from OBDOntology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology.config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
+from obd_ontology.connection_controller import ConnectionController
+from obd_ontology.fact import Fact
+from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 from owlready2 import *
 from rdflib import Namespace, RDF
 

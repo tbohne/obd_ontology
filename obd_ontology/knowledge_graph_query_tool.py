@@ -5,8 +5,8 @@
 import pathlib
 
 import rdflib
-from OBDOntology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
-from OBDOntology.connection_controller import ConnectionController
+from obd_ontology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
+from obd_ontology.connection_controller import ConnectionController
 from termcolor import colored
 
 

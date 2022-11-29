@@ -1,4 +1,5 @@
 rdflib
 Owlready2
 requests
+termcolor
 git+https://github.com/tbohne/dtc_parser.git
