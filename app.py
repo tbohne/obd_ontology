@@ -88,7 +88,7 @@ class DTCForm(FlaskForm):
     """
     Form for the DTC page.
     """
-    dtc_name = StringField("DTC")
+    dtc_name = StringField("Please enter the DTC:")
 
     occurs_with = SelectField("Select DTCs that occur with this DTC", choices=make_tuple_list(get_dtcs()))
 
@@ -100,7 +100,7 @@ class DTCForm(FlaskForm):
 
     symptoms_list = make_tuple_list(get_symptoms())
 
-    symptoms = SelectField("Select symptoms", choices=symptoms_list)
+    symptoms = SelectField("Select symptom", choices=symptoms_list)
 
     symptoms_submit = SubmitField("Add symptom")
 
@@ -110,7 +110,7 @@ class DTCForm(FlaskForm):
 
     new_symptom_submit = SubmitField("Add new symptom")
 
-    suspectComponents_selectField = SelectField("suspect Components", choices=get_component_list())
+    suspectComponents_selectField = SelectField("Select component", choices=get_component_list())
 
     add_component_submit = SubmitField("Add component")
 
@@ -142,7 +142,7 @@ class SuspectComponentsForm(FlaskForm):
     """
     component_name = StringField('Component name:')
 
-    boolean_choices = [(False,"No",),(True,"Yes")]
+    boolean_choices = [("false","No",),("true","Yes")]
 
     final_submit = SubmitField('Submit component')
 
@@ -178,7 +178,6 @@ def add_dtc_to_knowledge_graph(dtc_name, occurs_with, faultcondition, symptoms, 
     symptom_facts = expert_knowledge_enhancer.generate_symptom_facts(fault_cond_uuid, new_dtc_knowledge)
     diag_association_facts = expert_knowledge_enhancer.generate_facts_to_connect_components_and_dtc(dtc_uuid,
                                                                                                     new_dtc_knowledge)
-    print("diag facts", diag_association_facts)
     fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
@@ -231,11 +230,6 @@ def suspectcomponents():
         elif form.clear_affecting_components.data:
             get_session_variable_list("affecting_components").clear()
 
-
-        else:
-            print("No Submit pressed")
-            print(form.chosen_components)
-            return redirect(url_for('suspectcomponents'))
 
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
@@ -312,7 +306,7 @@ def dtc():
     form.suspectComponents_selectField.choices = get_component_list()
     form.occurs_with.choices = get_dtcs()
 
-    return render_template('DTC.html', form=form, suspectComponents=get_session_variable_list("component_list"),symptoms=get_session_variable_list("symptom_list"),occurs_with_DTCs=get_session_variable_list("occurs_with_list"))
+    return render_template('DTC.html', form=form, suspectComponents=get_session_variable_list("component_list"), symptoms=get_session_variable_list("symptom_list"), occurs_with_DTCs=get_session_variable_list("occurs_with_list"))
 
 
 @app.route('/subsystem', methods=['GET', 'POST'])
@@ -340,8 +334,15 @@ def subsystem():
                             name=form.subsystem_name.data))
                     return redirect(url_for('subsystem'))
 
+
+            else:
+                flash("Please enter a name for the subsystem!")
+
         elif form.add_component_submit.data:
             get_session_variable_list("subsystem_components").append(form.suspectcomponents.data)
+
+        elif form.clear_components.data:
+            get_session_variable_list("subsystem_components").clear()
 
     if form.subsystem_name.data != session.get("subsystem_name"):
         session["subsystem_name"] = None
