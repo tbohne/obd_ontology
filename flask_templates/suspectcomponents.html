@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Components</title>
+</head>
+<body>
+    <div> Site navigation: <a href="/">Start page</a> | <a href="subsystem">Add a vehicle subsystems</a> | <a href="dtc">Add a DTC</a>. </div>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class=flashes>
@@ -13,10 +16,6 @@
       {% endif %}
     {% endwith %}
     {% block body %}{% endblock %}
-
-    Site navigation: <a href="/">Start page</a> | <a href="subsystem">Add a vehicle subsystems</a> | <a href="dtc">Add a DTC</a>.
-</head>
-<body>
   <form method="POST">
       {{ form.csrf_token }}
       <br>
@@ -34,8 +33,8 @@
       <p color=blue style>
       {%for i in affectingComponents%}
         {{i}},
-      {%endfor%}</p> <br>
-      <br>
+      {%endfor%}</p>
+      <br> <br>
       {{form.final_submit}}
   </form>
 </body>
