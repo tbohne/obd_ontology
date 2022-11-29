@@ -13,7 +13,7 @@ for i in range(len(required)):
         required[i] = pkg + "@" + required[i]
 
 setup(
-    name='OBDOntology',
+    name='obd_ontology',
     version=__version__,
     description='Ontology for capturing knowledge about on-board diagnosis (DTCs).',
     author='Tim Bohne',
@@ -28,5 +28,6 @@ setup(
     python_requires='>=3.7',
     install_requires=required,
     packages=find_packages(),
+    py_modules=['']
     include_package_data=True,
 )
