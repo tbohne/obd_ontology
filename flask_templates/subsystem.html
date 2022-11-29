@@ -25,9 +25,14 @@
       <br>
       {{ form.subsystem_name.label }} {{ form.subsystem_name(size=20) }} <br>
       <br>
-      Please list the components that belong into this vehicle subsystem (you can select multiple by pressing ctrl):
+      Please list the components that belong into this vehicle subsystem:
       <br>
-      <div>{{form.suspectcomponents(multiple=True)}} </div>
+      <div>{{form.suspectcomponents}} {{form.add_component_submit}} {{form.clear_components}}</div>
+      <br>
+      <p color=blue style>
+      {%for i in suspectComponents%}
+        {{i}},
+      {%endfor%}</p> <br>
       <br>
       Please select which component can verify whether the subsystem works correctly:
       {{form.veryfied_by}}

@@ -27,9 +27,14 @@
       Are oscilloscope measurements possible for this component?
       {{form.measurements_possible}} <br>
       <br>
-      Please select other components whose malfunctions can affect the current component (you can select multiple by pressing ctrl):
+      Please select other components whose malfunctions can affect the current component:
       <br>
-      <div>{{ form.component_selectfield}} </div>
+      <div>{{ form.component_selectfield}} {{form.affecting_component_submit}} {{form.clear_affecting_components}}</div>
+      <br>
+      <p color=blue style>
+      {%for i in affectingComponents%}
+        {{i}},
+      {%endfor%}</p> <br>
       <br>
       {{form.final_submit}}
   </form>

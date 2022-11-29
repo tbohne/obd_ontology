@@ -22,7 +22,7 @@ csrf.init_app(app)
 logging.basicConfig(level=logging.DEBUG)
 
 
-def get_component_list():
+def get_component_list() -> list:
     """
     returns a list of all instances of components that are in the knowledge graph.
     """
@@ -30,7 +30,7 @@ def get_component_list():
     return kg_query_tool.query_all_component_instances()
 
 
-def get_dtcs():
+def get_dtcs() -> list:
     """
     returns a list of all instances of DTC that are in the knowledge graph.
     """
@@ -38,7 +38,7 @@ def get_dtcs():
     return kg_query_tool.query_all_dtc_instances()
 
 
-def get_symptoms():
+def get_symptoms() -> list:
     """
     returns a list of all instances of symptoms that are in the knowledge graph.
     """
@@ -46,7 +46,7 @@ def get_symptoms():
     return kg_query_tool.query_all_symptom_instances()
 
 
-def get_vehicle_subsystems():
+def get_vehicle_subsystems() -> list:
     """
     returns a list of all instances of vehicle subsystems that are in the knowledge graph.
     """
@@ -54,7 +54,7 @@ def get_vehicle_subsystems():
     return kg_query_tool.query_all_vehicle_subsystem_instances()
 
 
-def make_tuple_list(some_list):
+def make_tuple_list(some_list) -> list:
     """
     takes a list of single elements and returns a list where each element appears in a tuple with itself.
 
@@ -66,23 +66,49 @@ def make_tuple_list(some_list):
     return new_list
 
 
+def get_session_variable_list(name: str) -> list:
+    """
+    returns the session variable for a given name, or, if not existent, an empty list.
+
+    It is expected to be only used on session variables that should either contain lists or contain None, but no other data type.
+
+    :param name: name of the session variable
+
+    :return: list stored in the session variable, or empty list
+    """
+    if session.get(name) == None:
+        session[name] = []
+
+    assert isinstance(session.get(name), list)
+
+    return session.get(name)
+
+
 class DTCForm(FlaskForm):
     """
     Form for the DTC page.
     """
     dtc_name = StringField("DTC")
 
-    occurs_with = SelectMultipleField("Select DTCs that occur with this DTC", choices=make_tuple_list(get_dtcs()))
+    occurs_with = SelectField("Select DTCs that occur with this DTC", choices=make_tuple_list(get_dtcs()))
+
+    occurs_with_submit = SubmitField("Add DTC")
+
+    clear_occurs_with = SubmitField("Clear list")
 
     faultcondition = StringField("Faultcondition")
 
     symptoms_list = make_tuple_list(get_symptoms())
 
-    symptoms = SelectMultipleField("Select symptoms", choices=symptoms_list)
+    symptoms = SelectField("Select symptoms", choices=symptoms_list)
+
+    symptoms_submit = SubmitField("Add symptom")
+
+    clear_symptoms = SubmitField("clear list")
 
     new_symptom = StringField("New symptom")
 
-    new_symptom_submit = SubmitField("add symptom")
+    new_symptom_submit = SubmitField("Add new symptom")
 
     suspectComponents_selectField = SelectField("suspect Components", choices=get_component_list())
 
@@ -97,10 +123,13 @@ class SubsystemForm(FlaskForm):
     """
     Form for the subsystem page.
     """
-    subsystem_name = StringField("Name of the subsystem", validators=[InputRequired()])
+    subsystem_name = StringField("Name of the subsystem")
 
-    suspectcomponents = SelectMultipleField("Suspect components", choices=make_tuple_list(get_component_list()),
-                                            validators=[InputRequired()])
+    suspectcomponents = SelectField("Suspect components", choices=make_tuple_list(get_component_list()))
+
+    add_component_submit = SubmitField("Add to list")
+
+    clear_components = SubmitField("Clear list")
 
     veryfied_by = SelectField("component", choices=get_component_list())
 
@@ -112,15 +141,18 @@ class SuspectComponentsForm(FlaskForm):
     Form for the component page.
     """
     component_name = StringField('Component name:')
-    boolean_choices = ["Yes", "No"]
+
+    boolean_choices = [(False,"No",),(True,"Yes")]
+
     final_submit = SubmitField('Submit component')
+
+    affecting_component_submit = SubmitField('Add to list')
+
+    clear_affecting_components = SubmitField("Clear list")
+
     measurements_possible = SelectField(choices=boolean_choices)
-    component_selectfield = SelectMultipleField("Add further component", choices=make_tuple_list(get_component_list()))
 
-
-@app.route('/', methods=['POST', 'GET'])
-def main():
-    return render_template('index.html')
+    component_selectfield = SelectField("Add further component", choices=make_tuple_list(get_component_list()))
 
 
 def add_component_to_knowledge_graph(name, affected_by, oscilloscope_useful):
@@ -160,6 +192,9 @@ def add_subsystem_to_knowledge_graph(subsystem_name, components, veryfied_by):
     fact_list = expert_knowledge_enhancer.generate_subsystem_facts(new_subsystem_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
+@app.route('/', methods=['POST', 'GET'])
+def main():
+    return render_template('index.html')
 
 @app.route('/suspectcomponents', methods=['GET', 'POST'])
 def suspectcomponents():
@@ -176,9 +211,9 @@ def suspectcomponents():
                     session["component_name"] = form.component_name.data
                 else:
                     add_component_to_knowledge_graph(name=form.component_name.data,
-                                                     affected_by=form.component_selectfield.data,
+                                                     affected_by=get_session_variable_list("affecting_components"),
                                                      oscilloscope_useful=form.measurements_possible.data)
-                    # Todo: see why the component selectfield does not update right away
+                    get_session_variable_list("affecting_components").clear()
                     form.component_selectfield.choices = get_component_list()
                     if form.component_name.data == session.get("component_name"):
                         flash("The component {name} has successfully been overwritten.".format(
@@ -188,6 +223,15 @@ def suspectcomponents():
                     return redirect(url_for('suspectcomponents'))
             else:
                 flash("Please enter component name")
+
+        elif form.affecting_component_submit.data:
+            get_session_variable_list("affecting_components").append(form.component_selectfield.data)
+
+
+        elif form.clear_affecting_components.data:
+            get_session_variable_list("affecting_components").clear()
+
+
         else:
             print("No Submit pressed")
             print(form.chosen_components)
@@ -196,7 +240,9 @@ def suspectcomponents():
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
 
-    return render_template('suspectcomponents.html', form=form)
+    form.component_selectfield.choices = get_component_list()
+
+    return render_template('suspectcomponents.html', form=form, affectingComponents = get_session_variable_list("affecting_components"))
 
 
 @app.route('/dtc', methods=['GET', 'POST'])
@@ -215,10 +261,12 @@ def dtc():
                             "click the submit button one more time.")
                         session["dtc_name"] = form.dtc_name.data
                     else:
-                        add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data, occurs_with=form.occurs_with.data,
-                                                   faultcondition=form.faultcondition.data, symptoms=form.symptoms.data,
-                                                   suspect_components=session.get("component_list"))
-                        session.get("component_list").clear()
+                        add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data, occurs_with=get_session_variable_list("occurs_with_list"),
+                                                   faultcondition=form.faultcondition.data, symptoms=get_session_variable_list("symptom_list"),
+                                                   suspect_components=get_session_variable_list("component_list"))
+                        get_session_variable_list("component_list").clear()
+                        get_session_variable_list("symptom_list").clear()
+                        get_session_variable_list("occurs_with_list").clear()
                         if form.dtc_name.data == session.get("dtc_name"):
                             flash("The DTC {name} has successfully been overwritten.".format(name=form.dtc_name.data))
                         else:
@@ -231,32 +279,40 @@ def dtc():
                 flash("Please enter a DTC code!")
 
         elif form.add_component_submit.data:
-            if isinstance(session.get("component_list"), list):
-                component_list = session.get("component_list")
-                component_list.append(form.suspectComponents_selectField.data)
-                session["component_list"] = component_list
-                session.modified
-            else:
-                session["component_list"] = [form.suspectComponents_selectField.data]
+            get_session_variable_list("component_list").append(form.suspectComponents_selectField.data)
+
+        elif form.symptoms_submit.data:
+            get_session_variable_list("symptom_list").append(form.symptoms.data)
 
         elif form.new_symptom_submit.data:
 
             if form.new_symptom.data:
-                form.symptoms_list.append((form.new_symptom.data, form.new_symptom.data))
-                form.symptoms.choices.append((form.new_symptom.data, form.new_symptom.data))
+                # ToDo: check if symptom is already in the list
+                get_session_variable_list("symptom_list").append(form.new_symptom.data)
 
             else:
                 flash("Please add the new symptom before submitting the symptom!")
+
+        elif form.occurs_with_submit.data:
+            get_session_variable_list("occurs_with_list").append(form.occurs_with.data)
+
+        elif form.clear_occurs_with.data:
+            get_session_variable_list("occurs_with_list").clear()
+
         elif form.clear_components.data:
             session.get("component_list").clear()
+
+        elif form.clear_symptoms.data:
+            session.get("symptom_list").clear()
 
     if form.dtc_name.data != session.get("dtc_name"):
         session["dtc_name"] = None
 
-    if session.get("component_list") is None:
-        session["component_list"] = []
+    form.symptoms.choices = get_symptoms()
+    form.suspectComponents_selectField.choices = get_component_list()
+    form.occurs_with.choices = get_dtcs()
 
-    return render_template('DTC.html', form=form, suspectComponents=session.get("component_list"))
+    return render_template('DTC.html', form=form, suspectComponents=get_session_variable_list("component_list"),symptoms=get_session_variable_list("symptom_list"),occurs_with_DTCs=get_session_variable_list("occurs_with_list"))
 
 
 @app.route('/subsystem', methods=['GET', 'POST'])
@@ -274,7 +330,8 @@ def subsystem():
                     session["subsystem_name"] = form.subsystem_name.data
                 else:
                     add_subsystem_to_knowledge_graph(subsystem_name=form.subsystem_name.data,
-                                                     components=form.suspectcomponents.data, veryfied_by=form.veryfied_by.data)
+                                                     components=get_session_variable_list("subsystem_components"), veryfied_by=form.veryfied_by.data)
+                    get_session_variable_list("subsystem_components").clear()
                     if form.subsystem_name.data == session.get("subsystem_name"):
                         flash("The vehicle subsystem called {name} has successfully been overwritten.".format(
                             name=form.subsystem_name.data))
@@ -283,10 +340,15 @@ def subsystem():
                             name=form.subsystem_name.data))
                     return redirect(url_for('subsystem'))
 
+        elif form.add_component_submit.data:
+            get_session_variable_list("subsystem_components").append(form.suspectcomponents.data)
+
     if form.subsystem_name.data != session.get("subsystem_name"):
         session["subsystem_name"] = None
 
-    return render_template('subsystem.html', form=form)
+    form.suspectcomponents.choices = get_component_list()
+
+    return render_template('subsystem.html', form=form, suspectComponents = get_session_variable_list("subsystem_components"))
 
 
 if __name__ == '__main__':
