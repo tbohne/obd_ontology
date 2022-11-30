@@ -1,7 +1,6 @@
 import logging
 from flask import Flask, render_template, redirect, flash, url_for, session
-from wtforms import StringField, SubmitField, SelectField, SelectMultipleField
-from wtforms.validators import InputRequired
+from wtforms import StringField, SubmitField, SelectField
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 
@@ -22,7 +21,7 @@ csrf.init_app(app)
 logging.basicConfig(level=logging.DEBUG)
 
 
-def get_component_list() -> list:
+def get_components() -> list:
     """
     returns a list of all instances of components that are in the knowledge graph.
     """
@@ -58,7 +57,7 @@ def make_tuple_list(some_list) -> list:
     """
     takes a list of single elements and returns a list where each element appears in a tuple with itself.
 
-    This format is needed as input for the SelectMultipleField.
+    This format is needed as input for the SelectMultipleField. Can also be used for the SelectField.
     """
     new_list = []
     for element in some_list:
@@ -76,7 +75,7 @@ def get_session_variable_list(name: str) -> list:
 
     :return: list stored in the session variable, or empty list
     """
-    if session.get(name) == None:
+    if session.get(name) is None:
         session[name] = []
 
     assert isinstance(session.get(name), list)
@@ -96,7 +95,7 @@ class DTCForm(FlaskForm):
 
     clear_occurs_with = SubmitField("Clear list")
 
-    faultcondition = StringField("Faultcondition")
+    fault_condition = StringField("Fault condition")
 
     symptoms_list = make_tuple_list(get_symptoms())
 
@@ -110,7 +109,7 @@ class DTCForm(FlaskForm):
 
     new_symptom_submit = SubmitField("Add new symptom")
 
-    suspectComponents_selectField = SelectField("Select component", choices=get_component_list())
+    suspect_components = SelectField("Select component", choices=get_components())
 
     add_component_submit = SubmitField("Add component")
 
@@ -125,13 +124,13 @@ class SubsystemForm(FlaskForm):
     """
     subsystem_name = StringField("Name of the subsystem")
 
-    suspectcomponents = SelectField("Suspect components", choices=make_tuple_list(get_component_list()))
+    components = SelectField("Suspect components", choices=make_tuple_list(get_components()))
 
     add_component_submit = SubmitField("Add to list")
 
     clear_components = SubmitField("Clear list")
 
-    veryfied_by = SelectField("component", choices=get_component_list())
+    verified_by = SelectField("component", choices=get_components())
 
     final_submit = SubmitField("Submit")
 
@@ -142,7 +141,7 @@ class SuspectComponentsForm(FlaskForm):
     """
     component_name = StringField('Component name:')
 
-    boolean_choices = [("false","No",),("true","Yes")]
+    boolean_choices = [("false", "No",), ("true", "Yes")]
 
     final_submit = SubmitField('Submit component')
 
@@ -152,7 +151,7 @@ class SuspectComponentsForm(FlaskForm):
 
     measurements_possible = SelectField(choices=boolean_choices)
 
-    component_selectfield = SelectField("Add further component", choices=make_tuple_list(get_component_list()))
+    affecting_components = SelectField("Add further component", choices=make_tuple_list(get_components()))
 
 
 def add_component_to_knowledge_graph(name, affected_by, oscilloscope_useful):
@@ -175,27 +174,36 @@ def add_dtc_to_knowledge_graph(dtc_name, occurs_with, faultcondition, symptoms, 
     fact_list = expert_knowledge_enhancer.generate_all_dtc_related_facts(new_dtc_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
-def add_subsystem_to_knowledge_graph(subsystem_name, components, veryfied_by):
+
+def add_subsystem_to_knowledge_graph(subsystem_name, components, verified_by):
     """
     Adds a subsystem instance to the knowledge graph.
     """
-    new_subsystem_knowledge = SubsystemKnowledge(subsystem_name, components, veryfied_by)
+    new_subsystem_knowledge = SubsystemKnowledge(subsystem_name, components, verified_by)
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
     fact_list = expert_knowledge_enhancer.generate_subsystem_facts(new_subsystem_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
+
 @app.route('/', methods=['POST', 'GET'])
 def main():
+    """
+    Renders the start page.
+    """
     return render_template('index.html')
 
-@app.route('/suspectcomponents', methods=['GET', 'POST'])
-def suspectcomponents():
+
+@app.route('/component_form', methods=['GET', 'POST'])
+def component_form():
+    """
+    Renders the components page and processes the form data.
+    """
     form = SuspectComponentsForm()
 
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.component_name.data:
-                if form.component_name.data in get_component_list() and form.component_name.data != session.get(
+                if form.component_name.data in get_components() and form.component_name.data != session.get(
                         "component_name"):
                     flash(
                         "WARNING: This component already exists! If you are sure that you want to overwrite it, "
@@ -206,67 +214,70 @@ def suspectcomponents():
                                                      affected_by=get_session_variable_list("affecting_components"),
                                                      oscilloscope_useful=form.measurements_possible.data)
                     get_session_variable_list("affecting_components").clear()
-                    form.component_selectfield.choices = get_component_list()
+                    form.affecting_components.choices = get_components()
                     if form.component_name.data == session.get("component_name"):
-                        flash("The component {name} has successfully been overwritten.".format(
-                            name=form.component_name.data))
+                        flash(f"The component {form.component_name.data} has successfully been overwritten.")
                     else:
-                        flash("The component {name} has successfully been added.".format(name=form.component_name.data))
-                    return redirect(url_for('suspectcomponents'))
+                        flash(f"The component {form.component_name.data} has successfully been added.")
+                    return redirect(url_for('component_form'))
             else:
                 flash("Please enter component name")
 
         elif form.affecting_component_submit.data:
-            get_session_variable_list("affecting_components").append(form.component_selectfield.data)
-
+            get_session_variable_list("affecting_components").append(form.affecting_components.data)
 
         elif form.clear_affecting_components.data:
             get_session_variable_list("affecting_components").clear()
 
-
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
 
-    form.component_selectfield.choices = get_component_list()
+    form.affecting_components.choices = get_components()
 
-    return render_template('suspectcomponents.html', form=form, affectingComponents = get_session_variable_list("affecting_components"))
+    return render_template('component_form.html', form=form,
+                           affecting_components_variable_list=get_session_variable_list("affecting_components"))
 
 
-@app.route('/dtc', methods=['GET', 'POST'])
-def dtc():
+@app.route('/dtc_form', methods=['GET', 'POST'])
+def dtc_form():
+    """
+    Renders the DTC page and processes the form data.
+    """
     form = DTCForm()
 
-    form.suspectComponents_selectField.choices = get_component_list()
+    form.suspect_components.choices = get_components()
 
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.dtc_name.data:
-                if form.faultcondition.data:
+                if form.fault_condition.data:
                     if form.dtc_name.data in get_dtcs() and form.dtc_name.data != session.get("dtc_name"):
                         flash(
                             "WARNING: This DTC already exists! If you are sure that you want to overwrite it, please "
                             "click the submit button one more time.")
                         session["dtc_name"] = form.dtc_name.data
                     else:
-                        add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data, occurs_with=get_session_variable_list("occurs_with_list"),
-                                                   faultcondition=form.faultcondition.data, symptoms=get_session_variable_list("symptom_list"),
+                        add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data,
+                                                   occurs_with=get_session_variable_list("occurs_with_list"),
+                                                   faultcondition=form.fault_condition.data,
+                                                   symptoms=get_session_variable_list("symptom_list"),
                                                    suspect_components=get_session_variable_list("component_list"))
                         get_session_variable_list("component_list").clear()
                         get_session_variable_list("symptom_list").clear()
                         get_session_variable_list("occurs_with_list").clear()
                         if form.dtc_name.data == session.get("dtc_name"):
-                            flash("The DTC {name} has successfully been overwritten.".format(name=form.dtc_name.data))
+                            flash(f"The DTC {form.dtc_name.data} has successfully been overwritten.")
                         else:
-                            flash("The DTC {name} has successfully been added.".format(name=form.dtc_name.data))
+                            flash(f"The DTC {form.dtc_name.data} has successfully been added.")
 
-                        return redirect(url_for('dtc'))
+                        return redirect(url_for('dtc_form'))
                 else:
                     flash("Please enter a fault condition description!")
             else:
                 flash("Please enter a DTC code!")
 
         elif form.add_component_submit.data:
-            get_session_variable_list("component_list").append(form.suspectComponents_selectField.data)
+            get_session_variable_list("component_list").append(form.suspect_components.data)
 
         elif form.symptoms_submit.data:
             get_session_variable_list("symptom_list").append(form.symptoms.data)
@@ -296,14 +307,20 @@ def dtc():
         session["dtc_name"] = None
 
     form.symptoms.choices = get_symptoms()
-    form.suspectComponents_selectField.choices = get_component_list()
+    form.suspect_components.choices = get_components()
     form.occurs_with.choices = get_dtcs()
 
-    return render_template('DTC.html', form=form, suspectComponents=get_session_variable_list("component_list"), symptoms=get_session_variable_list("symptom_list"), occurs_with_DTCs=get_session_variable_list("occurs_with_list"))
+    return render_template('DTC_form.html', form=form,
+                           suspect_components_variable_list=get_session_variable_list("component_list"),
+                           symptoms_variable_list=get_session_variable_list("symptom_list"),
+                           occurs_with_DTCs_variable_list=get_session_variable_list("occurs_with_list"))
 
 
-@app.route('/subsystem', methods=['GET', 'POST'])
-def subsystem():
+@app.route('/subsystem_form', methods=['GET', 'POST'])
+def subsystem_form():
+    """
+    Renders the subsystem page and processes the form data.
+    """
     form = SubsystemForm()
 
     if form.validate_on_submit():
@@ -317,22 +334,21 @@ def subsystem():
                     session["subsystem_name"] = form.subsystem_name.data
                 else:
                     add_subsystem_to_knowledge_graph(subsystem_name=form.subsystem_name.data,
-                                                     components=get_session_variable_list("subsystem_components"), veryfied_by=form.veryfied_by.data)
+                                                     components=get_session_variable_list("subsystem_components"),
+                                                     verified_by=form.verified_by.data)
                     get_session_variable_list("subsystem_components").clear()
                     if form.subsystem_name.data == session.get("subsystem_name"):
-                        flash("The vehicle subsystem called {name} has successfully been overwritten.".format(
-                            name=form.subsystem_name.data))
+                        flash(f"The vehicle subsystem called {form.subsystem_name.data} "
+                              f"has successfully been overwritten.")
                     else:
-                        flash("The vehicle subsystem called {name} has successfully been added.".format(
-                            name=form.subsystem_name.data))
-                    return redirect(url_for('subsystem'))
-
+                        flash(f"The vehicle subsystem called {form.subsystem_name.data} has successfully been added.")
+                    return redirect(url_for('subsystem_form'))
 
             else:
                 flash("Please enter a name for the subsystem!")
 
         elif form.add_component_submit.data:
-            get_session_variable_list("subsystem_components").append(form.suspectcomponents.data)
+            get_session_variable_list("subsystem_components").append(form.components.data)
 
         elif form.clear_components.data:
             get_session_variable_list("subsystem_components").clear()
@@ -340,9 +356,10 @@ def subsystem():
     if form.subsystem_name.data != session.get("subsystem_name"):
         session["subsystem_name"] = None
 
-    form.suspectcomponents.choices = get_component_list()
+    form.components.choices = get_components()
 
-    return render_template('subsystem.html', form=form, suspectComponents = get_session_variable_list("subsystem_components"))
+    return render_template('subsystem_form.html', form=form,
+                           components_variable_list=get_session_variable_list("subsystem_components"))
 
 
 if __name__ == '__main__':

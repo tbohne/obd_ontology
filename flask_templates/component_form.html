@@ -5,7 +5,7 @@
     <title>Components</title>
 </head>
 <body>
-    <div> Site navigation: <a href="/">Start page</a> | <a href="subsystem">Add a vehicle subsystems</a> | <a href="dtc">Add a DTC</a>. </div>
+    <div> Site navigation: <a href="/">Start page</a> | <a href="subsystem_form">Add a vehicle subsystems</a> | <a href="dtc_form">Add a DTC</a>. </div>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class=flashes>
@@ -28,10 +28,10 @@
       <br>
       Please select other components whose malfunctions can affect the current component:
       <br>
-      <div>{{ form.component_selectfield}} {{form.affecting_component_submit}} {{form.clear_affecting_components}}</div>
+      <div>{{ form.affecting_components}} {{form.affecting_component_submit}} {{form.clear_affecting_components}}</div>
       <br>
       <p color=blue style>
-      {%for i in affectingComponents%}
+      {%for i in affecting_components_variable_list%}
         {{i}},
       {%endfor%}</p>
       <br> <br>

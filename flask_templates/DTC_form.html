@@ -5,7 +5,7 @@
     <title>DTC</title>
 </head>
 <body>
-    Site navigation: <a href="/">Start page</a> | <a href="subsystem">Add a vehicle subsystems</a> | <a href="suspectcomponents">Add a component</a>.
+    Site navigation: <a href="/">Start page</a> | <a href="subsystem_form">Add a vehicle subsystems</a> | <a href="component_form">Add a component</a>.
     {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul class=flashes>
@@ -27,14 +27,14 @@
       <br>
       <div>{{form.occurs_with.label}} {{form.occurs_with}} {{form.occurs_with_submit}} {{form.clear_occurs_with}} </div>
       <br>
-      {%for i in occurs_with_DTCs%}
+      {%for i in occurs_with_DTCs_variable_list%}
         {{i}},
       {%endfor%}</p>
       <br>
       Please describe the fault condition for the DTC:
-      {{form.faultcondition}}
+      {{form.fault_condition}}
       <br> <br>
-      Please choose symptoms of the faultcondition:
+      Please choose symptoms of the fault condition:
       <br>
       <div>{{ form.symptoms.label }} {{ form.symptoms }} {{form.symptoms_submit}} {{form.clear_symptoms}}</div>
       <br>
@@ -43,16 +43,16 @@
       <div>{{ form.new_symptom.label }} {{form.new_symptom}} {{form.new_symptom_submit}}</div>
       <br>
       <p color=blue style>
-      {%for i in symptoms%}
+      {%for i in symptoms_variable_list%}
         {{i}},
       {%endfor%}</p>
       <br> <br>
-      Please list the components that should be checked. Please list them in the right order - the ones that come first in the list should be the ones that should be checked first. If you want to add a component that is not in this list, please add it via <a href="suspectcomponents">this</a> form and afterwards select it in the list here.
+      Please list the components that should be checked. Please list them in the right order - the ones that come first in the list should be the ones that should be checked first. If you want to add a component that is not in this list, please add it via <a href="component_form">this</a> form and afterwards select it in the list here.
       <br>
 
-      <div>{{ form.suspectComponents_selectField.label }} {{form.suspectComponents_selectField}} {{form.add_component_submit}} {{form.clear_components}} </div>
+      <div>{{ form.suspect_components.label }} {{form.suspect_components}} {{form.add_component_submit}} {{form.clear_components}} </div>
       <p color=blue style>
-      {%for i in suspectComponents%}
+      {%for i in suspect_components_variable_list%}
         {{i}},
       {%endfor%}</p>
       <br> <br>
