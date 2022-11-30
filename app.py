@@ -172,15 +172,8 @@ def add_dtc_to_knowledge_graph(dtc_name, occurs_with, faultcondition, symptoms, 
     """
     new_dtc_knowledge = DTCKnowledge(dtc_name, occurs_with, faultcondition, symptoms, suspect_components)
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
-    dtc_uuid, dtc_facts = expert_knowledge_enhancer.generate_dtc_facts(new_dtc_knowledge)
-    _, fault_cat_facts = expert_knowledge_enhancer.generate_fault_cat_facts(dtc_uuid, new_dtc_knowledge)
-    fault_cond_uuid, fault_cond_facts = expert_knowledge_enhancer.generate_fault_cond_facts(dtc_uuid, new_dtc_knowledge)
-    symptom_facts = expert_knowledge_enhancer.generate_symptom_facts(fault_cond_uuid, new_dtc_knowledge)
-    diag_association_facts = expert_knowledge_enhancer.generate_facts_to_connect_components_and_dtc(dtc_uuid,
-                                                                                                    new_dtc_knowledge)
-    fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
+    fact_list = expert_knowledge_enhancer.generate_all_dtc_related_facts(new_dtc_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
-
 
 def add_subsystem_to_knowledge_graph(subsystem_name, components, veryfied_by):
     """

@@ -242,6 +242,15 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
+    def generate_all_dtc_related_facts(self, dtc_knowledge):
+        dtc_uuid, dtc_facts = self.generate_dtc_facts(dtc_knowledge)
+        _, fault_cat_facts = self.generate_fault_cat_facts(dtc_uuid, dtc_knowledge)
+        fault_cond_uuid, fault_cond_facts = self.generate_fault_cond_facts(dtc_uuid, dtc_knowledge)
+        symptom_facts = self.generate_symptom_facts(fault_cond_uuid, dtc_knowledge)
+        diag_association_facts = self.generate_facts_to_connect_components_and_dtc(dtc_uuid, dtc_knowledge)
+        fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
+        return fact_list
+
     def extend_knowledge_graph(self) -> None:
         """
         Parses the expert knowledge from the specified file and extends the knowledge graph with it.
@@ -252,12 +261,7 @@ class ExpertKnowledgeEnhancer:
 
         if "dtc" in self.knowledge_file:
             dtc_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            dtc_uuid, dtc_facts = self.generate_dtc_facts(dtc_knowledge)
-            _, fault_cat_facts = self.generate_fault_cat_facts(dtc_uuid, dtc_knowledge)
-            fault_cond_uuid, fault_cond_facts = self.generate_fault_cond_facts(dtc_uuid, dtc_knowledge)
-            symptom_facts = self.generate_symptom_facts(fault_cond_uuid, dtc_knowledge)
-            diag_association_facts = self.generate_facts_to_connect_components_and_dtc(dtc_uuid, dtc_knowledge)
-            fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
+            fact_list = self.generate_all_dtc_related_facts(self, dtc_knowledge)
 
         elif "component" in self.knowledge_file:
             comp_knowledge_list = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
