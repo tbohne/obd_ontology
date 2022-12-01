@@ -242,7 +242,13 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def generate_all_dtc_related_facts(self, dtc_knowledge):
+    def generate_dtc_form_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
+        """
+        Generates all facts obtained from the DTC form / template to be entered into the knowledge graph.
+
+        :param dtc_knowledge: parsed DTC knowledge
+        :return: generated fact list
+        """
         dtc_uuid, dtc_facts = self.generate_dtc_facts(dtc_knowledge)
         _, fault_cat_facts = self.generate_fault_cat_facts(dtc_uuid, dtc_knowledge)
         fault_cond_uuid, fault_cond_facts = self.generate_fault_cond_facts(dtc_uuid, dtc_knowledge)
