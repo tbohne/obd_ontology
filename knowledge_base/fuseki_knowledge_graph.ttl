@@ -1,326 +1,326 @@
-<http://www.semanticweb.org/diag_ontology><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Ontology> .
-<http://www.semanticweb.org/diag_ontology><http://www.w3.org/2000/01/rdf-schema#comment> "OBD ontology" .
-<http://www.semanticweb.org/diag_ontology#contains><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#contains><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#VehicleSubsystem> .
-<http://www.semanticweb.org/diag_ontology#contains><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#VehicleSubsystem><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#VehicleSubsystem><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942 .
-<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd .
-<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac .
-<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f .
-<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938 .
-<http://www.semanticweb.org/diag_ontology#deletes><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#deletes><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#CorrectiveAction> .
-<http://www.semanticweb.org/diag_ontology#deletes><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#CorrectiveAction><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#CorrectiveAction><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55 .
-<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c .
-<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b .
-<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22 .
-<http://www.semanticweb.org/diag_ontology#has><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#has><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#has><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#DiagnosticAssociation><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#DiagnosticAssociation><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732 .
-<http://www.semanticweb.org/diag_ontology#hasCategory><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#hasCategory><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#hasCategory><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCategory> .
-<http://www.semanticweb.org/diag_ontology#FaultCategory><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#FaultCategory><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5 .
-<http://www.semanticweb.org/diag_ontology#hasCause><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#hasCause><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#hasCause><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCause> .
-<http://www.semanticweb.org/diag_ontology#FaultCondition><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#FaultCondition><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4 .
-<http://www.semanticweb.org/diag_ontology#FaultCause><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#FaultCause><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c .
-<http://www.semanticweb.org/diag_ontology#implies><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#implies><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#implies><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#MeasuringPos> .
-<http://www.semanticweb.org/diag_ontology#MeasuringPos><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#MeasuringPos><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e .
-<http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#Symptom> .
-<http://www.semanticweb.org/diag_ontology#Symptom><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#Symptom><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2 .
-<http://www.semanticweb.org/diag_ontology#occurredIn><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#occurredIn><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#occurredIn><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#Vehicle> .
-<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class> .
-<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb .
-<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127 .
-<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610 .
-<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf> _:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83 .
-<http://www.semanticweb.org/diag_ontology#pointsTo><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#pointsTo><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#pointsTo><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#represents><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#represents><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#represents><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#resolves><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#resolves><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#CorrectiveAction> .
-<http://www.semanticweb.org/diag_ontology#resolves><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#verifies><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty> .
-<http://www.semanticweb.org/diag_ontology#verifies><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#verifies><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#VehicleSubsystem> .
-<http://www.semanticweb.org/diag_ontology#HSN><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#HSN><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle> .
-<http://www.semanticweb.org/diag_ontology#HSN><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#TSN><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#TSN><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle> .
-<http://www.semanticweb.org/diag_ontology#TSN><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#VIN><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#VIN><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle> .
-<http://www.semanticweb.org/diag_ontology#VIN><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#action_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#action_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#CorrectiveAction> .
-<http://www.semanticweb.org/diag_ontology#action_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#affected_by><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#affected_by><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#affected_by><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#category_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#category_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCategory> .
-<http://www.semanticweb.org/diag_ontology#category_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#cause_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#cause_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCause> .
-<http://www.semanticweb.org/diag_ontology#cause_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#code><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#code><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#code><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#component_name><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#component_name><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#component_name><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#condition_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#condition_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#condition_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#model><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#model><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle> .
-<http://www.semanticweb.org/diag_ontology#model><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#occurs_with_DTC><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#occurs_with_DTC><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#occurs_with_DTC><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#position_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#position_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#MeasuringPos> .
-<http://www.semanticweb.org/diag_ontology#position_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#priority_id><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#priority_id><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#priority_id><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#int> .
-<http://www.semanticweb.org/diag_ontology#subsystem_name><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#subsystem_name><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#VehicleSubsystem> .
-<http://www.semanticweb.org/diag_ontology#subsystem_name><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#symptom_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#symptom_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Symptom> .
-<http://www.semanticweb.org/diag_ontology#symptom_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#use_oscilloscope><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty> .
-<http://www.semanticweb.org/diag_ontology#use_oscilloscope><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#use_oscilloscope><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#boolean> .
-_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#action_description> .
-_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#occurs_with_DTC> .
-_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c <http://www.w3.org/2002/07/owl#minQualifiedCardinality> "0"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#code> .
-_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#occurs_with_DTC> .
-_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22 <http://www.w3.org/2002/07/owl#maxQualifiedCardinality> "50"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#priority_id> .
-_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#int> .
-_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#category_description> .
-_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#cause_description> .
-_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#condition_description> .
-_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#position_description> .
-_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#affected_by> .
-_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd <http://www.w3.org/2002/07/owl#minQualifiedCardinality> "0"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#component_name> .
-_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#use_oscilloscope> .
-_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#boolean> .
-_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#affected_by> .
-_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938 <http://www.w3.org/2002/07/owl#maxQualifiedCardinality> "50"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#symptom_description> .
-_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#HSN> .
-_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#TSN> .
-_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#VIN> .
-_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#model> .
-_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction> .
-_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942 <http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#subsystem_name> .
-_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942 <http://www.w3.org/2002/07/owl#qualifiedCardinality> "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
-_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942 <http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association0> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association1> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association2> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association3> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association4> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#hasCategory><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#represents><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#code> "P2563" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC> "P00AF" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC> "P226C" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC> "P2564" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC> "P2565" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.w3.org/2000/01/rdf-schema#label> "code0"@en .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association0><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association0><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association0><http://www.semanticweb.org/diag_ontology#priority_id> "0"^^<http://www.w3.org/2001/XMLSchema#int> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association1><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association1><http://www.semanticweb.org/diag_ontology#priority_id> "1"^^<http://www.w3.org/2001/XMLSchema#int> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association2><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association2><http://www.semanticweb.org/diag_ontology#priority_id> "2"^^<http://www.w3.org/2001/XMLSchema#int> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association3><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association3><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association3><http://www.semanticweb.org/diag_ontology#priority_id> "3"^^<http://www.w3.org/2001/XMLSchema#int> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association4><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association4><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6> .
-<http://www.semanticweb.org/diag_ontology#diagnostic_association4><http://www.semanticweb.org/diag_ontology#priority_id> "4"^^<http://www.w3.org/2001/XMLSchema#int> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCategory> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.semanticweb.org/diag_ontology#category_description> "{powertrain (engine, transmission, and associated accessories), ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.w3.org/2000/01/rdf-schema#label> "cat0"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#condition_description> "Ladedrucksteller-Positionssensor / Signal unplausibel" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.w3.org/2000/01/rdf-schema#label> "cond0"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.semanticweb.org/diag_ontology#symptom_description> "Anzeige Bordcomputer: Fehler Start-Stopp-System" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.w3.org/2000/01/rdf-schema#label> "symp1"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.semanticweb.org/diag_ontology#symptom_description> "Fz. erreicht maximal eine Geschwindigkeit von 80 km/h" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.w3.org/2000/01/rdf-schema#label> "symp0"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.semanticweb.org/diag_ontology#symptom_description> "Glühkontrollleuchte leuchtet" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.w3.org/2000/01/rdf-schema#label> "symp2"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.semanticweb.org/diag_ontology#symptom_description> "Glühkontrollleuchte blinkt" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.w3.org/2000/01/rdf-schema#label> "symp3"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCondition> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#condition_description> "Abgasturbolader-Steuereinheit 1 / Mechanischer Fehler" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.w3.org/2000/01/rdf-schema#label> "cond1"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.semanticweb.org/diag_ontology#affected_by> "Ladedrucksteller-Positionssensor" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.semanticweb.org/diag_ontology#component_name> "Motor-Steuergerät" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.semanticweb.org/diag_ontology#use_oscilloscope> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.w3.org/2000/01/rdf-schema#label> "sus2"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#affected_by> "Motor-Steuergerät" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#affected_by> "Ladedruck-Regelventil" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#affected_by> "VTG-Abgasturbolader" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#component_name> "Ladedruck-Magnetventil" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#use_oscilloscope> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.w3.org/2000/01/rdf-schema#label> "sus3"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCategory> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.semanticweb.org/diag_ontology#category_description> "{powertrain (engine, transmission, and associated accessories), standardized (SAE) code, aka generic code, fuel and air metering and auxiliary emission controls, turbocharger/supercharger boost control 'a' module performance}" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.w3.org/2000/01/rdf-schema#label> "cat1"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DTC> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association0> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association1> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association2> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#hasCategory><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#represents><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#code> "P00AF" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#occurs_with_DTC> "P2563" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.w3.org/2000/01/rdf-schema#label> "code1"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.semanticweb.org/diag_ontology#component_name> "Ladedrucksteller-Positionssensor" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.semanticweb.org/diag_ontology#use_oscilloscope> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.w3.org/2000/01/rdf-schema#label> "sus0"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.semanticweb.org/diag_ontology#affected_by> "Ladedrucksteller-Positionssensor" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.semanticweb.org/diag_ontology#component_name> "Ladedruck-Regelventil" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.semanticweb.org/diag_ontology#use_oscilloscope> "true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.w3.org/2000/01/rdf-schema#label> "sus4"@en .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.semanticweb.org/diag_ontology#affected_by> "Ladedrucksteller-Positionssensor" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.semanticweb.org/diag_ontology#component_name> "VTG-Abgasturbolader" .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.semanticweb.org/diag_ontology#use_oscilloscope> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
-<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.w3.org/2000/01/rdf-schema#label> "sus1"@en .
-<http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d> .
-<http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d><http://www.semanticweb.org/diag_ontology#priority_id> "0"^^<http://www.w3.org/2001/XMLSchema#integer> .
-<http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee> .
-<http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917><http://www.semanticweb.org/diag_ontology#priority_id> "2"^^<http://www.w3.org/2001/XMLSchema#integer> .
-<http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562> .
-<http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46><http://www.semanticweb.org/diag_ontology#priority_id> "3"^^<http://www.w3.org/2001/XMLSchema#integer> .
-<http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e> .
-<http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7><http://www.semanticweb.org/diag_ontology#priority_id> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
-<http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
-<http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6> .
-<http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c><http://www.semanticweb.org/diag_ontology#priority_id> "4"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://www.semanticweb.org/diag_ontology><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Ontology>.
+<http://www.semanticweb.org/diag_ontology><http://www.w3.org/2000/01/rdf-schema#comment>"OBDontology".
+<http://www.semanticweb.org/diag_ontology#contains><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#contains><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#VehicleSubsystem>.
+<http://www.semanticweb.org/diag_ontology#contains><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#VehicleSubsystem><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#VehicleSubsystem><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942.
+<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd.
+<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac.
+<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f.
+<http://www.semanticweb.org/diag_ontology#SuspectComponent><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938.
+<http://www.semanticweb.org/diag_ontology#deletes><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#deletes><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#CorrectiveAction>.
+<http://www.semanticweb.org/diag_ontology#deletes><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#CorrectiveAction><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#CorrectiveAction><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55.
+<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c.
+<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b.
+<http://www.semanticweb.org/diag_ontology#DTC><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22.
+<http://www.semanticweb.org/diag_ontology#has><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#has><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#has><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#DiagnosticAssociation><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#DiagnosticAssociation><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732.
+<http://www.semanticweb.org/diag_ontology#hasCategory><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#hasCategory><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#hasCategory><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCategory>.
+<http://www.semanticweb.org/diag_ontology#FaultCategory><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#FaultCategory><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5.
+<http://www.semanticweb.org/diag_ontology#hasCause><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#hasCause><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#hasCause><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCause>.
+<http://www.semanticweb.org/diag_ontology#FaultCondition><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#FaultCondition><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4.
+<http://www.semanticweb.org/diag_ontology#FaultCause><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#FaultCause><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c.
+<http://www.semanticweb.org/diag_ontology#implies><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#implies><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#implies><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#MeasuringPos>.
+<http://www.semanticweb.org/diag_ontology#MeasuringPos><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#MeasuringPos><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e.
+<http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#Symptom>.
+<http://www.semanticweb.org/diag_ontology#Symptom><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#Symptom><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2.
+<http://www.semanticweb.org/diag_ontology#occurredIn><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#occurredIn><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#occurredIn><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#Vehicle>.
+<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Class>.
+<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb.
+<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127.
+<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610.
+<http://www.semanticweb.org/diag_ontology#Vehicle><http://www.w3.org/2000/01/rdf-schema#subClassOf>_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83.
+<http://www.semanticweb.org/diag_ontology#pointsTo><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#pointsTo><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#pointsTo><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#represents><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#represents><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#represents><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#resolves><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#resolves><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#CorrectiveAction>.
+<http://www.semanticweb.org/diag_ontology#resolves><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#verifies><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#ObjectProperty>.
+<http://www.semanticweb.org/diag_ontology#verifies><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#verifies><http://www.w3.org/2000/01/rdf-schema#range><http://www.semanticweb.org/diag_ontology#VehicleSubsystem>.
+<http://www.semanticweb.org/diag_ontology#HSN><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#HSN><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle>.
+<http://www.semanticweb.org/diag_ontology#HSN><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#TSN><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#TSN><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle>.
+<http://www.semanticweb.org/diag_ontology#TSN><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#VIN><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#VIN><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle>.
+<http://www.semanticweb.org/diag_ontology#VIN><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#action_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#action_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#CorrectiveAction>.
+<http://www.semanticweb.org/diag_ontology#action_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#affected_by><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#affected_by><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#affected_by><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#category_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#category_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCategory>.
+<http://www.semanticweb.org/diag_ontology#category_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#cause_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#cause_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCause>.
+<http://www.semanticweb.org/diag_ontology#cause_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#code><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#code><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#code><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#component_name><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#component_name><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#component_name><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#condition_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#condition_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#condition_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#model><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#model><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Vehicle>.
+<http://www.semanticweb.org/diag_ontology#model><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#occurs_with_DTC><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#occurs_with_DTC><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#occurs_with_DTC><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#position_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#position_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#MeasuringPos>.
+<http://www.semanticweb.org/diag_ontology#position_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#priority_id><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#priority_id><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#priority_id><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#int>.
+<http://www.semanticweb.org/diag_ontology#subsystem_name><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#subsystem_name><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#VehicleSubsystem>.
+<http://www.semanticweb.org/diag_ontology#subsystem_name><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#symptom_description><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#symptom_description><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#Symptom>.
+<http://www.semanticweb.org/diag_ontology#symptom_description><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#use_oscilloscope><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#DatatypeProperty>.
+<http://www.semanticweb.org/diag_ontology#use_oscilloscope><http://www.w3.org/2000/01/rdf-schema#domain><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#use_oscilloscope><http://www.w3.org/2000/01/rdf-schema#range><http://www.w3.org/2001/XMLSchema#boolean>.
+_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#action_description>.
+_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B96cada0dX2D574fX2D4534X2Dba28X2D083d95aa4b55<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#occurs_with_DTC>.
+_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B220b844eX2D4c5dX2D4e5dX2Db2e1X2D4e194849377c<http://www.w3.org/2002/07/owl#minQualifiedCardinality>"0"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#code>.
+_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:Bec968346X2Da811X2D4becX2D9abeX2D02b19579dc7b<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#occurs_with_DTC>.
+_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B7e28d76bX2Dbd8eX2D4559X2Db0b8X2D742ce249bb22<http://www.w3.org/2002/07/owl#maxQualifiedCardinality>"50"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#priority_id>.
+_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B03c07614X2Da573X2D4cd5X2Db871X2Df2492d115732<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#int>.
+_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#category_description>.
+_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B22087bafX2Dd394X2D491dX2Da715X2Df1efd9beedb5<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#cause_description>.
+_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B0b0245c7X2D7713X2D43a7X2Dbe19X2D468d4d7bc63c<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#condition_description>.
+_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B9badc774X2Dfd01X2D4c0eX2DbfacX2D394fb22fd7c4<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#position_description>.
+_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B4b2e59a1X2D8d72X2D4200X2Da831X2D08100f14a08e<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#affected_by>.
+_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B870d5ea3X2Df66aX2D4c4eX2D8d23X2D6994990c4abd<http://www.w3.org/2002/07/owl#minQualifiedCardinality>"0"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#component_name>.
+_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:Bbc4e2f47X2D5530X2D487aX2D870eX2Db5233b283aac<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#use_oscilloscope>.
+_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:Bec447a83X2D6608X2D4050X2Dabe4X2D74fef09ae55f<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#boolean>.
+_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#affected_by>.
+_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:Bde280e47X2Db436X2D4bc0X2D93a0X2D1a98050e5938<http://www.w3.org/2002/07/owl#maxQualifiedCardinality>"50"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#symptom_description>.
+_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B9f278af8X2Db996X2D4fdcX2Db804X2D412c87a1c6c2<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#HSN>.
+_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B33a7bec6X2D21e4X2D4324X2Da009X2D20e4714477cb<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#TSN>.
+_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B393abba8X2D9f97X2D4d3bX2D989fX2Da5d7ff2d1127<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#VIN>.
+_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B5eb4d9f3X2D7d86X2D4c2fX2Da6ecX2D4ed44f90e610<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#model>.
+_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:Bc4ab2fb6X2D56adX2D4f26X2Da303X2Dcabc28780e83<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942<http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#Restriction>.
+_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942<http://www.w3.org/2002/07/owl#onProperty><http://www.semanticweb.org/diag_ontology#subsystem_name>.
+_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942<http://www.w3.org/2002/07/owl#qualifiedCardinality>"1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>.
+_:B1a6cad68X2D84d8X2D4ac6X2Dbaf4X2Da970b3596942<http://www.w3.org/2002/07/owl#onDataRange><http://www.w3.org/2001/XMLSchema#string>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association0>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association1>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association2>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association3>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association4>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#hasCategory><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#represents><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#code>"P2563".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC>"P00AF".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC>"P226C".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC>"P2564".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.semanticweb.org/diag_ontology#occurs_with_DTC>"P2565".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d><http://www.w3.org/2000/01/rdf-schema#label>"code0"@en.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association0><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association0><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association0><http://www.semanticweb.org/diag_ontology#priority_id>"0"^^<http://www.w3.org/2001/XMLSchema#int>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association1><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association1><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association1><http://www.semanticweb.org/diag_ontology#priority_id>"1"^^<http://www.w3.org/2001/XMLSchema#int>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association2><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association2><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association2><http://www.semanticweb.org/diag_ontology#priority_id>"2"^^<http://www.w3.org/2001/XMLSchema#int>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association3><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association3><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association3><http://www.semanticweb.org/diag_ontology#priority_id>"3"^^<http://www.w3.org/2001/XMLSchema#int>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association4><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association4><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6>.
+<http://www.semanticweb.org/diag_ontology#diagnostic_association4><http://www.semanticweb.org/diag_ontology#priority_id>"4"^^<http://www.w3.org/2001/XMLSchema#int>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCategory>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.semanticweb.org/diag_ontology#category_description>"{powertrain(engine,transmission,andassociatedaccessories),---,vehiclespeedcontrol,idlecontrolsystems,andauxiliaryinputs,---}".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de><http://www.w3.org/2000/01/rdf-schema#label>"cat0"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.semanticweb.org/diag_ontology#condition_description>"Ladedrucksteller-Positionssensor/Signalunplausibel".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a><http://www.w3.org/2000/01/rdf-schema#label>"cond0"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.semanticweb.org/diag_ontology#symptom_description>"AnzeigeBordcomputer:FehlerStart-Stopp-System".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452><http://www.w3.org/2000/01/rdf-schema#label>"symp1"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.semanticweb.org/diag_ontology#symptom_description>"Fz.erreichtmaximaleineGeschwindigkeitvon80km/h".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea><http://www.w3.org/2000/01/rdf-schema#label>"symp0"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.semanticweb.org/diag_ontology#symptom_description>"Glühkontrollleuchteleuchtet".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865><http://www.w3.org/2000/01/rdf-schema#label>"symp2"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#Symptom>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.semanticweb.org/diag_ontology#symptom_description>"Glühkontrollleuchteblinkt".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b><http://www.w3.org/2000/01/rdf-schema#label>"symp3"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCondition>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_1b559f49_8d09_45bb_918c_dd93eb6aa452>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_5fdf3bc1_3909_4515_ab7e_1cc0e80170ea>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_75309033_8df1_44d7_868e_fab236504865>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#manifestedBy><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_b499c0c1_3704_4b92_88bb_44cd576db77b>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.semanticweb.org/diag_ontology#condition_description>"Abgasturbolader-Steuereinheit1/MechanischerFehler".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b><http://www.w3.org/2000/01/rdf-schema#label>"cond1"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.semanticweb.org/diag_ontology#affected_by>"Ladedrucksteller-Positionssensor".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.semanticweb.org/diag_ontology#component_name>"Motor-Steuergerät".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.semanticweb.org/diag_ontology#use_oscilloscope>"true"^^<http://www.w3.org/2001/XMLSchema#boolean>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee><http://www.w3.org/2000/01/rdf-schema#label>"sus2"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#affected_by>"Motor-Steuergerät".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#affected_by>"Ladedruck-Regelventil".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#affected_by>"VTG-Abgasturbolader".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#component_name>"Ladedruck-Magnetventil".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.semanticweb.org/diag_ontology#use_oscilloscope>"true"^^<http://www.w3.org/2001/XMLSchema#boolean>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562><http://www.w3.org/2000/01/rdf-schema#label>"sus3"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#FaultCategory>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.semanticweb.org/diag_ontology#category_description>"{powertrain(engine,transmission,andassociatedaccessories),standardized(SAE)code,akagenericcode,fuelandairmeteringandauxiliaryemissioncontrols,turbocharger/superchargerboostcontrol'a'moduleperformance}".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0><http://www.w3.org/2000/01/rdf-schema#label>"cat1"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DTC>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association0>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association1>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#has><http://www.semanticweb.org/diag_ontology#diagnostic_association2>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#hasCategory><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#represents><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#code>"P00AF".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.semanticweb.org/diag_ontology#occurs_with_DTC>"P2563".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182><http://www.w3.org/2000/01/rdf-schema#label>"code1"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.semanticweb.org/diag_ontology#component_name>"Ladedrucksteller-Positionssensor".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.semanticweb.org/diag_ontology#use_oscilloscope>"true"^^<http://www.w3.org/2001/XMLSchema#boolean>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d><http://www.w3.org/2000/01/rdf-schema#label>"sus0"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.semanticweb.org/diag_ontology#affected_by>"Ladedrucksteller-Positionssensor".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.semanticweb.org/diag_ontology#component_name>"Ladedruck-Regelventil".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.semanticweb.org/diag_ontology#use_oscilloscope>"true"^^<http://www.w3.org/2001/XMLSchema#boolean>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6><http://www.w3.org/2000/01/rdf-schema#label>"sus4"@en.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#SuspectComponent>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.w3.org/2002/07/owl#NamedIndividual>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.semanticweb.org/diag_ontology#affected_by>"Ladedrucksteller-Positionssensor".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.semanticweb.org/diag_ontology#component_name>"VTG-Abgasturbolader".
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.semanticweb.org/diag_ontology#use_oscilloscope>"false"^^<http://www.w3.org/2001/XMLSchema#boolean>.
+<http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e><http://www.w3.org/2000/01/rdf-schema#label>"sus1"@en.
+<http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d>.
+<http://www.semanticweb.org/diag_ontology#diag_association_130a1b5ccf1542ea85df3c0b225c7e5d><http://www.semanticweb.org/diag_ontology#priority_id>"0"^^<http://www.w3.org/2001/XMLSchema#integer>.
+<http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee>.
+<http://www.semanticweb.org/diag_ontology#diag_association_2a4733d3fc5947758ac3d3001c7c2917><http://www.semanticweb.org/diag_ontology#priority_id>"2"^^<http://www.w3.org/2001/XMLSchema#integer>.
+<http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562>.
+<http://www.semanticweb.org/diag_ontology#diag_association_4230e80d29aa461a80162de5aefcfc46><http://www.semanticweb.org/diag_ontology#priority_id>"3"^^<http://www.w3.org/2001/XMLSchema#integer>.
+<http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e>.
+<http://www.semanticweb.org/diag_ontology#diag_association_51a239b42bcc4a7285e36b91d36fecc7><http://www.semanticweb.org/diag_ontology#priority_id>"1"^^<http://www.w3.org/2001/XMLSchema#integer>.
+<http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c><http://www.w3.org/1999/02/22-rdf-syntax-ns#type><http://www.semanticweb.org/diag_ontology#DiagnosticAssociation>.
+<http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c><http://www.semanticweb.org/diag_ontology#pointsTo><http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6>.
+<http://www.semanticweb.org/diag_ontology#diag_association_a2226f2931434cd7b9a57ceb394a874c><http://www.semanticweb.org/diag_ontology#priority_id>"4"^^<http://www.w3.org/2001/XMLSchema#integer>.
