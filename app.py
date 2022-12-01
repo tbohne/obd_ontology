@@ -141,7 +141,7 @@ class SuspectComponentsForm(FlaskForm):
     """
     component_name = StringField('Component name:')
 
-    boolean_choices = [("false", "No",), ("true", "Yes")]
+    boolean_choices = [("No", "No",), ("Yes", "Yes")]
 
     final_submit = SubmitField('Submit component')
 
@@ -154,32 +154,65 @@ class SuspectComponentsForm(FlaskForm):
     affecting_components = SelectField("Add further component", choices=make_tuple_list(get_components()))
 
 
-def add_component_to_knowledge_graph(name, affected_by, oscilloscope_useful):
+def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool):
     """
-    Adds a component instance with the given properties to the knowledge graph.
-    """
+    Adds a component instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
 
-    new_component_knowledge = ComponentKnowledge(name, oscilloscope_useful, affected_by)
+    :param suspect_component: component to be checked
+    :param affected_by: list of components whose misbehavior could affect the correct functioning of the component
+                        under consideration
+    :param oscilloscope: whether oscilloscope measurement possible / reasonable
+    """
+    assert isinstance(suspect_component, str)
+    assert isinstance(affected_by, list)
+    assert isinstance(oscilloscope, bool)
+
+    new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
+                                                 affected_by=affected_by)
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
     fact_list = expert_knowledge_enhancer.generate_suspect_component_facts([new_component_knowledge])
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
-def add_dtc_to_knowledge_graph(dtc_name, occurs_with, faultcondition, symptoms, suspect_components):
+def add_dtc_to_knowledge_graph(dtc: str, occurs_with: list, fault_condition: str, symptoms: list,
+                               suspect_components: list) -> None:
     """
-    Adds a DTC instance with the given properties to the knowledge graph.
+    Adds a DTC instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
+
+    :param dtc: diagnostic trouble code to be considered
+    :param occurs_with: other DTCs frequently occurring with the considered one
+    :param fault_condition: fault condition associated with the considered DTC
+    :param symptoms: symptoms associated with the considered DTC
+    :param suspect_components: components that should be checked when this DTC occurs
+                               (order defines suggestion priority)
     """
-    new_dtc_knowledge = DTCKnowledge(dtc_name, occurs_with, faultcondition, symptoms, suspect_components)
+    assert isinstance(dtc, str)
+    assert isinstance(occurs_with, list)
+    assert isinstance(fault_condition, str)
+    assert isinstance(symptoms, list)
+    assert isinstance(suspect_components, list)
+
+    new_dtc_knowledge = DTCKnowledge(dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition,
+                                     symptoms=symptoms, suspect_components=suspect_components)
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
     fact_list = expert_knowledge_enhancer.generate_dtc_form_related_facts(new_dtc_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
-def add_subsystem_to_knowledge_graph(subsystem_name, components, verified_by):
+def add_subsystem_to_knowledge_graph(vehicle_subsystem: str, contains: list, verified_by: str) -> None:
     """
-    Adds a subsystem instance to the knowledge graph.
+    Adds a subsystem instance to the knowledge graph using the ExpertKnowledgeEnhancer.
+
+    :param vehicle_subsystem: vehicle subsystem to be represented
+    :param contains: suspect components assigned to this subsystem
+    :param verified_by: subsystem can be verified by checking this suspect component
     """
-    new_subsystem_knowledge = SubsystemKnowledge(subsystem_name, components, verified_by)
+    assert isinstance(vehicle_subsystem, str)
+    assert isinstance(contains, list)
+    assert isinstance(verified_by, str)
+
+    new_subsystem_knowledge = SubsystemKnowledge(vehicle_subsystem=vehicle_subsystem, contains=contains,
+                                                 verified_by=verified_by)
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
     fact_list = expert_knowledge_enhancer.generate_subsystem_facts(new_subsystem_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
@@ -210,9 +243,11 @@ def component_form():
                         "please click the submit button one more time.")
                     session["component_name"] = form.component_name.data
                 else:
-                    add_component_to_knowledge_graph(name=form.component_name.data,
+                    assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
+                    oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
+                    add_component_to_knowledge_graph(suspect_component=form.component_name.data,
                                                      affected_by=get_session_variable_list("affecting_components"),
-                                                     oscilloscope_useful=form.measurements_possible.data)
+                                                     oscilloscope=oscilloscope_useful)
                     get_session_variable_list("affecting_components").clear()
                     form.affecting_components.choices = get_components()
                     if form.component_name.data == session.get("component_name"):
@@ -257,9 +292,9 @@ def dtc_form():
                             "click the submit button one more time.")
                         session["dtc_name"] = form.dtc_name.data
                     else:
-                        add_dtc_to_knowledge_graph(dtc_name=form.dtc_name.data,
+                        add_dtc_to_knowledge_graph(dtc=form.dtc_name.data,
                                                    occurs_with=get_session_variable_list("occurs_with_list"),
-                                                   faultcondition=form.fault_condition.data,
+                                                   fault_condition=form.fault_condition.data,
                                                    symptoms=get_session_variable_list("symptom_list"),
                                                    suspect_components=get_session_variable_list("component_list"))
                         get_session_variable_list("component_list").clear()
@@ -333,8 +368,8 @@ def subsystem_form():
                         " please click the submit button one more time.")
                     session["subsystem_name"] = form.subsystem_name.data
                 else:
-                    add_subsystem_to_knowledge_graph(subsystem_name=form.subsystem_name.data,
-                                                     components=get_session_variable_list("subsystem_components"),
+                    add_subsystem_to_knowledge_graph(vehicle_subsystem=form.subsystem_name.data,
+                                                     contains=get_session_variable_list("subsystem_components"),
                                                      verified_by=form.verified_by.data)
                     get_session_variable_list("subsystem_components").clear()
                     if form.subsystem_name.data == session.get("subsystem_name"):
