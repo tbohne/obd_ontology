@@ -5,10 +5,10 @@
 import uuid
 from datetime import date
 
-from OBDOntology.config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
-from OBDOntology.connection_controller import ConnectionController
-from OBDOntology.fact import Fact
-from OBDOntology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology.config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
+from obd_ontology.connection_controller import ConnectionController
+from obd_ontology.fact import Fact
+from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 from owlready2 import *
 from rdflib import Namespace, RDF
 
@@ -63,6 +63,9 @@ class OntologyInstanceGenerator:
             if len(fault_condition_instance) > 0:
                 # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
                 fault_condition_id = fault_condition_instance[0].split("#")[1]
+                # TODO: deactivated for demo, should be activated again later
+                # fault_condition = self.knowledge_graph_query_tool.query_fault_condition_by_dtc(dtc)
+                # print("FAULT CONDITION:", fault_condition[0])
             else:
                 print("Presented fault condition (" + dtc + ") not yet part of KG -- should be entered in advance")
 

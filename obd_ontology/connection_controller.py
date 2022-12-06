@@ -5,9 +5,10 @@
 import re
 
 import requests
-from OBDOntology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT
-from OBDOntology.fact import Fact
+from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT
+from obd_ontology.fact import Fact
 from rdflib import Namespace, RDF, Literal, Graph, URIRef
+from termcolor import colored
 
 
 class ConnectionController:
@@ -22,20 +23,21 @@ class ConnectionController:
         self.graph = Graph()
         self.graph.bind("", self.namespace)
 
-    def query_knowledge_graph(self, query: str) -> list:
+    def query_knowledge_graph(self, query: str, verbose: bool) -> list:
         """
         Sends an HTTP request containing the specified query to the knowledge graph server.
 
         :param query: query to be sent to knowledge graph server
+        :param verbose: if true, queries are logged
         :return: query results
         """
-        print("query knowledge graph..")
-        print(query)
+        if verbose:
+            print("query knowledge graph..")
+            print(query)
         res = requests.post(self.fuseki_url + SPARQL_ENDPOINT, query.encode(),
                             headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'})
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
-        print(type(res.json()["results"]["bindings"]))
         return res.json()["results"]["bindings"]
 
     def extend_knowledge_graph(self, facts: list) -> None:
@@ -44,7 +46,7 @@ class ConnectionController:
 
         :param facts: facts to be entered into the knowledge graph
         """
-        print("extend knowledge graph..")
+        print(colored("\nextending knowledge graph..", "green", "on_grey", ["bold"]))
         graph = Graph()
         for fact in facts:
             print("fact:", fact)
@@ -76,7 +78,7 @@ if __name__ == '__main__':
 
     # query example
     q = "SELECT ?s ?p ?o WHERE { ?s ?p ?o } LIMIT 25"
-    response = connection.query_knowledge_graph(q)
+    response = connection.query_knowledge_graph(q, True)
     print(response)
 
     # extension example
