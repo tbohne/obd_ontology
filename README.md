@@ -39,7 +39,7 @@ $ ./fuseki-server
     - Dataset type: `Persistent (TDB2) – dataset will persist across Fuseki restarts`
 - `create dataset`
 - `add data` -> `select files`
-    - select knowledge graph file, e.g., `obd_knowledge_graph.owl`
+    - select knowledge graph file, e.g., `demo_knowledge_graph.ttl`
     - `upload now`
 
 Now the knowledge graph is hosted on the Fuseki server and can be queried or extended via the SPARQL endpoint `/OBD/sparql` and `/OBD/data`, respectively.
