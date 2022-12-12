@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 __version__ = '0.0.1'
-URL = 'https://github.com/tbohne/OBDOntology'
+URL = 'https://github.com/tbohne/obd_ontology'
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
