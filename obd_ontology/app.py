@@ -1,4 +1,5 @@
 import logging
+import os
 from flask import Flask, render_template, redirect, flash, url_for, session
 from wtforms import StringField, SubmitField, SelectField
 from flask_wtf import FlaskForm
@@ -10,7 +11,7 @@ from OBDOntology.component_knowledge import ComponentKnowledge
 from OBDOntology.dtc_knowledge import DTCKnowledge
 from OBDOntology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
-app = Flask(__name__, template_folder="flask_templates")
+app = Flask(__name__, template_folder=os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates')))
 app.debug = True
 app.config['SECRET_KEY'] = "3847850"
 app.app_context()
