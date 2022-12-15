@@ -21,37 +21,9 @@ csrf.init_app(app)
 
 logging.basicConfig(level=logging.DEBUG)
 
+kg_query_tool = KnowledgeGraphQueryTool()
 
-def get_components() -> list:
-    """
-    returns a list of all instances of components that are in the knowledge graph.
-    """
-    kg_query_tool = KnowledgeGraphQueryTool()
-    return kg_query_tool.query_all_component_instances()
-
-
-def get_dtcs() -> list:
-    """
-    returns a list of all instances of DTC that are in the knowledge graph.
-    """
-    kg_query_tool = KnowledgeGraphQueryTool()
-    return kg_query_tool.query_all_dtc_instances()
-
-
-def get_symptoms() -> list:
-    """
-    returns a list of all instances of symptoms that are in the knowledge graph.
-    """
-    kg_query_tool = KnowledgeGraphQueryTool()
-    return kg_query_tool.query_all_symptom_instances()
-
-
-def get_vehicle_subsystems() -> list:
-    """
-    returns a list of all instances of vehicle subsystems that are in the knowledge graph.
-    """
-    kg_query_tool = KnowledgeGraphQueryTool()
-    return kg_query_tool.query_all_vehicle_subsystem_instances()
+expert_knowledge_enhancer = ExpertKnowledgeEnhancer("")
 
 
 def make_tuple_list(some_list) -> list:
@@ -90,7 +62,7 @@ class DTCForm(FlaskForm):
     """
     dtc_name = StringField("Please enter the DTC:")
 
-    occurs_with = SelectField("Select DTCs that occur with this DTC", choices=make_tuple_list(get_dtcs()))
+    occurs_with = SelectField("Select DTCs that occur with this DTC", choices=make_tuple_list(kg_query_tool.query_all_dtc_instances()))
 
     occurs_with_submit = SubmitField("Add DTC")
 
@@ -98,7 +70,7 @@ class DTCForm(FlaskForm):
 
     fault_condition = StringField("Fault condition")
 
-    symptoms_list = make_tuple_list(get_symptoms())
+    symptoms_list = make_tuple_list(kg_query_tool.query_all_symptom_instances())
 
     symptoms = SelectField("Select symptom", choices=symptoms_list)
 
@@ -110,7 +82,7 @@ class DTCForm(FlaskForm):
 
     new_symptom_submit = SubmitField("Add new symptom")
 
-    suspect_components = SelectField("Select component", choices=get_components())
+    suspect_components = SelectField("Select component", choices=kg_query_tool.query_all_component_instances())
 
     add_component_submit = SubmitField("Add component")
 
@@ -125,13 +97,13 @@ class SubsystemForm(FlaskForm):
     """
     subsystem_name = StringField("Name of the subsystem")
 
-    components = SelectField("Suspect components", choices=make_tuple_list(get_components()))
+    components = SelectField("Suspect components", choices=make_tuple_list(kg_query_tool.query_all_component_instances()))
 
     add_component_submit = SubmitField("Add to list")
 
     clear_components = SubmitField("Clear list")
 
-    verified_by = SelectField("component", choices=get_components())
+    verified_by = SelectField("component", choices=kg_query_tool.query_all_component_instances())
 
     final_submit = SubmitField("Submit")
 
@@ -152,7 +124,7 @@ class SuspectComponentsForm(FlaskForm):
 
     measurements_possible = SelectField(choices=boolean_choices)
 
-    affecting_components = SelectField("Add further component", choices=make_tuple_list(get_components()))
+    affecting_components = SelectField("Add further component", choices=make_tuple_list(kg_query_tool.query_all_component_instances()))
 
 
 def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool):
@@ -170,7 +142,6 @@ def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, 
 
     new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
                                                  affected_by=affected_by)
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
     fact_list = expert_knowledge_enhancer.generate_suspect_component_facts([new_component_knowledge])
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
@@ -195,7 +166,6 @@ def add_dtc_to_knowledge_graph(dtc: str, occurs_with: list, fault_condition: str
 
     new_dtc_knowledge = DTCKnowledge(dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition,
                                      symptoms=symptoms, suspect_components=suspect_components)
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
     fact_list = expert_knowledge_enhancer.generate_dtc_form_related_facts(new_dtc_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
@@ -214,7 +184,6 @@ def add_subsystem_to_knowledge_graph(vehicle_subsystem: str, contains: list, ver
 
     new_subsystem_knowledge = SubsystemKnowledge(vehicle_subsystem=vehicle_subsystem, contains=contains,
                                                  verified_by=verified_by)
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer(None)
     fact_list = expert_knowledge_enhancer.generate_subsystem_facts(new_subsystem_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
@@ -237,7 +206,7 @@ def component_form():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.component_name.data:
-                if form.component_name.data in get_components() and form.component_name.data != session.get(
+                if form.component_name.data in kg_query_tool.query_all_component_instances() and form.component_name.data != session.get(
                         "component_name"):
                     flash(
                         "WARNING: This component already exists! If you are sure that you want to overwrite it, "
@@ -250,7 +219,7 @@ def component_form():
                                                      affected_by=get_session_variable_list("affecting_components"),
                                                      oscilloscope=oscilloscope_useful)
                     get_session_variable_list("affecting_components").clear()
-                    form.affecting_components.choices = get_components()
+                    form.affecting_components.choices = kg_query_tool.query_all_component_instances()
                     if form.component_name.data == session.get("component_name"):
                         flash(f"The component {form.component_name.data} has successfully been overwritten.")
                     else:
@@ -268,7 +237,7 @@ def component_form():
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
 
-    form.affecting_components.choices = get_components()
+    form.affecting_components.choices = kg_query_tool.query_all_component_instances()
 
     return render_template('component_form.html', form=form,
                            affecting_components_variable_list=get_session_variable_list("affecting_components"))
@@ -281,13 +250,13 @@ def dtc_form():
     """
     form = DTCForm()
 
-    form.suspect_components.choices = get_components()
+    form.suspect_components.choices = kg_query_tool.query_all_component_instances()
 
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.dtc_name.data:
                 if form.fault_condition.data:
-                    if form.dtc_name.data in get_dtcs() and form.dtc_name.data != session.get("dtc_name"):
+                    if form.dtc_name.data in kg_query_tool.query_all_dtc_instances() and form.dtc_name.data != session.get("dtc_name"):
                         flash(
                             "WARNING: This DTC already exists! If you are sure that you want to overwrite it, please "
                             "click the submit button one more time.")
@@ -342,9 +311,9 @@ def dtc_form():
     if form.dtc_name.data != session.get("dtc_name"):
         session["dtc_name"] = None
 
-    form.symptoms.choices = get_symptoms()
-    form.suspect_components.choices = get_components()
-    form.occurs_with.choices = get_dtcs()
+    form.symptoms.choices = kg_query_tool.query_all_symptom_instances()
+    form.suspect_components.choices = kg_query_tool.query_all_component_instances()
+    form.occurs_with.choices = kg_query_tool.query_all_dtc_instances()
 
     return render_template('DTC_form.html', form=form,
                            suspect_components_variable_list=get_session_variable_list("component_list"),
@@ -362,7 +331,7 @@ def subsystem_form():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.subsystem_name.data:
-                if form.subsystem_name.data in get_vehicle_subsystems() and form.subsystem_name.data != session.get(
+                if form.subsystem_name.data in kg_query_tool.query_all_vehicle_subsystem_instances() and form.subsystem_name.data != session.get(
                         "subsystem_name"):
                     flash(
                         "WARNING: This vehicle subsystem already exists! If you are sure that you want to overwrite it,"
@@ -392,7 +361,7 @@ def subsystem_form():
     if form.subsystem_name.data != session.get("subsystem_name"):
         session["subsystem_name"] = None
 
-    form.components.choices = get_components()
+    form.components.choices = kg_query_tool.query_all_component_instances()
 
     return render_template('subsystem_form.html', form=form,
                            components_variable_list=get_session_variable_list("subsystem_components"))
