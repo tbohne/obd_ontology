@@ -267,7 +267,7 @@ class ExpertKnowledgeEnhancer:
 
         if "dtc" in self.knowledge_file:
             dtc_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            fact_list = self.generate_all_dtc_related_facts(self, dtc_knowledge)
+            fact_list = self.generate_dtc_form_related_facts(self, dtc_knowledge)
 
         elif "component" in self.knowledge_file:
             comp_knowledge_list = expert_knowledge_parser.parse_knowledge(self.knowledge_file)

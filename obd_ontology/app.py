@@ -5,11 +5,11 @@ from wtforms import StringField, SubmitField, SelectField
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 
-from OBDOntology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
-from OBDOntology.subsystem_knowledge import SubsystemKnowledge
-from OBDOntology.component_knowledge import ComponentKnowledge
-from OBDOntology.dtc_knowledge import DTCKnowledge
-from OBDOntology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
+from obd_ontology.subsystem_knowledge import SubsystemKnowledge
+from obd_ontology.component_knowledge import ComponentKnowledge
+from obd_ontology.dtc_knowledge import DTCKnowledge
+from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 app = Flask(__name__, template_folder=os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates')))
 app.debug = True

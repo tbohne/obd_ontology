@@ -708,7 +708,7 @@ class KnowledgeGraphQueryTool:
         """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_all_symptom_instances(self) -> list:
         """
@@ -730,10 +730,9 @@ class KnowledgeGraphQueryTool:
 
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
+        return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_all_vehicle_subsystem_instances(self) -> list:
-
         """
         Queries all subsystem instances stored in the knowledge graph.
 
@@ -752,8 +751,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.comp_name for row in self.graph.query(s)]
-        return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s)]
-        
+        return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     @staticmethod
     def print_res(res: list) -> None:
