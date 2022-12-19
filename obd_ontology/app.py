@@ -32,10 +32,7 @@ def make_tuple_list(some_list) -> list:
 
     This format is needed as input for the SelectMultipleField. Can also be used for the SelectField.
     """
-    new_list = []
-    for element in some_list:
-        new_list.append((element, element))
-    return new_list
+    return [(e, e) for e in some_list]
 
 
 def get_session_variable_list(name: str) -> list:
