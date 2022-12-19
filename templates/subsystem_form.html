@@ -6,16 +6,6 @@
 </head>
 <body>
     Site navigation: <a href="/">Start page</a> | <a href="dtc_form">Add a DTC</a> | <a href="component_form">Add a component</a>.
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    {% block body %}{% endblock %}
   <form method="POST">
       {{ form.csrf_token }}
       <br>
@@ -29,7 +19,7 @@
       <br>
       <div>{{form.components}} {{form.add_component_submit}} {{form.clear_components}}</div>
       <br>
-      <p color=blue style>
+      <p style="color: blue;">
       {%for i in components_variable_list%}
         {{i}},
       {%endfor%}</p>
@@ -39,5 +29,14 @@
       <br> <br>
       {{form.final_submit}}
   </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 </body>
 </html>

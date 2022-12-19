@@ -6,16 +6,6 @@
 </head>
 <body>
     Site navigation: <a href="/">Start page</a> | <a href="subsystem_form">Add a vehicle subsystems</a> | <a href="component_form">Add a component</a>.
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    {% block body %}{% endblock %}
   <form method="POST">
       {{ form.csrf_token }}
       <br>
@@ -27,6 +17,7 @@
       <br>
       <div>{{form.occurs_with.label}} {{form.occurs_with}} {{form.occurs_with_submit}} {{form.clear_occurs_with}} </div>
       <br>
+      <p style="color: blue;">
       {%for i in occurs_with_DTCs_variable_list%}
         {{i}},
       {%endfor%}</p>
@@ -34,15 +25,15 @@
       Please describe the fault condition for the DTC:
       {{form.fault_condition}}
       <br> <br>
-      Please choose symptoms of the fault condition:
+      Please choose symptoms potentially occurring with the fault condition:
       <br>
       <div>{{ form.symptoms.label }} {{ form.symptoms }} {{form.symptoms_submit}} {{form.clear_symptoms}}</div>
       <br>
-      If there is a symptom that are not in the list, please add it in the textfield below:
+      If there is a symptom that is not in the list, please add it in the textfield below:
       <br>
       <div>{{ form.new_symptom.label }} {{form.new_symptom}} {{form.new_symptom_submit}}</div>
       <br>
-      <p color=blue style>
+      <p style="color: blue;">
       {%for i in symptoms_variable_list%}
         {{i}},
       {%endfor%}</p>
@@ -51,12 +42,21 @@
       <br>
 
       <div>{{ form.suspect_components.label }} {{form.suspect_components}} {{form.add_component_submit}} {{form.clear_components}} </div>
-      <p color=blue style>
+      <p style="color: blue;">
       {%for i in suspect_components_variable_list%}
         {{i}},
       {%endfor%}</p>
       <br> <br>
       {{form.final_submit}}
   </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 </body>
 </html>

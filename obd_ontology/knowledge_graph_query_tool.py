@@ -689,7 +689,6 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-
     def query_all_component_instances(self) -> list:
         """
         Queries all component instances stored in the knowledge graph.
@@ -701,7 +700,6 @@ class KnowledgeGraphQueryTool:
         print("####################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
-
         s = f"""
         SELECT ?name WHERE {{
             ?comp a {comp_entry} .
@@ -723,7 +721,6 @@ class KnowledgeGraphQueryTool:
         print("####################################")
         symptom_entry = self.complete_ontology_entry('Symptom')
         symptom_desc_entry = self.complete_ontology_entry('symptom_description')
-
         s = f"""
         SELECT ?desc WHERE {{
             ?symp a {symptom_entry} .
