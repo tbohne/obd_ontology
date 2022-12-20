@@ -13,7 +13,7 @@ from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 app = Flask(__name__, template_folder=os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates')))
 app.debug = True
-app.config['SECRET_KEY'] = "3847850"
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 app.app_context()
 
 csrf = CSRFProtect(app)
