@@ -167,7 +167,7 @@ def add_dtc_to_knowledge_graph(dtc: str, occurs_with: list, fault_condition: str
 
     new_dtc_knowledge = DTCKnowledge(dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition,
                                      symptoms=symptoms, suspect_components=suspect_components)
-    fact_list = expert_knowledge_enhancer.generate_dtc_form_related_facts(new_dtc_knowledge)
+    fact_list = expert_knowledge_enhancer.generate_dtc_related_facts(new_dtc_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 

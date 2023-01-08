@@ -243,7 +243,7 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def generate_dtc_form_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
+    def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
         Generates all facts obtained from the DTC form / template to be entered into the knowledge graph.
 
@@ -268,7 +268,7 @@ class ExpertKnowledgeEnhancer:
 
         if "dtc" in self.knowledge_file:
             dtc_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            fact_list = self.generate_dtc_form_related_facts(self, dtc_knowledge)
+            fact_list = self.generate_dtc_related_facts(self, dtc_knowledge)
 
         elif "component" in self.knowledge_file:
             comp_knowledge_list = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
