@@ -87,6 +87,8 @@ class DTCForm(FlaskForm):
 
     final_submit = SubmitField("Submit")
 
+    clear_everything = SubmitField("Clear everything")
+
 
 class SubsystemForm(FlaskForm):
     """
@@ -107,6 +109,8 @@ class SubsystemForm(FlaskForm):
     clear_verifying_components = SubmitField("Clear list")
 
     final_submit = SubmitField("Submit")
+
+    clear_everything = SubmitField("Clear everything")
 
 
 class SuspectComponentsForm(FlaskForm):
@@ -317,10 +321,15 @@ def dtc_form():
             get_session_variable_list("occurs_with_list").clear()
 
         elif form.clear_components.data:
-            session.get("component_list").clear()
+            get_session_variable_list("component_list").clear()
 
         elif form.clear_symptoms.data:
-            session.get("symptom_list").clear()
+            get_session_variable_list("symptom_list").clear()
+
+        elif form.clear_everything.data:
+            get_session_variable_list("occurs_with_list").clear()
+            get_session_variable_list("component_list").clear()
+            get_session_variable_list("symptom_list").clear()
 
     if form.dtc_name.data != session.get("dtc_name"):
         session["dtc_name"] = None
@@ -383,6 +392,10 @@ def subsystem_form():
             get_session_variable_list("subsystem_components").clear()
 
         elif form.clear_verifying_components.data:
+            get_session_variable_list("verifying_components").clear()
+
+        elif form.clear_everything.data:
+            get_session_variable_list("subsystem_components").clear()
             get_session_variable_list("verifying_components").clear()
 
     if form.subsystem_name.data != session.get("subsystem_name"):

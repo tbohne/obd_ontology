@@ -47,6 +47,8 @@
         {{i}},
       {%endfor%}</p>
       <br> <br>
+      {{form.clear_everything}}
+      <br> <br> <br>
       {{form.final_submit}}
   </form>
     {% with messages = get_flashed_messages() %}
