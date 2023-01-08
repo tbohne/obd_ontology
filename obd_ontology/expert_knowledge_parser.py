@@ -75,8 +75,8 @@ def parse_subsystem_expert_template(lines: list) -> SubsystemKnowledge:
     :param lines: lines of the knowledge template
     :return: parsed subsystem knowledge
     """
-    subsystem = verified_by = ""
-    contains = []
+    subsystem = ""
+    contains = verified_by = []
 
     title_cnt = 0
     for line in lines:
@@ -90,7 +90,7 @@ def parse_subsystem_expert_template(lines: list) -> SubsystemKnowledge:
         elif title_cnt == 4:  # 'contains' entries
             contains.append(line)
         elif title_cnt == 6:  # 'verified_by' entry
-            verified_by = line
+            verified_by = [line]
 
     return SubsystemKnowledge(subsystem, contains, verified_by)
 

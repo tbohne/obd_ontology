@@ -233,12 +233,13 @@ class ExpertKnowledgeEnhancer:
             comp_uuid = sus_comp[0].split("#")[1]
             fact_list.append(Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid)))
 
-        verifying_comp = subsystem_knowledge.verified_by
-        # relate knowledge to already existing facts
-        verifying_comp_instance = self.knowledge_graph_query_tool.query_suspect_component_by_name(verifying_comp)
-        assert len(verifying_comp_instance) == 1
-        verifying_comp_uuid = verifying_comp_instance[0].split("#")[1]
-        fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, subsystem_uuid)))
+        assert isinstance(subsystem_knowledge.verified_by, list)
+        for verifying_comp in subsystem_knowledge.verified_by:
+            # relate knowledge to already existing facts
+            verifying_comp_instance = self.knowledge_graph_query_tool.query_suspect_component_by_name(verifying_comp)
+            assert len(verifying_comp_instance) == 1
+            verifying_comp_uuid = verifying_comp_instance[0].split("#")[1]
+            fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, subsystem_uuid)))
 
         return fact_list
 

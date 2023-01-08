@@ -11,7 +11,7 @@ from obd_ontology.component_knowledge import ComponentKnowledge
 from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
-app = Flask(__name__, template_folder=os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'templates')))
+app = Flask(__name__, template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates')))
 app.debug = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 app.app_context()
@@ -100,7 +100,11 @@ class SubsystemForm(FlaskForm):
 
     clear_components = SubmitField("Clear list")
 
-    verified_by = SelectField("component", choices=kg_query_tool.query_all_component_instances())
+    verifying_components = SelectField("component", choices=kg_query_tool.query_all_component_instances())
+
+    verifying_components_submit = SubmitField("Add to list")
+
+    clear_verifying_components = SubmitField("Clear list")
 
     final_submit = SubmitField("Submit")
 
@@ -167,7 +171,7 @@ def add_dtc_to_knowledge_graph(dtc: str, occurs_with: list, fault_condition: str
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
-def add_subsystem_to_knowledge_graph(vehicle_subsystem: str, contains: list, verified_by: str) -> None:
+def add_subsystem_to_knowledge_graph(vehicle_subsystem: str, contains: list, verified_by: list) -> None:
     """
     Adds a subsystem instance to the knowledge graph using the ExpertKnowledgeEnhancer.
 
@@ -177,7 +181,7 @@ def add_subsystem_to_knowledge_graph(vehicle_subsystem: str, contains: list, ver
     """
     assert isinstance(vehicle_subsystem, str)
     assert isinstance(contains, list)
-    assert isinstance(verified_by, str)
+    assert isinstance(verified_by, list)
 
     new_subsystem_knowledge = SubsystemKnowledge(vehicle_subsystem=vehicle_subsystem, contains=contains,
                                                  verified_by=verified_by)
@@ -203,30 +207,34 @@ def component_form():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.component_name.data:
-                if form.component_name.data in kg_query_tool.query_all_component_instances() and form.component_name.data != session.get(
-                        "component_name"):
-                    flash(
-                        "WARNING: This component already exists! If you are sure that you want to overwrite it, "
-                        "please click the submit button one more time.")
-                    session["component_name"] = form.component_name.data
-                else:
-                    assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
-                    oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
-                    add_component_to_knowledge_graph(suspect_component=form.component_name.data,
-                                                     affected_by=get_session_variable_list("affecting_components"),
-                                                     oscilloscope=oscilloscope_useful)
-                    get_session_variable_list("affecting_components").clear()
-                    form.affecting_components.choices = kg_query_tool.query_all_component_instances()
-                    if form.component_name.data == session.get("component_name"):
-                        flash(f"The component {form.component_name.data} has successfully been overwritten.")
+                if get_session_variable_list("affecting_components"):
+                    if form.component_name.data in kg_query_tool.query_all_component_instances() and form.component_name.data != session.get(
+                            "component_name"):
+                        flash(
+                            "WARNING: This component already exists! If you are sure that you want to overwrite it, "
+                            "please click the submit button one more time.")
+                        session["component_name"] = form.component_name.data
                     else:
-                        flash(f"The component {form.component_name.data} has successfully been added.")
-                    return redirect(url_for('component_form'))
+                        assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
+                        oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
+                        add_component_to_knowledge_graph(suspect_component=form.component_name.data,
+                                                         affected_by=get_session_variable_list("affecting_components"),
+                                                         oscilloscope=oscilloscope_useful)
+                        get_session_variable_list("affecting_components").clear()
+                        form.affecting_components.choices = kg_query_tool.query_all_component_instances()
+                        if form.component_name.data == session.get("component_name"):
+                            flash(f"The component {form.component_name.data} has successfully been overwritten.")
+                        else:
+                            flash(f"The component {form.component_name.data} has successfully been added.")
+                        return redirect(url_for('component_form'))
+                else:
+                    flash("Please add at least one component that affects the current component!")
             else:
                 flash("Please enter component name")
 
         elif form.affecting_component_submit.data:
-            get_session_variable_list("affecting_components").append(form.affecting_components.data)
+            if form.affecting_components.data not in get_session_variable_list("affecting_components"):
+                get_session_variable_list("affecting_components").append(form.affecting_components.data)
 
         elif form.clear_affecting_components.data:
             get_session_variable_list("affecting_components").clear()
@@ -253,48 +261,57 @@ def dtc_form():
         if form.final_submit.data:
             if form.dtc_name.data:
                 if form.fault_condition.data:
-                    if form.dtc_name.data in kg_query_tool.query_all_dtc_instances() and form.dtc_name.data != session.get("dtc_name"):
-                        flash(
-                            "WARNING: This DTC already exists! If you are sure that you want to overwrite it, please "
-                            "click the submit button one more time.")
-                        session["dtc_name"] = form.dtc_name.data
-                    else:
-                        add_dtc_to_knowledge_graph(dtc=form.dtc_name.data,
-                                                   occurs_with=get_session_variable_list("occurs_with_list"),
-                                                   fault_condition=form.fault_condition.data,
-                                                   symptoms=get_session_variable_list("symptom_list"),
-                                                   suspect_components=get_session_variable_list("component_list"))
-                        get_session_variable_list("component_list").clear()
-                        get_session_variable_list("symptom_list").clear()
-                        get_session_variable_list("occurs_with_list").clear()
-                        if form.dtc_name.data == session.get("dtc_name"):
-                            flash(f"The DTC {form.dtc_name.data} has successfully been overwritten.")
-                        else:
-                            flash(f"The DTC {form.dtc_name.data} has successfully been added.")
+                    if get_session_variable_list("symptom_list"):
+                        if get_session_variable_list("component_list"):
+                            if form.dtc_name.data in kg_query_tool.query_all_dtc_instances() and form.dtc_name.data != session.get("dtc_name"):
+                                flash(
+                                    "WARNING: This DTC already exists! If you are sure that you want to overwrite it, please "
+                                    "click the submit button one more time.")
+                                session["dtc_name"] = form.dtc_name.data
+                            else:
+                                add_dtc_to_knowledge_graph(dtc=form.dtc_name.data,
+                                                           occurs_with=get_session_variable_list("occurs_with_list"),
+                                                           fault_condition=form.fault_condition.data,
+                                                           symptoms=get_session_variable_list("symptom_list"),
+                                                           suspect_components=get_session_variable_list("component_list"))
+                                get_session_variable_list("component_list").clear()
+                                get_session_variable_list("symptom_list").clear()
+                                get_session_variable_list("occurs_with_list").clear()
+                                if form.dtc_name.data == session.get("dtc_name"):
+                                    flash(f"The DTC {form.dtc_name.data} has successfully been overwritten.")
+                                else:
+                                    flash(f"The DTC {form.dtc_name.data} has successfully been added.")
 
-                        return redirect(url_for('dtc_form'))
+                                return redirect(url_for('dtc_form'))
+                        else:
+                            flash("Please list components that should be checked!")
+                    else:
+                        flash("Please add symptoms that can occur with the DTC!")
                 else:
                     flash("Please enter a fault condition description!")
             else:
                 flash("Please enter a DTC code!")
 
         elif form.add_component_submit.data:
-            get_session_variable_list("component_list").append(form.suspect_components.data)
+            if form.suspect_components.data not in get_session_variable_list("component_list"):
+                get_session_variable_list("component_list").append(form.suspect_components.data)
 
         elif form.symptoms_submit.data:
-            get_session_variable_list("symptom_list").append(form.symptoms.data)
+            if form.symptoms.data not in get_session_variable_list("symptom_list"):
+                get_session_variable_list("symptom_list").append(form.symptoms.data)
 
         elif form.new_symptom_submit.data:
 
             if form.new_symptom.data:
-                # ToDo: check if symptom is already in the list
-                get_session_variable_list("symptom_list").append(form.new_symptom.data)
+                if form.new_symptom.data not in get_session_variable_list("symptom_list"):
+                    get_session_variable_list("symptom_list").append(form.new_symptom.data)
 
             else:
                 flash("Please add the new symptom before submitting the symptom!")
 
         elif form.occurs_with_submit.data:
-            get_session_variable_list("occurs_with_list").append(form.occurs_with.data)
+            if form.occurs_with.data not in get_session_variable_list("occurs_with_list"):
+                get_session_variable_list("occurs_with_list").append(form.occurs_with.data)
 
         elif form.clear_occurs_with.data:
             get_session_variable_list("occurs_with_list").clear()
@@ -328,32 +345,45 @@ def subsystem_form():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.subsystem_name.data:
-                if form.subsystem_name.data in kg_query_tool.query_all_vehicle_subsystem_instances() and form.subsystem_name.data != session.get(
-                        "subsystem_name"):
-                    flash(
-                        "WARNING: This vehicle subsystem already exists! If you are sure that you want to overwrite it,"
-                        " please click the submit button one more time.")
-                    session["subsystem_name"] = form.subsystem_name.data
-                else:
-                    add_subsystem_to_knowledge_graph(vehicle_subsystem=form.subsystem_name.data,
-                                                     contains=get_session_variable_list("subsystem_components"),
-                                                     verified_by=form.verified_by.data)
-                    get_session_variable_list("subsystem_components").clear()
-                    if form.subsystem_name.data == session.get("subsystem_name"):
-                        flash(f"The vehicle subsystem called {form.subsystem_name.data} "
-                              f"has successfully been overwritten.")
+                if get_session_variable_list("subsystem_components"):
+                    if get_session_variable_list("verifying_components"):
+                        if form.subsystem_name.data in kg_query_tool.query_all_vehicle_subsystem_instances() and form.subsystem_name.data != session.get(
+                                "subsystem_name"):
+                            flash(
+                                "WARNING: This vehicle subsystem already exists! If you are sure that you want to overwrite it,"
+                                " please click the submit button one more time.")
+                            session["subsystem_name"] = form.subsystem_name.data
+                        else:
+                            add_subsystem_to_knowledge_graph(vehicle_subsystem=form.subsystem_name.data,
+                                                             contains=get_session_variable_list("subsystem_components"),
+                                                             verified_by=get_session_variable_list("verifying_components"))
+                            get_session_variable_list("subsystem_components").clear()
+                            if form.subsystem_name.data == session.get("subsystem_name"):
+                                flash(f"The vehicle subsystem called {form.subsystem_name.data} "
+                                      f"has successfully been overwritten.")
+                            else:
+                                flash(f"The vehicle subsystem called {form.subsystem_name.data} has successfully been added.")
+                            return redirect(url_for('subsystem_form'))
                     else:
-                        flash(f"The vehicle subsystem called {form.subsystem_name.data} has successfully been added.")
-                    return redirect(url_for('subsystem_form'))
-
+                        flash("Please name at least one component that can verify whether this subsystem works correctly!")
+                else:
+                    flash("Please list the components that this subsystem comprises!")
             else:
                 flash("Please enter a name for the subsystem!")
 
         elif form.add_component_submit.data:
-            get_session_variable_list("subsystem_components").append(form.components.data)
+            if form.components.data not in get_session_variable_list("subsystem_components"):
+                get_session_variable_list("subsystem_components").append(form.components.data)
+
+        elif form.verifying_components_submit.data:
+            if form.verifying_components.data not in get_session_variable_list("verifying_components"):
+                get_session_variable_list("verifying_components").append(form.verifying_components.data)
 
         elif form.clear_components.data:
             get_session_variable_list("subsystem_components").clear()
+
+        elif form.clear_verifying_components.data:
+            get_session_variable_list("verifying_components").clear()
 
     if form.subsystem_name.data != session.get("subsystem_name"):
         session["subsystem_name"] = None
@@ -361,7 +391,7 @@ def subsystem_form():
     form.components.choices = kg_query_tool.query_all_component_instances()
 
     return render_template('subsystem_form.html', form=form,
-                           components_variable_list=get_session_variable_list("subsystem_components"))
+                           components_variable_list=get_session_variable_list("subsystem_components"), verifying_components_list=get_session_variable_list("verifying_components"))
 
 
 if __name__ == '__main__':

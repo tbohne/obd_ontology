@@ -25,7 +25,12 @@
       {%endfor%}</p>
       <br> <br>
       Please select which component can verify whether the subsystem works correctly:
-      {{form.verified_by}}
+      <div> {{form.verifying_components}} {{form.verifying_components_submit}} {{form.clear_verifying_components}}</div>
+        <br>
+        <p style="color: blue;">
+      {%for i in verifying_components_list%}
+        {{i}},
+      {%endfor%}</p>
       <br> <br>
       {{form.final_submit}}
   </form>
