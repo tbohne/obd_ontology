@@ -288,9 +288,9 @@ def dtc_form():
 
                                 return redirect(url_for('dtc_form'))
                         else:
-                            flash("Please list components that should be checked!")
+                            flash("Please list at least one component that should be checked!")
                     else:
-                        flash("Please add symptoms that can occur with the DTC!")
+                        flash("Please add at least one symptom that can occur with the DTC!")
                 else:
                     flash("Please enter a fault condition description!")
             else:
@@ -367,6 +367,7 @@ def subsystem_form():
                                                              contains=get_session_variable_list("subsystem_components"),
                                                              verified_by=get_session_variable_list("verifying_components"))
                             get_session_variable_list("subsystem_components").clear()
+                            get_session_variable_list("verifying_components").clear()
                             if form.subsystem_name.data == session.get("subsystem_name"):
                                 flash(f"The vehicle subsystem called {form.subsystem_name.data} "
                                       f"has successfully been overwritten.")
