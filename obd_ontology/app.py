@@ -122,7 +122,7 @@ class SuspectComponentsForm(FlaskForm):
     """
     Form for the component page.
     """
-    component_name = StringField('Component name:')
+    component_name = StringField('Component:')
 
     boolean_choices = [("No", "No",), ("Yes", "Yes")]
 

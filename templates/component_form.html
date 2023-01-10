@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Components</title>
+    <title>Vehicle Component</title>
 </head>
+
 <body>
-    <div> Site navigation: <a href="/">Start page</a> | <a href="subsystem_form">Add a vehicle subsystems</a> | <a href="dtc_form">Add a DTC</a>. </div>
-  <form method="POST">
-      {{ form.csrf_token }}
-      <br>
-      <h2>Add a new component instance to the knowledge graph:</h2>
-      <br>
-      {{ form.component_name.label }} {{ form.component_name(size=20) }} <br>
-      <br>
-      Are oscilloscope measurements possible for this component?
-      {{form.measurements_possible}} <br>
-      <br>
-      Please select other components whose malfunctions can affect the current component:
-      <br>
-      <div>{{ form.affecting_components}} {{form.affecting_component_submit}} {{form.clear_affecting_components}}</div>
-      <br>
-      <p style="color: blue;">
-      {%for i in affecting_components_variable_list%}
-        {{i}},
-      {%endfor%}</p>
-      <br> <br>
-      {{form.final_submit}}
-  </form>
+    <div>Navigation: <a href="/">Start page</a> | <a href="subsystem_form">Add vehicle subsystem</a> | <a href="dtc_form">Add DTC</a></div>
+
+    <form method="POST">
+        {{ form.csrf_token }}
+
+        <h1>Add Vehicle Component Instance to Knowledge Graph</h1>
+        <br>
+        {{ form.component_name.label }} {{ form.component_name(size=20) }}
+        <p>Are oscilloscope measurements possible / reasonable for this component? {{form.measurements_possible}}</p>
+        <p>Select other components whose malfunctions may affect the current component:</p>
+        <div>{{ form.affecting_components}} {{form.affecting_component_submit}} {{form.clear_affecting_components}}</div>
+        <p style="color: blue;">
+        {%for i in affecting_components_variable_list%}
+            {{i}},
+        {%endfor%}</p>
+        {{form.final_submit}}
+    </form>
+
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endwith %}
+
 </body>
+
 </html>
