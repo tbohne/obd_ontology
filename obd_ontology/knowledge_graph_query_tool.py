@@ -689,6 +689,70 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
+    def query_all_component_instances(self) -> list:
+        """
+        Queries all component instances stored in the knowledge graph.
+
+        :return: all components stored in the knowledge graph
+        """
+        print("####################################")
+        print("QUERY: all component instances")
+        print("####################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        s = f"""
+        SELECT ?name WHERE {{
+            ?comp a {comp_entry} .
+            ?comp {name_entry} ?name.
+        }}
+        """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
+    def query_all_symptom_instances(self) -> list:
+        """
+        Queries all symptom instances stored in the knowledge graph.
+
+        :return: all symptoms stored in the knowledge graph
+        """
+        print("####################################")
+        print("QUERY: all symptom instances")
+        print("####################################")
+        symptom_entry = self.complete_ontology_entry('Symptom')
+        symptom_desc_entry = self.complete_ontology_entry('symptom_description')
+        s = f"""
+        SELECT ?desc WHERE {{
+            ?symp a {symptom_entry} .
+            ?symp {symptom_desc_entry} ?desc.
+        }}
+        """
+
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
+    def query_all_vehicle_subsystem_instances(self) -> list:
+        """
+        Queries all subsystem instances stored in the knowledge graph.
+
+        :return: all vehicle subsystems stored in the knowledge graph
+        """
+        print("####################################")
+        print("QUERY: all vehicle subsystem instances")
+        print("####################################")
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        subsystem_name_entry = self.complete_ontology_entry('subsystem_name')
+        s = f"""
+            SELECT ?subsystem_name WHERE {{
+                ?subsystem a {subsystem_entry} .
+                ?subsystem {subsystem_name_entry} ?subsystem_name .
+            }}
+            """
+        if self.local_kb:
+            return [row.comp_name for row in self.graph.query(s)]
+        return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """

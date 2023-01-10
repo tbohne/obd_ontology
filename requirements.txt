@@ -2,4 +2,7 @@ rdflib
 Owlready2
 requests
 termcolor
+flask
+flask_wtf
+wtforms
 git+https://github.com/tbohne/dtc_parser.git

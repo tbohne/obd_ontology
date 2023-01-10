@@ -7,7 +7,7 @@ class SubsystemKnowledge:
     Representation of vehicle-subsystem-related expert knowledge.
     """
 
-    def __init__(self, vehicle_subsystem: str, contains: list, verified_by: str) -> None:
+    def __init__(self, vehicle_subsystem: str, contains: list, verified_by: list) -> None:
         """
         Initializes the subsystem knowledge.
 
@@ -21,4 +21,4 @@ class SubsystemKnowledge:
 
     def __str__(self):
         return "Vehicle Subsystem: " + self.vehicle_subsystem + "\nContains: " + str(self.contains) \
-               + "\nVerified by: " + self.verified_by
+               + "\nVerified by: " + str(self.verified_by)
