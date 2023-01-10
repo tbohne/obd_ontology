@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DTC</title>
+</head>
+<body>
+    Site navigation: <a href="/">Start page</a> | <a href="subsystem_form">Add a vehicle subsystems</a> | <a href="component_form">Add a component</a>.
+  <form method="POST">
+      {{ form.csrf_token }}
+      <br>
+      <h2>Add a new DTC instance to the knowledge graph:</h2>
+      <br>
+      {{ form.dtc_name.label }} {{ form.dtc_name(size=20) }} <br>
+      <br>
+        Please list other DTCs that often occur together with the given DTC:
+      <br>
+      <div>{{form.occurs_with.label}} {{form.occurs_with}} {{form.occurs_with_submit}} {{form.clear_occurs_with}} </div>
+      <br>
+      <p style="color: blue;">
+      {%for i in occurs_with_DTCs_variable_list%}
+        {{i}},
+      {%endfor%}</p>
+      <br>
+      Please describe the fault condition for the DTC:
+      {{form.fault_condition}}
+      <br> <br>
+      Please choose symptoms potentially occurring with the fault condition:
+      <br>
+      <div>{{ form.symptoms.label }} {{ form.symptoms }} {{form.symptoms_submit}} {{form.clear_symptoms}}</div>
+      <br>
+      If there is a symptom that is not in the list, please add it in the textfield below:
+      <br>
+      <div>{{ form.new_symptom.label }} {{form.new_symptom}} {{form.new_symptom_submit}}</div>
+      <br>
+      <p style="color: blue;">
+      {%for i in symptoms_variable_list%}
+        {{i}},
+      {%endfor%}</p>
+      <br> <br>
+      Please list the components that should be checked. Please list them in the right order - the ones that come first in the list should be the ones that should be checked first. If you want to add a component that is not in this list, please add it via <a href="component_form">this</a> form and afterwards select it in the list here.
+      <br>
+
+      <div>{{ form.suspect_components.label }} {{form.suspect_components}} {{form.add_component_submit}} {{form.clear_components}} </div>
+      <p style="color: blue;">
+      {%for i in suspect_components_variable_list%}
+        {{i}},
+      {%endfor%}</p>
+      <br> <br>
+      {{form.clear_everything}}
+      <br> <br> <br>
+      {{form.final_submit}}
+  </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</body>
+</html>
