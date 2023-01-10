@@ -60,9 +60,9 @@ class DTCForm(FlaskForm):
     """
     Form for the DTC page.
     """
-    dtc_name = StringField("Please enter the DTC:")
+    dtc_name = StringField("DTC:")
 
-    occurs_with = SelectField("Select DTCs that occur with this DTC",
+    occurs_with = SelectField("Other DTCs that frequently occur together with the specified DTC:",
                               choices=make_tuple_list(kg_query_tool.query_all_dtc_instances()))
 
     occurs_with_submit = SubmitField("Add DTC")
@@ -73,17 +73,17 @@ class DTCForm(FlaskForm):
 
     symptoms_list = make_tuple_list(kg_query_tool.query_all_symptom_instances())
 
-    symptoms = SelectField("Select symptom", choices=symptoms_list)
+    symptoms = SelectField("Symptoms potentially occurring with the fault condition:", choices=symptoms_list)
 
     symptoms_submit = SubmitField("Add symptom")
 
     clear_symptoms = SubmitField("Clear list")
 
-    new_symptom = StringField("New symptom")
+    new_symptom = StringField("If a symptom is not included in the list, please add it in the text box:")
 
     new_symptom_submit = SubmitField("Add new symptom")
 
-    suspect_components = SelectField("Select component", choices=kg_query_tool.query_all_component_instances())
+    suspect_components = SelectField("List of suspect components (those that are first in the list should also be checked first):", choices=kg_query_tool.query_all_component_instances())
 
     add_component_submit = SubmitField("Add component")
 
