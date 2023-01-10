@@ -2,7 +2,6 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-
 PREFIX eg: <http://www.semanticweb.org/diag_ontology#>
 
 # Example queries with OBD code P0138
@@ -127,4 +126,45 @@ SELECT ?code ?occ ?cat_desc ?cond_desc ?symp_desc ?comp_name ?prio ?osci WHERE {
     ?sus_comp eg:component_name ?comp_name .
     ?sus_comp eg:priority_id ?prio .
     ?sus_comp eg:use_oscilloscope ?osci .
+}
+
+# DTC TEST QUERY - USEFUL FOR DEBUGGING THE KNOWLEDGE ACQUISITION WEB INTERFACE
+
+select ?dtc ?code ?occ ?cond ?symptom ?component where {
+    ?dtc a eg:DTC .
+    ?dtc eg:code "P0XXX" .
+    ?dtc eg:occurs_with_DTC ?occ .
+    ?fc a eg:FaultCondition .
+    ?dtc eg:represents ?fc .
+    ?fc eg:condition_description ?cond .
+    ?symp a eg:Symptom .
+    ?symp eg:symptom_description ?symptom .
+    ?fc eg:manifestedBy ?symp .
+    ?sus a eg:SuspectComponent .
+    ?da a eg:DiagnosticAssociation .
+    ?dtc eg:has ?da .
+    ?da eg:pointsTo ?sus .
+    ?sus eg:component_name ?component
+}
+
+# COMPONENT TEST QUERY - USEFUL FOR DEBUGGING THE KNOWLEDGE ACQUISITION WEB INTERFACE
+
+select ?component ?osci ?aff_by where {
+    ?sus a eg:SuspectComponent .
+    ?sus eg:component_name ?component .
+    ?sus eg:use_oscilloscope ?osci .
+    ?sus eg:affected_by ?aff_by .
+}
+
+# SUBSYSTEM TEST QUERY - USEFUL FOR DEBUGGING THE KNOWLEDGE ACQUISITION WEB INTERFACE
+
+select ?sub_name ?verifying_name ?contains_name where {
+    ?sub a eg:VehicleSubsystem .
+    ?sub eg:subsystem_name ?sub_name .
+    ?verifying a eg:SuspectComponent .
+    ?contains a eg:SuspectComponent .
+    ?verifying eg:verifies ?sub .
+    ?verifying eg:component_name ?verifying_name .
+    ?sub eg:contains ?contains .
+    ?contains eg:component_name ?contains_name .
 }
