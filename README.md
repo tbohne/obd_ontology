@@ -92,7 +92,14 @@ qt.print_res(qt.query_vehicle_by_dtc(dtc))
 
 The extension of the knowledge graph with new expert knowledge can also be carried out via a web interface instead of the local templates described above.
 
-TBD.
+Run server from *Apache Jena Fuseki* root directory (runs at `localhost:3030`):
+```
+$ ./fuseki-server
+```
+Run knowledge acquisition front-end (`Flask` server - runs at `localhost:5000`):
+```
+$ python obd_ontology/app.py
+```
 
 ## Interpretation of non-obvious aspects modeled in the ontology
 
