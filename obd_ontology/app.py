@@ -28,7 +28,7 @@ expert_knowledge_enhancer = ExpertKnowledgeEnhancer("")
 
 def make_tuple_list(some_list) -> list:
     """
-    takes a list of single elements and returns a list where each element appears in a tuple with itself.
+    Takes a list of single elements and returns a list where each element appears in a tuple with itself.
 
     This format is needed as input for the SelectMultipleField. Can also be used for the SelectField.
 
@@ -40,7 +40,7 @@ def make_tuple_list(some_list) -> list:
 
 def get_session_variable_list(name: str) -> list:
     """
-    returns the session variable for a given name, or, if not existent, an empty list.
+    Returns the session variable for a given name, or, if not existent, an empty list.
 
     It is expected to be only used on session variables that should either contain lists or contain None, but
     no other data type.
@@ -77,7 +77,7 @@ class DTCForm(FlaskForm):
 
     symptoms_submit = SubmitField("Add symptom")
 
-    clear_symptoms = SubmitField("clear list")
+    clear_symptoms = SubmitField("Clear list")
 
     new_symptom = StringField("New symptom")
 
@@ -138,7 +138,7 @@ class SuspectComponentsForm(FlaskForm):
                                        choices=make_tuple_list(kg_query_tool.query_all_component_instances()))
 
 
-def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool):
+def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
     """
     Adds a component instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
 
