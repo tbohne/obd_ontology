@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Vehicle Subsystem</title>
 </head>
+
 <body>
-    Site navigation: <a href="/">Start page</a> | <a href="dtc_form">Add a DTC</a> | <a href="component_form">Add a component</a>.
-  <form method="POST">
-      {{ form.csrf_token }}
-      <br>
-      <h2>Define a new vehicle subsystem:</h2>
-      <br>
-      {{ form.subsystem_name.label }} {{ form.subsystem_name(size=20) }} <br>
-      <br>
-      Please list the components that belong into this vehicle subsystem. If the component that you want
-      to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form
-      and afterwards select it in the list here:
-      <br>
-      <div>{{form.components}} {{form.add_component_submit}} {{form.clear_components}}</div>
-      <br>
-      <p style="color: blue;">
-      {%for i in components_variable_list%}
-        {{i}},
-      {%endfor%}</p>
-      <br> <br>
-      Please select which component can verify whether the subsystem works correctly:
-      <div> {{form.verifying_components}} {{form.verifying_components_submit}} {{form.clear_verifying_components}}</div>
+    Navigation: <a href="/">Start page</a> | <a href="dtc_form">Add DTC</a> | <a href="component_form">Add vehicle component</a>
+
+    <form method="POST">
+        {{ form.csrf_token }}
+        <h1>Add Vehicle Subsystem Instance to Knowledge Graph</h1>
         <br>
+        {{ form.subsystem_name.label }} {{ form.subsystem_name(size=20) }}
+        <br>
+        <p>List components belonging to this vehicle subsystem (if the component you want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
+        <div>{{form.components}} {{form.add_component_submit}} {{form.clear_components}}</div>
+
         <p style="color: blue;">
-      {%for i in verifying_components_list%}
-        {{i}},
-      {%endfor%}</p>
-      <br> <br>
-      {{form.clear_everything}}
-      <br> <br> <br>
-      {{form.final_submit}}
-  </form>
+        {%for i in components_variable_list%}
+            {{i}},
+        {%endfor%}</p>
+
+        <p>Select components that can verify whether the subsystem works correctly:</p>
+        <div> {{form.verifying_components}} {{form.verifying_components_submit}} {{form.clear_verifying_components}}</div>
+        <p style="color: blue;">
+        {%for i in verifying_components_list%}
+            {{i}},
+        {%endfor%}</p>
+
+        {{form.clear_everything}}
+        {{form.final_submit}}
+    </form>
+
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endwith %}
+
 </body>
+
 </html>

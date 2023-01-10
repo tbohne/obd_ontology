@@ -98,7 +98,7 @@ class SubsystemForm(FlaskForm):
     """
     Form for the subsystem page.
     """
-    subsystem_name = StringField("Name of the subsystem")
+    subsystem_name = StringField("Subsystem:")
 
     components = SelectField("Suspect components",
                              choices=make_tuple_list(kg_query_tool.query_all_component_instances()))
