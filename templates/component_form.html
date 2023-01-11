@@ -3,38 +3,40 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
     <title>Vehicle Component</title>
 </head>
 
 <body>
-    <div>Navigation: <a href="/">Start page</a> | <a href="subsystem_form">Add vehicle subsystem</a> | <a href="dtc_form">Add DTC</a></div>
-
-    <form method="POST">
-        {{ form.csrf_token }}
-
-        <h1>Add Vehicle Component Instance to Knowledge Graph</h1>
-        <br>
-        {{ form.component_name.label }} {{ form.component_name(size=20) }}
-        <p>Are oscilloscope measurements possible / reasonable for this component? {{form.measurements_possible}}</p>
-        <p>Select other components whose malfunctions may affect the current component:</p>
-        <div>{{ form.affecting_components}} {{form.affecting_component_submit}} {{form.clear_affecting_components}}</div>
-        <p style="color: blue;">
-        {%for i in affecting_components_variable_list%}
-            {{i}},
-        {%endfor%}</p>
-        {{form.final_submit}}
-    </form>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=flashes>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-
+    <header><h1>Add Vehicle Component Instance to Knowledge Graph</h1></header>
+    <section>
+        <article>
+            <p><a href="/">Start page</a> <a href="subsystem_form">Add vehicle subsystem</a> <a href="dtc_form">Add DTC</a></p>
+            <form method="POST">
+                {{ form.csrf_token }}
+                <br>
+                <p>{{ form.component_name.label }} {{ form.component_name(size=20) }}</p>
+                <p>Are oscilloscope measurements possible / reasonable for this component? {{form.measurements_possible}}</p>
+                <p>Select other components whose malfunctions may affect the current component:</p>
+                <div>{{ form.affecting_components}} {{form.affecting_component_submit}} {{form.clear_affecting_components}}</div>
+                <p style="color: #B40404;">
+                {%for i in affecting_components_variable_list%}
+                    {{i}},
+                {%endfor%}</p>
+                {{form.final_submit}}
+            </form>
+            <br>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                        {% for message in messages %}
+                            <li><p style="color: #B40404;">{{ message }}</p></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </article>
+    </section>
 </body>
 
 </html>
