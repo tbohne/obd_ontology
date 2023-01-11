@@ -1,0 +1,107 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: Roboto;
+}
+
+header {
+    height: 100px;
+    background-color: #B40404;
+    border-radius: 10px;
+}
+
+body {
+    width: 1400px;
+    background-color: #FFFFFF;
+    margin: 25px auto;
+}
+
+header h1 {
+    font-family: Fira Sans;
+    font-weight: bold;
+    padding-left: 40px;
+    padding-top: 25px;
+    color: white;
+    font-size: 30pt;
+    text-shadow: black 1px 1px 4px;
+}
+
+article {
+    padding: 20px;
+    text-align: left;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-right: 25px;
+}
+
+article p {
+    font-family: "Roboto", sans-serif;
+    font-size: 14pt;
+    font-style: normal;
+    padding-bottom: 10px;
+    color: black;
+}
+
+a {
+    flex: 1;
+    text-decoration: none;
+    outline: none;
+    text-align: center;
+    color: black;
+}
+
+a:link,
+a:visited,
+a:focus {
+    padding: 3px;
+    background: #B40404;
+    color: white;
+}
+
+a:hover {
+    background: lightcoral;
+    color: white;
+}
+
+input[type=text] {
+    padding: 3px;
+    border: 2px solid #ccc;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input[type=text]:focus {
+    border-color: #333;
+}
+
+input[type=submit] {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    border: 1px solid #eee;
+    font: inherit;
+    line-height: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-size: 5px 5px, 5px 5px;
+}
+
+select {
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0.5em 2em 0.5em 0.5em;
+    border: 1px solid #eee;
+    font: inherit;
+    line-height: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: right 15px top 1em, right 10px top 1em;
+    background-size: 5px 5px, 5px 5px;
+}
