@@ -1,16 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @author Patricia Windler, Tim Bohne
+
 import logging
-import re
 import os
+import re
+
 from flask import Flask, render_template, redirect, flash, url_for, session
-from wtforms import StringField, SubmitField, SelectField
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
+from wtforms import StringField, SubmitField, SelectField
 
-from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
-from obd_ontology.subsystem_knowledge import SubsystemKnowledge
 from obd_ontology.component_knowledge import ComponentKnowledge
 from obd_ontology.dtc_knowledge import DTCKnowledge
+from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology.subsystem_knowledge import SubsystemKnowledge
 
 app = Flask(
     __name__,
@@ -55,9 +60,7 @@ def get_session_variable_list(name: str) -> list:
     """
     if session.get(name) is None:
         session[name] = []
-
     assert isinstance(session.get(name), list)
-
     return session.get(name)
 
 
@@ -66,38 +69,23 @@ class DTCForm(FlaskForm):
     Form for the DTC page.
     """
     dtc_name = StringField("DTC:")
-
     occurs_with = SelectField("Other DTCs that frequently occur together with the specified DTC:",
                               choices=make_tuple_list(kg_query_tool.query_all_dtc_instances()))
-
     occurs_with_submit = SubmitField("Add DTC")
-
     clear_occurs_with = SubmitField("Clear list")
-
     fault_condition = StringField("Fault condition")
-
     symptoms_list = make_tuple_list(kg_query_tool.query_all_symptom_instances())
-
     symptoms = SelectField("Symptoms potentially occurring with the fault condition:", choices=symptoms_list)
-
     symptoms_submit = SubmitField("Add symptom")
-
     clear_symptoms = SubmitField("Clear list")
-
     new_symptom = StringField("If a symptom is not included in the list, please add it in the text box:")
-
     new_symptom_submit = SubmitField("Add new symptom")
-
     suspect_components = SelectField(
         "List of suspect components (those that are first in the list should also be checked first):",
         choices=kg_query_tool.query_all_component_instances())
-
     add_component_submit = SubmitField("Add component")
-
     clear_components = SubmitField("Clear list")
-
     final_submit = SubmitField("Submit")
-
     clear_everything = SubmitField("Clear everything")
 
 
@@ -106,22 +94,14 @@ class SubsystemForm(FlaskForm):
     Form for the subsystem page.
     """
     subsystem_name = StringField("Subsystem:")
-
     components = SelectField("Suspect components",
                              choices=make_tuple_list(kg_query_tool.query_all_component_instances()))
-
     add_component_submit = SubmitField("Add to list")
-
     clear_components = SubmitField("Clear list")
-
     verifying_components = SelectField("component", choices=kg_query_tool.query_all_component_instances())
-
     verifying_components_submit = SubmitField("Add to list")
-
     clear_verifying_components = SubmitField("Clear list")
-
     final_submit = SubmitField("Submit")
-
     clear_everything = SubmitField("Clear everything")
 
 
@@ -130,17 +110,11 @@ class SuspectComponentsForm(FlaskForm):
     Form for the component page.
     """
     component_name = StringField('Component:')
-
     boolean_choices = [("No", "No",), ("Yes", "Yes")]
-
     final_submit = SubmitField('Submit component')
-
     affecting_component_submit = SubmitField('Add to list')
-
     clear_affecting_components = SubmitField("Clear list")
-
     measurements_possible = SelectField(choices=boolean_choices)
-
     affecting_components = SelectField("Add further component",
                                        choices=make_tuple_list(kg_query_tool.query_all_component_instances()))
 
