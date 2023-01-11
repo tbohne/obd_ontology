@@ -11,7 +11,11 @@ from obd_ontology.component_knowledge import ComponentKnowledge
 from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
-app = Flask(__name__, template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates')))
+app = Flask(
+    __name__,
+    template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates')),
+    static_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'static'))
+)
 app.debug = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 app.app_context()
