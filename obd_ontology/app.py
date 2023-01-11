@@ -1,4 +1,5 @@
 import logging
+import re
 import os
 from flask import Flask, render_template, redirect, flash, url_for, session
 from wtforms import StringField, SubmitField, SelectField
@@ -87,7 +88,9 @@ class DTCForm(FlaskForm):
 
     new_symptom_submit = SubmitField("Add new symptom")
 
-    suspect_components = SelectField("List of suspect components (those that are first in the list should also be checked first):", choices=kg_query_tool.query_all_component_instances())
+    suspect_components = SelectField(
+        "List of suspect components (those that are first in the list should also be checked first):",
+        choices=kg_query_tool.query_all_component_instances())
 
     add_component_submit = SubmitField("Add component")
 
@@ -262,6 +265,18 @@ def component_form():
                            affecting_components_variable_list=get_session_variable_list("affecting_components"))
 
 
+def dtc_sanity_check(dtc: str) -> bool:
+    """
+    Checks whether the specified DTC satisfies the expected pattern.
+
+    :param dtc: DTC to check pattern for
+    :return whether the specified DTC matches the pattern
+    """
+    pattern = re.compile("[PCBU][01]\d{3}")
+    print("match:", pattern.match(dtc))
+    return pattern.match(dtc) and len(dtc) == 5
+
+
 @app.route('/dtc_form', methods=['GET', 'POST'])
 def dtc_form():
     """
@@ -284,21 +299,25 @@ def dtc_form():
                                     " to overwrite it, please click the submit button one more time.")
                                 session["dtc_name"] = form.dtc_name.data
                             else:
-                                add_dtc_to_knowledge_graph(dtc=form.dtc_name.data,
-                                                           occurs_with=get_session_variable_list("occurs_with_list"),
-                                                           fault_condition=form.fault_condition.data,
-                                                           symptoms=get_session_variable_list("symptom_list"),
-                                                           suspect_components=get_session_variable_list(
-                                                               "component_list"))
-                                get_session_variable_list("component_list").clear()
-                                get_session_variable_list("symptom_list").clear()
-                                get_session_variable_list("occurs_with_list").clear()
-                                if form.dtc_name.data == session.get("dtc_name"):
-                                    flash(f"The DTC {form.dtc_name.data} has successfully been overwritten.")
+                                if not dtc_sanity_check(form.dtc_name.data):
+                                    flash("invalid DTC (not matching expected pattern): " + form.dtc_name.data)
                                 else:
-                                    flash(f"The DTC {form.dtc_name.data} has successfully been added.")
+                                    add_dtc_to_knowledge_graph(dtc=form.dtc_name.data,
+                                                               occurs_with=get_session_variable_list(
+                                                                   "occurs_with_list"),
+                                                               fault_condition=form.fault_condition.data,
+                                                               symptoms=get_session_variable_list("symptom_list"),
+                                                               suspect_components=get_session_variable_list(
+                                                                   "component_list"))
+                                    get_session_variable_list("component_list").clear()
+                                    get_session_variable_list("symptom_list").clear()
+                                    get_session_variable_list("occurs_with_list").clear()
+                                    if form.dtc_name.data == session.get("dtc_name"):
+                                        flash(f"The DTC {form.dtc_name.data} has successfully been overwritten.")
+                                    else:
+                                        flash(f"The DTC {form.dtc_name.data} has successfully been added.")
 
-                                return redirect(url_for('dtc_form'))
+                                    return redirect(url_for('dtc_form'))
                         else:
                             flash("Please list at least one component that should be checked!")
                     else:
