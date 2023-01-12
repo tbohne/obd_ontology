@@ -29,8 +29,7 @@
                     {%for i in verifying_components_list%}
                         {{i}},
                     {%endfor%}</p>
-                    {{form.clear_everything}}
-                    {{form.final_submit}}
+                    <p>{{form.final_submit}} {{form.clear_everything}}</p>
                 </form>
                 <br>
                 {% with messages = get_flashed_messages() %}

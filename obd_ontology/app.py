@@ -86,7 +86,7 @@ class DTCForm(FlaskForm):
     add_component_submit = SubmitField("Add component")
     clear_components = SubmitField("Clear list")
     final_submit = SubmitField("Submit")
-    clear_everything = SubmitField("Clear everything")
+    clear_everything = SubmitField("Clear")
 
 
 class SubsystemForm(FlaskForm):
@@ -102,7 +102,7 @@ class SubsystemForm(FlaskForm):
     verifying_components_submit = SubmitField("Add to list")
     clear_verifying_components = SubmitField("Clear list")
     final_submit = SubmitField("Submit")
-    clear_everything = SubmitField("Clear everything")
+    clear_everything = SubmitField("Clear")
 
 
 class SuspectComponentsForm(FlaskForm):

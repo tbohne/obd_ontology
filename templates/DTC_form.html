@@ -36,7 +36,7 @@
                 {%for i in suspect_components_variable_list%}
                     {{i}},
                 {%endfor%}</p>
-                <p>{{form.clear_everything}} {{form.final_submit}}</p>
+                <p>{{form.final_submit}} {{form.clear_everything}}</p>
             </form>
             <br>
             {% with messages = get_flashed_messages() %}
