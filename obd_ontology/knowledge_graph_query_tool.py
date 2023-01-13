@@ -211,34 +211,36 @@ class KnowledgeGraphQueryTool:
             return [row.action_desc for row in self.graph.query(s)]
         return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_fault_cat_by_dtc(self, dtc: str) -> list:
+    def query_fault_cat_by_dtc(self, dtc: str, verbose: bool = True) -> list:
         """
         Queries the fault category of the specified DTC.
 
         :param dtc: diagnostic trouble code to query fault category for
+        :param verbose: if true, logging is activated
         :return: fault category
         """
-        print("########################################################################")
-        print(colored("QUERY: fault category for " + dtc, "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: fault category for " + dtc, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         has_cat_entry = self.complete_ontology_entry('hasCategory')
         fault_cat = self.complete_ontology_entry('FaultCategory')
-        cat_name_entry = self.complete_ontology_entry('category_name')
+        cat_desc_entry = self.complete_ontology_entry('category_description')
         code_entry = self.complete_ontology_entry('code')
         s = f"""
-            SELECT ?cat_name WHERE {{
+            SELECT ?cat_desc WHERE {{
                 ?dtc a {dtc_entry} .
                 ?dtc {has_cat_entry} ?cat .
                 ?dtc {code_entry} ?dtc_code .
                 ?cat a {fault_cat} .
-                ?cat {cat_name_entry} ?cat_name .
+                ?cat {cat_desc_entry} ?cat_desc .
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         if self.local_kb:
             return [row.cat_name for row in self.graph.query(s)]
-        return [row['cat_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+        return [row['cat_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_fault_cat_by_description(self, desc: str) -> list:
         """
