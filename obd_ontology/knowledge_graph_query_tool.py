@@ -392,16 +392,18 @@ class KnowledgeGraphQueryTool:
             return [row.comp_name for row in self.graph.query(s)]
         return [row['car']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_co_occurring_trouble_codes(self, dtc: str) -> list:
+    def query_co_occurring_trouble_codes(self, dtc: str, verbose: bool = True) -> list:
         """
         Queries DTCs regularly occurring with the specified DTC.
 
         :param dtc: diagnostic trouble code to query associated other DTCs for
+        :param verbose: if true, logging is activated
         :return: co-occurring DTCs
         """
-        print("########################################################################")
-        print(colored("QUERY: DTCs occurring with " + dtc, "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: DTCs occurring with " + dtc, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         occurs_with_dtc_entry = self.complete_ontology_entry('occurs_with_DTC')
         code_entry = self.complete_ontology_entry('code')
@@ -415,7 +417,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.other for row in self.graph.query(s)]
-        return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+        return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_vehicle_by_dtc(self, dtc: str) -> list:
         """
@@ -457,15 +459,17 @@ class KnowledgeGraphQueryTool:
         return [(row['model']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value']) for row in
                 self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_all_dtc_instances(self) -> list:
+    def query_all_dtc_instances(self, verbose: bool = True) -> list:
         """
         Queries all DTC instances stored in the knowledge graph.
 
+        :param verbose: if true, logging is activated
         :return: all DTCs stored in the knowledge graph
         """
-        print("########################################################################")
-        print(colored("QUERY: all DTC instances:", "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: all DTC instances:", "green", "on_grey", ["bold"]))
+            print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         code_entry = self.complete_ontology_entry('code')
         s = f"""
@@ -476,7 +480,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_fault_condition_instance_by_code(self, dtc: str) -> list:
         """
