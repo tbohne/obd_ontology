@@ -81,9 +81,9 @@ class ExpertKnowledgeEnhancer:
         else:
             fact_list = [
                 Fact((fault_cat_uuid, RDF.type, self.onto_namespace["FaultCategory"].toPython())),
-                Fact((fault_cat_uuid, self.onto_namespace.category_description, cat_desc), property_fact=True),
-                Fact((dtc_uuid, self.onto_namespace.hasCategory, fault_cat_uuid))
+                Fact((fault_cat_uuid, self.onto_namespace.category_description, cat_desc), property_fact=True)
             ]
+        fact_list.append(Fact((dtc_uuid, self.onto_namespace.hasCategory, fault_cat_uuid)))
         return fault_cat_uuid, fact_list
 
     def generate_fault_cond_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
