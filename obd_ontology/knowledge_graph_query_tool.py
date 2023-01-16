@@ -72,16 +72,18 @@ class KnowledgeGraphQueryTool:
             return [row.cause_desc for row in self.graph.query(s)]
         return [row['cause_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_fault_condition_by_dtc(self, dtc: str) -> list:
+    def query_fault_condition_by_dtc(self, dtc: str, verbose: bool = True) -> list:
         """
         Queries the fault condition for the specified DTC.
 
         :param dtc: diagnostic trouble code to query fault condition for
+        :param verbose: if true, logging is activated
         :return: fault condition
         """
-        print("########################################################################")
-        print(colored("QUERY: fault condition description for " + dtc, "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: fault condition description for " + dtc, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         condition_desc_entry = self.complete_ontology_entry('condition_description')
@@ -97,7 +99,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.condition_desc for row in self.graph.query(s)]
-        return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+        return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_fault_condition_by_description(self, desc: str) -> list:
         """
@@ -122,16 +124,18 @@ class KnowledgeGraphQueryTool:
             return [row.condition_desc for row in self.graph.query(s)]
         return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_symptoms_by_dtc(self, dtc: str) -> list:
+    def query_symptoms_by_dtc(self, dtc: str, verbose: bool = True) -> list:
         """
         Queries the symptoms for the specified DTC.
 
         :param dtc: diagnostic trouble code to query symptoms for
+        :param verbose: if true, logging is activated
         :return: symptoms
         """
-        print("########################################################################")
-        print(colored("QUERY: symptoms for " + dtc, "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: symptoms for " + dtc, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         represents_entry = self.complete_ontology_entry('represents')
         symptom_entry = self.complete_ontology_entry('Symptom')
@@ -151,7 +155,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.symptom_desc for row in self.graph.query(s)]
-        return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+        return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_symptoms_by_desc(self, desc: str) -> list:
         """
@@ -294,16 +298,18 @@ class KnowledgeGraphQueryTool:
             return [row.measuring_pos_desc for row in self.graph.query(s)]
         return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_suspect_component_by_dtc(self, dtc: str) -> list:
+    def query_suspect_component_by_dtc(self, dtc: str, verbose: bool = True) -> list:
         """
         Queries the suspect components associated with the specified DTC.
 
         :param dtc: diagnostic trouble codes to query suspect components for
+        :param verbose: if true, logging is activated
         :return: suspect components
         """
-        print("########################################################################")
-        print(colored("QUERY: suspect components for " + dtc, "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: suspect components for " + dtc, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
         diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
@@ -324,7 +330,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.comp_name for row in self.graph.query(s)]
-        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_suspect_component_by_name(self, component_name: str) -> list:
         """
@@ -557,18 +563,20 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_diagnostic_association_by_dtc_and_sus_comp(self, dtc: str, comp: str) -> list:
+    def query_diagnostic_association_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
         """
-        Queries the diagnostic association instance for the specified code and suspect component.
+        Queries the diagnostic association, i.e., the priority, for the specified code and suspect component.
 
         :param dtc: diagnostic trouble code to query diagnostic association for
         :param comp: suspect component to query diagnostic association for
+        :param verbose: if true, logging is activated
         :return: diagnostic association instance
         """
-        print("########################################################################")
-        print(colored("QUERY: diagnostic association instance by dtc + suspect component: " + dtc + ", " +
-                      comp, "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: diagnostic association (priority) by dtc + suspect component: " + dtc + ", " +
+                          comp, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
         diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
         suspect_component_entry = self.complete_ontology_entry('SuspectComponent')
@@ -576,9 +584,11 @@ class KnowledgeGraphQueryTool:
         has_entry = self.complete_ontology_entry('has')
         comp_name_entry = self.complete_ontology_entry('component_name')
         points_to_entry = self.complete_ontology_entry('pointsTo')
+        prio_entry = self.complete_ontology_entry('priority_id')
         s = f"""
-            SELECT ?diag_association WHERE {{
+            SELECT ?prio WHERE {{
                 ?diag_association a {diag_association_entry} .
+                ?diag_association  {prio_entry} ?prio .
                 ?dtc a {dtc_entry} .
                 ?dtc {code_entry} "{dtc}" .
                 ?dtc {has_entry} ?diag_association .
@@ -589,7 +599,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+        return [row['prio']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_dtcs_by_vin(self, vin: str) -> list:
         """
