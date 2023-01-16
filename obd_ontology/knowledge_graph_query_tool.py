@@ -653,16 +653,18 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_oscilloscope_usage_by_suspect_component(self, component_name: str) -> list:
+    def query_oscilloscope_usage_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
         """
         Queries whether an oscilloscope should be used to diagnose the specified component.
 
         :param component_name: suspect component to determine oscilloscope usage for
+        :param verbose: if true, logging is activated
         :return: true / false
         """
-        print("########################################################################")
-        print(colored("QUERY: oscilloscope usage by component name " + component_name, "green", "on_grey", ["bold"]))
-        print("########################################################################")
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: oscilloscope usage by component name " + component_name, "green", "on_grey", ["bold"]))
+            print("########################################################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
         oscilloscope_entry = self.complete_ontology_entry('use_oscilloscope')
@@ -676,7 +678,7 @@ class KnowledgeGraphQueryTool:
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
         return [True if row['use_oscilloscope']['value'] == "true" else False
-                for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+                for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_affected_by_relations_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
         """
@@ -704,6 +706,37 @@ class KnowledgeGraphQueryTool:
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
         return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
+    def query_verifies_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
+        """
+        Queries the vehicle subsystem that can be verified by the specified suspect component.
+
+        :param component_name: suspect component to query verified subsystem for
+        :param verbose: if true, logging is activated
+        :return: subsystem name
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: verified subsystem by component name "
+                          + component_name, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        verifies_entry = self.complete_ontology_entry('verifies')
+        s = f"""
+            SELECT ?sub_name WHERE {{
+                ?comp a {comp_entry} .
+                ?comp {name_entry} "{component_name}" .
+                ?sub a {subsystem_entry} .
+                ?sub {sub_name_entry} ?sub_name .
+                ?comp {verifies_entry} ?sub .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_all_component_instances(self) -> list:
         """
