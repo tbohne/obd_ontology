@@ -100,8 +100,11 @@ class ExpertKnowledgeEnhancer:
         # check whether fault condition to be added is already part of the KG
         fault_cond_instance = self.knowledge_graph_query_tool.query_fault_condition_by_description(fault_cond)
         if len(fault_cond_instance) > 0:
-            print("Specified fault condition (" + fault_cond + ") already present in KG")
+            print("Specified fault condition (" + fault_cond + ") already present in KG, updating description")
             fault_cond_uuid = fault_cond_instance[0].split("#")[1]
+            fact_list.append(Fact(
+                (fault_cond_uuid, self.onto_namespace.condition_description, fault_cond), property_fact=True)
+            )
         else:
             fact_list = [
                 Fact((fault_cond_uuid, RDF.type, self.onto_namespace["FaultCondition"].toPython())),
