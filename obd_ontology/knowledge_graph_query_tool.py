@@ -146,11 +146,10 @@ class KnowledgeGraphQueryTool:
             SELECT ?symptom_desc WHERE {{
                 ?dtc a {dtc_entry} .
                 ?dtc {represents_entry} ?condition .
-                ?dtc {code_entry} ?dtc_code .
+                ?dtc {code_entry} "{dtc}" .
                 ?symptom a {symptom_entry} .
                 ?condition {manifested_by_entry} ?symptom .
                 ?symptom {symptom_desc_entry} ?symptom_desc .
-                FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
         if self.local_kb:
