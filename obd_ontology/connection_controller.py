@@ -60,6 +60,38 @@ class ConnectionController:
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
 
+    def generate_condition_description_fact(self, fc_uuid: str, fault_cond: str, prop: bool) -> Fact:
+        """
+        Generates a `condition_description` fact (RDF) based on the provided properties.
+
+        :param fc_uuid: UUID of the fault condition instance to generate fact for
+        :param fault_cond: the fault condition description
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((fc_uuid, self.namespace.condition_description, fault_cond), property_fact=prop)
+
+    def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
+        """
+        Sends an HTTP request containing the facts to be removed from the knowledge graph.
+
+        :param facts: facts to be removed from the knowledge graph
+        """
+        print(colored("\nremoving facts from knowledge graph..", "green", "on_grey", ["bold"]))
+        for fact in facts:
+            print("fact:", fact)
+            if fact.property_fact:
+                f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), Literal(fact.triple[2]))
+            else:
+                f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2]))
+
+        query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
+        res = requests.post(
+            self.fuseki_url + "/OBD/update", data=query, headers={'Content-Type': 'application/sparql-update'}
+        )
+        if res.status_code != 200 and res.status_code != 204:
+            print("HTTP status code:", res.status_code)
+
     def get_uri(self, triple_ele: str) -> URIRef:
         """
         Returns the specified triple element as feasible URI reference.
