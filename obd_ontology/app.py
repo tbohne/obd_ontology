@@ -70,7 +70,7 @@ class DTCForm(FlaskForm):
     """
     dtc_name = StringField("DTC:")
     occurs_with = SelectField("Other DTCs that frequently occur together with the specified DTC:",
-                              choices=make_tuple_list(kg_query_tool.query_all_dtc_instances()))
+                              choices=make_tuple_list(kg_query_tool.query_all_dtc_instances(False)))
     occurs_with_submit = SubmitField("Add DTC")
     clear_occurs_with = SubmitField("Clear list")
     fault_condition = StringField("Fault condition")
@@ -246,9 +246,27 @@ def dtc_sanity_check(dtc: str) -> bool:
     :param dtc: DTC to check pattern for
     :return whether the specified DTC matches the pattern
     """
-    pattern = re.compile("[PCBU][01]\d{3}")
+    pattern = re.compile("[PCBU][012]\d{3}")
     print("match:", pattern.match(dtc))
     return pattern.match(dtc) and len(dtc) == 5
+
+
+def add_fault_condition_removal_fact(dtc_name: str, facts_to_be_removed: list) -> None:
+    """
+    If necessary, adds the fault condition removal fact to the list of facts to be removed.
+
+    :param dtc_name: DTC to check fault condition removal for
+    :param facts_to_be_removed: list of facts to be removed from the KG
+    """
+    fault_condition = kg_query_tool.query_fault_condition_by_dtc(dtc_name, False)[0]
+    # check whether fault condition to be added is already part of the KG
+    fc = kg_query_tool.query_fault_condition_by_description(fault_condition)
+    if len(fc) > 0:
+        print("specified FC (" + fault_condition + ") already present in KG")
+        fault_cond_uuid = fc[0].split("#")[1]
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_condition_description_fact(
+            fault_cond_uuid, fault_condition, True)
+        )
 
 
 @app.route('/dtc_form', methods=['GET', 'POST'])
@@ -266,7 +284,7 @@ def dtc_form():
                 if form.fault_condition.data:
                     if get_session_variable_list("symptom_list"):
                         if get_session_variable_list("component_list"):
-                            if form.dtc_name.data in kg_query_tool.query_all_dtc_instances() \
+                            if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
                                     and form.dtc_name.data != session.get("dtc_name"):
                                 flash(
                                     "WARNING: This DTC already exists! If you are sure that you want"
@@ -276,13 +294,23 @@ def dtc_form():
                                 if not dtc_sanity_check(form.dtc_name.data):
                                     flash("invalid DTC (not matching expected pattern): " + form.dtc_name.data)
                                 else:
-                                    add_dtc_to_knowledge_graph(dtc=form.dtc_name.data,
-                                                               occurs_with=get_session_variable_list(
-                                                                   "occurs_with_list"),
-                                                               fault_condition=form.fault_condition.data,
-                                                               symptoms=get_session_variable_list("symptom_list"),
-                                                               suspect_components=get_session_variable_list(
-                                                                   "component_list"))
+                                    # TODO: check whether this is the correct way to check replacement confirmation
+                                    if form.dtc_name.data == session.get("dtc_name"):
+                                        dtc_name = session.get("dtc_name")
+                                        # TODO: construct all the facts that should be removed
+                                        facts_to_be_removed = []
+                                        add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                                        # TODO: remove all the facts that are newly added now (replacement)
+                                        expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                                            facts_to_be_removed)
+
+                                    add_dtc_to_knowledge_graph(
+                                        dtc=form.dtc_name.data,
+                                        occurs_with=get_session_variable_list("occurs_with_list"),
+                                        fault_condition=form.fault_condition.data,
+                                        symptoms=get_session_variable_list("symptom_list"),
+                                        suspect_components=get_session_variable_list("component_list"))
+
                                     get_session_variable_list("component_list").clear()
                                     get_session_variable_list("symptom_list").clear()
                                     get_session_variable_list("occurs_with_list").clear()
@@ -341,7 +369,7 @@ def dtc_form():
 
     form.symptoms.choices = kg_query_tool.query_all_symptom_instances()
     form.suspect_components.choices = kg_query_tool.query_all_component_instances()
-    form.occurs_with.choices = kg_query_tool.query_all_dtc_instances()
+    form.occurs_with.choices = kg_query_tool.query_all_dtc_instances(False)
 
     return render_template('DTC_form.html', form=form,
                            suspect_components_variable_list=get_session_variable_list("component_list"),
