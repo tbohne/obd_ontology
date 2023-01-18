@@ -285,6 +285,24 @@ def add_co_occurring_dtc_removal_facts(dtc_name: str, facts_to_be_removed: list)
         ))
 
 
+def add_symptom_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
+    """
+    Adds the symptom facts to be removed.
+
+    :param dtc_name: DTC to remove symptom associations for
+    :param facts_to_be_removed: list of facts to be removed from the KG
+    """
+    symptoms = kg_query_tool.query_symptoms_by_dtc(dtc_name)
+    fault_condition = kg_query_tool.query_fault_condition_by_dtc(dtc_name, False)[0]
+    fault_cond_uuid = kg_query_tool.query_fault_condition_by_description(fault_condition)[0].split("#")[1]
+
+    for symptom in symptoms:
+        symptom_uuid = kg_query_tool.query_symptoms_by_desc(symptom)[0].split("#")[1]
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_symptom_fact(
+            fault_cond_uuid, symptom_uuid, False
+        ))
+
+
 @app.route('/dtc_form', methods=['GET', 'POST'])
 def dtc_form():
     """
@@ -318,6 +336,7 @@ def dtc_form():
                                         facts_to_be_removed = []
                                         add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
                                         add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
+                                        add_symptom_removal_facts(dtc_name, facts_to_be_removed)
 
                                         # TODO: remove all the facts that are newly added now (replacement)
                                         expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
