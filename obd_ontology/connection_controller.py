@@ -5,7 +5,7 @@
 import re
 
 import requests
-from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT
+from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT, UPDATE_ENDPOINT
 from obd_ontology.fact import Fact
 from rdflib import Namespace, RDF, Literal, Graph, URIRef
 from termcolor import colored
@@ -87,7 +87,7 @@ class ConnectionController:
 
         query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
         res = requests.post(
-            self.fuseki_url + "/OBD/update", data=query, headers={'Content-Type': 'application/sparql-update'}
+            self.fuseki_url + UPDATE_ENDPOINT, data=query, headers={'Content-Type': 'application/sparql-update'}
         )
         if res.status_code != 200 and res.status_code != 204:
             print("HTTP status code:", res.status_code)
