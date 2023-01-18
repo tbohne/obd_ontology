@@ -262,11 +262,27 @@ def add_fault_condition_removal_fact(dtc_name: str, facts_to_be_removed: list) -
     # check whether fault condition to be added is already part of the KG
     fc = kg_query_tool.query_fault_condition_by_description(fault_condition)
     if len(fc) > 0:
-        print("specified FC (" + fault_condition + ") already present in KG")
         fault_cond_uuid = fc[0].split("#")[1]
         facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_condition_description_fact(
-            fault_cond_uuid, fault_condition, True)
-        )
+            fault_cond_uuid, fault_condition, True
+        ))
+
+
+def add_co_occurring_dtc_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
+    """
+    Adds the co-occurring DTC facts to be removed.
+
+    :param dtc_name: DTC to remove co-occurring DTCs for
+    :param facts_to_be_removed: list of facts to be removed from the KG
+    """
+    co_occurring_dtcs = kg_query_tool.query_co_occurring_trouble_codes(dtc_name, False)
+    dtc_instance = kg_query_tool.query_dtc_instance_by_code(dtc_name)
+    dtc_uuid = dtc_instance[0].split("#")[1]
+
+    for code in co_occurring_dtcs:
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_co_occurring_dtc_fact(
+            dtc_uuid, code, True
+        ))
 
 
 @app.route('/dtc_form', methods=['GET', 'POST'])
@@ -297,9 +313,12 @@ def dtc_form():
                                     # TODO: check whether this is the correct way to check replacement confirmation
                                     if form.dtc_name.data == session.get("dtc_name"):
                                         dtc_name = session.get("dtc_name")
+
                                         # TODO: construct all the facts that should be removed
                                         facts_to_be_removed = []
                                         add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                                        add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
+
                                         # TODO: remove all the facts that are newly added now (replacement)
                                         expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
                                             facts_to_be_removed)
