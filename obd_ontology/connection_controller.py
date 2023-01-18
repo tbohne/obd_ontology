@@ -71,6 +71,17 @@ class ConnectionController:
         """
         return Fact((fc_uuid, self.namespace.condition_description, fault_cond), property_fact=prop)
 
+    def generate_co_occurring_dtc_fact(self, dtc_uuid: str, code: str, prop: bool) -> Fact:
+        """
+        Generates an `occurs_with_DTC` fact (RDF) based on the provided properties.
+
+        :param dtc_uuid: UUID of the DTC to generate fact for
+        :param code: code of the co-occurring DTC
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((dtc_uuid, self.namespace.occurs_with_DTC, code), property_fact=prop)
+
     def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
@@ -85,12 +96,15 @@ class ConnectionController:
             else:
                 f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2]))
 
-        query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
-        res = requests.post(
-            self.fuseki_url + UPDATE_ENDPOINT, data=query, headers={'Content-Type': 'application/sparql-update'}
-        )
-        if res.status_code != 200 and res.status_code != 204:
-            print("HTTP status code:", res.status_code)
+            query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
+
+            print("******************************************** DELETION QUERY:", query)
+
+            res = requests.post(
+                self.fuseki_url + UPDATE_ENDPOINT, data=query, headers={'Content-Type': 'application/sparql-update'}
+            )
+            if res.status_code != 200 and res.status_code != 204:
+                print("HTTP status code:", res.status_code)
 
     def get_uri(self, triple_ele: str) -> URIRef:
         """
