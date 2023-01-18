@@ -82,6 +82,17 @@ class ConnectionController:
         """
         return Fact((dtc_uuid, self.namespace.occurs_with_DTC, code), property_fact=prop)
 
+    def generate_symptom_fact(self, fc_uuid: str, symptom_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `manifestedBy` fact (RDF) based on the provided properties.
+
+        :param fc_uuid: UUID of the fault condition to generate the fact for
+        :param symptom_uuid: UUID of the symptom to generate the fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((fc_uuid, self.namespace.manifestedBy, symptom_uuid), property_fact=prop)
+
     def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
@@ -93,10 +104,10 @@ class ConnectionController:
             print("fact:", fact)
             if fact.property_fact:
                 f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), Literal(fact.triple[2]))
+                query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
             else:
                 f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2]))
-
-            query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
+                query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> <{f[2]}> . }}"
 
             print("******************************************** DELETION QUERY:", query)
 
