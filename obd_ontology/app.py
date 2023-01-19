@@ -348,6 +348,23 @@ def add_contained_component_removal_facts(subsystem_name: str, facts_to_be_remov
         ))
 
 
+def add_verifying_component_removal_facts(subsystem_name: str, facts_to_be_removed: list) -> None:
+    """
+    Adds the `verifies` facts to be removed.
+
+    :param subsystem_name: subsystem to remove verifies relations for
+    :param facts_to_be_removed: list of facts to be removed from the KG
+    """
+    subsystem_uuid = kg_query_tool.query_vehicle_subsystem_by_name(subsystem_name)[0].split("#")[1]
+
+    for comp in kg_query_tool.query_verifies_relations_by_vehicle_subsystem(subsystem_name, False):
+        comp_uuid = kg_query_tool.query_suspect_component_by_name(comp)[0].split("#")[1]
+
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_verifies_fact(
+            comp_uuid, subsystem_uuid, False
+        ))
+
+
 @app.route('/dtc_form', methods=['GET', 'POST'])
 def dtc_form():
     """
@@ -487,6 +504,7 @@ def subsystem_form():
                                 # TODO: construct all the facts that should be removed
                                 facts_to_be_removed = []
                                 add_contained_component_removal_facts(subsystem_name, facts_to_be_removed)
+                                add_verifying_component_removal_facts(subsystem_name, facts_to_be_removed)
 
                                 # TODO: remove all the facts that are newly added now (replacement)
                                 expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
