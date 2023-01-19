@@ -303,6 +303,34 @@ def add_symptom_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
         ))
 
 
+def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
+    """
+    Adds the diagnostic association facts to be removed.
+
+    :param dtc_name: DTC to consider diagnostic associations for
+    :param facts_to_be_removed: list of facts to be removed from the KG
+    """
+    dtc_uuid = kg_query_tool.query_dtc_instance_by_code(dtc_name)[0].split("#")[1]
+
+    for comp in kg_query_tool.query_suspect_components_by_dtc(dtc_name, False):
+        comp_uuid = kg_query_tool.query_suspect_component_by_name(comp)[0].split("#")[1]
+        diag_association_uuid = kg_query_tool.query_diag_association_instance_by_dtc_and_sus_comp(dtc_name, comp, False)
+        diag_association_uuid = diag_association_uuid[0].split("#")[1]
+
+        # remove the 'has' connection between DTC and diagnostic association
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_has_fact(
+            dtc_uuid, diag_association_uuid, False
+        ))
+        # remove the 'pointsTo' connection between diagnostic association and suspect component
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_points_to_fact(
+            diag_association_uuid, comp_uuid, False
+        ))
+        # remove diagnostic association for the considered DTC
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_diagnostic_association_fact(
+            diag_association_uuid, False
+        ))
+
+
 @app.route('/dtc_form', methods=['GET', 'POST'])
 def dtc_form():
     """
@@ -337,6 +365,7 @@ def dtc_form():
                                         add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
                                         add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
                                         add_symptom_removal_facts(dtc_name, facts_to_be_removed)
+                                        add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
 
                                         # TODO: remove all the facts that are newly added now (replacement)
                                         expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
