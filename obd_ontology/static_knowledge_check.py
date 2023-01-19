@@ -43,10 +43,18 @@ def static_knowledge_check_subsystem_perspective():
 
 
 def static_knowledge_check_component_perspective():
-    pass
+    """
+    Presents the static knowledge that is currently stored in the KG from a component-centric perspective.
+    """
+    component_instances = qt.query_all_component_instances(False)
+    for comp in component_instances:
+        print(comp)
+        print("\t- oscilloscope:", qt.query_oscilloscope_usage_by_suspect_component(comp, False))
+        print("\t- affected by:", qt.query_affected_by_relations_by_suspect_component(comp, False))
 
 
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     static_knowledge_check_dtc_perspective()
     static_knowledge_check_subsystem_perspective()
+    static_knowledge_check_component_perspective()
