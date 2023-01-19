@@ -139,6 +139,17 @@ class ConnectionController:
         """
         return Fact((subsystem_uuid, self.namespace.contains, comp_uuid), property_fact=prop)
 
+    def generate_verifies_fact(self, comp_uuid: str, subsystem_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `verifies` fact (RDF) based on the provided properties.
+
+        :param comp_uuid: UUID of the component to generate fact for
+        :param subsystem_uuid: UUID of the subsystem to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((comp_uuid, self.namespace.verifies, subsystem_uuid), property_fact=prop)
+
     def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
