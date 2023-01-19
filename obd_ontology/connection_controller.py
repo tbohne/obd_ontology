@@ -150,6 +150,17 @@ class ConnectionController:
         """
         return Fact((comp_uuid, self.namespace.verifies, subsystem_uuid), property_fact=prop)
 
+    def generate_use_oscilloscope_fact(self, comp_uuid: str, osci_usage: bool, prop: bool) -> Fact:
+        """
+        Generates a `use_oscilloscope` fact (RDF) based on the provided properties.
+
+        :param comp_uuid: UUID of the component to generate fact for
+        :param osci_usage: oscilloscope usage value (literal)
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((comp_uuid, self.namespace.use_oscilloscope, osci_usage), property_fact=prop)
+
     def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
@@ -161,7 +172,11 @@ class ConnectionController:
             print("fact:", fact)
             if fact.property_fact:
                 f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), Literal(fact.triple[2]))
-                query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
+                # TODO: check for better ways to handle these special cases
+                if "<http://www.w3.org/2001/XMLSchema#boolean>" in f[2]:
+                    query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> {f[2]} . }}"
+                else:
+                    query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> \"{f[2]}\" . }}"
             else:
                 f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2]))
                 query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> <{f[2]}> . }}"
