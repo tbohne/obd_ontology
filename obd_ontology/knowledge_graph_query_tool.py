@@ -865,15 +865,17 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_all_component_instances(self) -> list:
+    def query_all_component_instances(self, verbose: bool = True) -> list:
         """
         Queries all component instances stored in the knowledge graph.
 
+        :param verbose: if true, logging is activated
         :return: all components stored in the knowledge graph
         """
-        print("####################################")
-        print("QUERY: all component instances")
-        print("####################################")
+        if verbose:
+            print("####################################")
+            print("QUERY: all component instances")
+            print("####################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
         s = f"""
@@ -884,7 +886,7 @@ class KnowledgeGraphQueryTool:
         """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
-        return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+        return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_all_symptom_instances(self) -> list:
         """
@@ -929,7 +931,7 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.comp_name for row in self.graph.query(s)]
-        return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+        return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     @staticmethod
     def print_res(res: list) -> None:
