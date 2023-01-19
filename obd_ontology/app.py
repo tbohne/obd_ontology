@@ -331,6 +331,23 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
         ))
 
 
+def add_contained_component_removal_facts(subsystem_name: str, facts_to_be_removed: list) -> None:
+    """
+    Adds the `contains` facts to be removed.
+
+    :param subsystem_name: subsystem to remove contains relations for
+    :param facts_to_be_removed: list of facts to be removed from the KG
+    """
+    subsystem_uuid = kg_query_tool.query_vehicle_subsystem_by_name(subsystem_name)[0].split("#")[1]
+
+    for comp in kg_query_tool.query_contains_relation_by_subsystem(subsystem_name, False):
+        comp_uuid = kg_query_tool.query_suspect_component_by_name(comp)[0].split("#")[1]
+
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_contains_fact(
+            subsystem_uuid, comp_uuid, False
+        ))
+
+
 @app.route('/dtc_form', methods=['GET', 'POST'])
 def dtc_form():
     """
@@ -463,10 +480,24 @@ def subsystem_form():
                                 "you want to overwrite it, please click the submit button one more time.")
                             session["subsystem_name"] = form.subsystem_name.data
                         else:
-                            add_subsystem_to_knowledge_graph(vehicle_subsystem=form.subsystem_name.data,
-                                                             contains=get_session_variable_list("subsystem_components"),
-                                                             verified_by=get_session_variable_list(
-                                                                 "verifying_components"))
+                            # TODO: check whether this is the correct way to check replacement confirmation
+                            if form.subsystem_name.data == session.get("subsystem_name"):
+                                subsystem_name = session.get("subsystem_name")
+
+                                # TODO: construct all the facts that should be removed
+                                facts_to_be_removed = []
+                                add_contained_component_removal_facts(subsystem_name, facts_to_be_removed)
+
+                                # TODO: remove all the facts that are newly added now (replacement)
+                                expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                                    facts_to_be_removed
+                                )
+
+                            add_subsystem_to_knowledge_graph(
+                                vehicle_subsystem=form.subsystem_name.data,
+                                contains=get_session_variable_list("subsystem_components"),
+                                verified_by=get_session_variable_list("verifying_components")
+                            )
                             get_session_variable_list("subsystem_components").clear()
                             get_session_variable_list("verifying_components").clear()
                             if form.subsystem_name.data == session.get("subsystem_name"):
