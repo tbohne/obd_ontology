@@ -158,13 +158,13 @@ select ?component ?osci ?aff_by where {
 
 # SUBSYSTEM TEST QUERY - USEFUL FOR DEBUGGING THE KNOWLEDGE ACQUISITION WEB INTERFACE
 
-select ?sub_name ?verifying_name ?contains_name where {
-    ?sub a eg:VehicleSubsystem .
-    ?sub eg:subsystem_name ?sub_name .
-    ?verifying a eg:SuspectComponent .
-    ?contains a eg:SuspectComponent .
-    ?verifying eg:verifies ?sub .
-    ?verifying eg:component_name ?verifying_name .
-    ?sub eg:contains ?contains .
-    ?contains eg:component_name ?contains_name .
+select ?subsys_name ?containing_comp_name ?verifying_comp_name where {
+    ?sub_sys a eg:VehicleSubsystem .
+    ?sub_sys eg:subsystem_name ?subsys_name .
+    ?containing_comp a eg:SuspectComponent .
+    ?containing_comp eg:component_name ?containing_comp_name .
+    ?sub_sys eg:contains ?containing_comp .
+    ?verifying_comp a eg:SuspectComponent .
+    ?verifying_comp eg:verifies ?sub_sys .
+    ?verifying_comp eg:component_name ?verifying_comp_name .
 }
