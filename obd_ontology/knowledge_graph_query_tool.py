@@ -297,7 +297,7 @@ class KnowledgeGraphQueryTool:
             return [row.measuring_pos_desc for row in self.graph.query(s)]
         return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_suspect_component_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_suspect_components_by_dtc(self, dtc: str, verbose: bool = True) -> list:
         """
         Queries the suspect components associated with the specified DTC.
 
@@ -561,6 +561,42 @@ class KnowledgeGraphQueryTool:
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+
+    def query_diag_association_instance_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
+        """
+        Queries the diagnostic association instance for the specified code and suspect component.
+
+        :param dtc: diagnostic trouble code to query diagnostic association for
+        :param comp: suspect component to query diagnostic association for
+        :param verbose: if true, logging is activated
+        :return: diagnostic association instance
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: diagnostic association by dtc + suspect component: " + dtc + ", " +
+                          comp, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
+        suspect_component_entry = self.complete_ontology_entry('SuspectComponent')
+        code_entry = self.complete_ontology_entry('code')
+        has_entry = self.complete_ontology_entry('has')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        points_to_entry = self.complete_ontology_entry('pointsTo')
+        s = f"""
+            SELECT ?diag_association WHERE {{
+                ?diag_association a {diag_association_entry} .
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} "{dtc}" .
+                ?dtc {has_entry} ?diag_association .
+                ?sus a {suspect_component_entry} .
+                ?sus {comp_name_entry} "{comp}" .
+                ?diag_association {points_to_entry} ?sus .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_diagnostic_association_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
         """
@@ -861,7 +897,7 @@ if __name__ == '__main__':
     qt.print_res(qt.query_corrective_actions_by_dtc(error_code))
     qt.print_res(qt.query_fault_cat_by_dtc(error_code))
     qt.print_res(qt.query_measuring_pos_by_dtc(error_code))
-    qt.print_res(qt.query_suspect_component_by_dtc(error_code))
+    qt.print_res(qt.query_suspect_components_by_dtc(error_code))
     qt.print_res(qt.query_co_occurring_trouble_codes(error_code))
     qt.print_res(qt.query_vehicle_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_instance_by_code(error_code))
