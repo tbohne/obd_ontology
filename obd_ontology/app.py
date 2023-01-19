@@ -206,6 +206,19 @@ def component_form():
                             "please click the submit button one more time.")
                         session["component_name"] = form.component_name.data
                     else:
+                        # TODO: check whether this is the correct way to check replacement confirmation
+                        if form.component_name.data == session.get("component_name"):
+                            component_name = session.get("component_name")
+
+                            # TODO: construct all the facts that should be removed
+                            facts_to_be_removed = []
+                            add_use_oscilloscope_removal_fact(component_name, facts_to_be_removed)
+
+                            # TODO: remove all the facts that are newly added now (replacement)
+                            expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                                facts_to_be_removed
+                            )
+
                         assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
                         oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
                         add_component_to_knowledge_graph(suspect_component=form.component_name.data,
@@ -363,6 +376,20 @@ def add_verifying_component_removal_facts(subsystem_name: str, facts_to_be_remov
         facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_verifies_fact(
             comp_uuid, subsystem_uuid, False
         ))
+
+
+def add_use_oscilloscope_removal_fact(component_name: str, facts_to_be_removed: list) -> None:
+    """
+    Adds the `use_oscilloscope` facts to be removed.
+
+    :param component_name: vehicle component to remove oscilloscope usage for
+    :param facts_to_be_removed: list of facts to be removed from the KG
+    """
+    component_uuid = kg_query_tool.query_suspect_component_by_name(component_name)[0].split("#")[1]
+    usage = kg_query_tool.query_oscilloscope_usage_by_suspect_component(component_name, False)[0]
+    facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_use_oscilloscope_fact(
+        component_uuid, f"\"{str(usage).lower()}\"^^<http://www.w3.org/2001/XMLSchema#boolean>", True
+    ))
 
 
 @app.route('/dtc_form', methods=['GET', 'POST'])
