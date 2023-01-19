@@ -15,7 +15,7 @@ if __name__ == '__main__':
         print("\t- condition:", qt.query_fault_condition_by_dtc(dtc, False))
         print("\t- symptoms:", qt.query_symptoms_by_dtc(dtc, False))
         print("\t- ordered suspect components:")
-        suspect_components = qt.query_suspect_component_by_dtc(dtc, False)
+        suspect_components = qt.query_suspect_components_by_dtc(dtc, False)
         ordered_sus_comp = {int(qt.query_diagnostic_association_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp
                             in suspect_components}
 

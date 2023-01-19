@@ -75,6 +75,7 @@ instance_gen.extend_knowledge_graph("Mazda 3", "847984", "45539", "1234567890ABC
 **<u>Query knowledge graph:</u>**
 
 The `KnowledgeGraphQueryTool` provides a library of predefined queries for accessing useful information stored in the knowledge graph, e.g.:
+
 ```python
 qt = KnowledgeGraphQueryTool(local_kb=False)
 qt.print_res(qt.query_all_dtc_instances())
@@ -82,7 +83,7 @@ dtc = "P2563"
 qt.print_res(qt.query_fault_condition_by_dtc(dtc))
 qt.print_res(qt.query_symptoms_by_dtc(dtc))
 qt.print_res(qt.query_fault_cat_by_dtc(dtc))
-qt.print_res(qt.query_suspect_component_by_dtc(dtc))
+qt.print_res(qt.query_suspect_components_by_dtc(dtc))
 qt.print_res(qt.query_dtc_occurring_with_the_specified_dtc(dtc))
 qt.print_res(qt.query_vehicle_by_dtc(dtc))
 ...
