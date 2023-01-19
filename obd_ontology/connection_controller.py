@@ -93,6 +93,41 @@ class ConnectionController:
         """
         return Fact((fc_uuid, self.namespace.manifestedBy, symptom_uuid), property_fact=prop)
 
+    def generate_has_fact(self, dtc_uuid: str, da_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `has` fact (RDF) based on the provided properties.
+
+        :param dtc_uuid: UUID of the DTC to generate fact for
+        :param da_uuid: UUID of the diagnostic association to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((dtc_uuid, self.namespace.has, da_uuid), property_fact=prop)
+
+    def generate_points_to_fact(self, da_uuid: str, comp_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `pointsTo` fact (RDF) based on the provided properties.
+
+        :param da_uuid: UUID of the diagnostic association to generate fact for
+        :param comp_uuid: UUID of the suspect component to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((da_uuid, self.namespace.pointsTo, comp_uuid), property_fact=prop)
+
+    def generate_diagnostic_association_fact(self, da_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `DiagnosticAssociation` fact (RDF) based on the provided properties.
+
+        :param da_uuid: UUID of the diagnostic association to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact(
+            (da_uuid, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", self.namespace.DiagnosticAssociation),
+            property_fact=prop
+        )
+
     def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
@@ -126,6 +161,8 @@ class ConnectionController:
         """
         if re.match("(http|https)://([\w_-]+(?:\.[\w_-]+)+)([\w.,@?^=%&:/~+]*[\w@?^=%&/~+])", triple_ele):
             return URIRef(triple_ele)
+        elif triple_ele == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type":
+            return triple_ele
         else:
             return URIRef(self.namespace[triple_ele])
 
