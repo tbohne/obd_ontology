@@ -128,6 +128,17 @@ class ConnectionController:
             property_fact=prop
         )
 
+    def generate_contains_fact(self, subsystem_uuid: str, comp_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `contains` fact (RDF) based on the provided properties.
+
+        :param subsystem_uuid: UUID of the subsystem to generate fact for
+        :param comp_uuid: UUID of the suspect component to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((subsystem_uuid, self.namespace.contains, comp_uuid), property_fact=prop)
+
     def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
