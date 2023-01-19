@@ -773,6 +773,37 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
+    def query_verifies_relations_by_vehicle_subsystem(self, subsystem_name: str, verbose: bool = True) -> list:
+        """
+        Queries the suspect components that can verify the specified vehicle subsystem.
+
+        :param subsystem_name: vehicle subsystem to query verifying suspect components for
+        :param verbose: if true, logging is activated
+        :return: suspect component names
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: verifying components by vehicle subsystem name "
+                          + subsystem_name, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        verifies_entry = self.complete_ontology_entry('verifies')
+        s = f"""
+            SELECT ?comp_name WHERE {{
+                ?sub a {subsystem_entry} .
+                ?sub {sub_name_entry} "{subsystem_name}" .
+                ?comp a {comp_entry} .
+                ?comp {name_entry} ?comp_name .
+                ?comp {verifies_entry} ?sub .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
     def query_contains_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
         """
         Queries the vehicle subsystem that the specified suspect component is part of.
@@ -803,6 +834,36 @@ class KnowledgeGraphQueryTool:
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
         return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
+    def query_contains_relation_by_subsystem(self, subsystem_name: str, verbose: bool = True) -> list:
+        """
+        Queries the suspect components that are contained in the specified vehicle subsystem.
+
+        :param subsystem_name: subsystem to query contained suspect components for
+        :param verbose: if true, logging is activated
+        :return: component names
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: components by subsystem name " + subsystem_name, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        contains_entry = self.complete_ontology_entry('contains')
+        s = f"""
+            SELECT ?comp_name WHERE {{
+                ?sub a {subsystem_entry} .
+                ?sub {sub_name_entry} "{subsystem_name}" .
+                ?comp a {comp_entry} .
+                ?comp {name_entry} ?comp_name .
+                ?sub {contains_entry} ?comp .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_all_component_instances(self) -> list:
         """
@@ -847,15 +908,17 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_all_vehicle_subsystem_instances(self) -> list:
+    def query_all_vehicle_subsystem_instances(self, verbose: bool = True) -> list:
         """
         Queries all subsystem instances stored in the knowledge graph.
 
+        :param verbose: if true, logging is activated
         :return: all vehicle subsystems stored in the knowledge graph
         """
-        print("####################################")
-        print("QUERY: all vehicle subsystem instances")
-        print("####################################")
+        if verbose:
+            print("####################################")
+            print("QUERY: all vehicle subsystem instances")
+            print("####################################")
         subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
         subsystem_name_entry = self.complete_ontology_entry('subsystem_name')
         s = f"""
