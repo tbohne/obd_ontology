@@ -4,9 +4,11 @@
 
 from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
-if __name__ == '__main__':
-    qt = KnowledgeGraphQueryTool(local_kb=False)
 
+def static_knowledge_check_dtc_perspective():
+    """
+    Presents the static knowledge that is currently stored in the KG from a DTC-centric perspective.
+    """
     dtc_instances = qt.query_all_dtc_instances(False)
     for dtc in dtc_instances:
         print(dtc)
@@ -21,8 +23,30 @@ if __name__ == '__main__':
 
         for i in range(len(suspect_components)):
             print("\t\t-", ordered_sus_comp[i])
-            print("\t\t\tuse oscilloscope:", qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False))
+            print("\t\t\tuse oscilloscope:",
+                  qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\taffected by:", qt.query_affected_by_relations_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tverifies:", qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tpart of:", qt.query_contains_relation_by_suspect_component(ordered_sus_comp[i], False))
         print()
+
+
+def static_knowledge_check_subsystem_perspective():
+    """
+    Presents the static knowledge that is currently stored in the KG from a vehicle-subsystem-centric perspective.
+    """
+    subsystem_instances = qt.query_all_vehicle_subsystem_instances(False)
+    for subsystem in subsystem_instances:
+        print(subsystem)
+        print("\t- contains:", qt.query_contains_relation_by_subsystem(subsystem, False))
+        print("\t- verified by:", qt.query_verifies_relations_by_vehicle_subsystem(subsystem, False))
+
+
+def static_knowledge_check_component_perspective():
+    pass
+
+
+if __name__ == '__main__':
+    qt = KnowledgeGraphQueryTool(local_kb=False)
+    static_knowledge_check_dtc_perspective()
+    static_knowledge_check_subsystem_perspective()
