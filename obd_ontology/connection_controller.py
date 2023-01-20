@@ -161,6 +161,17 @@ class ConnectionController:
         """
         return Fact((comp_uuid, self.namespace.use_oscilloscope, osci_usage), property_fact=prop)
 
+    def generate_affected_by_fact(self, comp_uuid: str, comp_name: str, prop: bool) -> Fact:
+        """
+        Generates an `affected_by` fact (RDF) based on the provided properties.
+
+        :param comp_uuid: UUID of the component to generate fact for
+        :param comp_name: name of the affecting component
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((comp_uuid, self.namespace.affected_by, comp_name), property_fact=prop)
+
     def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
@@ -184,7 +195,9 @@ class ConnectionController:
             print("******************************************** DELETION QUERY:", query)
 
             res = requests.post(
-                self.fuseki_url + UPDATE_ENDPOINT, data=query, headers={'Content-Type': 'application/sparql-update'}
+                self.fuseki_url + UPDATE_ENDPOINT,
+                data=query.encode(),
+                headers={'Content-Type': 'application/sparql-update'}
             )
             if res.status_code != 200 and res.status_code != 204:
                 print("HTTP status code:", res.status_code)
