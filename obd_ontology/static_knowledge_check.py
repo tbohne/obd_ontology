@@ -29,6 +29,7 @@ def static_knowledge_check_dtc_perspective():
             print("\t\t\tverifies:", qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tpart of:", qt.query_contains_relation_by_suspect_component(ordered_sus_comp[i], False))
         print()
+    print("\n----------------------------------------------------------------------\n")
 
 
 def static_knowledge_check_subsystem_perspective():
@@ -40,6 +41,7 @@ def static_knowledge_check_subsystem_perspective():
         print(subsystem)
         print("\t- contains:", qt.query_contains_relation_by_subsystem(subsystem, False))
         print("\t- verified by:", qt.query_verifies_relations_by_vehicle_subsystem(subsystem, False))
+    print("\n----------------------------------------------------------------------\n")
 
 
 def static_knowledge_check_component_perspective():
@@ -51,6 +53,7 @@ def static_knowledge_check_component_perspective():
         print(comp)
         print("\t- oscilloscope:", qt.query_oscilloscope_usage_by_suspect_component(comp, False))
         print("\t- affected by:", qt.query_affected_by_relations_by_suspect_component(comp, False))
+    print("\n----------------------------------------------------------------------\n")
 
 
 if __name__ == '__main__':
