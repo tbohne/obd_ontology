@@ -5,10 +5,11 @@
 import re
 
 import requests
-from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT, UPDATE_ENDPOINT
-from obd_ontology.fact import Fact
 from rdflib import Namespace, RDF, Literal, Graph, URIRef
 from termcolor import colored
+
+from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL, SPARQL_ENDPOINT, DATA_ENDPOINT, UPDATE_ENDPOINT
+from obd_ontology.fact import Fact
 
 
 class ConnectionController:

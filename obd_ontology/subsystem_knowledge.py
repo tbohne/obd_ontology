@@ -21,4 +21,4 @@ class SubsystemKnowledge:
 
     def __str__(self):
         return "Vehicle Subsystem: " + self.vehicle_subsystem + "\nContains: " + str(self.contains) \
-               + "\nVerified by: " + str(self.verified_by)
+            + "\nVerified by: " + str(self.verified_by)

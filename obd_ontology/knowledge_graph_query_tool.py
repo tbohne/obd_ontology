@@ -5,9 +5,10 @@
 import pathlib
 
 import rdflib
+from termcolor import colored
+
 from obd_ontology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
 from obd_ontology.connection_controller import ConnectionController
-from termcolor import colored
 
 
 class KnowledgeGraphQueryTool:
@@ -527,7 +528,6 @@ class KnowledgeGraphQueryTool:
         fault_cond_entry = self.complete_ontology_entry('FaultCondition')
         manifested_by_entry = self.complete_ontology_entry('manifestedBy')
         symptom_desc_entry = self.complete_ontology_entry('symptom_description')
-        cond_desc_entry = self.complete_ontology_entry('condition_description')
         s = f"""
             SELECT ?fault_cond WHERE {{
                 ?fault_cond a {fault_cond_entry} .
@@ -698,7 +698,8 @@ class KnowledgeGraphQueryTool:
         """
         if verbose:
             print("########################################################################")
-            print(colored("QUERY: oscilloscope usage by component name " + component_name, "green", "on_grey", ["bold"]))
+            print(
+                colored("QUERY: oscilloscope usage by component name " + component_name, "green", "on_grey", ["bold"]))
             print("########################################################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
