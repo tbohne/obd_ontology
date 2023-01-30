@@ -599,6 +599,7 @@ def subsystem_form():
         session["subsystem_name"] = None
 
     form.components.choices = kg_query_tool.query_all_component_instances()
+    form.verifying_components.choices = kg_query_tool.query_all_component_instances()
 
     return render_template('subsystem_form.html', form=form,
                            components_variable_list=get_session_variable_list("subsystem_components"),
