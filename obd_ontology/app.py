@@ -198,42 +198,55 @@ def component_form():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.component_name.data:
-                if get_session_variable_list("affecting_components"):
+                if not (form.component_name.data in kg_query_tool.query_all_component_instances() and
+                        form.component_name.data != session.get("component_name")) and \
+                        (get_session_variable_list("affecting_components") or
+                         session.get("affecting_components_empty_warning_received") is True):
+
+                    # TODO: check whether this is the correct way to check replacement confirmation
+                    if form.component_name.data == session.get("component_name"):
+                        component_name = session.get("component_name")
+
+                        # TODO: construct all the facts that should be removed
+                        facts_to_be_removed = []
+                        add_use_oscilloscope_removal_fact(component_name, facts_to_be_removed)
+                        add_affected_by_removal_fact(component_name, facts_to_be_removed)
+
+                        # TODO: remove all the facts that are newly added now (replacement)
+                        expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                            facts_to_be_removed
+                        )
+
+                    assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
+                    oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
+                    add_component_to_knowledge_graph(suspect_component=form.component_name.data,
+                                                     affected_by=get_session_variable_list("affecting_components"),
+                                                     oscilloscope=oscilloscope_useful)
+                    get_session_variable_list("affecting_components").clear()
+                    form.affecting_components.choices = kg_query_tool.query_all_component_instances()
+                    if form.component_name.data == session.get("component_name"):
+                        flash(f"The component {form.component_name.data} has successfully been overwritten.")
+                    else:
+                        flash(f"The component {form.component_name.data} has successfully been added.")
+
+                    session["affecting_components_empty_warning_received"] = None
+                    return redirect(url_for('component_form'))
+
+                else:
                     if form.component_name.data in kg_query_tool.query_all_component_instances() and \
                             form.component_name.data != session.get("component_name"):
                         flash(
                             "WARNING: This component already exists! If you are sure that you want to overwrite it, "
                             "please click the submit button one more time.")
                         session["component_name"] = form.component_name.data
-                    else:
-                        # TODO: check whether this is the correct way to check replacement confirmation
-                        if form.component_name.data == session.get("component_name"):
-                            component_name = session.get("component_name")
-
-                            # TODO: construct all the facts that should be removed
-                            facts_to_be_removed = []
-                            add_use_oscilloscope_removal_fact(component_name, facts_to_be_removed)
-                            add_affected_by_removal_fact(component_name, facts_to_be_removed)
-
-                            # TODO: remove all the facts that are newly added now (replacement)
-                            expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                                facts_to_be_removed
-                            )
-
-                        assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
-                        oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
-                        add_component_to_knowledge_graph(suspect_component=form.component_name.data,
-                                                         affected_by=get_session_variable_list("affecting_components"),
-                                                         oscilloscope=oscilloscope_useful)
-                        get_session_variable_list("affecting_components").clear()
-                        form.affecting_components.choices = kg_query_tool.query_all_component_instances()
-                        if form.component_name.data == session.get("component_name"):
-                            flash(f"The component {form.component_name.data} has successfully been overwritten.")
-                        else:
-                            flash(f"The component {form.component_name.data} has successfully been added.")
-                        return redirect(url_for('component_form'))
-                else:
-                    flash("Please add at least one component that affects the current component!")
+                    if not get_session_variable_list("affecting_components") and not \
+                            session.get("affecting_components_empty_warning_received"):
+                        flash(
+                            "WARNING: You do not have specified any components that affect the current component! "
+                            "Please make sure to add all affecting components that you know about. If you are "
+                            "sure that you do not want to add any affecting components, please click the submit "
+                            "button one more time.")
+                        session["affecting_components_empty_warning_received"] = True
             else:
                 flash("Please enter component name")
 
@@ -243,6 +256,9 @@ def component_form():
 
         elif form.clear_affecting_components.data:
             get_session_variable_list("affecting_components").clear()
+
+    else:
+        session["affecting_components_empty_warning_received"] = None
 
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
