@@ -69,19 +69,21 @@ class DTCForm(FlaskForm):
     Form for the DTC page.
     """
     dtc_name = StringField("DTC:")
-    occurs_with = SelectField("Other DTCs that frequently occur together with the specified DTC:",
-                              choices=make_tuple_list(kg_query_tool.query_all_dtc_instances(False)), validate_choice=False)
+    occurs_with = SelectField("",
+                              choices=make_tuple_list(kg_query_tool.query_all_dtc_instances(False)),
+                              validate_choice=False)
     occurs_with_submit = SubmitField("Add DTC")
     clear_occurs_with = SubmitField("Clear list")
     fault_condition = StringField("Fault condition")
     symptoms_list = make_tuple_list(kg_query_tool.query_all_symptom_instances())
-    symptoms = SelectField("Symptoms potentially occurring with the fault condition:", choices=symptoms_list, validate_choice=False)
+    symptoms = SelectField("", choices=symptoms_list,
+                           validate_choice=False)
     symptoms_submit = SubmitField("Add symptom")
     clear_symptoms = SubmitField("Clear list")
-    new_symptom = StringField("If a symptom is not included in the list, please add it in the text box:")
+    new_symptom = StringField("")
     new_symptom_submit = SubmitField("Add new symptom")
     suspect_components = SelectField(
-        "List of suspect components (those that are first in the list should also be checked first):",
+        "",
         choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False)
     add_component_submit = SubmitField("Add component")
     clear_components = SubmitField("Clear list")
@@ -93,12 +95,15 @@ class SubsystemForm(FlaskForm):
     """
     Form for the subsystem page.
     """
-    subsystem_name = StringField("Subsystem:")
-    components = SelectField("Suspect components",
-                             choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False)
+    subsystem_name = StringField("")
+    components = SelectField("",
+                             choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                             validate_choice=False)
     add_component_submit = SubmitField("Add to list")
     clear_components = SubmitField("Clear list")
-    verifying_components = SelectField("component", choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False)
+    verifying_components = SelectField("",
+                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       validate_choice=False)
     verifying_components_submit = SubmitField("Add to list")
     clear_verifying_components = SubmitField("Clear list")
     final_submit = SubmitField("Submit")
@@ -109,14 +114,15 @@ class SuspectComponentsForm(FlaskForm):
     """
     Form for the component page.
     """
-    component_name = StringField('Component:')
+    component_name = StringField("")
     boolean_choices = [("No", "No",), ("Yes", "Yes")]
     final_submit = SubmitField('Submit component')
     affecting_component_submit = SubmitField('Add to list')
     clear_affecting_components = SubmitField("Clear list")
     measurements_possible = SelectField(choices=boolean_choices)
-    affecting_components = SelectField("Add further component",
-                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False)
+    affecting_components = SelectField("",
+                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       validate_choice=False)
 
 
 def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
