@@ -41,9 +41,9 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#has -->
+    <!-- http://www.semanticweb.org/diag_ontology#hasAssociation -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#has">
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#hasAssociation">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#DiagnosticAssociation"/>
     </owl:ObjectProperty>
