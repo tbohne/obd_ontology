@@ -204,24 +204,24 @@ def component_form():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.component_name.data:
-                # the component will only be added if 1. either the name of the component does not exist in the
-                # knowledge graph yet, or a related warning has already been flashed, and 2. either there is at least
-                # one affecting component specified, or a related warning has already been flashed
-                if not (form.component_name.data in kg_query_tool.query_all_component_instances() and
-                        form.component_name.data != session.get("component_name")) and \
-                        (get_session_variable_list("affecting_components") or
-                         session.get("affecting_components_empty_warning_received")):
 
-                    # TODO: check whether this is the correct way to check replacement confirmation
-                    if form.component_name.data == session.get("component_name"):
+                comp_part_of_kg = form.component_name.data in kg_query_tool.query_all_component_instances()
+                warning_already_shown = form.component_name.data == session.get("component_name")
+                entered_affecting_comps = get_session_variable_list("affecting_components")
+
+                # the component will only be added if:
+                #   - the name of the component does not exist in the KG yet, or a warning has already been flashed
+                #   - there is at least one affecting component specified, or a related warning has already been flashed
+                if (not comp_part_of_kg or warning_already_shown) and (
+                        entered_affecting_comps or session.get("affecting_components_empty_warning_received")):
+                    # replacement confirmation given
+                    if warning_already_shown:
                         component_name = session.get("component_name")
-
-                        # TODO: construct all the facts that should be removed
+                        # construct all the facts that should be removed
                         facts_to_be_removed = []
                         add_use_oscilloscope_removal_fact(component_name, facts_to_be_removed)
                         add_affected_by_removal_fact(component_name, facts_to_be_removed)
-
-                        # TODO: remove all the facts that are newly added now (replacement)
+                        # remove all the facts that are newly added now (replacement)
                         expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
                             facts_to_be_removed
                         )
@@ -229,7 +229,7 @@ def component_form():
                     assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
                     oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
                     add_component_to_knowledge_graph(suspect_component=form.component_name.data,
-                                                     affected_by=get_session_variable_list("affecting_components"),
+                                                     affected_by=entered_affecting_comps,
                                                      oscilloscope=oscilloscope_useful)
                     # update SelectField
                     form.affecting_components.choices = kg_query_tool.query_all_component_instances()
@@ -241,28 +241,20 @@ def component_form():
                         flash(f"The component {form.component_name.data} has successfully been overwritten.")
                     else:
                         flash(f"The component {form.component_name.data} has successfully been added.")
-
                     return redirect(url_for('component_form'))
 
-                else:
-                    # if the component name already exists in the knowledge graph and there has been no warning yet,
-                    # flash a warning that it will be overwritten
-                    if form.component_name.data in kg_query_tool.query_all_component_instances() and \
-                            form.component_name.data != session.get("component_name"):
-                        flash(
-                            "WARNING: This component already exists! If you are sure that you want to overwrite it, "
-                            "please click the submit button one more time.")
-                        session["component_name"] = form.component_name.data
-                    # if no affecting components are specified and there has been no warning yet, flash a warning that
-                    # affecting components should be added if possible
-                    if not get_session_variable_list("affecting_components") and not \
-                            session.get("affecting_components_empty_warning_received"):
-                        flash(
-                            "WARNING: You do not have specified any components that affect the current component! "
-                            "Please make sure to add all affecting components that you know about. If you are "
-                            "sure that you do not want to add any affecting components, please click the submit "
-                            "button one more time.")
-                        session["affecting_components_empty_warning_received"] = True
+                elif comp_part_of_kg and not warning_already_shown:
+                    flash("WARNING: This component already exists! If you are sure that you want to overwrite it,"
+                          " please click the submit button one more time.")
+                    session["component_name"] = form.component_name.data
+
+                elif not entered_affecting_comps and not session.get("affecting_components_empty_warning_received"):
+                    flash("WARNING: You do not have specified any components that affect the current component! "
+                          "Please make sure to add all affecting components that you know about. If you are "
+                          "sure that you do not want to add any affecting components, please click the submit "
+                          "button one more time.")
+                    session["affecting_components_empty_warning_received"] = True
+
             else:  # component name StringField is empty
                 flash("Please enter component name")
         # a button that is not the final submit button has been clicked
@@ -445,7 +437,6 @@ def dtc_form():
     Renders the DTC page and processes the form data.
     """
     form = DTCForm()
-
     form.suspect_components.choices = kg_query_tool.query_all_component_instances()
 
     if form.validate_on_submit():
@@ -454,30 +445,28 @@ def dtc_form():
                 if form.fault_condition.data:
                     if get_session_variable_list("symptom_list"):
                         if get_session_variable_list("component_list"):
-                            # if the DTC code already exists and there has not been a warning yet,
-                            # flash a warning first
+
+                            warning_already_shown = form.dtc_name.data == session.get("dtc_name")
+                            # if the DTC already exists and there has not been a warning yet, flash a warning first
                             if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
-                                    and form.dtc_name.data != session.get("dtc_name"):
-                                flash(
-                                    "WARNING: This DTC already exists! If you are sure that you want"
-                                    " to overwrite it, please click the submit button one more time.")
+                                    and not warning_already_shown:
+                                flash("WARNING: This DTC already exists! If you are sure that you want"
+                                      " to overwrite it, please click the submit button one more time.")
                                 session["dtc_name"] = form.dtc_name.data
                             else:  # either the DTC does not exist yet, or the warning has already been flashed
                                 if not dtc_sanity_check(form.dtc_name.data):
                                     flash("invalid DTC (not matching expected pattern): " + form.dtc_name.data)
                                 else:
-                                    # TODO: check whether this is the correct way to check replacement confirmation
-                                    if form.dtc_name.data == session.get("dtc_name"):
+                                    # replacement confirmation given
+                                    if warning_already_shown:
                                         dtc_name = session.get("dtc_name")
-
-                                        # TODO: construct all the facts that should be removed
+                                        # construct all the facts that should be removed
                                         facts_to_be_removed = []
                                         add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
                                         add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
                                         add_symptom_removal_facts(dtc_name, facts_to_be_removed)
                                         add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
-
-                                        # TODO: remove all the facts that are newly added now (replacement)
+                                        # remove all the facts that are newly added now (replacement)
                                         expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
                                             facts_to_be_removed)
 
@@ -499,7 +488,6 @@ def dtc_form():
                                         flash(f"The DTC {form.dtc_name.data} has successfully been overwritten.")
                                     else:
                                         flash(f"The DTC {form.dtc_name.data} has successfully been added.")
-
                                     return redirect(url_for('dtc_form'))
                         else:  # the list of suspect components is empty
                             flash("Please list at least one component that should be checked!")
@@ -573,28 +561,26 @@ def subsystem_form():
             if form.subsystem_name.data:
                 if get_session_variable_list("subsystem_components"):
                     if get_session_variable_list("verifying_components"):
+
+                        warning_already_shown = form.subsystem_name.data == session.get("subsystem_name")
                         # if the subsystem already exists and there has not been a warning yet, flash a warning first
                         if form.subsystem_name.data in kg_query_tool.query_all_vehicle_subsystem_instances() \
-                                and form.subsystem_name.data != session.get("subsystem_name"):
-                            flash(
-                                "WARNING: This vehicle subsystem already exists! If you are sure that "
-                                "you want to overwrite it, please click the submit button one more time.")
+                                and not warning_already_shown:
+                            flash("WARNING: This vehicle subsystem already exists! If you are sure that "
+                                  "you want to overwrite it, please click the submit button one more time.")
                             session["subsystem_name"] = form.subsystem_name.data
                         else:
-                            # TODO: check whether this is the correct way to check replacement confirmation
-                            if form.subsystem_name.data == session.get("subsystem_name"):
+                            # replacement confirmation given
+                            if warning_already_shown:
                                 subsystem_name = session.get("subsystem_name")
-
-                                # TODO: construct all the facts that should be removed
+                                # construct all the facts that should be removed
                                 facts_to_be_removed = []
                                 add_contained_component_removal_facts(subsystem_name, facts_to_be_removed)
                                 add_verifying_component_removal_facts(subsystem_name, facts_to_be_removed)
-
-                                # TODO: remove all the facts that are newly added now (replacement)
+                                # remove all the facts that are newly added now (replacement)
                                 expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
                                     facts_to_be_removed
                                 )
-
                             # add the subsystem to the knowledge graph
                             add_subsystem_to_knowledge_graph(
                                 vehicle_subsystem=form.subsystem_name.data,
@@ -609,14 +595,12 @@ def subsystem_form():
                                 flash(f"The vehicle subsystem called {form.subsystem_name.data} "
                                       f"has successfully been overwritten.")
                             else:
-                                flash(
-                                    f"The vehicle subsystem called {form.subsystem_name.data} "
-                                    f"has successfully been added.")
+                                flash(f"The vehicle subsystem called {form.subsystem_name.data} "
+                                      f"has successfully been added.")
                             return redirect(url_for('subsystem_form'))
                     else:  # the list of verifying components is empty
-                        flash(
-                            "Please name at least one component that can verify whether this "
-                            "subsystem works correctly!")
+                        flash("Please name at least one component that can verify whether this "
+                              "subsystem works correctly!")
                 else:  # the list of components belonging to the subsystem is empty
                     flash("Please list the components that this subsystem comprises!")
             else:  # the StringField for the subsystem name is empty
