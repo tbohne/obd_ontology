@@ -16,14 +16,15 @@
                 <form method="POST">
                     {{ form.csrf_token }}
                     <br>
-                    <p>{{ form.subsystem_name.label }} {{ form.subsystem_name(size=20) }}</p>
+                    <p>Subsystem: {{ form.subsystem_name(size=20) }}</p>
                     <p>List components belonging to this vehicle subsystem (if the component you want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
                     <div>{{form.components}} {{form.add_component_submit}} {{form.clear_components}}</div>
                     <p style="color: #B40404;">
                     {%for i in components_variable_list%}
                         {{i}},
                     {%endfor%}</p>
-                    <p>Select components that can verify whether the subsystem works correctly:</p>
+                    <p>Select components that can verify whether the subsystem works correctly (if the component you
+                        want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
                     <div> {{form.verifying_components}} {{form.verifying_components_submit}} {{form.clear_verifying_components}}</div>
                     <p style="color: #B40404;">
                     {%for i in verifying_components_list%}

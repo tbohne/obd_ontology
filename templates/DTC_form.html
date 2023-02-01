@@ -24,13 +24,13 @@
                     {{i}},
                 {%endfor%}</p>
                 <p>Fault condition for the DTC: {{form.fault_condition}}</p>
-                <p>{{ form.symptoms.label }} {{ form.symptoms }} {{form.symptoms_submit}} {{form.clear_symptoms}}</p>
-                <p>{{ form.new_symptom.label }} {{form.new_symptom}} {{form.new_symptom_submit}}</p>
+                <p>Symptoms potentially occurring with the fault condition: {{ form.symptoms }} {{form.symptoms_submit}} {{form.clear_symptoms}}</p>
+                <p>If a symptom is not included in the list, please add it in the text box: {{form.new_symptom}} {{form.new_symptom_submit}}</p>
                 <p style="color: #B40404;">
                 {%for i in symptoms_variable_list%}
                     {{i}},
                 {%endfor%}</p>
-                <p>{{ form.suspect_components.label }} {{form.suspect_components}} {{form.add_component_submit}} {{form.clear_components}}</p>
+                <p>List of suspect components (those that are first in the list should also be checked first): {{form.suspect_components}} {{form.add_component_submit}} {{form.clear_components}}</p>
                 <p>If you want to add a component that is not included in the list, please add it via <a href="component_form">this</a> form.</p>
                 <p style="color: #B40404;">
                 {%for i in suspect_components_variable_list%}
