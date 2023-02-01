@@ -206,7 +206,7 @@ def component_form():
             if form.component_name.data:
                 # the component will only be added if 1. either the name of the component does not exist in the
                 # knowledge graph yet, or a related warning has already been flashed, and 2. either there is at least
-                # one affecting component specified, or a related warning has already been flashed.
+                # one affecting component specified, or a related warning has already been flashed
                 if not (form.component_name.data in kg_query_tool.query_all_component_instances() and
                         form.component_name.data != session.get("component_name")) and \
                         (get_session_variable_list("affecting_components") or
@@ -246,7 +246,7 @@ def component_form():
 
                 else:
                     # if the component name already exists in the knowledge graph and there has been no warning yet,
-                    # flash a warning that it will be overwritten.
+                    # flash a warning that it will be overwritten
                     if form.component_name.data in kg_query_tool.query_all_component_instances() and \
                             form.component_name.data != session.get("component_name"):
                         flash(
@@ -254,7 +254,7 @@ def component_form():
                             "please click the submit button one more time.")
                         session["component_name"] = form.component_name.data
                     # if no affecting components are specified and there has been no warning yet, flash a warning that
-                    # affecting components should be added if possible.
+                    # affecting components should be added if possible
                     if not get_session_variable_list("affecting_components") and not \
                             session.get("affecting_components_empty_warning_received"):
                         flash(
@@ -263,19 +263,19 @@ def component_form():
                             "sure that you do not want to add any affecting components, please click the submit "
                             "button one more time.")
                         session["affecting_components_empty_warning_received"] = True
-            else:  # component name StringField is empty.
+            else:  # component name StringField is empty
                 flash("Please enter component name")
-        # a button that is not the final submit button has been clicked.
-        elif form.affecting_component_submit.data:  # button that adds affecting components to list has been clicked.
+        # a button that is not the final submit button has been clicked
+        elif form.affecting_component_submit.data:  # button that adds affecting components to list has been clicked
             if form.affecting_components.data not in get_session_variable_list("affecting_components"):
                 get_session_variable_list("affecting_components").append(form.affecting_components.data)
 
-        elif form.clear_affecting_components.data: # button that clears the affecting component list has been clicked.
+        elif form.clear_affecting_components.data:  # button that clears the affecting component list has been clicked
             get_session_variable_list("affecting_components").clear()
 
-    else:  # no submit button has been pressed. Reset variable that specifies whether warning has been shown.
+    else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
         session["affecting_components_empty_warning_received"] = None
-    # Reset variable that specifies whether warning has been shown.
+    # reset variable that specifies whether warning has been shown
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
     # update SelectField choices
@@ -454,14 +454,15 @@ def dtc_form():
                 if form.fault_condition.data:
                     if get_session_variable_list("symptom_list"):
                         if get_session_variable_list("component_list"):
-                            # if the DTC code already exists and there has not been a warning yet, flash a warning first.
+                            # if the DTC code already exists and there has not been a warning yet,
+                            # flash a warning first
                             if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
                                     and form.dtc_name.data != session.get("dtc_name"):
                                 flash(
                                     "WARNING: This DTC already exists! If you are sure that you want"
                                     " to overwrite it, please click the submit button one more time.")
                                 session["dtc_name"] = form.dtc_name.data
-                            else:  # either the DTC does not exist yet, or the warning has already been flashed.
+                            else:  # either the DTC does not exist yet, or the warning has already been flashed
                                 if not dtc_sanity_check(form.dtc_name.data):
                                     flash("invalid DTC (not matching expected pattern): " + form.dtc_name.data)
                                 else:
@@ -509,22 +510,21 @@ def dtc_form():
             else:  # the StringField for the DTC is empty
                 flash("Please enter a DTC code!")
 
-        # a button that is not the final submit button has been clicked.
+        # a button that is not the final submit button has been clicked
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
             if form.suspect_components.data not in get_session_variable_list("component_list"):
                 get_session_variable_list("component_list").append(form.suspect_components.data)
 
-        elif form.symptoms_submit.data:  # button that adds symptoms from the SelectField to the symptom list
-            # has been clicked
+        # button that adds symptoms from the SelectField to the symptom list has been clicked
+        elif form.symptoms_submit.data:
             if form.symptoms.data not in get_session_variable_list("symptom_list"):
                 get_session_variable_list("symptom_list").append(form.symptoms.data)
 
-        elif form.new_symptom_submit.data:  # button that adds symptoms from the StringField to the
-            # symptom list has been clicked
+        # button that adds symptoms from the StringField to the symptom list has been clicked
+        elif form.new_symptom_submit.data:
             if form.new_symptom.data:
                 if form.new_symptom.data not in get_session_variable_list("symptom_list"):
                     get_session_variable_list("symptom_list").append(form.new_symptom.data)
-
             else:
                 flash("Please add the new symptom before submitting the symptom!")
 
@@ -546,11 +546,11 @@ def dtc_form():
             get_session_variable_list("component_list").clear()
             get_session_variable_list("symptom_list").clear()
 
-    # Reset variable that specifies whether warning has been shown.
+    # reset variable that specifies whether warning has been shown
     if form.dtc_name.data != session.get("dtc_name"):
         session["dtc_name"] = None
 
-    # Update choices of the SelectFields
+    # update choices of the SelectFields
     form.symptoms.choices = kg_query_tool.query_all_symptom_instances()
     form.suspect_components.choices = kg_query_tool.query_all_component_instances()
     form.occurs_with.choices = kg_query_tool.query_all_dtc_instances(False)
@@ -573,7 +573,7 @@ def subsystem_form():
             if form.subsystem_name.data:
                 if get_session_variable_list("subsystem_components"):
                     if get_session_variable_list("verifying_components"):
-                        # if the subsystem already exists and there has not been a warning yet, flash a warning first.
+                        # if the subsystem already exists and there has not been a warning yet, flash a warning first
                         if form.subsystem_name.data in kg_query_tool.query_all_vehicle_subsystem_instances() \
                                 and form.subsystem_name.data != session.get("subsystem_name"):
                             flash(
@@ -622,13 +622,13 @@ def subsystem_form():
             else:  # the StringField for the subsystem name is empty
                 flash("Please enter a name for the subsystem!")
 
-        # a button that is not the final submit button has been clicked.
+        # a button that is not the final submit button has been clicked
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
             if form.components.data not in get_session_variable_list("subsystem_components"):
                 get_session_variable_list("subsystem_components").append(form.components.data)
 
-        elif form.verifying_components_submit.data:  # button that adds components to the verified_by list
-            # has been clicked
+        # button that adds components to the verified_by list has been clicked
+        elif form.verifying_components_submit.data:
             if form.verifying_components.data not in get_session_variable_list("verifying_components"):
                 get_session_variable_list("verifying_components").append(form.verifying_components.data)
 
@@ -642,11 +642,11 @@ def subsystem_form():
             get_session_variable_list("subsystem_components").clear()
             get_session_variable_list("verifying_components").clear()
 
-    # Reset variable that specifies whether warning has been shown.
+    # reset variable that specifies whether warning has been shown
     if form.subsystem_name.data != session.get("subsystem_name"):
         session["subsystem_name"] = None
 
-    # Update choices for the SelectFields
+    # update choices for the SelectFields
     form.components.choices = kg_query_tool.query_all_component_instances()
     form.verifying_components.choices = kg_query_tool.query_all_component_instances()
 
