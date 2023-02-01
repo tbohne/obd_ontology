@@ -77,6 +77,16 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#includes -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#includes">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#ComponentSet"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:label xml:lang="en">includes</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#indicates -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#indicates">
@@ -137,7 +147,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#verifies">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#ComponentSet"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
     </owl:ObjectProperty>
     
 
