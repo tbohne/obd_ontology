@@ -18,9 +18,12 @@ from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 class ExpertKnowledgeEnhancer:
     """
-    Extends the knowledge graph hosted by the Fuseki server with vehicle-agnostic OBD knowledge (codes, symptoms, etc.)
-    provided in the form of `templates/dtc_expert_template.txt`, `templates/component_expert_template.txt`, and
-    `templates/subsystem_expert_template.txt`.
+    Extends the knowledge graph hosted by the Fuseki server with vehicle-agnostic OBD knowledge (codes, symptoms, etc.).
+
+    The knowledge can be provided in the form of `templates/dtc_expert_template.txt`,
+    `templates/component_expert_template.txt`, and `templates/subsystem_expert_template.txt`.
+
+    Furthermore, new knowledge can be provided as input to a web interface (cf. `app.py`).
     """
 
     def __init__(self, knowledge_file: str) -> None:
@@ -45,9 +48,13 @@ class ExpertKnowledgeEnhancer:
             print("Specified DTC (" + dtc_knowledge.dtc + ") already present in KG")
             dtc_uuid = dtc_instance[0].split("#")[1]
         else:
+            dtc_parser = DTCParser()
+            code_type = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["code_type"]
+            code_type = "generic" if "generic" in code_type else "manufacturer-specific"
             fact_list = [
                 Fact((dtc_uuid, RDF.type, self.onto_namespace["DTC"].toPython())),
-                Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True)
+                Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True),
+                Fact((dtc_uuid, self.onto_namespace.code_type, code_type), property_fact=True)
             ]
         for code in dtc_knowledge.occurs_with:
             fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
@@ -63,7 +70,7 @@ class ExpertKnowledgeEnhancer:
         """
         fault_cat_uuid = "fault_cat_" + uuid.uuid4().hex
         dtc_parser = DTCParser()
-        cat_desc = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)
+        cat_desc = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["fault_description"]
         fact_list = []
         # check whether fault category to be added is already part of the KG
         fault_cat_instance = self.knowledge_graph_query_tool.query_fault_cat_by_description(cat_desc)
@@ -244,7 +251,8 @@ class ExpertKnowledgeEnhancer:
 
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
-        Generates all facts obtained from the DTC form / template to be entered into the knowledge graph.
+        Generates all facts obtained from the DTC form / template to be entered into the knowledge graph and extends
+        it with automatically obtained information from the dtc_parser.
 
         :param dtc_knowledge: parsed DTC knowledge
         :return: generated fact list
