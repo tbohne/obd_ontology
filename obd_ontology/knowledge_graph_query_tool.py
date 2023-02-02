@@ -866,6 +866,30 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
+    def query_code_type_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+        """
+        Queries the code type for the specified DTC.
+
+        :param dtc: DTC to query code type for
+        :param verbose: if true, logging is activated
+        :return: code type
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: code type by DTC " + dtc, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        code_entry = self.complete_ontology_entry('code')
+        type_entry = self.complete_ontology_entry('code_type')
+        s = f"""
+            SELECT ?code_type WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {type_entry} ?code_type .
+                ?dtc {code_entry} "{dtc}" .
+            }}
+            """
+        return [row['code_type']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
     def query_all_component_instances(self, verbose: bool = True) -> list:
         """
         Queries all component instances stored in the knowledge graph.
@@ -980,3 +1004,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_dtcs_by_model(model))
     qt.print_res(qt.query_oscilloscope_usage_by_suspect_component(suspect_comp_name))
     qt.print_res(qt.query_affected_by_relations_by_suspect_component(suspect_comp_name))
+    qt.print_res(qt.query_code_type_by_dtc(error_code))

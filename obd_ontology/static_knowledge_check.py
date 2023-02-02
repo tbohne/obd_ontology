@@ -14,6 +14,7 @@ def static_knowledge_check_dtc_perspective():
         print(dtc)
         print("\t- occurs with:", qt.query_co_occurring_trouble_codes(dtc, False))
         print("\t- category:", qt.query_fault_cat_by_dtc(dtc, False))
+        print("\t- code type:", qt.query_code_type_by_dtc(dtc, False))
         print("\t- condition:", qt.query_fault_condition_by_dtc(dtc, False))
         print("\t- symptoms:", qt.query_symptoms_by_dtc(dtc, False))
         print("\t- ordered suspect components:")
