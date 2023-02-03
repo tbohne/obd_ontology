@@ -9,9 +9,10 @@ from dtc_parser.parser import DTCParser
 from rdflib import Namespace, RDF
 
 import expert_knowledge_parser
+from component_set_knowledge import ComponentSetKnowledge
 from config import ONTOLOGY_PREFIX
 from connection_controller import ConnectionController
-from expert_knowledge_parser import DTCKnowledge, SubsystemKnowledge
+from dtc_knowledge import DTCKnowledge
 from fact import Fact
 from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
@@ -210,42 +211,42 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def generate_subsystem_facts(self, subsystem_knowledge: SubsystemKnowledge) -> list:
+    def generate_component_set_facts(self, comp_set_knowledge: ComponentSetKnowledge) -> list:
         """
-        Generates vehicle subsystem facts to be entered into the knowledge graph.
+        Generates vehicle component set facts to be entered into the knowledge graph.
 
-        :param subsystem_knowledge: parsed VehicleSubsystem knowledge
+        :param comp_set_knowledge: parsed ComponentSet knowledge
         :return: generated fact list
         """
         fact_list = []
-        subsystem_name = subsystem_knowledge.vehicle_subsystem
-        subsystem_uuid = "subsystem_" + uuid.uuid4().hex
-        # check whether subsystem to be added is already part of the KG
-        subsystem_instance = self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)
-        if len(subsystem_instance) > 0:
-            print("Specified subsystem (" + subsystem_name + ") already present in KG")
-            subsystem_uuid = subsystem_instance[0].split("#")[1]
+        comp_set_name = comp_set_knowledge.component_set
+        comp_set_uuid = "component_set_" + uuid.uuid4().hex
+        # check whether component set to be added is already part of the KG
+        comp_set_instance = self.knowledge_graph_query_tool.query_component_set_by_name(comp_set_name)
+        if len(comp_set_instance) > 0:
+            print("Specified component set (" + comp_set_name + ") already present in KG")
+            comp_set_uuid = comp_set_instance[0].split("#")[1]
         else:
             fact_list = [
-                Fact((subsystem_uuid, RDF.type, self.onto_namespace["VehicleSubsystem"].toPython())),
-                Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_name), property_fact=True)
+                Fact((comp_set_uuid, RDF.type, self.onto_namespace["ComponentSet"].toPython())),
+                Fact((comp_set_uuid, self.onto_namespace.set_name, comp_set_name), property_fact=True)
             ]
 
-        for containing_comp in subsystem_knowledge.contains:
+        for containing_comp in comp_set_knowledge.includes:
             # relate knowledge to already existing facts
             sus_comp = self.knowledge_graph_query_tool.query_suspect_component_by_name(containing_comp)
             # should already be defined in KG
             assert len(sus_comp) == 1
             comp_uuid = sus_comp[0].split("#")[1]
-            fact_list.append(Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid)))
+            fact_list.append(Fact((comp_set_uuid, self.onto_namespace.includes, comp_uuid)))
 
-        assert isinstance(subsystem_knowledge.verified_by, list)
-        for verifying_comp in subsystem_knowledge.verified_by:
+        assert isinstance(comp_set_knowledge.verified_by, list)
+        for verifying_comp in comp_set_knowledge.verified_by:
             # relate knowledge to already existing facts
             verifying_comp_instance = self.knowledge_graph_query_tool.query_suspect_component_by_name(verifying_comp)
             assert len(verifying_comp_instance) == 1
             verifying_comp_uuid = verifying_comp_instance[0].split("#")[1]
-            fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, subsystem_uuid)))
+            fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, comp_set_uuid)))
 
         return fact_list
 
@@ -283,7 +284,7 @@ class ExpertKnowledgeEnhancer:
 
         elif "subsystem" in self.knowledge_file:
             subsystem_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            fact_list = self.generate_subsystem_facts(subsystem_knowledge)
+            fact_list = self.generate_component_set_facts(subsystem_knowledge)
 
         # enter facts into knowledge graph
         self.fuseki_connection.extend_knowledge_graph(fact_list)
