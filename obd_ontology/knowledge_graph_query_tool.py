@@ -818,34 +818,32 @@ class KnowledgeGraphQueryTool:
 
     def query_verifies_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
         """
-        Queries the vehicle subsystem that can be verified by the specified suspect component.
+        Queries the vehicle component set that can be verified by the specified suspect component.
 
-        :param component_name: suspect component to query verified subsystem for
+        :param component_name: suspect component to query verified component set for
         :param verbose: if true, logging is activated
-        :return: subsystem name
+        :return: vehicle component set name
         """
         if verbose:
             print("########################################################################")
-            print(colored("QUERY: verified subsystem by component name "
+            print(colored("QUERY: verified component set by component name "
                           + component_name, "green", "on_grey", ["bold"]))
             print("########################################################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
-        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
-        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        set_entry = self.complete_ontology_entry('ComponentSet')
+        set_name_entry = self.complete_ontology_entry('set_name')
         verifies_entry = self.complete_ontology_entry('verifies')
         s = f"""
-            SELECT ?sub_name WHERE {{
+            SELECT ?set_name WHERE {{
                 ?comp a {comp_entry} .
                 ?comp {name_entry} "{component_name}" .
-                ?sub a {subsystem_entry} .
-                ?sub {sub_name_entry} ?sub_name .
-                ?comp {verifies_entry} ?sub .
+                ?set a {set_entry} .
+                ?set {set_name_entry} ?set_name .
+                ?comp {verifies_entry} ?set .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
-        return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+        return [row['set_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_verifies_relations_by_component_set(self, set_name: str, verbose: bool = True) -> list:
         """

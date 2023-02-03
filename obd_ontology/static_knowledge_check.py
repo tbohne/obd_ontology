@@ -71,6 +71,7 @@ def static_knowledge_check_component_perspective():
         print(comp)
         print("\t- oscilloscope:", qt.query_oscilloscope_usage_by_suspect_component(comp, False))
         print("\t- affected by:", qt.query_affected_by_relations_by_suspect_component(comp, False))
+        print("\t- verifies:", qt.query_verifies_relation_by_suspect_component(comp, False))
     print("\n----------------------------------------------------------------------\n")
 
 
