@@ -378,6 +378,27 @@ class KnowledgeGraphQueryTool:
             return [row.comp_name for row in self.graph.query(s)]
         return [row['subsystem']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
+    def query_component_set_by_name(self, set_name: str) -> list:
+        """
+        Queries a component set by its name.
+
+        :param set_name: name to query component set for
+        :return: component set
+        """
+        print("########################################################################")
+        print(colored("QUERY: component set by name - " + set_name, "green", "on_grey", ["bold"]))
+        print("########################################################################")
+        component_set_entry = self.complete_ontology_entry('ComponentSet')
+        set_name_entry = self.complete_ontology_entry('set_name')
+        s = f"""
+            SELECT ?comp_set WHERE {{
+                ?comp_set a {component_set_entry} .
+                ?comp_set {set_name_entry} ?set_name .
+                FILTER(STR(?set_name) = "{set_name}")
+            }}
+            """
+        return [row['comp_set']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+
     def query_vehicle_instance_by_vin(self, vin: str) -> list:
         """
         Queries a vehicle instance by the vehicle identification number.
@@ -774,35 +795,33 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_verifies_relations_by_vehicle_subsystem(self, subsystem_name: str, verbose: bool = True) -> list:
+    def query_verifies_relations_by_component_set(self, set_name: str, verbose: bool = True) -> list:
         """
-        Queries the suspect components that can verify the specified vehicle subsystem.
+        Queries the suspect components that can verify the specified component set.
 
-        :param subsystem_name: vehicle subsystem to query verifying suspect components for
+        :param set_name: component set to query verifying suspect components for
         :param verbose: if true, logging is activated
         :return: suspect component names
         """
         if verbose:
             print("########################################################################")
-            print(colored("QUERY: verifying components by vehicle subsystem name "
-                          + subsystem_name, "green", "on_grey", ["bold"]))
+            print(colored("QUERY: verifying components by component set name "
+                          + set_name, "green", "on_grey", ["bold"]))
             print("########################################################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
-        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
-        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        component_set_entry = self.complete_ontology_entry('ComponentSet')
+        set_name_entry = self.complete_ontology_entry('set_name')
         verifies_entry = self.complete_ontology_entry('verifies')
         s = f"""
             SELECT ?comp_name WHERE {{
-                ?sub a {subsystem_entry} .
-                ?sub {sub_name_entry} "{subsystem_name}" .
+                ?comp_set a {component_set_entry} .
+                ?comp_set {set_name_entry} "{set_name}" .
                 ?comp a {comp_entry} .
                 ?comp {name_entry} ?comp_name .
-                ?comp {verifies_entry} ?sub .
+                ?comp {verifies_entry} ?comp_set .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_contains_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
@@ -864,6 +883,34 @@ class KnowledgeGraphQueryTool:
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
+    def query_includes_relation_by_component_set(self, comp_set_name: str, verbose: bool = True) -> list:
+        """
+        Queries the suspect components that are included in the specified component set.
+
+        :param comp_set_name: component set to query included suspect components for
+        :param verbose: if true, logging is activated
+        :return: component names
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: components by component set name " + comp_set_name, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        comp_set_entry = self.complete_ontology_entry('ComponentSet')
+        set_name_entry = self.complete_ontology_entry('set_name')
+        includes_entry = self.complete_ontology_entry('includes')
+        s = f"""
+            SELECT ?comp_name WHERE {{
+                ?comp_set a {comp_set_entry} .
+                ?comp_set {set_name_entry} "{comp_set_name}" .
+                ?comp a {comp_entry} .
+                ?comp {name_entry} ?comp_name .
+                ?comp_set {includes_entry} ?comp .
+            }}
+            """
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_code_type_by_dtc(self, dtc: str, verbose: bool = True) -> list:
@@ -958,6 +1005,27 @@ class KnowledgeGraphQueryTool:
             return [row.comp_name for row in self.graph.query(s)]
         return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_component_set_instances(self, verbose: bool = True) -> list:
+        """
+        Queries all component set instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all component sets stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all component set instances")
+            print("####################################")
+        component_set_entry = self.complete_ontology_entry('ComponentSet')
+        set_name_entry = self.complete_ontology_entry('set_name')
+        s = f"""
+            SELECT ?set_name WHERE {{
+                ?comp_set a {component_set_entry} .
+                ?comp_set {set_name_entry} ?set_name .
+            }}
+            """
+        return [row['set_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     @staticmethod
     def print_res(res: list) -> None:
         """
@@ -1005,3 +1073,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_oscilloscope_usage_by_suspect_component(suspect_comp_name))
     qt.print_res(qt.query_affected_by_relations_by_suspect_component(suspect_comp_name))
     qt.print_res(qt.query_code_type_by_dtc(error_code))
+    qt.print_res(qt.query_all_component_set_instances(False))
