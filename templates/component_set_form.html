@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
-    <title>Vehicle Subsystem</title>
+    <title>Vehicle Component Set</title>
 </head>
 
 <body>
-    <header><h1>Add Vehicle Subsystem Instance to Knowledge Graph</h1></header>
+    <header><h1>Add Vehicle Component Set Instance to Knowledge Graph</h1></header>
 
     <section>
         <article>
@@ -16,14 +16,14 @@
                 <form method="POST">
                     {{ form.csrf_token }}
                     <br>
-                    <p>Subsystem: {{ form.subsystem_name(size=20) }}</p>
-                    <p>List components belonging to this vehicle subsystem (if the component you want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
+                    <p>Component Set: {{ form.set_name(size=20) }}</p>
+                    <p>List components belonging to this vehicle component set (if the component you want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
                     <div>{{form.components}} {{form.add_component_submit}} {{form.clear_components}}</div>
                     <p style="color: #B40404;">
                     {%for i in components_variable_list%}
                         {{i}},
                     {%endfor%}</p>
-                    <p>Select components that can verify whether the subsystem works correctly (if the component you
+                    <p>Select components that can verify whether the component set works correctly (if the component you
                         want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
                     <div> {{form.verifying_components}} {{form.verifying_components_submit}} {{form.clear_verifying_components}}</div>
                     <p style="color: #B40404;">
