@@ -157,6 +157,34 @@ class KnowledgeGraphQueryTool:
             return [row.symptom_desc for row in self.graph.query(s)]
         return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_indicates_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+        """
+        Queries the indicated subsystem for the specified DTC.
+
+        :param dtc: diagnostic trouble code to query indicated subsystem for
+        :param verbose: if true, logging is activated
+        :return: indicated subsystem
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: indicated subsystem for " + dtc, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        indicates_entry = self.complete_ontology_entry('indicates')
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        code_entry = self.complete_ontology_entry('code')
+        s = f"""
+            SELECT ?sub_name WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {indicates_entry} ?subsystem .
+                ?dtc {code_entry} "{dtc}" .
+                ?subsystem a {subsystem_entry} .
+                ?subsystem {sub_name_entry} ?sub_name .
+            }}
+            """
+        return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_symptoms_by_desc(self, desc: str) -> list:
         """
         Queries the symptom instance for the specified description.
