@@ -41,8 +41,18 @@ def static_knowledge_check_subsystem_perspective():
     for subsystem in subsystem_instances:
         print(subsystem)
         print("\t- contains:", qt.query_contains_relation_by_subsystem(subsystem, False))
-        print("\t- verified by:", qt.query_verifies_relations_by_vehicle_subsystem(subsystem, False))
     print("\n----------------------------------------------------------------------\n")
+
+
+def static_knowledge_check_component_set_perspective():
+    """
+    Presents the static knowledge that is currently stored in the KG from a component-set-centric perspective.
+    """
+    component_set_instances = qt.query_all_component_set_instances(False)
+    for comp_set in component_set_instances:
+        print(comp_set)
+        print("\t- verified by:", qt.query_verifies_relations_by_component_set(comp_set, False))
+        print("\t- includes:", qt.query_includes_relation_by_component_set(comp_set, False))
 
 
 def static_knowledge_check_component_perspective():
@@ -62,3 +72,4 @@ if __name__ == '__main__':
     static_knowledge_check_dtc_perspective()
     static_knowledge_check_subsystem_perspective()
     static_knowledge_check_component_perspective()
+    static_knowledge_check_component_set_perspective()
