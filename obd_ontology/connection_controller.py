@@ -140,6 +140,17 @@ class ConnectionController:
         """
         return Fact((subsystem_uuid, self.namespace.contains, comp_uuid), property_fact=prop)
 
+    def generate_includes_fact(self, component_set_uuid: str, comp_uuid: str, prop: bool) -> Fact:
+        """
+        Generates an `includes` fact (RDF) based on the provided properties.
+
+        :param component_set_uuid: UUID of the component set to generate fact for
+        :param comp_uuid: UUID of the suspect component to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((component_set_uuid, self.namespace.includes, comp_uuid), property_fact=prop)
+
     def generate_verifies_fact(self, comp_uuid: str, subsystem_uuid: str, prop: bool) -> Fact:
         """
         Generates a `verifies` fact (RDF) based on the provided properties.
