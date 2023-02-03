@@ -17,7 +17,10 @@ def static_knowledge_check_dtc_perspective():
         print("\t- code type:", qt.query_code_type_by_dtc(dtc, False))
         print("\t- condition:", qt.query_fault_condition_by_dtc(dtc, False))
         print("\t- symptoms:", qt.query_symptoms_by_dtc(dtc, False))
-        print("\t- indicates subsystem:", qt.query_indicates_by_dtc(dtc, False))
+        sub_name = qt.query_indicates_by_dtc(dtc, False)
+        sub_name = "" if len(sub_name) == 0 else sub_name[0]
+        print("\t- indicates subsystem:", sub_name)
+        print("\t- indicates vehicle part:", qt.query_vehicle_part_by_subsystem(sub_name, False))
         print("\t- ordered suspect components:")
         suspect_components = qt.query_suspect_components_by_dtc(dtc, False)
         ordered_sus_comp = {int(qt.query_diagnostic_association_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp
@@ -44,6 +47,7 @@ def static_knowledge_check_subsystem_perspective():
     for subsystem in subsystem_instances:
         print(subsystem)
         print("\t- contains:", qt.query_contains_relation_by_subsystem(subsystem, False))
+        print("\t- vehicle part(s):", qt.query_vehicle_part_by_subsystem(subsystem, False))
     print("\n----------------------------------------------------------------------\n")
 
 

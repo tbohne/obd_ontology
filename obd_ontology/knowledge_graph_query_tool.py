@@ -185,6 +185,30 @@ class KnowledgeGraphQueryTool:
             """
         return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_vehicle_part_by_subsystem(self, subsystem: str, verbose: bool = True) -> list:
+        """
+        Queries the `vehicle_part`s for the specified subsystem.
+
+        :param subsystem: vehicle subsystem to query vehicle part(s) for
+        :param verbose: if true, logging is activated
+        :return: vehicle part(s)
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: vehicle part(s) for " + subsystem, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        vehicle_part_entry = self.complete_ontology_entry('vehicle_part')
+        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        s = f"""
+            SELECT ?vehicle_part WHERE {{
+                ?subsystem a {subsystem_entry} .
+                ?subsystem {sub_name_entry} "{subsystem}" .
+                ?subsystem {vehicle_part_entry} ?vehicle_part .
+            }}
+            """
+        return [row['vehicle_part']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_symptoms_by_desc(self, desc: str) -> list:
         """
         Queries the symptom instance for the specified description.
