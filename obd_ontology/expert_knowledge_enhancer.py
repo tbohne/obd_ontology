@@ -174,7 +174,8 @@ class ExpertKnowledgeEnhancer:
                 diag_association_uuid = "diag_association_" + uuid.uuid4().hex
                 fact_list.append(
                     Fact((diag_association_uuid, RDF.type, self.onto_namespace["DiagnosticAssociation"].toPython())))
-                fact_list.append(Fact((dtc_uuid, self.onto_namespace.has, diag_association_uuid)))
+
+                fact_list.append(Fact((dtc_uuid, self.onto_namespace.hasAssociation, diag_association_uuid)))
                 fact_list.append(
                     Fact((diag_association_uuid, self.onto_namespace.priority_id, idx), property_fact=True))
                 fact_list.append(Fact((diag_association_uuid, self.onto_namespace.pointsTo, comp_uuid)))

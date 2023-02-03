@@ -94,16 +94,16 @@ class ConnectionController:
         """
         return Fact((fc_uuid, self.namespace.manifestedBy, symptom_uuid), property_fact=prop)
 
-    def generate_has_fact(self, dtc_uuid: str, da_uuid: str, prop: bool) -> Fact:
+    def generate_has_association_fact(self, dtc_uuid: str, da_uuid: str, prop: bool) -> Fact:
         """
-        Generates a `has` fact (RDF) based on the provided properties.
+        Generates a `hasAssociation` fact (RDF) based on the provided properties.
 
         :param dtc_uuid: UUID of the DTC to generate fact for
         :param da_uuid: UUID of the diagnostic association to generate fact for
         :param prop: determines whether it's a property fact
         :return: generated fact
         """
-        return Fact((dtc_uuid, self.namespace.has, da_uuid), property_fact=prop)
+        return Fact((dtc_uuid, self.namespace.hasAssociation, da_uuid), property_fact=prop)
 
     def generate_points_to_fact(self, da_uuid: str, comp_uuid: str, prop: bool) -> Fact:
         """

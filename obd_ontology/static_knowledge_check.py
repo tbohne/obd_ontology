@@ -28,7 +28,9 @@ def static_knowledge_check_dtc_perspective():
                   qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\taffected by:", qt.query_affected_by_relations_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tverifies:", qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False))
-            print("\t\t\tpart of:", qt.query_contains_relation_by_suspect_component(ordered_sus_comp[i], False))
+            print("\t\t\tcontained in subsystem:", qt.query_contains_relation_by_suspect_component(
+                ordered_sus_comp[i], False)
+            )
         print()
     print("\n----------------------------------------------------------------------\n")
 

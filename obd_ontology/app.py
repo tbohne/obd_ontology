@@ -356,7 +356,7 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
         diag_association_uuid = diag_association_uuid[0].split("#")[1]
 
         # remove the 'has' connection between DTC and diagnostic association
-        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_has_fact(
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_has_association_fact(
             dtc_uuid, diag_association_uuid, False
         ))
         # remove the 'pointsTo' connection between diagnostic association and suspect component

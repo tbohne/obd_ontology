@@ -314,7 +314,7 @@ class KnowledgeGraphQueryTool:
         suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
         diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
         points_to_entry = self.complete_ontology_entry('pointsTo')
-        has_entry = self.complete_ontology_entry('has')
+        has_association_entry = self.complete_ontology_entry('hasAssociation')
         component_name_entry = self.complete_ontology_entry('component_name')
         code_entry = self.complete_ontology_entry('code')
         s = f"""
@@ -325,7 +325,7 @@ class KnowledgeGraphQueryTool:
                 ?da a {diag_association_entry} .
                 ?dtc {code_entry} "{dtc}" .
                 ?da {points_to_entry} ?comp .
-                ?dtc {has_entry} ?da .
+                ?dtc {has_association_entry} ?da .
             }}
             """
         if self.local_kb:
@@ -601,7 +601,7 @@ class KnowledgeGraphQueryTool:
         diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
         suspect_component_entry = self.complete_ontology_entry('SuspectComponent')
         code_entry = self.complete_ontology_entry('code')
-        has_entry = self.complete_ontology_entry('has')
+        has_association_entry = self.complete_ontology_entry('hasAssociation')
         comp_name_entry = self.complete_ontology_entry('component_name')
         points_to_entry = self.complete_ontology_entry('pointsTo')
         s = f"""
@@ -609,7 +609,7 @@ class KnowledgeGraphQueryTool:
                 ?diag_association a {diag_association_entry} .
                 ?dtc a {dtc_entry} .
                 ?dtc {code_entry} "{dtc}" .
-                ?dtc {has_entry} ?diag_association .
+                ?dtc {has_association_entry} ?diag_association .
                 ?sus a {suspect_component_entry} .
                 ?sus {comp_name_entry} "{comp}" .
                 ?diag_association {points_to_entry} ?sus .
@@ -637,7 +637,7 @@ class KnowledgeGraphQueryTool:
         diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
         suspect_component_entry = self.complete_ontology_entry('SuspectComponent')
         code_entry = self.complete_ontology_entry('code')
-        has_entry = self.complete_ontology_entry('has')
+        has_association_entry = self.complete_ontology_entry('hasAssociation')
         comp_name_entry = self.complete_ontology_entry('component_name')
         points_to_entry = self.complete_ontology_entry('pointsTo')
         prio_entry = self.complete_ontology_entry('priority_id')
@@ -647,7 +647,7 @@ class KnowledgeGraphQueryTool:
                 ?diag_association  {prio_entry} ?prio .
                 ?dtc a {dtc_entry} .
                 ?dtc {code_entry} "{dtc}" .
-                ?dtc {has_entry} ?diag_association .
+                ?dtc {has_association_entry} ?diag_association .
                 ?sus a {suspect_component_entry} .
                 ?sus {comp_name_entry} "{comp}" .
                 ?diag_association {points_to_entry} ?sus .
