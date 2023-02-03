@@ -52,15 +52,17 @@ class ExpertKnowledgeEnhancer:
             dtc_parser = DTCParser()
             code_type = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["code_type"]
             code_type = "generic" if "generic" in code_type else "manufacturer-specific"
-            subsystem_name = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["vehicle_subsystem"]
-            subsystem_instance = self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)
-            subsystem_uuid = subsystem_instance[0].split("#")[1]
             fact_list = [
                 Fact((dtc_uuid, RDF.type, self.onto_namespace["DTC"].toPython())),
                 Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True),
-                Fact((dtc_uuid, self.onto_namespace.code_type, code_type), property_fact=True),
-                Fact((dtc_uuid, self.onto_namespace.indicates, subsystem_uuid))
+                Fact((dtc_uuid, self.onto_namespace.code_type, code_type), property_fact=True)
             ]
+            subsystem_name = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["vehicle_subsystem"]
+            subsystem_instance = self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)
+            if len(subsystem_instance) > 0:
+                subsystem_uuid = subsystem_instance[0].split("#")[1]
+                fact_list.append(Fact((dtc_uuid, self.onto_namespace.indicates, subsystem_uuid)))
+
         for code in dtc_knowledge.occurs_with:
             fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
         return dtc_uuid, fact_list

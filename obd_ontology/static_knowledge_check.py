@@ -20,7 +20,7 @@ def static_knowledge_check_dtc_perspective():
         sub_name = qt.query_indicates_by_dtc(dtc, False)
         sub_name = "" if len(sub_name) == 0 else sub_name[0]
         print("\t- indicates subsystem:", sub_name)
-        print("\t- indicates vehicle part:", qt.query_vehicle_part_by_subsystem(sub_name, False))
+        print("\t- indicates vehicle part(s):", qt.query_vehicle_part_by_subsystem(sub_name, False))
         print("\t- ordered suspect components:")
         suspect_components = qt.query_suspect_components_by_dtc(dtc, False)
         ordered_sus_comp = {int(qt.query_diagnostic_association_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp
