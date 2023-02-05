@@ -3,47 +3,51 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
-    <title>Vehicle Subsystem</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Fahrzeug-Subsystem</title>
 </head>
 
 <body>
-    <header><h1>Add Vehicle Subsystem Instance to Knowledge Graph</h1></header>
+<header><h1>Fügen Sie dem Wissensgraphen ein neues Fahrzeug-Subsystem hinzu</h1></header>
 
-    <section>
-        <article>
-                <p><a href="/">Start page</a> <a href="dtc_form">Add DTC</a> <a href="component_form">Add vehicle component</a></p>
-                <form method="POST">
-                    {{ form.csrf_token }}
-                    <br>
-                    <p>Subsystem: {{ form.subsystem_name(size=20) }}</p>
-                    <p>List components belonging to this vehicle subsystem (if the component you want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
-                    <div>{{form.components}} {{form.add_component_submit}} {{form.clear_components}}</div>
-                    <p style="color: #B40404;">
-                    {%for i in components_variable_list%}
-                        {{i}},
-                    {%endfor%}</p>
-                    <p>Select components that can verify whether the subsystem works correctly (if the component you
-                        want to add is not in the drop-down menu, you can add it via <a href="component_form">this</a> form):</p>
-                    <div> {{form.verifying_components}} {{form.verifying_components_submit}} {{form.clear_verifying_components}}</div>
-                    <p style="color: #B40404;">
-                    {%for i in verifying_components_list%}
-                        {{i}},
-                    {%endfor%}</p>
-                    <p>{{form.final_submit}} {{form.clear_everything}}</p>
-                </form>
-                <br>
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <ul class=flashes>
-                            {% for message in messages %}
-                                <li><p style="color: #B40404;">{{ message }}</p></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
-        </article>
-    </section>
+<section>
+    <article>
+        <p><a href="/">Startseite</a> <a href="dtc_form">DTC hinzufügen</a> <a href="component_form">Fahrzeug-Komponente
+            hinzufügen</a></p>
+        <form method="POST">
+            {{ form.csrf_token }}
+            <br>
+            <p>Subsystem: {{ form.subsystem_name(size=20) }}</p>
+            <p>Listen Sie Komponenten auf, die zu diesem Fahrzeug-Subsystem gehören (wenn die Komponente, die Sie
+                hinzufügen möchten, nicht im Dropdown-Menü enthalten ist, können Sie sie über
+                <a href="component_form">dieses</a> Formular hinzufügen):</p>
+            <div>{{ form.components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
+            <p style="color: #B40404;">
+                {% for i in components_variable_list %}
+                    {{ i }},
+                {% endfor %}</p>
+            <p>Wählen Sie Komponenten aus, mit denen überprüft werden kann, ob das Subsystem korrekt funktioniert (wenn
+                die Komponente, die Sie hinzufügen möchten, nicht im Dropdown-Menü enthalten ist, können Sie sie über <a
+                        href="component_form">dieses</a> Formular hinzufügen):</p>
+            <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>
+            <p style="color: #B40404;">
+                {% for i in verifying_components_list %}
+                    {{ i }},
+                {% endfor %}</p>
+            <p>{{ form.final_submit }} {{ form.clear_everything }}</p>
+        </form>
+        <br>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li><p style="color: #B40404;">{{ message }}</p></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </article>
+</section>
 </body>
 
 </html>

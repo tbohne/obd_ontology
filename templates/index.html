@@ -3,29 +3,30 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
-    <title>Expert Knowledge Acquisition</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Expertenwissenserwerb</title>
 </head>
 
 <body>
-    <header>
-        <h1>Expert Knowledge Acquisition</h1>
-    </header>
+<header>
+    <h1>Expertenwissenserwerb</h1>
+</header>
 
-    <section>
-        <article>
-            <br>
-            <p>Collaborative construction of a knowledge graph concerning automotive diagnostics.</p>
-            <p>The goal is to extend the captured knowledge by filling a predefined <a href="https://github.com/tbohne/OBDOntology">ontology</a> with instance data.</p>
-            <br>
-            <p><u><b>You can add the following types of instances:</b></u></p>
-            <ul>
-                <li><p><a href="dtc_form">Diagnostic Trouble Codes (DTCs)</a></p></li>
-                <li><p><a href="subsystem_form">Vehicle Subsystems</a></p></li>
-                <li><p><a href="component_form">Vehicle Components</a></p></li>
-            </ul>
-        </article>
-    </section>
+<section>
+    <article>
+        <br>
+        <p>Kollaborativer Aufbau eines Wissensgraphen zur KFZ-Diagnose.</p>
+        <p>Ziel ist es, das erfasste Wissen zu erweitern, indem eine vordefinierte <a
+                href="https://github.com/tbohne/OBDOntology">Ontologie</a> mit Instanzdaten gefüllt wird.</p>
+        <br>
+        <p><u><b>Sie können die folgenden Arten von Instanzen hinzufügen:</b></u></p>
+        <ul>
+            <li><p><a href="dtc_form">Diagnostic Trouble Codes (DTCs)</a></p></li>
+            <li><p><a href="subsystem_form">Fahrzeug-Subsysteme</a></p></li>
+            <li><p><a href="component_form">Fahrzeug-Komponenten</a></p></li>
+        </ul>
+    </article>
+</section>
 </body>
 
 </html>
