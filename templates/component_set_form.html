@@ -26,9 +26,9 @@
                 {% for i in components_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Wählen Sie Komponenten aus, mit denen überprüft werden kann, ob das Komponenten-Set korrekt funktioniert (wenn
-                die Komponente, die Sie hinzufügen möchten, nicht im Dropdown-Menü enthalten ist, können Sie sie über <a
-                        href="component_form">dieses</a> Formular hinzufügen):</p>
+            <p>Wählen Sie Komponenten aus, mit denen überprüft werden kann, ob das Komponenten-Set korrekt funktioniert
+                (wenn die Komponente, die Sie hinzufügen möchten, nicht im Dropdown-Menü enthalten ist, können Sie sie
+                über <a href="component_form">dieses</a> Formular hinzufügen):</p>
             <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>
             <p style="color: #B40404;">
                 {% for i in verifying_components_list %}
