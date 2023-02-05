@@ -94,16 +94,16 @@ class ConnectionController:
         """
         return Fact((fc_uuid, self.namespace.manifestedBy, symptom_uuid), property_fact=prop)
 
-    def generate_has_fact(self, dtc_uuid: str, da_uuid: str, prop: bool) -> Fact:
+    def generate_has_association_fact(self, dtc_uuid: str, da_uuid: str, prop: bool) -> Fact:
         """
-        Generates a `has` fact (RDF) based on the provided properties.
+        Generates a `hasAssociation` fact (RDF) based on the provided properties.
 
         :param dtc_uuid: UUID of the DTC to generate fact for
         :param da_uuid: UUID of the diagnostic association to generate fact for
         :param prop: determines whether it's a property fact
         :return: generated fact
         """
-        return Fact((dtc_uuid, self.namespace.has, da_uuid), property_fact=prop)
+        return Fact((dtc_uuid, self.namespace.hasAssociation, da_uuid), property_fact=prop)
 
     def generate_points_to_fact(self, da_uuid: str, comp_uuid: str, prop: bool) -> Fact:
         """
@@ -139,6 +139,17 @@ class ConnectionController:
         :return: generated fact
         """
         return Fact((subsystem_uuid, self.namespace.contains, comp_uuid), property_fact=prop)
+
+    def generate_includes_fact(self, component_set_uuid: str, comp_uuid: str, prop: bool) -> Fact:
+        """
+        Generates an `includes` fact (RDF) based on the provided properties.
+
+        :param component_set_uuid: UUID of the component set to generate fact for
+        :param comp_uuid: UUID of the suspect component to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((component_set_uuid, self.namespace.includes, comp_uuid), property_fact=prop)
 
     def generate_verifies_fact(self, comp_uuid: str, subsystem_uuid: str, prop: bool) -> Fact:
         """

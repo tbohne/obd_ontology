@@ -14,8 +14,13 @@ def static_knowledge_check_dtc_perspective():
         print(dtc)
         print("\t- occurs with:", qt.query_co_occurring_trouble_codes(dtc, False))
         print("\t- category:", qt.query_fault_cat_by_dtc(dtc, False))
+        print("\t- code type:", qt.query_code_type_by_dtc(dtc, False))
         print("\t- condition:", qt.query_fault_condition_by_dtc(dtc, False))
         print("\t- symptoms:", qt.query_symptoms_by_dtc(dtc, False))
+        sub_name = qt.query_indicates_by_dtc(dtc, False)
+        sub_name = "" if len(sub_name) == 0 else sub_name[0]
+        print("\t- indicates subsystem:", sub_name)
+        print("\t- indicates vehicle part(s):", qt.query_vehicle_part_by_subsystem(sub_name, False))
         print("\t- ordered suspect components:")
         suspect_components = qt.query_suspect_components_by_dtc(dtc, False)
         ordered_sus_comp = {int(qt.query_diagnostic_association_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp
@@ -27,7 +32,9 @@ def static_knowledge_check_dtc_perspective():
                   qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\taffected by:", qt.query_affected_by_relations_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tverifies:", qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False))
-            print("\t\t\tpart of:", qt.query_contains_relation_by_suspect_component(ordered_sus_comp[i], False))
+            print("\t\t\tcontained in subsystem:", qt.query_contains_relation_by_suspect_component(
+                ordered_sus_comp[i], False)
+            )
         print()
     print("\n----------------------------------------------------------------------\n")
 
@@ -40,8 +47,19 @@ def static_knowledge_check_subsystem_perspective():
     for subsystem in subsystem_instances:
         print(subsystem)
         print("\t- contains:", qt.query_contains_relation_by_subsystem(subsystem, False))
-        print("\t- verified by:", qt.query_verifies_relations_by_vehicle_subsystem(subsystem, False))
+        print("\t- vehicle part(s):", qt.query_vehicle_part_by_subsystem(subsystem, False))
     print("\n----------------------------------------------------------------------\n")
+
+
+def static_knowledge_check_component_set_perspective():
+    """
+    Presents the static knowledge that is currently stored in the KG from a component-set-centric perspective.
+    """
+    component_set_instances = qt.query_all_component_set_instances(False)
+    for comp_set in component_set_instances:
+        print(comp_set)
+        print("\t- verified by:", qt.query_verifies_relations_by_component_set(comp_set, False))
+        print("\t- includes:", qt.query_includes_relation_by_component_set(comp_set, False))
 
 
 def static_knowledge_check_component_perspective():
@@ -53,6 +71,7 @@ def static_knowledge_check_component_perspective():
         print(comp)
         print("\t- oscilloscope:", qt.query_oscilloscope_usage_by_suspect_component(comp, False))
         print("\t- affected by:", qt.query_affected_by_relations_by_suspect_component(comp, False))
+        print("\t- verifies:", qt.query_verifies_relation_by_suspect_component(comp, False))
     print("\n----------------------------------------------------------------------\n")
 
 
@@ -61,3 +80,4 @@ if __name__ == '__main__':
     static_knowledge_check_dtc_perspective()
     static_knowledge_check_subsystem_perspective()
     static_knowledge_check_component_perspective()
+    static_knowledge_check_component_set_perspective()

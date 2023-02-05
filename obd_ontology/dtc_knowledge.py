@@ -4,7 +4,7 @@
 
 class DTCKnowledge:
     """
-    Representation of DTC-related expert knowledge.
+    Representation of DTC-related expert knowledge that is not automatically generated based on the dtc_parser.
     """
 
     def __init__(self, dtc: str, occurs_with: list, fault_condition: str, symptoms: list,

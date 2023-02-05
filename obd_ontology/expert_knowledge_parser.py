@@ -5,8 +5,8 @@
 from typing import Union
 
 from component_knowledge import ComponentKnowledge
+from component_set_knowledge import ComponentSetKnowledge
 from dtc_knowledge import DTCKnowledge
-from subsystem_knowledge import SubsystemKnowledge
 
 
 def parse_dtc_expert_template(lines: list) -> DTCKnowledge:
@@ -68,15 +68,15 @@ def parse_component_expert_template(lines: list) -> list:
     return suspect_components
 
 
-def parse_subsystem_expert_template(lines: list) -> SubsystemKnowledge:
+def parse_subsystem_expert_template(lines: list) -> ComponentSetKnowledge:
     """
-    Parses the vehicle subsystem expert template.
+    Parses the vehicle component set expert template.
 
     :param lines: lines of the knowledge template
-    :return: parsed subsystem knowledge
+    :return: parsed component set knowledge
     """
-    subsystem = ""
-    contains = verified_by = []
+    component_set = ""
+    includes = verified_by = []
 
     title_cnt = 0
     for line in lines:
@@ -86,16 +86,16 @@ def parse_subsystem_expert_template(lines: list) -> SubsystemKnowledge:
         line = line[2:].strip()
 
         if title_cnt == 1:  # subsystem name
-            subsystem = line
+            component_set = line
         elif title_cnt == 4:  # 'contains' entries
-            contains.append(line)
+            includes.append(line)
         elif title_cnt == 6:  # 'verified_by' entry
             verified_by = [line]
 
-    return SubsystemKnowledge(subsystem, contains, verified_by)
+    return ComponentSetKnowledge(component_set, includes, verified_by)
 
 
-def parse_knowledge(knowledge_file: str) -> Union[DTCKnowledge, list, SubsystemKnowledge, None]:
+def parse_knowledge(knowledge_file: str) -> Union[DTCKnowledge, list, ComponentKnowledge, None]:
     """
     Parses OBD-related expert knowledge from template file (cf. `templates/dtc_expert_template.txt`,
     `templates/component_expert_template`, `templates/subsystem_expert_template.txt`).

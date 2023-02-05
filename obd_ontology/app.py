@@ -12,10 +12,10 @@ from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, SubmitField, SelectField
 
 from obd_ontology.component_knowledge import ComponentKnowledge
+from obd_ontology.component_set_knowledge import ComponentSetKnowledge
 from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
-from obd_ontology.subsystem_knowledge import SubsystemKnowledge
 
 app = Flask(
     __name__,
@@ -91,11 +91,11 @@ class DTCForm(FlaskForm):
     clear_everything = SubmitField("Alle Listen leeren")
 
 
-class SubsystemForm(FlaskForm):
+class ComponentSetForm(FlaskForm):
     """
-    Form for the subsystem page.
+    Form for the component set page.
     """
-    subsystem_name = StringField("")
+    set_name = StringField("")
     components = SelectField("",
                              choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
                              validate_choice=False)
@@ -168,21 +168,21 @@ def add_dtc_to_knowledge_graph(dtc: str, occurs_with: list, fault_condition: str
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
-def add_subsystem_to_knowledge_graph(vehicle_subsystem: str, contains: list, verified_by: list) -> None:
+def add_component_set_to_knowledge_graph(component_set: str, includes: list, verified_by: list) -> None:
     """
-    Adds a subsystem instance to the knowledge graph using the ExpertKnowledgeEnhancer.
+    Adds a component set instance to the knowledge graph using the ExpertKnowledgeEnhancer.
 
-    :param vehicle_subsystem: vehicle subsystem to be represented
-    :param contains: suspect components assigned to this subsystem
-    :param verified_by: subsystem can be verified by checking this suspect component
+    :param component_set: vehicle component set to be represented
+    :param includes: suspect components assigned to this component set
+    :param verified_by: component set can be verified by checking this suspect component
     """
-    assert isinstance(vehicle_subsystem, str)
-    assert isinstance(contains, list)
+    assert isinstance(component_set, str)
+    assert isinstance(includes, list)
     assert isinstance(verified_by, list)
 
-    new_subsystem_knowledge = SubsystemKnowledge(vehicle_subsystem=vehicle_subsystem, contains=contains,
-                                                 verified_by=verified_by)
-    fact_list = expert_knowledge_enhancer.generate_subsystem_facts(new_subsystem_knowledge)
+    new_comp_set_knowledge = ComponentSetKnowledge(component_set=component_set, includes=includes,
+                                                   verified_by=verified_by)
+    fact_list = expert_knowledge_enhancer.generate_component_set_facts(new_comp_set_knowledge)
     expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
@@ -357,7 +357,7 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
         diag_association_uuid = diag_association_uuid[0].split("#")[1]
 
         # remove the 'has' connection between DTC and diagnostic association
-        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_has_fact(
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_has_association_fact(
             dtc_uuid, diag_association_uuid, False
         ))
         # remove the 'pointsTo' connection between diagnostic association and suspect component
@@ -370,37 +370,33 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
         ))
 
 
-def add_contained_component_removal_facts(subsystem_name: str, facts_to_be_removed: list) -> None:
+def add_included_component_removal_facts(comp_set_name: str, facts_to_be_removed: list) -> None:
     """
-    Adds the `contains` facts to be removed.
+    Adds the `includes` facts to be removed.
 
-    :param subsystem_name: subsystem to remove contains relations for
+    :param comp_set_name: component set to remove `includes` relations for
     :param facts_to_be_removed: list of facts to be removed from the KG
     """
-    subsystem_uuid = kg_query_tool.query_vehicle_subsystem_by_name(subsystem_name)[0].split("#")[1]
-
-    for comp in kg_query_tool.query_contains_relation_by_subsystem(subsystem_name, False):
+    comp_set_uuid = kg_query_tool.query_component_set_by_name(comp_set_name)[0].split("#")[1]
+    for comp in kg_query_tool.query_includes_relation_by_component_set(comp_set_name, False):
         comp_uuid = kg_query_tool.query_suspect_component_by_name(comp)[0].split("#")[1]
-
-        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_contains_fact(
-            subsystem_uuid, comp_uuid, False
+        facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_includes_fact(
+            comp_set_uuid, comp_uuid, False
         ))
 
 
-def add_verifying_component_removal_facts(subsystem_name: str, facts_to_be_removed: list) -> None:
+def add_verifying_component_removal_facts(component_set_name: str, facts_to_be_removed: list) -> None:
     """
     Adds the `verifies` facts to be removed.
 
-    :param subsystem_name: subsystem to remove verifies relations for
+    :param component_set_name: component set to remove `verifies` relations for
     :param facts_to_be_removed: list of facts to be removed from the KG
     """
-    subsystem_uuid = kg_query_tool.query_vehicle_subsystem_by_name(subsystem_name)[0].split("#")[1]
-
-    for comp in kg_query_tool.query_verifies_relations_by_vehicle_subsystem(subsystem_name, False):
+    component_set_uuid = kg_query_tool.query_component_set_by_name(component_set_name)[0].split("#")[1]
+    for comp in kg_query_tool.query_verifies_relations_by_component_set(component_set_name, False):
         comp_uuid = kg_query_tool.query_suspect_component_by_name(comp)[0].split("#")[1]
-
         facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_verifies_fact(
-            comp_uuid, subsystem_uuid, False
+            comp_uuid, component_set_uuid, False
         ))
 
 
@@ -554,69 +550,69 @@ def dtc_form():
                            occurs_with_DTCs_variable_list=get_session_variable_list("occurs_with_list"))
 
 
-@app.route('/subsystem_form', methods=['GET', 'POST'])
-def subsystem_form():
+@app.route('/component_set_form', methods=['GET', 'POST'])
+def component_set_form():
     """
-    Renders the subsystem page and processes the form data.
+    Renders the component set page and processes the form data.
     """
-    form = SubsystemForm()
+    form = ComponentSetForm()
 
     if form.validate_on_submit():
         if form.final_submit.data:
-            if form.subsystem_name.data:
-                if get_session_variable_list("subsystem_components"):
+            if form.set_name.data:
+                if get_session_variable_list("comp_set_components"):
                     if get_session_variable_list("verifying_components"):
 
-                        warning_already_shown = form.subsystem_name.data == session.get("subsystem_name")
-                        # if the subsystem already exists and there has not been a warning yet, flash a warning first
-                        if form.subsystem_name.data in kg_query_tool.query_all_vehicle_subsystem_instances() \
+                        warning_already_shown = form.set_name.data == session.get("comp_set_name")
+                        # if the comp set already exists and there has not been a warning yet, flash a warning first
+                        if form.set_name.data in kg_query_tool.query_all_component_set_instances() \
                                 and not warning_already_shown:
                             flash(
-                                "WARNUNG: Dieses Fahrzeug-Subsystem existiert bereits! Wenn Sie sicher sind, dass Sie"
+                                "WARNUNG: Dieses Fahrzeug-Komponenten-Set existiert bereits! Wenn Sie sicher sind, dass Sie"
                                 " es überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button.")
-                            session["subsystem_name"] = form.subsystem_name.data
+                            session["comp_set_name"] = form.set_name.data
                         else:
                             # replacement confirmation given
                             if warning_already_shown:
-                                subsystem_name = session.get("subsystem_name")
+                                comp_set_name = session.get("comp_set_name")
                                 # construct all the facts that should be removed
                                 facts_to_be_removed = []
-                                add_contained_component_removal_facts(subsystem_name, facts_to_be_removed)
-                                add_verifying_component_removal_facts(subsystem_name, facts_to_be_removed)
+                                add_included_component_removal_facts(comp_set_name, facts_to_be_removed)
+                                add_verifying_component_removal_facts(comp_set_name, facts_to_be_removed)
                                 # remove all the facts that are newly added now (replacement)
                                 expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
                                     facts_to_be_removed
                                 )
-                            # add the subsystem to the knowledge graph
-                            add_subsystem_to_knowledge_graph(
-                                vehicle_subsystem=form.subsystem_name.data,
-                                contains=get_session_variable_list("subsystem_components"),
+                            # add the component set to the knowledge graph
+                            add_component_set_to_knowledge_graph(
+                                component_set=form.set_name.data,
+                                includes=get_session_variable_list("comp_set_components"),
                                 verified_by=get_session_variable_list("verifying_components")
                             )
                             # reset lists
-                            get_session_variable_list("subsystem_components").clear()
+                            get_session_variable_list("comp_set_components").clear()
                             get_session_variable_list("verifying_components").clear()
                             # show a success message
-                            if form.subsystem_name.data == session.get("subsystem_name"):
-                                flash(f"Das Fahrzeug-Subsystem mit dem Namen {form.subsystem_name.data} "
+
+                            if form.set_name.data == session.get("comp_set_name"):
+                                flash(f"Das Fahrzeug-Komponenten-Set mit dem Namen {form.set_name.data} "
                                       f"wurde erfolgreich überschrieben.")
                             else:
-                                flash(f"Das Fahrzeug-Subsystem mit dem Namen {form.subsystem_name.data} "
+                                flash(f"Das Fahrzeug-Komponenten-Set mit dem Namen {form.set_name.data} "
                                       f"wurde erfolgreich hinzugefügt.")
-                            return redirect(url_for('subsystem_form'))
+                            return redirect(url_for('component_set_form'))
                     else:  # the list of verifying components is empty
-                        flash(
-                            "Nennen Sie bitte mindestens eine Komponente, durch die verifiziert werden kann, ob "
-                            "dieses Teilsystem korrekt funktioniert!")
-                else:  # the list of components belonging to the subsystem is empty
-                    flash("Bitte nennen Sie die Komponenten, aus denen dieses Subsystem besteht!")
-            else:  # the StringField for the subsystem name is empty
-                flash("Bitte geben Sie einen Namen für das Subsystem ein!")
+                        flash("Nennen Sie bitte mindestens eine Komponente, durch die verifiziert werden kann, ob "
+                            "dieses Komponenten-Set korrekt funktioniert!")
+                else:  # the list of components belonging to the component set is empty
+                    flash("Bitte nennen Sie die Komponenten, aus denen dieses Komponenten-Set besteht!")
+            else:  # the StringField for the component set name is empty
+                flash("Bitte geben Sie einen Namen für das Komponenten-Set ein!")
 
         # a button that is not the final submit button has been clicked
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
-            if form.components.data not in get_session_variable_list("subsystem_components"):
-                get_session_variable_list("subsystem_components").append(form.components.data)
+            if form.components.data not in get_session_variable_list("comp_set_components"):
+                get_session_variable_list("comp_set_components").append(form.components.data)
 
         # button that adds components to the verified_by list has been clicked
         elif form.verifying_components_submit.data:
@@ -624,25 +620,25 @@ def subsystem_form():
                 get_session_variable_list("verifying_components").append(form.verifying_components.data)
 
         elif form.clear_components.data:  # button that clears the component list has been clicked
-            get_session_variable_list("subsystem_components").clear()
+            get_session_variable_list("comp_set_components").clear()
 
         elif form.clear_verifying_components.data:  # button that clears the verified_by list has been clicked
             get_session_variable_list("verifying_components").clear()
 
         elif form.clear_everything.data:  # button that clears all lists has been clicked
-            get_session_variable_list("subsystem_components").clear()
+            get_session_variable_list("comp_set_components").clear()
             get_session_variable_list("verifying_components").clear()
 
     # reset variable that specifies whether warning has been shown
-    if form.subsystem_name.data != session.get("subsystem_name"):
-        session["subsystem_name"] = None
+    if form.set_name.data != session.get("comp_set_name"):
+        session["comp_set_name"] = None
 
     # update choices for the SelectFields
     form.components.choices = kg_query_tool.query_all_component_instances()
     form.verifying_components.choices = kg_query_tool.query_all_component_instances()
 
-    return render_template('subsystem_form.html', form=form,
-                           components_variable_list=get_session_variable_list("subsystem_components"),
+    return render_template('component_set_form.html', form=form,
+                           components_variable_list=get_session_variable_list("comp_set_components"),
                            verifying_components_list=get_session_variable_list("verifying_components"))
 
 
