@@ -384,6 +384,34 @@ class KnowledgeGraphQueryTool:
             return [row.comp_name for row in self.graph.query(s)]
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_suspect_components_by_subsystem_name(self, subsystem_name: str, verbose: bool = True) -> list:
+        """
+        Queries the suspect components associated with the specified subsystem.
+
+        :param subsystem_name: subsystem to query suspect components for
+        :param verbose: if true, logging is activated
+        :return: suspect components
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: suspect components for " + subsystem_name, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        contains_entry = self.complete_ontology_entry('contains')
+        sus_comp_entry = self.complete_ontology_entry('SuspectComponent')
+        subsystem_name_entry = self.complete_ontology_entry('subsystem_name')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        s = f"""
+            SELECT ?comp_name WHERE {{
+                ?sub a {subsystem_entry} .
+                ?sub {contains_entry} ?comp .
+                ?comp a {sus_comp_entry} .
+                ?sub {subsystem_name_entry} "{subsystem_name}" .
+                ?comp {comp_name_entry} ?comp_name .
+            }}
+            """
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_suspect_component_by_name(self, component_name: str) -> list:
         """
         Queries a suspect component by its component name.
