@@ -663,6 +663,46 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
+    def query_dtcs_by_suspect_comp_and_vehicle_subsystem(self, comp: str, subsystem: str, verbose: bool = True) -> list:
+        """
+        Queries the DTCs associated with the specified suspect component and vehicle subsystem.
+
+        :param comp: suspect component to query DTCs for
+        :param subsystem: subsystem to query DTCs for
+        :param verbose: if true, logging is activated
+        :return: DTCs
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: DTCs by suspect component " + comp + " and subsystem " + subsystem,
+                          "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        code_entry = self.complete_ontology_entry('code')
+        diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
+        has_association_entry = self.complete_ontology_entry('hasAssociation')
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        points_to_entry = self.complete_ontology_entry('pointsTo')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        subsystem_entry = self.complete_ontology_entry('VehicleSubsystem')
+        indicates_entry = self.complete_ontology_entry('indicates')
+        sub_name_entry = self.complete_ontology_entry('subsystem_name')
+        s = f"""
+            SELECT ?code WHERE {{
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} ?code .
+                ?diag_association a {diag_association_entry} .
+                ?dtc {has_association_entry} ?diag_association .
+                ?comp a {comp_entry} .
+                ?diag_association {points_to_entry} ?comp .
+                ?comp {comp_name_entry} "{comp}" .
+                ?sub a {subsystem_entry} .
+                ?dtc {indicates_entry} ?sub .
+                ?sub {sub_name_entry} "{subsystem}" .
+            }}
+            """
+        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+
     def query_diag_association_instance_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
         """
         Queries the diagnostic association instance for the specified code and suspect component.
