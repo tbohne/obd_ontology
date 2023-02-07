@@ -368,6 +368,21 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
             diag_association_uuid, False
         ))
 
+        subsystem_name = kg_query_tool.query_indicates_by_dtc(dtc_name, False)[0]
+        # remove `contains` relation if there is no other DTC that still causes it
+        # -> find DTCs that also have associations with this comp and the particular subsystem
+        dtcs_associated_with_comp = kg_query_tool.query_dtcs_by_suspect_comp_and_vehicle_subsystem(
+            comp, subsystem_name, False
+        )
+        if len(dtcs_associated_with_comp) > 1:
+            print("there is at least one other DTC causing the `contains` relation, not removing it..")
+        else:
+            print("there is no other DTC causing the `contains` relation, removing it..")
+            subsystem_uuid = kg_query_tool.query_vehicle_subsystem_by_name(subsystem_name)[0].split("#")[1]
+            facts_to_be_removed.append(expert_knowledge_enhancer.fuseki_connection.generate_contains_fact(
+                subsystem_uuid, comp_uuid, False
+            ))
+
 
 def add_included_component_removal_facts(comp_set_name: str, facts_to_be_removed: list) -> None:
     """
