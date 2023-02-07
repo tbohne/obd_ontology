@@ -72,10 +72,14 @@ SELECT ?dtc WHERE {
 
 # QUERY SUSPECT COMPONENTS BY DTC
 
-SELECT ?comp WHERE {
-    eg:P0138 eg:pointsTo ?comp .
+select ?comp_name where {
     ?comp a eg:SuspectComponent .
-    eg:P0138 a eg:DTC .
+    ?diag_association a eg:DiagnosticAssociation .
+    ?dtc a eg:DTC .
+    ?dtc eg:code "P2563" .
+    ?dtc eg:hasAssociation ?diag_association .
+    ?diag_association eg:pointsTo ?comp .
+    ?comp eg:component_name ?comp_name .
 }
 
 # QUERY DTCs OCCURRING WITH THE SPECIFIED DTC
