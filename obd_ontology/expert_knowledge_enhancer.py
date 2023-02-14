@@ -176,15 +176,34 @@ class ExpertKnowledgeEnhancer:
             if len(diag_association) > 0:
                 print("Diagnostic association between", dtc_knowledge.dtc, "and", comp, "already defined in KG")
             else:
+                # TODO: shouldn't the diagnostic association be deletable, too?
                 # creating diagnostic association between DTC and SuspectComponent
                 diag_association_uuid = "diag_association_" + uuid.uuid4().hex
                 fact_list.append(
                     Fact((diag_association_uuid, RDF.type, self.onto_namespace["DiagnosticAssociation"].toPython())))
-
                 fact_list.append(Fact((dtc_uuid, self.onto_namespace.hasAssociation, diag_association_uuid)))
                 fact_list.append(
                     Fact((diag_association_uuid, self.onto_namespace.priority_id, idx), property_fact=True))
                 fact_list.append(Fact((diag_association_uuid, self.onto_namespace.pointsTo, comp_uuid)))
+
+                # automatically adding the suspect component to the vehicle subsystem associated with the DTC
+                dtc_parser = DTCParser()
+                subsystem_name = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["vehicle_subsystem"]
+                subsystem_instance = self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)
+                # the subsystems should be predefined
+                assert len(subsystem_instance) > 0
+                subsystem_uuid = subsystem_instance[0].split("#")[1]
+
+                # only add fact if it's not already part of the KG (important because suspect components can be
+                # associated with many DTCs)
+                components_by_subsystem = self.knowledge_graph_query_tool.query_suspect_components_by_subsystem_name(
+                    subsystem_name, False
+                )
+                if comp in components_by_subsystem:
+                    print("comp:", comp, "already in:", subsystem_name, "- not adding it..")
+                else:
+                    print("comp:", comp, "not yet part of:", subsystem_name, "- adding it..")
+                    fact_list.append(Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid)))
 
         return fact_list
 
