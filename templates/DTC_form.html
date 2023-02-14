@@ -26,15 +26,18 @@
                     {{ i }},
                 {% endfor %}</p>
             <p>Störungszustand, den der DTC beschreibt: {{ form.fault_condition }}</p>
-            <p>Symptome, die bei dem Störungszustand auftreten
-                können: {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }}</p>
+            <p>Symptome, die im Zusammenhang mit dem Störungszustand auftreten
+                können:
+            <div> {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }} </div>
+            </p>
             <p>Wenn ein Symptom nicht in der Liste enthalten ist, fügen Sie es bitte über das Textfeld
                 ein: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
             <p style="color: #B40404;">
                 {% for i in symptoms_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Liste der zu überprüfenden Komponenten (die in der Liste zurest kommen, sollten zuerst überprüft werden):
+            <p>Liste der zu überprüfenden Komponenten (nennen Sie die Komponenten zuerst, die als erstes überprüft
+                werden sollen):
             <div>{{ form.suspect_components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
             </p>
             <p>Wenn Sie eine Komponente hinzufügen möchten, die nicht in der Liste enthalten ist, nutzen Sie dafür bitte
