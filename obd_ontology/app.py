@@ -115,6 +115,10 @@ class SuspectComponentsForm(FlaskForm):
     Form for the component page.
     """
     component_name = StringField("")
+    existing_components = SelectField("",
+                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       validate_choice=False)
+    existing_components_submit = SubmitField("Daten anzeigen")
     boolean_choices = [("Nein", "Nein",), ("Ja", "Ja")]
     final_submit = SubmitField('Absenden')
     affecting_component_submit = SubmitField('Komponente hinzufügen')
@@ -265,6 +269,14 @@ def component_form():
 
         elif form.clear_affecting_components.data:  # button that clears the affecting component list has been clicked
             get_session_variable_list("affecting_components").clear()
+
+        elif form.existing_components_submit.data: # user wants to see data for an existing component
+            existing_component_name = form.existing_components.data
+            existing_affecting_components = kg_query_tool.query_affected_by_relations_by_suspect_component(existing_component_name)
+            session["affecting_components"] = existing_affecting_components
+            form.component_name.data = existing_component_name
+            oscilloscope_useful = kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
+            form.measurements_possible.data = "Ja" if oscilloscope_useful else "Nein"
 
     else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
         session["affecting_components_empty_warning_received"] = None
