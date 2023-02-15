@@ -18,6 +18,8 @@
             {{ form.csrf_token }}
             <br>
             <p>Komponenten-Set: {{ form.set_name(size=20) }}</p>
+            <p> Alternativ können Sie eine bereits bestehende Komponente auswählen und verändern: </p>
+            <div> {{ form.existing_component_sets }} {{ form.existing_component_set_submit }}</div>
             <p>Listen Sie Komponenten auf, die zu diesem Fahrzeug-Komponenten-Set gehören (wenn die Komponente, die Sie
                 hinzufügen möchten, nicht im Dropdown-Menü enthalten ist, können Sie sie über
                 <a href="component_form">dieses</a> Formular hinzufügen):</p>
