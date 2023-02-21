@@ -278,13 +278,16 @@ def component_form():
 
         elif form.existing_components_submit.data:  # user wants to see data for an existing component
             existing_component_name = form.existing_components.data
-            existing_affecting_components = kg_query_tool.query_affected_by_relations_by_suspect_component(
-                existing_component_name)
-            session["affecting_components"] = existing_affecting_components
-            form.component_name.data = existing_component_name
-            oscilloscope_useful = kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[
-                0]
-            form.measurements_possible.data = "Ja" if oscilloscope_useful else "Nein"
+            if existing_component_name is None:
+                flash("Keine Daten verfügbar")
+            else:
+                existing_affecting_components = kg_query_tool.query_affected_by_relations_by_suspect_component(
+                    existing_component_name)
+                session["affecting_components"] = existing_affecting_components
+                form.component_name.data = existing_component_name
+                oscilloscope_useful = \
+                kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
+                form.measurements_possible.data = "Ja" if oscilloscope_useful else "Nein"
 
     else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
         session["affecting_components_empty_warning_received"] = None
@@ -573,14 +576,17 @@ def dtc_form():
 
         elif form.existing_dtc_submit.data:  # user wants to see data for existing DTCs
             existing_dtc = form.existing_dtcs.data
-            session["occurs_with_list"] = kg_query_tool.query_co_occurring_trouble_codes(existing_dtc)
-            session["component_list"] = kg_query_tool.query_suspect_components_by_dtc(existing_dtc)
-            session["symptom_list"] = kg_query_tool.query_symptoms_by_dtc(existing_dtc)
-            form.dtc_name.data = existing_dtc
-            try:
-                form.fault_condition.data = kg_query_tool.query_fault_condition_by_dtc(existing_dtc)[0]
-            except IndexError:
-                form.fault_condition.data = ""
+            if existing_dtc is None:
+                flash("Keine Daten verfügbar")
+            else:
+                session["occurs_with_list"] = kg_query_tool.query_co_occurring_trouble_codes(existing_dtc)
+                session["component_list"] = kg_query_tool.query_suspect_components_by_dtc(existing_dtc)
+                session["symptom_list"] = kg_query_tool.query_symptoms_by_dtc(existing_dtc)
+                form.dtc_name.data = existing_dtc
+                try:
+                    form.fault_condition.data = kg_query_tool.query_fault_condition_by_dtc(existing_dtc)[0]
+                except IndexError:
+                    form.fault_condition.data = ""
 
     # reset variable that specifies whether warning has been shown
     if form.dtc_name.data != session.get("dtc_name"):
@@ -679,10 +685,14 @@ def component_set_form():
 
         elif form.existing_component_set_submit.data:  # user wants to see data for existing component sets
             component_set_name = form.existing_component_sets.data
-            session["comp_set_components"] = kg_query_tool.query_includes_relation_by_component_set(component_set_name)
-            session["verifying_components"] = kg_query_tool.query_verifies_relations_by_component_set(
-                component_set_name)
-            form.set_name.data = component_set_name
+            if component_set_name is None:
+                flash("Keine Daten verfügbar")
+            else:
+                session["comp_set_components"] = kg_query_tool.query_includes_relation_by_component_set(
+                    component_set_name)
+                session["verifying_components"] = kg_query_tool.query_verifies_relations_by_component_set(
+                    component_set_name)
+                form.set_name.data = component_set_name
 
     # reset variable that specifies whether warning has been shown
     if form.set_name.data != session.get("comp_set_name"):
