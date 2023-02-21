@@ -702,6 +702,16 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_2d14e436_0628_4cbc_bbb6_d0c1a5735cf2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_2d14e436_0628_4cbc_bbb6_d0c1a5735cf2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
+        <subsystem_name>unknown</subsystem_name>
+        <rdfs:label xml:lang="en">unknown_sub</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b">
