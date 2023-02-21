@@ -293,6 +293,7 @@ def component_form():
         session["component_name"] = None
     # update SelectField choices
     form.affecting_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
+    form.existing_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
 
     return render_template('component_form.html', form=form,
                            affecting_components_variable_list=get_session_variable_list("affecting_components"))
@@ -589,6 +590,7 @@ def dtc_form():
     form.symptoms.choices = kg_query_tool.query_all_symptom_instances()
     form.suspect_components.choices = kg_query_tool.query_all_component_instances()
     form.occurs_with.choices = kg_query_tool.query_all_dtc_instances(False)
+    form.existing_dtcs.choices = kg_query_tool.query_all_dtc_instances()
 
     return render_template('DTC_form.html', form=form,
                            suspect_components_variable_list=get_session_variable_list("component_list"),
@@ -689,6 +691,7 @@ def component_set_form():
     # update choices for the SelectFields
     form.components.choices = kg_query_tool.query_all_component_instances()
     form.verifying_components.choices = kg_query_tool.query_all_component_instances()
+    form.existing_component_sets.choices = kg_query_tool.query_all_component_set_instances()
 
     return render_template('component_set_form.html', form=form,
                            components_variable_list=get_session_variable_list("comp_set_components"),
