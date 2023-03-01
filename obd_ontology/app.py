@@ -68,27 +68,27 @@ class DTCForm(FlaskForm):
     """
     Form for the DTC page.
     """
-    dtc_name = StringField("DTC:")
+    dtc_name = StringField("")
     occurs_with = SelectField("",
                               choices=make_tuple_list(kg_query_tool.query_all_dtc_instances(False)),
                               validate_choice=False)
-    occurs_with_submit = SubmitField("Add DTC")
-    clear_occurs_with = SubmitField("Clear list")
-    fault_condition = StringField("Fault condition")
+    occurs_with_submit = SubmitField("DTC hinzufügen")
+    clear_occurs_with = SubmitField("Liste leeren")
+    fault_condition = StringField("")
     symptoms_list = make_tuple_list(kg_query_tool.query_all_symptom_instances())
     symptoms = SelectField("", choices=symptoms_list,
                            validate_choice=False)
-    symptoms_submit = SubmitField("Add symptom")
-    clear_symptoms = SubmitField("Clear list")
+    symptoms_submit = SubmitField("Symptom hinzufügen")
+    clear_symptoms = SubmitField("Liste leeren")
     new_symptom = StringField("")
-    new_symptom_submit = SubmitField("Add new symptom")
+    new_symptom_submit = SubmitField("Neues Symptom hinzufügen")
     suspect_components = SelectField(
         "",
         choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False)
-    add_component_submit = SubmitField("Add component")
-    clear_components = SubmitField("Clear list")
-    final_submit = SubmitField("Submit")
-    clear_everything = SubmitField("Clear")
+    add_component_submit = SubmitField("Komponente hinzufügen")
+    clear_components = SubmitField("Liste leeren")
+    final_submit = SubmitField("Absenden")
+    clear_everything = SubmitField("Alle Listen leeren")
 
 
 class ComponentSetForm(FlaskForm):
@@ -96,18 +96,18 @@ class ComponentSetForm(FlaskForm):
     Form for the component set page.
     """
     set_name = StringField("")
-    components = SelectField(
-        "", choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False
-    )
-    add_component_submit = SubmitField("Add to list")
-    clear_components = SubmitField("Clear list")
-    verifying_components = SelectField(
-        "", choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False
-    )
-    verifying_components_submit = SubmitField("Add to list")
-    clear_verifying_components = SubmitField("Clear list")
-    final_submit = SubmitField("Submit")
-    clear_everything = SubmitField("Clear")
+    components = SelectField("",
+                             choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                             validate_choice=False)
+    add_component_submit = SubmitField("Komponente hinzufügen")
+    clear_components = SubmitField("Liste leeren")
+    verifying_components = SelectField("",
+                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       validate_choice=False)
+    verifying_components_submit = SubmitField("Komponente hinzufügen")
+    clear_verifying_components = SubmitField("Liste leeren")
+    final_submit = SubmitField("Absenden")
+    clear_everything = SubmitField("Alle Listen leeren")
 
 
 class SuspectComponentsForm(FlaskForm):
@@ -115,10 +115,10 @@ class SuspectComponentsForm(FlaskForm):
     Form for the component page.
     """
     component_name = StringField("")
-    boolean_choices = [("No", "No",), ("Yes", "Yes")]
-    final_submit = SubmitField('Submit component')
-    affecting_component_submit = SubmitField('Add to list')
-    clear_affecting_components = SubmitField("Clear list")
+    boolean_choices = [("Nein", "Nein",), ("Ja", "Ja")]
+    final_submit = SubmitField('Absenden')
+    affecting_component_submit = SubmitField('Komponente hinzufügen')
+    clear_affecting_components = SubmitField("Liste leeren")
     measurements_possible = SelectField(choices=boolean_choices)
     affecting_components = SelectField("",
                                        choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
@@ -226,8 +226,8 @@ def component_form():
                             facts_to_be_removed
                         )
                     # add component to the knowledge graph
-                    assert form.measurements_possible.data == "Yes" or form.measurements_possible.data == "No"
-                    oscilloscope_useful = True if form.measurements_possible.data == "Yes" else False
+                    assert form.measurements_possible.data == "Ja" or form.measurements_possible.data == "Nein"
+                    oscilloscope_useful = True if form.measurements_possible.data == "Ja" else False
                     add_component_to_knowledge_graph(suspect_component=form.component_name.data,
                                                      affected_by=entered_affecting_comps,
                                                      oscilloscope=oscilloscope_useful)
@@ -238,25 +238,26 @@ def component_form():
                     session["affecting_components_empty_warning_received"] = None
                     # show success message
                     if form.component_name.data == session.get("component_name"):
-                        flash(f"The component {form.component_name.data} has successfully been overwritten.")
+                        flash(f"Die Komponente {form.component_name.data} wurde erfolgreich überschrieben.")
                     else:
-                        flash(f"The component {form.component_name.data} has successfully been added.")
+                        flash(f"Die Komponente {form.component_name.data} wurde erfolgreich hinzugefügt.")
                     return redirect(url_for('component_form'))
 
                 elif comp_part_of_kg and not warning_already_shown:
-                    flash("WARNING: This component already exists! If you are sure that you want to overwrite it,"
-                          " please click the submit button one more time.")
+                    flash(
+                        "WARNUNG: Diese Komponente existiert bereits! Wenn Sie sicher sind, dass Sie sie "
+                        "überschreiben möchten, klicken Sie bitte erneut auf den \"Absenden\"-Button.")
                     session["component_name"] = form.component_name.data
 
                 elif not entered_affecting_comps and not session.get("affecting_components_empty_warning_received"):
-                    flash("WARNING: You do not have specified any components that affect the current component! "
-                          "Please make sure to add all affecting components that you know about. If you are "
-                          "sure that you do not want to add any affecting components, please click the submit "
-                          "button one more time.")
+                    flash("WARNUNG: Sie haben keine Komponenten angegeben, die die aktuelle Komponente beeinflussen! "
+                          "Bitte fügen Sie alle Komponenten hinzu, von denen Sie wissen, dass sie die aktuelle "
+                          "Komponente beeinflussen. Wenn Sie sicher sind, dass Sie keine beeinflussenden Komponenten "
+                          "hinzufügen wollen, klicken Sie bitte den  \"Absenden\"-Button erneut.")
                     session["affecting_components_empty_warning_received"] = True
 
             else:  # component name StringField is empty
-                flash("Please enter component name")
+                flash("Bitte geben Sie den Namen der Komponente ein!")
         # a button that is not the final submit button has been clicked
         elif form.affecting_component_submit.data:  # button that adds affecting components to list has been clicked
             if form.affecting_components.data not in get_session_variable_list("affecting_components"):
@@ -461,12 +462,14 @@ def dtc_form():
                             # if the DTC already exists and there has not been a warning yet, flash a warning first
                             if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
                                     and not warning_already_shown:
-                                flash("WARNING: This DTC already exists! If you are sure that you want"
-                                      " to overwrite it, please click the submit button one more time.")
+                                flash(
+                                    "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
+                                    "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
                                 session["dtc_name"] = form.dtc_name.data
                             else:  # either the DTC does not exist yet, or the warning has already been flashed
                                 if not dtc_sanity_check(form.dtc_name.data):
-                                    flash("invalid DTC (not matching expected pattern): " + form.dtc_name.data)
+                                    flash(
+                                        "Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
                                 else:
                                     # replacement confirmation given
                                     if warning_already_shown:
@@ -496,18 +499,20 @@ def dtc_form():
 
                                     # show success message
                                     if form.dtc_name.data == session.get("dtc_name"):
-                                        flash(f"The DTC {form.dtc_name.data} has successfully been overwritten.")
+                                        flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
                                     else:
-                                        flash(f"The DTC {form.dtc_name.data} has successfully been added.")
+                                        flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
                                     return redirect(url_for('dtc_form'))
                         else:  # the list of suspect components is empty
-                            flash("Please list at least one component that should be checked!")
+                            flash("Bitte nennen Sie mindestens eine Komponente, die überprüft werden sollte!")
                     else:  # the list of symptoms is empty
-                        flash("Please add at least one symptom that can occur with the DTC!")
+                        flash(
+                            "Bitte fügen Sie mindestens ein Symptom hinzu, das im Zusammenhang mit dem DTC "
+                            "auftreten kann!")
                 else:  # the StringField for the fault condition is empty
-                    flash("Please enter a fault condition description!")
+                    flash("Bitte geben Sie eine Beschreibung des Fehlerzustands ein!")
             else:  # the StringField for the DTC is empty
-                flash("Please enter a DTC code!")
+                flash("Bitte geben Sie den DTC ein!")
 
         # a button that is not the final submit button has been clicked
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
@@ -525,7 +530,7 @@ def dtc_form():
                 if form.new_symptom.data not in get_session_variable_list("symptom_list"):
                     get_session_variable_list("symptom_list").append(form.new_symptom.data)
             else:
-                flash("Please add the new symptom before submitting the symptom!")
+                flash("Bitte schreiben Sie das neue Symptom in das Textfeld, bevor Sie versuchen, es hinzuzufügen!")
 
         elif form.occurs_with_submit.data:  # button that adds other DTC to the occurs_with list has been clicked
             if form.occurs_with.data not in get_session_variable_list("occurs_with_list"):
@@ -577,8 +582,10 @@ def component_set_form():
                         # if the comp set already exists and there has not been a warning yet, flash a warning first
                         if form.set_name.data in kg_query_tool.query_all_component_set_instances() \
                                 and not warning_already_shown:
-                            flash("WARNING: This component set already exists! If you are sure that "
-                                  "you want to overwrite it, please click the submit button one more time.")
+                            flash(
+                                "WARNUNG: Dieses Fahrzeug-Komponenten-Set existiert bereits! Wenn Sie sicher sind, "
+                                "dass Sie es überschreiben möchten, klicken Sie bitte noch einmal auf den"
+                                " \"Absenden\"-Button.")
                             session["comp_set_name"] = form.set_name.data
                         else:
                             # replacement confirmation given
@@ -603,19 +610,19 @@ def component_set_form():
                             get_session_variable_list("verifying_components").clear()
                             # show a success message
                             if form.set_name.data == session.get("comp_set_name"):
-                                flash(f"The vehicle component set called {form.set_name.data} "
-                                      f"has successfully been overwritten.")
+                                flash(f"Das Fahrzeug-Komponenten-Set mit dem Namen {form.set_name.data} "
+                                      f"wurde erfolgreich überschrieben.")
                             else:
-                                flash(f"The vehicle component set called {form.set_name.data} "
-                                      f"has successfully been added.")
+                                flash(f"Das Fahrzeug-Komponenten-Set mit dem Namen {form.set_name.data} "
+                                      f"wurde erfolgreich hinzugefügt.")
                             return redirect(url_for('component_set_form'))
                     else:  # the list of verifying components is empty
-                        flash("Please name at least one component that can verify whether this "
-                              "component set works correctly!")
+                        flash("Nennen Sie bitte mindestens eine Komponente, durch die verifiziert werden kann, ob "
+                            "dieses Komponenten-Set korrekt funktioniert!")
                 else:  # the list of components belonging to the component set is empty
-                    flash("Please list the components that this component set comprises!")
+                    flash("Bitte nennen Sie die Komponenten, aus denen dieses Komponenten-Set besteht!")
             else:  # the StringField for the component set name is empty
-                flash("Please enter a name for the component set!")
+                flash("Bitte geben Sie einen Namen für das Komponenten-Set ein!")
 
         # a button that is not the final submit button has been clicked
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked

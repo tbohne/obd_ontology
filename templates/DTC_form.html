@@ -3,52 +3,62 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <title>DTC</title>
 </head>
 
 <body>
-    <header><h1>Add DTC Instance to Knowledge Graph</h1></header>
+<header><h1>Fügen Sie dem Wissensgraphen eine neue DTC-Instanz hinzu</h1></header>
 
-    <section>
-        <article>
-            <p><a href="/">Start page</a> <a href="component_set_form">Add vehicle component set</a> <a href="component_form">Add vehicle component</a></p>
+<section>
+    <article>
+        <p><a href="/">Startseite</a> <a href="component_set_form">Fahrzeug-Komponenten-Set hinzufügen</a> <a
+                href="component_form">Fahrzeug-Komponente hinzufügen</a></p>
 
-            <form method="POST">
-                {{ form.csrf_token }}
-                <br>
-                <p>DTC: {{ form.dtc_name(size=20) }}</p>
-                <p>Other DTCs that frequently occur together with the specified DTC: {{form.occurs_with}} {{form.occurs_with_submit}} {{form.clear_occurs_with}}</p>
-                <p style="color: #B40404;">
-                {%for i in occurs_with_DTCs_variable_list%}
-                    {{i}},
-                {%endfor%}</p>
-                <p>Fault condition for the DTC: {{form.fault_condition}}</p>
-                <p>Symptoms potentially occurring with the fault condition: {{ form.symptoms }} {{form.symptoms_submit}} {{form.clear_symptoms}}</p>
-                <p>If a symptom is not included in the list, please add it in the text box: {{form.new_symptom}} {{form.new_symptom_submit}}</p>
-                <p style="color: #B40404;">
-                {%for i in symptoms_variable_list%}
-                    {{i}},
-                {%endfor%}</p>
-                <p>List of suspect components (those that are first in the list should also be checked first): {{form.suspect_components}} {{form.add_component_submit}} {{form.clear_components}}</p>
-                <p>If you want to add a component that is not included in the list, please add it via <a href="component_form">this</a> form.</p>
-                <p style="color: #B40404;">
-                {%for i in suspect_components_variable_list%}
-                    {{i}},
-                {%endfor%}</p>
-                <p>{{form.final_submit}} {{form.clear_everything}}</p>
-            </form>
+        <form method="POST">
+            {{ form.csrf_token }}
             <br>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <ul class=flashes>
-                        {% for message in messages %}
-                            <li><p style="color: #B40404;">{{ message }}</p></li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-        </article>
-    </section>
+            <p>DTC: {{ form.dtc_name(size=20) }}</p>
+            <p>Andere DTCs, die häufig zusammen mit dem angegebenen DTC
+                auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
+            <p style="color: #B40404;">
+                {% for i in occurs_with_DTCs_variable_list %}
+                    {{ i }},
+                {% endfor %}</p>
+            <p>Störungszustand, den der DTC beschreibt: {{ form.fault_condition }}</p>
+            <p>Symptome, die im Zusammenhang mit dem Störungszustand auftreten
+                können:
+            <div> {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }} </div>
+            </p>
+            <p>Wenn ein Symptom nicht in der Liste enthalten ist, fügen Sie es bitte über das Textfeld
+                ein: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
+            <p style="color: #B40404;">
+                {% for i in symptoms_variable_list %}
+                    {{ i }},
+                {% endfor %}</p>
+            <p>Liste der zu überprüfenden Komponenten (nennen Sie die Komponenten zuerst, die als erstes überprüft
+                werden sollen):
+            <div>{{ form.suspect_components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
+            </p>
+            <p>Wenn Sie eine Komponente hinzufügen möchten, die nicht in der Liste enthalten ist, nutzen Sie dafür bitte
+                <a href="component_form">dieses</a> Formular.</p>
+            <p style="color: #B40404;">
+                {% for i in suspect_components_variable_list %}
+                    {{ i }},
+                {% endfor %}</p>
+            <p>{{ form.final_submit }} {{ form.clear_everything }}</p>
+        </form>
+        <br>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li><p style="color: #B40404;">{{ message }}</p></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </article>
+</section>
 </body>
 </html>
