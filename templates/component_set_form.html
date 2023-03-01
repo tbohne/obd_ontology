@@ -20,8 +20,14 @@
         <form method="POST">
             {{ form.csrf_token }}
             <br>
+            <p>
+                <i>Idee: Wenn ein Fahrzeugkomponenten-Set als nicht fehlerhaft verifiziert wurde, sind sämtliche
+                Komponenten, welche mit diesem assoziiert sind, ebenfalls i.O., was eine Menge redundanter
+                Oszilloskop-Messungen vermeidet.</i>
+            </p>
+            <p></p><p></p>
             <p>Fahrzeugkomponenten-Set: {{ form.set_name(size=20) }}</p>
-            <p>Listen Sie Komponenten auf, die zu diesem Fahrzeugkomponenten-Set gehören
+            <p>Komponenten, die diesem Fahrzeugkomponenten-Set zugeordnet werden
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
             <div>{{ form.components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
@@ -29,7 +35,7 @@
                 {% for i in components_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Wählen Sie Komponenten aus, die die korrekte Funktionalität des Komponenten-Sets verifizieren können
+            <p>Komponenten, die die korrekte Funktionalität des Komponenten-Sets verifizieren können
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
             <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>

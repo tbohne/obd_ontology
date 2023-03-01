@@ -22,7 +22,7 @@
             {{ form.csrf_token }}
             <br>
             <p>DTC: {{ form.dtc_name(size=20) }}</p>
-            <p>Weitere DTCs, die häufig zusammen mit dem angegebenen DTC
+            <p>Weitere DTCs, die erfahrungsgemäß häufig zusammen mit dem angegebenen DTC
                 auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
             <p style="color: #B40404;">
                 {% for i in occurs_with_DTCs_variable_list %}
@@ -32,7 +32,7 @@
             <p>Symptome, die in Zusammenhang mit dem Fehlerzustand auftreten können:
             <div> {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }} </div>
             </p>
-            <p>Wenn ein Symptom nicht in der Liste enthalten ist, fügen Sie es bitte über das Textfeld
+            <p>Ist ein Symptom nicht in der Liste enthalten, fügen Sie es bitte über das Textfeld
                 hinzu: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
             <p style="color: #B40404;">
                 {% for i in symptoms_variable_list %}

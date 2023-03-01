@@ -21,8 +21,8 @@
             <br>
             <p>Name der Fahrzeugkomponente: {{ form.component_name(size=20) }}</p>
             <p>Sind Oszilloskopmessungen für diese Komponente möglich / sinnvoll? {{ form.measurements_possible }}</p>
-            <p>Wählen Sie andere Komponenten aus, deren Fehlfunktion sich auf die betrachtete Komponente auswirken
-                könnte:</p>
+            <p>Komponenten, deren Fehlverhalten das korrekte Funktionieren der betrachteten
+                Komponente beeinträchtigen könnte (<a href="component_form">fehlende Komponente ergänzen</a>):</p>
             <div>{{ form.affecting_components }} {{ form.affecting_component_submit }} {{ form.clear_affecting_components }}</div>
             <p style="color: #B40404;">
                 {% for i in affecting_components_variable_list %}
