@@ -4,25 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title>Fahrzeug-Komponente</title>
+    <title>Fahrzeugkomponente</title>
 </head>
 
 <body>
-<header><h1>Fügen Sie dem Wissensgraphen eine neue Fahrzeug-Komponente hinzu</h1></header>
+<header><h1>Aufnahme von Komponenten-bezogenem Expertenwissen</h1></header>
 <section>
     <article>
-        <p><a href="/">Startseite</a> <a href="component_set_form">Fahrzeug-Komponenten-Set hinzufügen</a> <a
-                href="dtc_form">DTC
-            hinzufügen</a></p>
+        <p>
+            <a href="/">Startseite</a>
+            <a href="component_set_form">Fahrzeugkomponenten-Sets</a>
+            <a href="dtc_form">Diagnostic Trouble Codes (DTCs)</a>
+        </p>
         <form method="POST">
             {{ form.csrf_token }}
             <br>
-            <p>Name der Komponente: {{ form.component_name(size=20) }}</p>
+            <p>Name der Fahrzeugkomponente: {{ form.component_name(size=20) }}</p>
             <p> Alternativ können Sie eine bereits bestehende Komponente auswählen und verändern: </p>
             <div> {{ form.existing_components }} {{ form.existing_components_submit }}</div>
             <p>Sind Oszilloskopmessungen für diese Komponente möglich / sinnvoll? {{ form.measurements_possible }}</p>
-            <p>Wählen Sie andere Komponenten aus, deren Fehlfunktionen sich auf die aktuelle Komponente auswirken
-                können:</p>
+            <p>Komponenten, deren Fehlverhalten das korrekte Funktionieren der betrachteten
+                Komponente beeinträchtigen könnte (<a href="component_form">fehlende Komponente ergänzen</a>):</p>
             <div>{{ form.affecting_components }} {{ form.affecting_component_submit }} {{ form.clear_affecting_components }}</div>
             <p style="color: #B40404;">
                 {% for i in affecting_components_variable_list %}

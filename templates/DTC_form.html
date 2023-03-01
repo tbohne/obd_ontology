@@ -8,12 +8,15 @@
 </head>
 
 <body>
-<header><h1>Fügen Sie dem Wissensgraphen eine neue DTC-Instanz hinzu</h1></header>
+<header><h1>Aufnahme von DTC-bezogenem Expertenwissen</h1></header>
 
 <section>
     <article>
-        <p><a href="/">Startseite</a> <a href="component_set_form">Fahrzeug-Komponenten-Set hinzufügen</a> <a
-                href="component_form">Fahrzeug-Komponente hinzufügen</a></p>
+        <p>
+            <a href="/">Startseite</a>
+            <a href="component_set_form">Fahrzeugkomponenten-Sets</a>
+            <a href="component_form">Fahrzeugkomponenten</a>
+        </p>
 
         <form method="POST">
             {{ form.csrf_token }}
@@ -21,25 +24,24 @@
             <p>DTC: {{ form.dtc_name(size=20) }}</p>
             <p> Alternativ können Sie einen bereits bestehenden DTC auswählen und verändern: </p>
             <div> {{ form.existing_dtcs }} {{ form.existing_dtc_submit }}</div>
-            <p>Andere DTCs, die häufig zusammen mit dem angegebenen DTC
+            <p>Weitere DTCs, die erfahrungsgemäß häufig zusammen mit dem angegebenen DTC
                 auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
             <p style="color: #B40404;">
                 {% for i in occurs_with_DTCs_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Störungszustand, den der DTC beschreibt: {{ form.fault_condition }}</p>
-            <p>Symptome, die im Zusammenhang mit dem Störungszustand auftreten
-                können:
+            <p>Fehlerzustand, den der DTC beschreibt: {{ form.fault_condition }}</p>
+            <p>Symptome, die in Zusammenhang mit dem Fehlerzustand auftreten können:
             <div> {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }} </div>
             </p>
-            <p>Wenn ein Symptom nicht in der Liste enthalten ist, fügen Sie es bitte über das Textfeld
-                ein: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
+            <p>Ist ein Symptom nicht in der Liste enthalten, fügen Sie es bitte über das Textfeld
+                hinzu: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
             <p style="color: #B40404;">
                 {% for i in symptoms_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Liste der zu überprüfenden Komponenten (nennen Sie die Komponenten zuerst, die als erstes überprüft
-                werden sollen):
+            <p>Liste der zu überprüfenden Komponenten (listen Sie die Komponenten in der Reihenfolge auf, in der sie
+                überprüft werden sollten.):
             <div>{{ form.suspect_components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
             </p>
             <p>Wenn Sie eine Komponente hinzufügen möchten, die nicht in der Liste enthalten ist, nutzen Sie dafür bitte

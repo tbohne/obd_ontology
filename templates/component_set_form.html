@@ -4,33 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title>Fahrzeug-Komponenten-Set</title>
+    <title>Fahrzeugkomponenten-Set</title>
 </head>
 
 <body>
-<header><h1>Fügen Sie dem Wissensgraphen ein neues Fahrzeug-Komponenten-Set hinzu</h1></header>
+<header><h1>Aufnahme von Fahrzeugkomponenten-Sets</h1></header>
 
 <section>
     <article>
-        <p><a href="/">Startseite</a> <a href="dtc_form">DTC hinzufügen</a> <a href="component_form">Fahrzeug-Komponente
-            hinzufügen</a></p>
+        <p>
+            <a href="/">Startseite</a>
+            <a href="dtc_form">Diagnostic Trouble Codes (DTCs)</a>
+            <a href="component_form">Fahrzeugkomponenten</a>
+        </p>
         <form method="POST">
             {{ form.csrf_token }}
             <br>
-            <p>Komponenten-Set: {{ form.set_name(size=20) }}</p>
+            <p>
+                <i>Idee: Wenn ein Fahrzeugkomponenten-Set als nicht fehlerhaft verifiziert wurde, sind sämtliche
+                Komponenten, welche mit diesem assoziiert sind, ebenfalls i.O., was eine Menge redundanter
+                Oszilloskop-Messungen vermeidet.</i>
+            </p>
+            <p></p><p></p>
+            <p>Fahrzeugkomponenten-Set: {{ form.set_name(size=20) }}</p>
             <p> Alternativ können Sie eine bereits bestehende Komponente auswählen und verändern: </p>
             <div> {{ form.existing_component_sets }} {{ form.existing_component_set_submit }}</div>
-            <p>Listen Sie Komponenten auf, die zu diesem Fahrzeug-Komponenten-Set gehören (wenn die Komponente, die Sie
-                hinzufügen möchten, nicht im Dropdown-Menü enthalten ist, können Sie sie über
-                <a href="component_form">dieses</a> Formular hinzufügen):</p>
+            <p>Komponenten, die diesem Fahrzeugkomponenten-Set zugeordnet werden
+                (<a href="component_form">fehlende Komponente ergänzen</a>):
+            </p>
             <div>{{ form.components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
             <p style="color: #B40404;">
                 {% for i in components_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Wählen Sie Komponenten aus, mit denen überprüft werden kann, ob das Komponenten-Set korrekt funktioniert
-                (wenn die Komponente, die Sie hinzufügen möchten, nicht im Dropdown-Menü enthalten ist, können Sie sie
-                über <a href="component_form">dieses</a> Formular hinzufügen):</p>
+            <p>Komponenten, die die korrekte Funktionalität des Komponenten-Sets verifizieren können
+                (<a href="component_form">fehlende Komponente ergänzen</a>):
+            </p>
             <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>
             <p style="color: #B40404;">
                 {% for i in verifying_components_list %}
