@@ -583,7 +583,7 @@ def component_set_form():
                         if form.set_name.data in kg_query_tool.query_all_component_set_instances() \
                                 and not warning_already_shown:
                             flash(
-                                "WARNUNG: Dieses Fahrzeug-Komponenten-Set existiert bereits! Wenn Sie sicher sind, "
+                                "WARNUNG: Dieses Fahrzeugkomponenten-Set existiert bereits! Wenn Sie sicher sind, "
                                 "dass Sie es überschreiben möchten, klicken Sie bitte noch einmal auf den"
                                 " \"Absenden\"-Button.")
                             session["comp_set_name"] = form.set_name.data
@@ -610,10 +610,10 @@ def component_set_form():
                             get_session_variable_list("verifying_components").clear()
                             # show a success message
                             if form.set_name.data == session.get("comp_set_name"):
-                                flash(f"Das Fahrzeug-Komponenten-Set mit dem Namen {form.set_name.data} "
+                                flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
                                       f"wurde erfolgreich überschrieben.")
                             else:
-                                flash(f"Das Fahrzeug-Komponenten-Set mit dem Namen {form.set_name.data} "
+                                flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
                                       f"wurde erfolgreich hinzugefügt.")
                             return redirect(url_for('component_set_form'))
                     else:  # the list of verifying components is empty
