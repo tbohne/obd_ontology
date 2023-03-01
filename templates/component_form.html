@@ -19,7 +19,11 @@
         <form method="POST">
             {{ form.csrf_token }}
             <br>
-            <p>Name der Fahrzeugkomponente: {{ form.component_name(size=20) }}</p>
+            <p>Fahrzeugkomponente: {{ form.component_name(size=20) }}</p>
+            <p>
+                (alternativ bestehende Komponente auswählen und anpassen:
+                {{ form.existing_components }} {{ form.existing_components_submit }})
+            </p>
             <p>Sind Oszilloskopmessungen für diese Komponente möglich / sinnvoll? {{ form.measurements_possible }}</p>
             <p>Komponenten, deren Fehlverhalten das korrekte Funktionieren der betrachteten
                 Komponente beeinträchtigen könnte (<a href="component_form">fehlende Komponente ergänzen</a>):</p>

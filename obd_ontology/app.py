@@ -69,6 +69,9 @@ class DTCForm(FlaskForm):
     Form for the DTC page.
     """
     dtc_name = StringField("")
+    existing_dtcs = SelectField("", choices=kg_query_tool.query_all_dtc_instances(),
+                                validate_choice=False)
+    existing_dtc_submit = SubmitField("Daten anzeigen")
     occurs_with = SelectField("",
                               choices=make_tuple_list(kg_query_tool.query_all_dtc_instances(False)),
                               validate_choice=False)
@@ -96,6 +99,9 @@ class ComponentSetForm(FlaskForm):
     Form for the component set page.
     """
     set_name = StringField("")
+    existing_component_sets = SelectField("", choices=kg_query_tool.query_all_component_set_instances(),
+                                          validate_choice=False)
+    existing_component_set_submit = SubmitField("Daten anzeigen")
     components = SelectField("",
                              choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
                              validate_choice=False)
@@ -115,6 +121,10 @@ class SuspectComponentsForm(FlaskForm):
     Form for the component page.
     """
     component_name = StringField("")
+    existing_components = SelectField("",
+                                      choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                      validate_choice=False)
+    existing_components_submit = SubmitField("Daten anzeigen")
     boolean_choices = [("Nein", "Nein",), ("Ja", "Ja")]
     final_submit = SubmitField('Absenden')
     affecting_component_submit = SubmitField('Komponente hinzufügen')
@@ -266,6 +276,19 @@ def component_form():
         elif form.clear_affecting_components.data:  # button that clears the affecting component list has been clicked
             get_session_variable_list("affecting_components").clear()
 
+        elif form.existing_components_submit.data:  # user wants to see data for an existing component
+            existing_component_name = form.existing_components.data
+            if existing_component_name is None:
+                flash("Keine Daten verfügbar")
+            else:
+                existing_affecting_components = kg_query_tool.query_affected_by_relations_by_suspect_component(
+                    existing_component_name)
+                session["affecting_components"] = existing_affecting_components
+                form.component_name.data = existing_component_name
+                oscilloscope_useful = \
+                kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
+                form.measurements_possible.data = "Ja" if oscilloscope_useful else "Nein"
+
     else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
         session["affecting_components_empty_warning_received"] = None
     # reset variable that specifies whether warning has been shown
@@ -273,6 +296,7 @@ def component_form():
         session["component_name"] = None
     # update SelectField choices
     form.affecting_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
+    form.existing_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
 
     return render_template('component_form.html', form=form,
                            affecting_components_variable_list=get_session_variable_list("affecting_components"))
@@ -550,6 +574,20 @@ def dtc_form():
             get_session_variable_list("component_list").clear()
             get_session_variable_list("symptom_list").clear()
 
+        elif form.existing_dtc_submit.data:  # user wants to see data for existing DTCs
+            existing_dtc = form.existing_dtcs.data
+            if existing_dtc is None:
+                flash("Keine Daten verfügbar")
+            else:
+                session["occurs_with_list"] = kg_query_tool.query_co_occurring_trouble_codes(existing_dtc)
+                session["component_list"] = kg_query_tool.query_suspect_components_by_dtc(existing_dtc)
+                session["symptom_list"] = kg_query_tool.query_symptoms_by_dtc(existing_dtc)
+                form.dtc_name.data = existing_dtc
+                try:
+                    form.fault_condition.data = kg_query_tool.query_fault_condition_by_dtc(existing_dtc)[0]
+                except IndexError:
+                    form.fault_condition.data = ""
+
     # reset variable that specifies whether warning has been shown
     if form.dtc_name.data != session.get("dtc_name"):
         session["dtc_name"] = None
@@ -558,6 +596,7 @@ def dtc_form():
     form.symptoms.choices = kg_query_tool.query_all_symptom_instances()
     form.suspect_components.choices = kg_query_tool.query_all_component_instances()
     form.occurs_with.choices = kg_query_tool.query_all_dtc_instances(False)
+    form.existing_dtcs.choices = kg_query_tool.query_all_dtc_instances()
 
     return render_template('DTC_form.html', form=form,
                            suspect_components_variable_list=get_session_variable_list("component_list"),
@@ -618,7 +657,7 @@ def component_set_form():
                             return redirect(url_for('component_set_form'))
                     else:  # the list of verifying components is empty
                         flash("Nennen Sie bitte mindestens eine Komponente, durch die verifiziert werden kann, ob "
-                            "dieses Komponenten-Set korrekt funktioniert!")
+                              "dieses Komponenten-Set korrekt funktioniert!")
                 else:  # the list of components belonging to the component set is empty
                     flash("Bitte nennen Sie die Komponenten, aus denen dieses Komponenten-Set besteht!")
             else:  # the StringField for the component set name is empty
@@ -644,6 +683,17 @@ def component_set_form():
             get_session_variable_list("comp_set_components").clear()
             get_session_variable_list("verifying_components").clear()
 
+        elif form.existing_component_set_submit.data:  # user wants to see data for existing component sets
+            component_set_name = form.existing_component_sets.data
+            if component_set_name is None:
+                flash("Keine Daten verfügbar")
+            else:
+                session["comp_set_components"] = kg_query_tool.query_includes_relation_by_component_set(
+                    component_set_name)
+                session["verifying_components"] = kg_query_tool.query_verifies_relations_by_component_set(
+                    component_set_name)
+                form.set_name.data = component_set_name
+
     # reset variable that specifies whether warning has been shown
     if form.set_name.data != session.get("comp_set_name"):
         session["comp_set_name"] = None
@@ -651,6 +701,7 @@ def component_set_form():
     # update choices for the SelectFields
     form.components.choices = kg_query_tool.query_all_component_instances()
     form.verifying_components.choices = kg_query_tool.query_all_component_instances()
+    form.existing_component_sets.choices = kg_query_tool.query_all_component_set_instances()
 
     return render_template('component_set_form.html', form=form,
                            components_variable_list=get_session_variable_list("comp_set_components"),

@@ -26,7 +26,11 @@
                 Oszilloskop-Messungen vermeidet.</i>
             </p>
             <p></p><p></p>
-            <p>Fahrzeugkomponenten-Set: {{ form.set_name(size=20) }}</p>
+            <p>
+                Fahrzeugkomponenten-Set: {{ form.set_name(size=20) }}
+                (alternativ bestehende Komponente auswählen und anpassen:
+                {{ form.existing_component_sets }} {{ form.existing_component_set_submit }})
+            </p>
             <p>Komponenten, die diesem Fahrzeugkomponenten-Set zugeordnet werden
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>

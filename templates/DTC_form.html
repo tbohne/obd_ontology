@@ -21,7 +21,11 @@
         <form method="POST">
             {{ form.csrf_token }}
             <br>
-            <p>DTC: {{ form.dtc_name(size=20) }}</p>
+            <p>
+                DTC: {{ form.dtc_name(size=20) }}
+                (alternativ bestehenden DTC auswählen und anpassen:
+                {{ form.existing_dtcs }} {{ form.existing_dtc_submit }})
+            </p>
             <p>Weitere DTCs, die erfahrungsgemäß häufig zusammen mit dem angegebenen DTC
                 auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
             <p style="color: #B40404;">
