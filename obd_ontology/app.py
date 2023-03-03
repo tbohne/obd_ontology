@@ -709,4 +709,5 @@ def component_set_form():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    context = ('static/cert.pem', 'static/key.pem')
+    app.run(debug=True, ssl_context=context)
