@@ -32,7 +32,7 @@
                 {% for i in affecting_components_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            {{ form.final_submit }}
+            {{ form.final_submit }} {{ form.clear_everything }}
         </form>
         <br>
         {% with messages = get_flashed_messages() %}
