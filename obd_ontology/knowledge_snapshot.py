@@ -5,17 +5,21 @@
 from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 
-def static_knowledge_check_dtc_perspective():
+def knowledge_snapshot_dtc_perspective():
     """
     Presents the static knowledge that is currently stored in the KG from a DTC-centric perspective.
     """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - DTC PERSPECTIVE")
+    print("###########################################################################\n")
     dtc_instances = qt.query_all_dtc_instances(False)
     for dtc in dtc_instances:
         print(dtc)
         print("\t- occurs with:", qt.query_co_occurring_trouble_codes(dtc, False))
         print("\t- category:", qt.query_fault_cat_by_dtc(dtc, False))
         print("\t- code type:", qt.query_code_type_by_dtc(dtc, False))
-        print("\t- condition:", qt.query_fault_condition_by_dtc(dtc, False))
+        print("\t- fault condition:", qt.query_fault_condition_by_dtc(dtc, False))
+        print("\t- vehicle occurrences:", qt.query_vehicle_by_dtc(dtc, False))
         print("\t- symptoms:", qt.query_symptoms_by_dtc(dtc, False))
         sub_name = qt.query_indicates_by_dtc(dtc, False)
         sub_name = "" if len(sub_name) == 0 else sub_name[0]
@@ -39,10 +43,13 @@ def static_knowledge_check_dtc_perspective():
     print("\n----------------------------------------------------------------------\n")
 
 
-def static_knowledge_check_subsystem_perspective():
+def knowledge_snapshot_subsystem_perspective():
     """
     Presents the static knowledge that is currently stored in the KG from a vehicle-subsystem-centric perspective.
     """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - SUBSYSTEM PERSPECTIVE")
+    print("###########################################################################\n")
     subsystem_instances = qt.query_all_vehicle_subsystem_instances(False)
     for subsystem in subsystem_instances:
         print(subsystem)
@@ -51,10 +58,13 @@ def static_knowledge_check_subsystem_perspective():
     print("\n----------------------------------------------------------------------\n")
 
 
-def static_knowledge_check_component_set_perspective():
+def knowledge_snapshot_component_set_perspective():
     """
     Presents the static knowledge that is currently stored in the KG from a component-set-centric perspective.
     """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - COMPONENT SET PERSPECTIVE")
+    print("###########################################################################\n")
     component_set_instances = qt.query_all_component_set_instances(False)
     for comp_set in component_set_instances:
         print(comp_set)
@@ -62,10 +72,13 @@ def static_knowledge_check_component_set_perspective():
         print("\t- includes:", qt.query_includes_relation_by_component_set(comp_set, False))
 
 
-def static_knowledge_check_component_perspective():
+def knowledge_snapshot_component_perspective():
     """
     Presents the static knowledge that is currently stored in the KG from a component-centric perspective.
     """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - COMPONENT PERSPECTIVE")
+    print("###########################################################################\n")
     component_instances = qt.query_all_component_instances(False)
     for comp in component_instances:
         print(comp)
@@ -77,7 +90,7 @@ def static_knowledge_check_component_perspective():
 
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
-    static_knowledge_check_dtc_perspective()
-    static_knowledge_check_subsystem_perspective()
-    static_knowledge_check_component_perspective()
-    static_knowledge_check_component_set_perspective()
+    knowledge_snapshot_dtc_perspective()
+    knowledge_snapshot_subsystem_perspective()
+    knowledge_snapshot_component_perspective()
+    knowledge_snapshot_component_set_perspective()
