@@ -7,7 +7,7 @@ from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 def knowledge_snapshot_dtc_perspective():
     """
-    Presents the static knowledge that is currently stored in the KG from a DTC-centric perspective.
+    Presents a snapshot of the knowledge currently stored in the KG from a DTC-centric perspective.
     """
     print("###########################################################################")
     print("KNOWLEDGE SNAPSHOT - DTC PERSPECTIVE")
@@ -45,7 +45,7 @@ def knowledge_snapshot_dtc_perspective():
 
 def knowledge_snapshot_subsystem_perspective():
     """
-    Presents the static knowledge that is currently stored in the KG from a vehicle-subsystem-centric perspective.
+    Presents a snapshot of the knowledge currently stored in the KG from a vehicle-subsystem-centric perspective.
     """
     print("###########################################################################")
     print("KNOWLEDGE SNAPSHOT - SUBSYSTEM PERSPECTIVE")
@@ -60,7 +60,7 @@ def knowledge_snapshot_subsystem_perspective():
 
 def knowledge_snapshot_component_set_perspective():
     """
-    Presents the static knowledge that is currently stored in the KG from a component-set-centric perspective.
+    Presents a snapshot of the knowledge currently stored in the KG from a component-set-centric perspective.
     """
     print("###########################################################################")
     print("KNOWLEDGE SNAPSHOT - COMPONENT SET PERSPECTIVE")
@@ -74,7 +74,7 @@ def knowledge_snapshot_component_set_perspective():
 
 def knowledge_snapshot_component_perspective():
     """
-    Presents the static knowledge that is currently stored in the KG from a component-centric perspective.
+    Presents a snapshot of the knowledge currently stored in the KG from a component-centric perspective.
     """
     print("###########################################################################")
     print("KNOWLEDGE SNAPSHOT - COMPONENT PERSPECTIVE")
