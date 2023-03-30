@@ -1,0 +1,137 @@
+###########################################################################
+KNOWLEDGE SNAPSHOT - DTC PERSPECTIVE
+###########################################################################
+
+P2563
+	- occurs with: ['P00AF', 'P226C', 'P2564', 'P2565']
+	- category: ['unsupported dtc']
+	- code type: ['manufacturer-specific']
+	- fault condition: ['Ladedrucksteller-Positionssensor / Signal unplausibel']
+	- vehicle occurrences: []
+	- symptoms: ['Anzeige Bordcomputer: Fehler Start-Stopp-System', 'Fz. erreicht maximal eine Geschwindigkeit von 80 km/h', 'Glühkontrollleuchte leuchtet', 'Glühkontrollleuchte blinkt']
+	- indicates subsystem: vehicle speed control, idle control systems, and auxiliary inputs
+	- indicates vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+	- ordered suspect components:
+		- Ladedrucksteller-Positionssensor
+			use oscilloscope: [True]
+			affected by: []
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+		- VTG-Abgasturbolader
+			use oscilloscope: [False]
+			affected by: ['Ladedrucksteller-Positionssensor']
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+		- Motor-Steuergerät
+			use oscilloscope: [True]
+			affected by: ['Ladedrucksteller-Positionssensor']
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+		- Ladedruck-Magnetventil
+			use oscilloscope: [True]
+			affected by: ['Motor-Steuergerät', 'Ladedruck-Regelventil', 'VTG-Abgasturbolader']
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+		- Ladedruck-Regelventil
+			use oscilloscope: [True]
+			affected by: ['Ladedrucksteller-Positionssensor']
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+
+P00AF
+	- occurs with: ['P2563']
+	- category: ["turbocharger/supercharger boost control 'a' module performance"]
+	- code type: ['generic']
+	- fault condition: ['Abgasturbolader-Steuereinheit 1 / Mechanischer Fehler']
+	- vehicle occurrences: []
+	- symptoms: ['Anzeige Bordcomputer: Fehler Start-Stopp-System', 'Fz. erreicht maximal eine Geschwindigkeit von 80 km/h', 'Glühkontrollleuchte leuchtet', 'Glühkontrollleuchte blinkt']
+	- indicates subsystem: fuel and air metering and auxiliary emission controls
+	- indicates vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+	- ordered suspect components:
+		- Ladedrucksteller-Positionssensor
+			use oscilloscope: [True]
+			affected by: []
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+		- VTG-Abgasturbolader
+			use oscilloscope: [False]
+			affected by: ['Ladedrucksteller-Positionssensor']
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+		- Motor-Steuergerät
+			use oscilloscope: [True]
+			affected by: ['Ladedrucksteller-Positionssensor']
+			verifies: []
+			contained in subsystem: ['vehicle speed control, idle control systems, and auxiliary inputs']
+
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - SUBSYSTEM PERSPECTIVE
+###########################################################################
+
+vehicle speed control, idle control systems, and auxiliary inputs
+	- contains: ['Ladedrucksteller-Positionssensor', 'VTG-Abgasturbolader', 'Motor-Steuergerät', 'Ladedruck-Magnetventil', 'Ladedruck-Regelventil']
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+ignition systems or misfires
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+fuel and air metering and auxiliary emission controls
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+auxiliary emission controls
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+unknown
+	- contains: []
+	- vehicle part(s): []
+hybrid propulsion systems
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+transmission
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+fuel and air metering
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+fuel and air metering – injector circuit
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+computer and output circuit
+	- contains: []
+	- vehicle part(s): ['body (parts that are mainly found in the passenger compartment area)', 'chassis (covers mechanical systems and functions: steering, suspension, and braking)', 'network & vehicle integration (functions that are managed by the onboard computer system)', 'powertrain (engine, transmission, and associated accessories)']
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - COMPONENT PERSPECTIVE
+###########################################################################
+
+Ladedrucksteller-Positionssensor
+	- oscilloscope: [True]
+	- affected by: []
+	- verifies: []
+VTG-Abgasturbolader
+	- oscilloscope: [False]
+	- affected by: ['Ladedrucksteller-Positionssensor']
+	- verifies: []
+Motor-Steuergerät
+	- oscilloscope: [True]
+	- affected by: ['Ladedrucksteller-Positionssensor']
+	- verifies: []
+Ladedruck-Magnetventil
+	- oscilloscope: [True]
+	- affected by: ['Motor-Steuergerät', 'Ladedruck-Regelventil', 'VTG-Abgasturbolader']
+	- verifies: []
+Ladedruck-Regelventil
+	- oscilloscope: [True]
+	- affected by: ['Ladedrucksteller-Positionssensor']
+	- verifies: []
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - COMPONENT SET PERSPECTIVE
+###########################################################################
+
