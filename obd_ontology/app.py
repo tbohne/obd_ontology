@@ -91,7 +91,7 @@ class DTCForm(FlaskForm):
     add_component_submit = SubmitField("Komponente hinzufügen")
     clear_components = SubmitField("Liste leeren")
     final_submit = SubmitField("Absenden")
-    clear_everything = SubmitField("Alles leeren")
+    clear_everything = SubmitField("Eingaben löschen")
 
 
 class ComponentSetForm(FlaskForm):
@@ -113,7 +113,7 @@ class ComponentSetForm(FlaskForm):
     verifying_components_submit = SubmitField("Komponente hinzufügen")
     clear_verifying_components = SubmitField("Liste leeren")
     final_submit = SubmitField("Absenden")
-    clear_everything = SubmitField("Alles leeren")
+    clear_everything = SubmitField("Eingaben löschen")
 
 
 class SuspectComponentsForm(FlaskForm):
@@ -133,7 +133,7 @@ class SuspectComponentsForm(FlaskForm):
     affecting_components = SelectField("",
                                        choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
                                        validate_choice=False)
-    clear_everything = SubmitField("Alles leeren")
+    clear_everything = SubmitField("Eingaben löschen")
 
 
 def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
@@ -287,10 +287,10 @@ def component_form():
                 session["affecting_components"] = existing_affecting_components
                 form.component_name.data = existing_component_name
                 oscilloscope_useful = \
-                kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
+                    kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
                 form.measurements_possible.data = "Ja" if oscilloscope_useful else "Nein"
 
-        elif form.clear_everything.data: # button that clears all lists and text fields has been clicked
+        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("affecting_components").clear()
             form.component_name.data = ""
 
