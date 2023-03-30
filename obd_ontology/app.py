@@ -91,7 +91,7 @@ class DTCForm(FlaskForm):
     add_component_submit = SubmitField("Komponente hinzufügen")
     clear_components = SubmitField("Liste leeren")
     final_submit = SubmitField("Absenden")
-    clear_everything = SubmitField("Alle Listen leeren")
+    clear_everything = SubmitField("Eingaben löschen")
 
 
 class ComponentSetForm(FlaskForm):
@@ -113,7 +113,7 @@ class ComponentSetForm(FlaskForm):
     verifying_components_submit = SubmitField("Komponente hinzufügen")
     clear_verifying_components = SubmitField("Liste leeren")
     final_submit = SubmitField("Absenden")
-    clear_everything = SubmitField("Alle Listen leeren")
+    clear_everything = SubmitField("Eingaben löschen")
 
 
 class SuspectComponentsForm(FlaskForm):
@@ -133,6 +133,7 @@ class SuspectComponentsForm(FlaskForm):
     affecting_components = SelectField("",
                                        choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
                                        validate_choice=False)
+    clear_everything = SubmitField("Eingaben löschen")
 
 
 def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
@@ -286,8 +287,12 @@ def component_form():
                 session["affecting_components"] = existing_affecting_components
                 form.component_name.data = existing_component_name
                 oscilloscope_useful = \
-                kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
+                    kg_query_tool.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
                 form.measurements_possible.data = "Ja" if oscilloscope_useful else "Nein"
+
+        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
+            get_session_variable_list("affecting_components").clear()
+            form.component_name.data = ""
 
     else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
         session["affecting_components_empty_warning_received"] = None
@@ -569,10 +574,12 @@ def dtc_form():
         elif form.clear_symptoms.data:  # button that clears the symptom list has been clicked
             get_session_variable_list("symptom_list").clear()
 
-        elif form.clear_everything.data:  # button that clears all lists has been clicked
+        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("occurs_with_list").clear()
             get_session_variable_list("component_list").clear()
             get_session_variable_list("symptom_list").clear()
+            form.dtc_name.data = ""
+            form.fault_condition.data = ""
 
         elif form.existing_dtc_submit.data:  # user wants to see data for existing DTCs
             existing_dtc = form.existing_dtcs.data
@@ -679,9 +686,10 @@ def component_set_form():
         elif form.clear_verifying_components.data:  # button that clears the verified_by list has been clicked
             get_session_variable_list("verifying_components").clear()
 
-        elif form.clear_everything.data:  # button that clears all lists has been clicked
+        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("comp_set_components").clear()
             get_session_variable_list("verifying_components").clear()
+            form.set_name.data = ""
 
         elif form.existing_component_set_submit.data:  # user wants to see data for existing component sets
             component_set_name = form.existing_component_sets.data
