@@ -623,7 +623,6 @@
         <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association3"/>
         <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association4"/>
         <hasCategory rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de"/>
-        <indicates rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_820d4eca_6718_4a4d_a9cc_f4cfead55317"/>
         <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a"/>
         <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2563</code>
         <code_type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">manufacturer-specific</code_type>
@@ -632,48 +631,6 @@
         <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2564</occurs_with_DTC>
         <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2565</occurs_with_DTC>
         <rdfs:label xml:lang="en">code0</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_0a4536a9_940d_40fd_9a0b_5f6091295bb7 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_0a4536a9_940d_40fd_9a0b_5f6091295bb7">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ignition systems or misfires</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub4</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_0c31185e_2a42_401a_a9f2_75fbf923b584 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_0c31185e_2a42_401a_a9f2_75fbf923b584">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fuel and air metering and auxiliary emission controls</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub1</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_0d5f0bef_20d9_4342_b0eb_430d3deec0e9 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_0d5f0bef_20d9_4342_b0eb_430d3deec0e9">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">auxiliary emission controls</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub5</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -702,16 +659,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_2d14e436_0628_4cbc_bbb6_d0c1a5735cf2 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_2d14e436_0628_4cbc_bbb6_d0c1a5735cf2">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name>unknown</subsystem_name>
-        <rdfs:label xml:lang="en">unknown_sub</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b">
@@ -734,20 +681,6 @@
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Motor-Steuergerät</component_name>
         <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</use_oscilloscope>
         <rdfs:label xml:lang="en">sus2</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4bc3764a_58cd_4395_9306_e54780bd012e -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4bc3764a_58cd_4395_9306_e54780bd012e">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hybrid propulsion systems</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub8</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -806,39 +739,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_820d4eca_6718_4a4d_a9cc_f4cfead55317 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_820d4eca_6718_4a4d_a9cc_f4cfead55317">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <contains rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_4095c250_fe12_42a1_936f_6263c5fd7eee"/>
-        <contains rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562"/>
-        <contains rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a698b149_94ff_4ce1_b011_383c32901f6d"/>
-        <contains rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6"/>
-        <contains rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vehicle speed control, idle control systems, and auxiliary inputs</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub0</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_913d95e3_c590_46cc_8dc8_cd0500b72c5d -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_913d95e3_c590_46cc_8dc8_cd0500b72c5d">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">transmission</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub7</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182 -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182">
@@ -847,26 +747,11 @@
         <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association1"/>
         <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association2"/>
         <hasCategory rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0"/>
-        <indicates rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_0c31185e_2a42_401a_a9f2_75fbf923b584"/>
         <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b"/>
         <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P00AF</code>
         <code_type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">generic</code_type>
         <occurs_with_DTC rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2563</occurs_with_DTC>
         <rdfs:label xml:lang="en">code1</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a4122fdd_efbd_456c_80ee_ae3be1d544e3 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a4122fdd_efbd_456c_80ee_ae3be1d544e3">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fuel and air metering</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub2</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -912,34 +797,6 @@
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VTG-Abgasturbolader</component_name>
         <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</use_oscilloscope>
         <rdfs:label xml:lang="en">sus1</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_e2a89b09_2da2_48fb_a9bf_bd862e2676fe -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_e2a89b09_2da2_48fb_a9bf_bd862e2676fe">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fuel and air metering – injector circuit</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub3</rdfs:label>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_fc146447_0589_46a3_a14c_3bd956ddae37 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_fc146447_0589_46a3_a14c_3bd956ddae37">
-        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#VehicleSubsystem"/>
-        <subsystem_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">computer and output circuit</subsystem_name>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">body (parts that are mainly found in the passenger compartment area)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chassis (covers mechanical systems and functions: steering, suspension, and braking)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">network &amp; vehicle integration (functions that are managed by the onboard computer system)</vehicle_part>
-        <vehicle_part rdf:datatype="http://www.w3.org/2001/XMLSchema#string">powertrain (engine, transmission, and associated accessories)</vehicle_part>
-        <rdfs:label xml:lang="en">sub6</rdfs:label>
     </owl:NamedIndividual>
     
 
