@@ -101,6 +101,13 @@ Run knowledge acquisition front-end (`Flask` server - runs at `localhost:5000`):
 $ python obd_ontology/app.py
 ```
 
+## Knowledge Snapshot
+
+The idea of the knowledge snapshot is to output the knowledge currently stored in the knowledge graph on a concept-by-concept basis. This is useful, for instance, to compare different states via `diff`.
+```
+$ python obd_ontology/knowledge_snapshot.py
+```
+
 ## Interpretation of non-obvious aspects modeled in the ontology
 
 - `use_oscilloscope`: `true` means that it is generally possible to diagnose faults on this component using an oscilloscope
