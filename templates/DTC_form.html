@@ -42,8 +42,13 @@
                 {% for i in symptoms_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Liste der zu überprüfenden Komponenten (listen Sie die Komponenten in der Reihenfolge auf, in der sie
-                überprüft werden sollten.):
+            <p>Liste der fehlerverdächtigen Komponenten: Listen Sie alle Komponenten, die als Ursache in Frage kommen,
+                der Reihe nach auf, sodass die Komponenten, wie am wahrscheinlichsen die Urache des Fehlers sind,
+                zuerst genannt werden. Es sollten nur Komponenten angegeben werden, die Teil des Subsystems sind,
+                mit dem dieser DTC in Verbindung steht. Falls Sie eine nicht ursächliche Komponente aus einem anderen
+                Subsystem angeben möchten, die dennoch in der Lage ist,
+                das korrekte Funktionieren einer oder mehrerer Komponenten innerhalb des Subsystems zu verifizieren,
+                definieren Sie ein <a href="component_set_form">Fahrzeugkomponenten-Set</a>.
             <div>{{ form.suspect_components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
             </p>
             <p>Wenn Sie eine Komponente hinzufügen möchten, die nicht in der Liste enthalten ist, nutzen Sie dafür bitte
