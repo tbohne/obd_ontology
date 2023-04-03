@@ -19,14 +19,14 @@
         <form method="POST">
             {{ form.csrf_token }}
             <br>
-            <p>Fahrzeugkomponente: {{ form.component_name(size=20) }}</p>
+            <p><b>Fahrzeugkomponente</b>: {{ form.component_name(size=20) }}</p>
             <p>
                 (alternativ bestehende Komponente auswählen und anpassen:
                 {{ form.existing_components }} {{ form.existing_components_submit }})
             </p>
-            <p>Sind Oszilloskopmessungen für diese Komponente möglich / sinnvoll? {{ form.measurements_possible }}</p>
-            <p>Komponenten, deren Fehlverhalten das korrekte Funktionieren der betrachteten
-                Komponente beeinträchtigen könnte (<a href="component_form">fehlende Komponente ergänzen</a>):</p>
+            <p>Sind <b>Oszilloskopmessungen</b> für diese Komponente möglich / sinnvoll? {{ form.measurements_possible }}</p>
+            <p><b>Komponenten</b>, deren Fehlverhalten das korrekte Funktionieren der betrachteten
+                Komponente <b>beeinträchtigen</b> könnte (<a href="component_form">fehlende Komponente ergänzen</a>):</p>
             <div>{{ form.affecting_components }} {{ form.affecting_component_submit }} {{ form.clear_affecting_components }}</div>
             <p style="color: #B40404;">
                 {% for i in affecting_components_variable_list %}

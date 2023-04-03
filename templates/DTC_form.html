@@ -22,18 +22,18 @@
             {{ form.csrf_token }}
             <br>
             <p>
-                DTC: {{ form.dtc_name(size=20) }}
+                <b>DTC</b>: {{ form.dtc_name(size=20) }}
                 (alternativ bestehenden DTC auswählen und anpassen:
                 {{ form.existing_dtcs }} {{ form.existing_dtc_submit }})
             </p>
-            <p>Weitere DTCs, die erfahrungsgemäß häufig zusammen mit dem angegebenen DTC
+            <p>Weitere DTCs, die erfahrungsgemäß <b>häufig zusammen mit dem angegebenen DTC</b>
                 auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
             <p style="color: #B40404;">
                 {% for i in occurs_with_DTCs_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Fehlerzustand, den der DTC beschreibt: {{ form.fault_condition }}</p>
-            <p>Symptome, die in Zusammenhang mit dem Fehlerzustand auftreten können:
+            <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition }}</p>
+            <p><b>Symptome</b>, die in Zusammenhang mit dem Fehlerzustand auftreten können:
             <div> {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }} </div>
             </p>
             <p>Ist ein Symptom nicht in der Liste enthalten, fügen Sie es bitte über das Textfeld
@@ -42,7 +42,7 @@
                 {% for i in symptoms_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Liste der fehlerverdächtigen Komponenten: Listen Sie alle Komponenten, die als Ursache infrage kommen,
+            <p>Liste der <b>fehlerverdächtigen Komponenten</b>: Listen Sie alle Komponenten, die als Ursache infrage kommen,
                 der Reihe nach auf, sodass die Komponenten, die am wahrscheinlichsten die Ursache des Fehlers sind,
                 zuerst genannt werden. Es sollten nur Komponenten angegeben werden, die Teil des Subsystems sind,
                 mit dem dieser DTC in Verbindung steht. Falls Sie eine nicht ursächliche Komponente aus einem anderen

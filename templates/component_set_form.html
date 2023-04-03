@@ -27,11 +27,11 @@
             </p>
             <p></p><p></p>
             <p>
-                Fahrzeugkomponenten-Set: {{ form.set_name(size=20) }}
+                <b>Fahrzeugkomponenten-Set</b>: {{ form.set_name(size=20) }}
                 (alternativ bestehende Komponente auswählen und anpassen:
                 {{ form.existing_component_sets }} {{ form.existing_component_set_submit }})
             </p>
-            <p>Komponenten, die diesem Fahrzeugkomponenten-Set zugeordnet werden
+            <p><b>Komponenten</b>, die diesem Fahrzeugkomponenten-Set <b>zugeordnet</b> werden
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
             <div>{{ form.components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
@@ -39,7 +39,7 @@
                 {% for i in components_variable_list %}
                     {{ i }},
                 {% endfor %}</p>
-            <p>Komponenten, die die korrekte Funktionalität des Komponenten-Sets verifizieren können
+            <p><b>Komponenten</b>, die die korrekte Funktionalität des Komponenten-Sets <b>verifizieren</b> können
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
             <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>
