@@ -34,38 +34,54 @@ class ExpertKnowledgeEnhancer:
         self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
         self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
-    def generate_dtc_facts(self, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
+    def generate_dtc_facts(self, dtc_knowledge: DTCKnowledge) -> Tuple[str, str, list]:
         """
         Generates the DTC-related facts to be entered into the knowledge graph.
 
         :param dtc_knowledge: parsed DTC knowledge
-        :return: [DTC UUID, generated fact list]
+        :return: [DTC UUID, subsystem UUID, generated fact list]
         """
         dtc_uuid = "dtc_" + uuid.uuid4().hex
         fact_list = []
+        dtc_parser = DTCParser()
+        parsed_code = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)
+        subsystem_name = parsed_code["vehicle_subsystem"]
+        subsystem_instance = self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)
+        vehicle_part = parsed_code["vehicle_part"]
+
         # check whether DTC to be added is already part of the KG
         dtc_instance = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc_knowledge.dtc)
         if len(dtc_instance) > 0:
             print("Specified DTC (" + dtc_knowledge.dtc + ") already present in KG")
             dtc_uuid = dtc_instance[0].split("#")[1]
+            # subsystem already part of KG
+            assert len(subsystem_instance) > 0
+            subsystem_uuid = subsystem_instance[0].split("#")[1]
         else:
-            dtc_parser = DTCParser()
-            code_type = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["code_type"]
+            code_type = parsed_code["code_type"]
             code_type = "generic" if "generic" in code_type else "manufacturer-specific"
             fact_list = [
                 Fact((dtc_uuid, RDF.type, self.onto_namespace["DTC"].toPython())),
                 Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True),
                 Fact((dtc_uuid, self.onto_namespace.code_type, code_type), property_fact=True)
             ]
-            subsystem_name = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["vehicle_subsystem"]
-            subsystem_instance = self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)
+            # subsystems already part of KG
             if len(subsystem_instance) > 0:
                 subsystem_uuid = subsystem_instance[0].split("#")[1]
-                fact_list.append(Fact((dtc_uuid, self.onto_namespace.indicates, subsystem_uuid)))
+            else:
+                # creating new subsystem
+                subsystem_uuid = "vehicle_subsystem_" + uuid.uuid4().hex
+                fact_list.append(Fact((subsystem_uuid, RDF.type, self.onto_namespace["VehicleSubsystem"].toPython())))
+                fact_list.append(
+                    Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_name), property_fact=True))
+                fact_list.append(
+                    Fact((subsystem_uuid, self.onto_namespace.vehicle_part, vehicle_part), property_fact=True))
+
+            fact_list.append(Fact((dtc_uuid, self.onto_namespace.indicates, subsystem_uuid)))
 
         for code in dtc_knowledge.occurs_with:
             fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
-        return dtc_uuid, fact_list
+        return dtc_uuid, subsystem_uuid, fact_list
 
     def generate_fault_cat_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
         """
@@ -151,12 +167,14 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def generate_facts_to_connect_components_and_dtc(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> list:
+    def generate_facts_to_connect_components_and_dtc(self, dtc_uuid: str, subsystem_uuid: str,
+                                                     dtc_knowledge: DTCKnowledge) -> list:
         """
         Generates the facts that connect the present DTC with associated suspect components, i.e., generating
         the diagnostic associations.
 
         :param dtc_uuid: DTC UUID used to draw the connection to the trouble code
+        :param subsystem_uuid: subsystem UUID used to draw the connection to the subsystem
         :param dtc_knowledge: parsed DTC knowledge
         :return: generated fact list
         """
@@ -189,10 +207,6 @@ class ExpertKnowledgeEnhancer:
                 # automatically adding the suspect component to the vehicle subsystem associated with the DTC
                 dtc_parser = DTCParser()
                 subsystem_name = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["vehicle_subsystem"]
-                subsystem_instance = self.knowledge_graph_query_tool.query_vehicle_subsystem_by_name(subsystem_name)
-                # the subsystems should be predefined
-                assert len(subsystem_instance) > 0
-                subsystem_uuid = subsystem_instance[0].split("#")[1]
 
                 # only add fact if it's not already part of the KG (important because suspect components can be
                 # associated with many DTCs)
@@ -284,11 +298,12 @@ class ExpertKnowledgeEnhancer:
         :param dtc_knowledge: parsed DTC knowledge
         :return: generated fact list
         """
-        dtc_uuid, dtc_facts = self.generate_dtc_facts(dtc_knowledge)
+        dtc_uuid, subsystem_uuid, dtc_facts = self.generate_dtc_facts(dtc_knowledge)
         _, fault_cat_facts = self.generate_fault_cat_facts(dtc_uuid, dtc_knowledge)
         fault_cond_uuid, fault_cond_facts = self.generate_fault_cond_facts(dtc_uuid, dtc_knowledge)
         symptom_facts = self.generate_symptom_facts(fault_cond_uuid, dtc_knowledge)
-        diag_association_facts = self.generate_facts_to_connect_components_and_dtc(dtc_uuid, dtc_knowledge)
+        diag_association_facts = self.generate_facts_to_connect_components_and_dtc(dtc_uuid, subsystem_uuid,
+                                                                                   dtc_knowledge)
         fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
         return fact_list
 
