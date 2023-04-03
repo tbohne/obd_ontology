@@ -19,11 +19,8 @@
         <form method="POST">
             {{ form.csrf_token }}
             <br>
-            <p><b>Fahrzeugkomponente</b>: {{ form.component_name(size=20) }}</p>
-            <p>
-                (alternativ bestehende Komponente auswählen und anpassen:
-                {{ form.existing_components }} {{ form.existing_components_submit }})
-            </p>
+            <p><b>Fahrzeugkomponente</b>: {{ form.component_name(size=20) }} (alternativ bestehende Komponente auswählen
+                und anpassen: {{ form.existing_components }} {{ form.existing_components_submit }})</p>
             <p>Sind <b>Oszilloskopmessungen</b> für diese Komponente möglich / sinnvoll? {{ form.measurements_possible }}</p>
             <p><b>Komponenten</b>, deren Fehlverhalten das korrekte Funktionieren der betrachteten
                 Komponente <b>beeinträchtigen</b> könnte (<a href="component_form">fehlende Komponente ergänzen</a>):</p>
