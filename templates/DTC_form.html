@@ -14,8 +14,8 @@
     <article>
         <p>
             <a href="/">Startseite</a>
-            <a href="component_set_form">Fahrzeugkomponenten-Sets</a>
             <a href="component_form">Fahrzeugkomponenten</a>
+            <a href="component_set_form">Fahrzeugkomponenten-Sets</a>
         </p>
 
         <form method="POST">
@@ -34,7 +34,7 @@
                 {% endfor %}</p>
             <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition }}</p>
             <p><b>Symptome</b>, die in Zusammenhang mit dem Fehlerzustand auftreten können:
-            <div> {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }} </div>
+             {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }}
             </p>
             <p>Ist ein Symptom nicht in der Liste enthalten, fügen Sie es bitte über das Textfeld
                 hinzu: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
