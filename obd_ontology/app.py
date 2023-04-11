@@ -486,52 +486,57 @@ def dtc_form():
                 if form.fault_condition.data:
                     if get_session_variable_list("symptom_list"):
                         if get_session_variable_list("component_list"):
+                            if not form.fault_condition.data in kg_query_tool.query_all_fault_condition_instances() or \
+                                    form.fault_condition.data == kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data)[0]:
 
-                            warning_already_shown = form.dtc_name.data == session.get("dtc_name")
-                            # if the DTC already exists and there has not been a warning yet, flash a warning first
-                            if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
-                                    and not warning_already_shown:
-                                flash(
-                                    "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
-                                    "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
-                                session["dtc_name"] = form.dtc_name.data
-                            else:  # either the DTC does not exist yet, or the warning has already been flashed
-                                if not dtc_sanity_check(form.dtc_name.data):
+                                warning_already_shown = form.dtc_name.data == session.get("dtc_name")
+                                # if the DTC already exists and there has not been a warning yet, flash a warning first
+                                if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
+                                        and not warning_already_shown:
                                     flash(
-                                        "Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
-                                else:
-                                    # replacement confirmation given
-                                    if warning_already_shown:
-                                        dtc_name = session.get("dtc_name")
-                                        # construct all the facts that should be removed
-                                        facts_to_be_removed = []
-                                        add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
-                                        add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
-                                        add_symptom_removal_facts(dtc_name, facts_to_be_removed)
-                                        add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
-                                        # remove all the facts that are newly added now (replacement)
-                                        expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                                            facts_to_be_removed)
-
-                                    # add the DTC to the knowledge graph
-                                    add_dtc_to_knowledge_graph(
-                                        dtc=form.dtc_name.data,
-                                        occurs_with=get_session_variable_list("occurs_with_list"),
-                                        fault_condition=form.fault_condition.data,
-                                        symptoms=get_session_variable_list("symptom_list"),
-                                        suspect_components=get_session_variable_list("component_list"))
-
-                                    # reset lists
-                                    get_session_variable_list("component_list").clear()
-                                    get_session_variable_list("symptom_list").clear()
-                                    get_session_variable_list("occurs_with_list").clear()
-
-                                    # show success message
-                                    if form.dtc_name.data == session.get("dtc_name"):
-                                        flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
+                                        "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
+                                        "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
+                                    session["dtc_name"] = form.dtc_name.data
+                                else:  # either the DTC does not exist yet, or the warning has already been flashed
+                                    if not dtc_sanity_check(form.dtc_name.data):
+                                        flash(
+                                            "Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
                                     else:
-                                        flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
-                                    return redirect(url_for('dtc_form'))
+                                        # replacement confirmation given
+                                        if warning_already_shown:
+                                            dtc_name = session.get("dtc_name")
+                                            # construct all the facts that should be removed
+                                            facts_to_be_removed = []
+                                            add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                                            add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
+                                            add_symptom_removal_facts(dtc_name, facts_to_be_removed)
+                                            add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
+                                            # remove all the facts that are newly added now (replacement)
+                                            expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                                                facts_to_be_removed)
+
+                                        # add the DTC to the knowledge graph
+                                        add_dtc_to_knowledge_graph(
+                                            dtc=form.dtc_name.data,
+                                            occurs_with=get_session_variable_list("occurs_with_list"),
+                                            fault_condition=form.fault_condition.data,
+                                            symptoms=get_session_variable_list("symptom_list"),
+                                            suspect_components=get_session_variable_list("component_list"))
+
+                                        # reset lists
+                                        get_session_variable_list("component_list").clear()
+                                        get_session_variable_list("symptom_list").clear()
+                                        get_session_variable_list("occurs_with_list").clear()
+
+                                        # show success message
+                                        if form.dtc_name.data == session.get("dtc_name"):
+                                            flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
+                                        else:
+                                            flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
+                                        return redirect(url_for('dtc_form'))
+                            else:  # fault condition already exists
+                                flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Jeder DTC muss einem"
+                                      "individuellen Fehlerzustand zugeordnet werden")
                         else:  # the list of suspect components is empty
                             flash("Bitte nennen Sie mindestens eine Komponente, die überprüft werden sollte!")
                     else:  # the list of symptoms is empty
