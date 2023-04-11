@@ -215,58 +215,62 @@ def component_form():
     if form.validate_on_submit():
         if form.final_submit.data:
             if form.component_name.data:
+                if not (form.component_name.data in get_session_variable_list("affecting_components")):
 
-                comp_part_of_kg = form.component_name.data in kg_query_tool.query_all_component_instances()
-                warning_already_shown = form.component_name.data == session.get("component_name")
-                entered_affecting_comps = get_session_variable_list("affecting_components")
+                    comp_part_of_kg = form.component_name.data in kg_query_tool.query_all_component_instances()
+                    warning_already_shown = form.component_name.data == session.get("component_name")
+                    entered_affecting_comps = get_session_variable_list("affecting_components")
 
-                # the component will only be added if:
-                #   - the name of the component does not exist in the KG yet, or a warning has already been flashed
-                #   - there is at least one affecting component specified, or a related warning has already been flashed
-                if (not comp_part_of_kg or warning_already_shown) and (
-                        entered_affecting_comps or session.get("affecting_components_empty_warning_received")):
-                    # replacement confirmation given
-                    if warning_already_shown:
-                        component_name = session.get("component_name")
-                        # construct all the facts that should be removed
-                        facts_to_be_removed = []
-                        add_use_oscilloscope_removal_fact(component_name, facts_to_be_removed)
-                        add_affected_by_removal_fact(component_name, facts_to_be_removed)
-                        # remove all the facts that are newly added now (replacement)
-                        expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                            facts_to_be_removed
-                        )
-                    # add component to the knowledge graph
-                    assert form.measurements_possible.data == "Ja" or form.measurements_possible.data == "Nein"
-                    oscilloscope_useful = True if form.measurements_possible.data == "Ja" else False
-                    add_component_to_knowledge_graph(suspect_component=form.component_name.data,
-                                                     affected_by=entered_affecting_comps,
-                                                     oscilloscope=oscilloscope_useful)
-                    # update SelectField
-                    form.affecting_components.choices = kg_query_tool.query_all_component_instances()
-                    # reset variables related to the newly added component
-                    get_session_variable_list("affecting_components").clear()
-                    session["affecting_components_empty_warning_received"] = None
-                    # show success message
-                    if form.component_name.data == session.get("component_name"):
-                        flash(f"Die Komponente {form.component_name.data} wurde erfolgreich überschrieben.")
-                    else:
-                        flash(f"Die Komponente {form.component_name.data} wurde erfolgreich hinzugefügt.")
-                    return redirect(url_for('component_form'))
+                    # the component will only be added if:
+                    #   - the name of the component does not exist in the KG yet, or a warning has already been flashed
+                    #   - there is at least one affecting component specified, or a related warning has already been flashed
+                    if (not comp_part_of_kg or warning_already_shown) and (
+                            entered_affecting_comps or session.get("affecting_components_empty_warning_received")):
+                        # replacement confirmation given
+                        if warning_already_shown:
+                            component_name = session.get("component_name")
+                            # construct all the facts that should be removed
+                            facts_to_be_removed = []
+                            add_use_oscilloscope_removal_fact(component_name, facts_to_be_removed)
+                            add_affected_by_removal_fact(component_name, facts_to_be_removed)
+                            # remove all the facts that are newly added now (replacement)
+                            expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                                facts_to_be_removed
+                            )
+                        # add component to the knowledge graph
+                        assert form.measurements_possible.data == "Ja" or form.measurements_possible.data == "Nein"
+                        oscilloscope_useful = True if form.measurements_possible.data == "Ja" else False
+                        add_component_to_knowledge_graph(suspect_component=form.component_name.data,
+                                                         affected_by=entered_affecting_comps,
+                                                         oscilloscope=oscilloscope_useful)
+                        # update SelectField
+                        form.affecting_components.choices = kg_query_tool.query_all_component_instances()
+                        # reset variables related to the newly added component
+                        get_session_variable_list("affecting_components").clear()
+                        session["affecting_components_empty_warning_received"] = None
+                        # show success message
+                        if form.component_name.data == session.get("component_name"):
+                            flash(f"Die Komponente {form.component_name.data} wurde erfolgreich überschrieben.")
+                        else:
+                            flash(f"Die Komponente {form.component_name.data} wurde erfolgreich hinzugefügt.")
+                        return redirect(url_for('component_form'))
 
-                elif comp_part_of_kg and not warning_already_shown:
-                    flash(
-                        "WARNUNG: Diese Komponente existiert bereits! Wenn Sie sicher sind, dass Sie sie "
-                        "überschreiben möchten, klicken Sie bitte erneut auf den \"Absenden\"-Button.")
-                    session["component_name"] = form.component_name.data
+                    elif comp_part_of_kg and not warning_already_shown:
+                        flash(
+                            "WARNUNG: Diese Komponente existiert bereits! Wenn Sie sicher sind, dass Sie sie "
+                            "überschreiben möchten, klicken Sie bitte erneut auf den \"Absenden\"-Button.")
+                        session["component_name"] = form.component_name.data
 
-                elif not entered_affecting_comps and not session.get("affecting_components_empty_warning_received"):
-                    flash("WARNUNG: Sie haben keine Komponenten angegeben, die die aktuelle Komponente beeinflussen! "
-                          "Bitte fügen Sie alle Komponenten hinzu, von denen Sie wissen, dass sie die aktuelle "
-                          "Komponente beeinflussen. Wenn Sie sicher sind, dass Sie keine beeinflussenden Komponenten "
-                          "hinzufügen wollen, klicken Sie bitte den  \"Absenden\"-Button erneut.")
-                    session["affecting_components_empty_warning_received"] = True
-
+                    elif not entered_affecting_comps and not session.get("affecting_components_empty_warning_received"):
+                        flash("WARNUNG: Sie haben keine Komponenten angegeben, die die aktuelle Komponente beeinflussen! "
+                              "Bitte fügen Sie alle Komponenten hinzu, von denen Sie wissen, dass sie die aktuelle "
+                              "Komponente beeinflussen. Wenn Sie sicher sind, dass Sie keine beeinflussenden Komponenten "
+                              "hinzufügen wollen, klicken Sie bitte den  \"Absenden\"-Button erneut.")
+                        session["affecting_components_empty_warning_received"] = True
+                        
+                else:  # the component itself is in the list of affecting components
+                    flash("Sie haben angegeben, dass die Komponente von sich selbst beeinflusst wird. Das ist nicht "
+                          "zuflässig.")
             else:  # component name StringField is empty
                 flash("Bitte geben Sie den Namen der Komponente ein!")
         # a button that is not the final submit button has been clicked
@@ -488,52 +492,56 @@ def dtc_form():
                         if get_session_variable_list("component_list"):
                             if not form.fault_condition.data in kg_query_tool.query_all_fault_condition_instances() or \
                                     form.fault_condition.data == kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data)[0]:
+                                if not form.dtc_name.data in get_session_variable_list("occurs_with_list"):
 
-                                warning_already_shown = form.dtc_name.data == session.get("dtc_name")
-                                # if the DTC already exists and there has not been a warning yet, flash a warning first
-                                if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
-                                        and not warning_already_shown:
-                                    flash(
-                                        "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
-                                        "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
-                                    session["dtc_name"] = form.dtc_name.data
-                                else:  # either the DTC does not exist yet, or the warning has already been flashed
-                                    if not dtc_sanity_check(form.dtc_name.data):
+                                    warning_already_shown = form.dtc_name.data == session.get("dtc_name")
+                                    # if the DTC already exists and there has not been a warning yet, flash a warning first
+                                    if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
+                                            and not warning_already_shown:
                                         flash(
-                                            "Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
-                                    else:
-                                        # replacement confirmation given
-                                        if warning_already_shown:
-                                            dtc_name = session.get("dtc_name")
-                                            # construct all the facts that should be removed
-                                            facts_to_be_removed = []
-                                            add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
-                                            add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
-                                            add_symptom_removal_facts(dtc_name, facts_to_be_removed)
-                                            add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
-                                            # remove all the facts that are newly added now (replacement)
-                                            expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                                                facts_to_be_removed)
-
-                                        # add the DTC to the knowledge graph
-                                        add_dtc_to_knowledge_graph(
-                                            dtc=form.dtc_name.data,
-                                            occurs_with=get_session_variable_list("occurs_with_list"),
-                                            fault_condition=form.fault_condition.data,
-                                            symptoms=get_session_variable_list("symptom_list"),
-                                            suspect_components=get_session_variable_list("component_list"))
-
-                                        # reset lists
-                                        get_session_variable_list("component_list").clear()
-                                        get_session_variable_list("symptom_list").clear()
-                                        get_session_variable_list("occurs_with_list").clear()
-
-                                        # show success message
-                                        if form.dtc_name.data == session.get("dtc_name"):
-                                            flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
+                                            "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
+                                            "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
+                                        session["dtc_name"] = form.dtc_name.data
+                                    else:  # either the DTC does not exist yet, or the warning has already been flashed
+                                        if not dtc_sanity_check(form.dtc_name.data):
+                                            flash(
+                                                "Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
                                         else:
-                                            flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
-                                        return redirect(url_for('dtc_form'))
+                                            # replacement confirmation given
+                                            if warning_already_shown:
+                                                dtc_name = session.get("dtc_name")
+                                                # construct all the facts that should be removed
+                                                facts_to_be_removed = []
+                                                add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                                                add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
+                                                add_symptom_removal_facts(dtc_name, facts_to_be_removed)
+                                                add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
+                                                # remove all the facts that are newly added now (replacement)
+                                                expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                                                    facts_to_be_removed)
+
+                                            # add the DTC to the knowledge graph
+                                            add_dtc_to_knowledge_graph(
+                                                dtc=form.dtc_name.data,
+                                                occurs_with=get_session_variable_list("occurs_with_list"),
+                                                fault_condition=form.fault_condition.data,
+                                                symptoms=get_session_variable_list("symptom_list"),
+                                                suspect_components=get_session_variable_list("component_list"))
+
+                                            # reset lists
+                                            get_session_variable_list("component_list").clear()
+                                            get_session_variable_list("symptom_list").clear()
+                                            get_session_variable_list("occurs_with_list").clear()
+
+                                            # show success message
+                                            if form.dtc_name.data == session.get("dtc_name"):
+                                                flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
+                                            else:
+                                                flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
+                                            return redirect(url_for('dtc_form'))
+                                else:  # DTC occurs with itself
+                                    flash("Sie haben eingegeben, dass der DTC häufig mit sich selbst zusammen auftritt. "
+                                          "Das ist nicht zulässig.")
                             else:  # fault condition already exists
                                 flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Jeder DTC muss einem"
                                       "individuellen Fehlerzustand zugeordnet werden")
