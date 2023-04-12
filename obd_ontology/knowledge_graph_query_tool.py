@@ -593,6 +593,29 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_fault_condition_instances(self, verbose: bool = True) -> list:
+        """
+        Queries all fault condition instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all fault conditions stored in the knowledge graph
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: all fault condition instances:", "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        fault_condition_entry = self.complete_ontology_entry('FaultCondition')
+        condition_desc_entry = self.complete_ontology_entry('condition_description')
+        s = f"""
+            SELECT ?desc WHERE {{
+                ?instance a {fault_condition_entry} .
+                ?instance {condition_desc_entry} ?desc .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_fault_condition_instance_by_code(self, dtc: str) -> list:
         """
         Queries the fault condition instance represented by the specified DTC.
