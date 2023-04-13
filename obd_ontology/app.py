@@ -561,8 +561,8 @@ def dtc_form():
                                     flash("Sie haben eingegeben, dass der DTC häufig mit sich selbst zusammen auftritt. "
                                           "Das ist nicht zulässig.")
                             else:  # fault condition already exists
-                                flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Jeder DTC muss einem"
-                                      "individuellen Fehlerzustand zugeordnet werden")
+                                flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Für jeden DTC muss ein "
+                                      "individueller Fehlerzustand eingegeben werden.")
                         else:  # the list of suspect components is empty
                             flash("Bitte nennen Sie mindestens eine Komponente, die überprüft werden sollte!")
                     else:  # the list of symptoms is empty
