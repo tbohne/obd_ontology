@@ -505,7 +505,7 @@ def dtc_form():
                     if get_session_variable_list("symptom_list"):
                         if get_session_variable_list("component_list"):
                             if not form.fault_condition.data in kg_query_tool.query_all_fault_condition_instances() or \
-                                    form.fault_condition.data == kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data)[0]:
+                                    form.fault_condition.data in kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data):
                                 if not form.dtc_name.data in get_session_variable_list("occurs_with_list"):
                                     if not check_for_invalid_characters(form.dtc_name.data):
 
