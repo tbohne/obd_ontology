@@ -282,6 +282,7 @@ def component_form():
                     form.affecting_components.choices = kg_query_tool.query_all_component_instances()
                     # reset variables related to the newly added component
                     get_session_variable_list("affecting_components").clear()
+                    session.modified = True
                     session["affecting_components_empty_warning_received"] = None
                     # show success message
                     if form.component_name.data == session.get("component_name"):
@@ -307,9 +308,11 @@ def component_form():
         elif form.affecting_component_submit.data:  # button that adds affecting components to list has been clicked
             if form.affecting_components.data not in get_session_variable_list("affecting_components"):
                 get_session_variable_list("affecting_components").append(form.affecting_components.data)
+                session.modified = True
 
         elif form.clear_affecting_components.data:  # button that clears the affecting component list has been clicked
             get_session_variable_list("affecting_components").clear()
+            session.modified = True
 
         elif form.existing_components_submit.data:  # user wants to see data for an existing component
             existing_component_name = form.existing_components.data
@@ -326,6 +329,7 @@ def component_form():
 
         elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("affecting_components").clear()
+            session.modified = True
             form.component_name.data = ""
 
     else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
@@ -601,6 +605,7 @@ def dtc_form():
                     get_session_variable_list("component_list").clear()
                     get_session_variable_list("symptom_list").clear()
                     get_session_variable_list("occurs_with_list").clear()
+                    session.modified = True
 
                     # show success message
                     if form.dtc_name.data == session.get("dtc_name"):
@@ -613,11 +618,13 @@ def dtc_form():
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
             if form.suspect_components.data not in get_session_variable_list("component_list"):
                 get_session_variable_list("component_list").append(form.suspect_components.data)
+                session.modified = True
 
         # button that adds symptoms from the SelectField to the symptom list has been clicked
         elif form.symptoms_submit.data:
             if form.symptoms.data not in get_session_variable_list("symptom_list"):
                 get_session_variable_list("symptom_list").append(form.symptoms.data)
+                session.modified = True
 
         # button that adds symptoms from the StringField to the symptom list has been clicked
         elif form.new_symptom_submit.data:
@@ -625,6 +632,7 @@ def dtc_form():
                 if not check_for_invalid_characters(form.new_symptom.data):
                     if form.new_symptom.data not in get_session_variable_list("symptom_list"):
                         get_session_variable_list("symptom_list").append(form.new_symptom.data)
+                        session.modified = True
                 else:  # found an invalid special character
                     flash("Ungültiges Sonderzeichen im Symptom-Eingabefeld gefunden!")
             else:  # no input text in the symptom StringField
@@ -633,20 +641,25 @@ def dtc_form():
         elif form.occurs_with_submit.data:  # button that adds other DTC to the occurs_with list has been clicked
             if form.occurs_with.data not in get_session_variable_list("occurs_with_list"):
                 get_session_variable_list("occurs_with_list").append(form.occurs_with.data)
+                session.modified = True
 
         elif form.clear_occurs_with.data:  # button that clears the occurs_with list has been clicked
             get_session_variable_list("occurs_with_list").clear()
+            session.modified = True
 
         elif form.clear_components.data:  # button that clears the component list has been clicked
             get_session_variable_list("component_list").clear()
+            session.modified = True
 
         elif form.clear_symptoms.data:  # button that clears the symptom list has been clicked
             get_session_variable_list("symptom_list").clear()
+            session.modified = True
 
         elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("occurs_with_list").clear()
             get_session_variable_list("component_list").clear()
             get_session_variable_list("symptom_list").clear()
+            session.modified = True
             form.dtc_name.data = ""
             form.fault_condition.data = ""
 
@@ -750,6 +763,7 @@ def component_set_form():
                     # reset lists
                     get_session_variable_list("comp_set_components").clear()
                     get_session_variable_list("verifying_components").clear()
+                    session.modified = True
                     # show a success message
                     if form.set_name.data == session.get("comp_set_name"):
                         flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
@@ -763,21 +777,26 @@ def component_set_form():
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
             if form.components.data not in get_session_variable_list("comp_set_components"):
                 get_session_variable_list("comp_set_components").append(form.components.data)
+                session.modified = True
 
         # button that adds components to the verified_by list has been clicked
         elif form.verifying_components_submit.data:
             if form.verifying_components.data not in get_session_variable_list("verifying_components"):
                 get_session_variable_list("verifying_components").append(form.verifying_components.data)
+                session.modified = True
 
         elif form.clear_components.data:  # button that clears the component list has been clicked
             get_session_variable_list("comp_set_components").clear()
+            session.modified = True
 
         elif form.clear_verifying_components.data:  # button that clears the verified_by list has been clicked
             get_session_variable_list("verifying_components").clear()
+            session.modified = True
 
         elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("comp_set_components").clear()
             get_session_variable_list("verifying_components").clear()
+            session.modified = True
             form.set_name.data = ""
 
         elif form.existing_component_set_submit.data:  # user wants to see data for existing component sets
