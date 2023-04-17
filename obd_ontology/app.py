@@ -64,15 +64,14 @@ def get_session_variable_list(name: str) -> list:
     return session.get(name)
 
 
-def check_for_invalid_characters(input_string: str) -> bool:
+def invalid_characters(input_string: str) -> bool:
     """
-    Checks whether a string contains invalid special characters, return true if invalid special characters have been found.
+    Checks whether a string contains invalid special characters, returns true if an invalid character has been found.
 
     :param input_string: string that should be checked
-    :return: boolean that indicates whether an invalid special character has been found.
+    :return: boolean that indicates whether an invalid special character has been found
     """
     valid_special_characters = " ,'()-:&"
-
     return any(not c.isalnum() and c not in valid_special_characters for c in input_string)
 
 
@@ -217,26 +216,26 @@ def main():
     return render_template('index.html')
 
 
-def check_SuspectComponentsForm(form: SuspectComponentsForm) -> bool:
+def check_suspect_components_form(form: SuspectComponentsForm) -> bool:
     """
     Checks if all user inputs to the component form are complete and correct.
 
     If a problem has been found, a corresponding message is flashed.
 
-    :param form: the SuspectComponentsForm that should be checked.
-    :return: True if the form has been filled out completely and correctly, else False.
+    :param form: the SuspectComponentsForm that should be checked
+    :return: True if the form has been filled out completely and correctly, else False
     """
     if not form.component_name.data:
         # component name StringField is empty
         flash("Bitte geben Sie den Namen der Komponente ein!")
         return False
-    if check_for_invalid_characters(form.component_name.data):
+    if invalid_characters(form.component_name.data):
         # found an invalid special character in component name StringField
         flash("Ungültiges Sonderzeichen im Namen der Komponente!")
         return False
     if form.component_name.data in get_session_variable_list("affecting_components"):
         # the component itself is in the list of affecting components
-        flash("Sie haben angegeben, dass die Komponente von sich selbst beeinflusst wird. Das ist nicht zuflässig.")
+        flash("Sie haben angegeben, dass die Komponente von sich selbst beeinflusst wird. Das ist nicht zulässig.")
         return False
     return True
 
@@ -250,7 +249,7 @@ def component_form():
 
     if form.validate_on_submit():
         if form.final_submit.data:
-            if check_SuspectComponentsForm(form):
+            if check_suspect_components_form(form):
 
                 comp_part_of_kg = form.component_name.data in kg_query_tool.query_all_component_instances()
                 warning_already_shown = form.component_name.data == session.get("component_name")
@@ -510,22 +509,22 @@ def add_affected_by_removal_fact(component_name: str, facts_to_be_removed: list)
         ))
 
 
-def check_DTCForm(form: DTCForm) -> bool:
+def check_dtc_form(form: DTCForm) -> bool:
     """
     Checks if all user inputs to the DTC form are complete and correct.
 
     If a problem has been found, a corresponding message is flashed.
 
-    :param form: the DTCForm that should be checked.
-    :return: True if the form has been filled out completely and correctly, else False.
+    :param form: the DTCForm that should be checked
+    :return: True if the form has been filled out completely and correctly, else False
     """
     if not form.dtc_name.data:
         # the StringField for the DTC is empty
         flash("Bitte geben Sie den DTC ein!")
         return False
-    if check_for_invalid_characters(form.dtc_name.data):
+    if invalid_characters(form.dtc_name.data):
         # found an invalid special character in DTC
-        flash("Ungülitges Sonderzeichen im DTC-Eingabefeld!")
+        flash("Ungültiges Sonderzeichen im DTC-Eingabefeld!")
         return False
     if not dtc_sanity_check(form.dtc_name.data):
         # invalid DTC pattern
@@ -540,7 +539,7 @@ def check_DTCForm(form: DTCForm) -> bool:
         # the StringField for the fault condition is empty
         flash("Bitte geben Sie eine Beschreibung des Fehlerzustands ein!")
         return False
-    if not (form.fault_condition.data not in kg_query_tool.query_all_fault_condition_instances() or \
+    if not (form.fault_condition.data not in kg_query_tool.query_all_fault_condition_instances() or
             form.fault_condition.data in kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data)):
         # fault condition already exists
         flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Für jeden DTC muss ein "
@@ -569,7 +568,7 @@ def dtc_form():
 
     if form.validate_on_submit():
         if form.final_submit.data:
-            if check_DTCForm(form):
+            if check_dtc_form(form):
 
                 warning_already_shown = form.dtc_name.data == session.get("dtc_name")
                 # if the DTC already exists and there has not been a warning yet, flash a warning first
@@ -629,7 +628,7 @@ def dtc_form():
         # button that adds symptoms from the StringField to the symptom list has been clicked
         elif form.new_symptom_submit.data:
             if form.new_symptom.data:
-                if not check_for_invalid_characters(form.new_symptom.data):
+                if not invalid_characters(form.new_symptom.data):
                     if form.new_symptom.data not in get_session_variable_list("symptom_list"):
                         get_session_variable_list("symptom_list").append(form.new_symptom.data)
                         session.modified = True
@@ -693,20 +692,20 @@ def dtc_form():
                            occurs_with_DTCs_variable_list=get_session_variable_list("occurs_with_list"))
 
 
-def check_ComponentSetForm(form: ComponentSetForm) -> bool:
+def check_component_set_form(form: ComponentSetForm) -> bool:
     """
     Checks if all user inputs to the component set form are complete and correct.
 
     If a problem has been found, a corresponding message is flashed.
 
-    :param form: the ComponentSetForm that should be checked.
-    :return: True if the form has been filled out completely and correctly, else False.
+    :param form: the ComponentSetForm that should be checked
+    :return: True if the form has been filled out completely and correctly, else False
     """
     if not form.set_name.data:
         # the StringField for the component set name is empty
         flash("Bitte geben Sie einen Namen für das Komponenten-Set ein!")
         return False
-    if check_for_invalid_characters(form.set_name.data):
+    if invalid_characters(form.set_name.data):
         # found an invalid special character in the set name
         flash("Ungültiges Sonderzeichen im Namen des Komponenten-Sets gefunden!")
         return False
@@ -731,7 +730,7 @@ def component_set_form():
 
     if form.validate_on_submit():
         if form.final_submit.data:
-            if check_ComponentSetForm(form):
+            if check_component_set_form(form):
 
                 warning_already_shown = form.set_name.data == session.get("comp_set_name")
                 # if the comp set already exists and there has not been a warning yet, flash a warning first
