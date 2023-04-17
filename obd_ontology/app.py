@@ -668,7 +668,12 @@ def dtc_form():
                 flash("Keine Daten verfügbar")
             else:
                 session["occurs_with_list"] = kg_query_tool.query_co_occurring_trouble_codes(existing_dtc)
-                session["component_list"] = kg_query_tool.query_suspect_components_by_dtc(existing_dtc)
+                suspect_components = kg_query_tool.query_suspect_components_by_dtc(existing_dtc, False)
+                ordered_sus_comp = {
+                    int(kg_query_tool.query_diagnostic_association_by_dtc_and_sus_comp(existing_dtc, comp, False)[0]):
+                        comp for comp in suspect_components
+                }
+                session["component_list"] = [ordered_sus_comp[i] for i in range(len(suspect_components))]
                 session["symptom_list"] = kg_query_tool.query_symptoms_by_dtc(existing_dtc)
                 form.dtc_name.data = existing_dtc
                 try:
