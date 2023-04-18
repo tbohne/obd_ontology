@@ -3,5 +3,3 @@ __pycache__/
 templates/dummy.txt
 build/
 obd_ontology.egg-info/
-static/cert.pem
-static/key.pem

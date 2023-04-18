@@ -829,5 +829,5 @@ def component_set_form():
 
 
 if __name__ == '__main__':
-    context = ('static/cert.pem', 'static/key.pem')
+    context = 'adhoc'
     app.run(debug=True, ssl_context=context)
