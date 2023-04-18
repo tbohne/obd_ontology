@@ -64,6 +64,17 @@ def get_session_variable_list(name: str) -> list:
     return session.get(name)
 
 
+def invalid_characters(input_string: str) -> bool:
+    """
+    Checks whether a string contains invalid special characters, returns true if an invalid character has been found.
+
+    :param input_string: string that should be checked
+    :return: boolean that indicates whether an invalid special character has been found
+    """
+    valid_special_characters = " ,'()-:&"
+    return any(not c.isalnum() and c not in valid_special_characters for c in input_string)
+
+
 class DTCForm(FlaskForm):
     """
     Form for the DTC page.
@@ -205,6 +216,30 @@ def main():
     return render_template('index.html')
 
 
+def check_suspect_components_form(form: SuspectComponentsForm) -> bool:
+    """
+    Checks if all user inputs to the component form are complete and correct.
+
+    If a problem has been found, a corresponding message is flashed.
+
+    :param form: the SuspectComponentsForm that should be checked
+    :return: True if the form has been filled out completely and correctly, else False
+    """
+    if not form.component_name.data:
+        # component name StringField is empty
+        flash("Bitte geben Sie den Namen der Komponente ein!")
+        return False
+    if invalid_characters(form.component_name.data):
+        # found an invalid special character in component name StringField
+        flash("Ungültiges Sonderzeichen im Namen der Komponente!")
+        return False
+    if form.component_name.data in get_session_variable_list("affecting_components"):
+        # the component itself is in the list of affecting components
+        flash("Sie haben angegeben, dass die Komponente von sich selbst beeinflusst wird. Das ist nicht zulässig.")
+        return False
+    return True
+
+
 @app.route('/component_form', methods=['GET', 'POST'])
 def component_form():
     """
@@ -214,7 +249,7 @@ def component_form():
 
     if form.validate_on_submit():
         if form.final_submit.data:
-            if form.component_name.data:
+            if check_suspect_components_form(form):
 
                 comp_part_of_kg = form.component_name.data in kg_query_tool.query_all_component_instances()
                 warning_already_shown = form.component_name.data == session.get("component_name")
@@ -246,6 +281,7 @@ def component_form():
                     form.affecting_components.choices = kg_query_tool.query_all_component_instances()
                     # reset variables related to the newly added component
                     get_session_variable_list("affecting_components").clear()
+                    session.modified = True
                     session["affecting_components_empty_warning_received"] = None
                     # show success message
                     if form.component_name.data == session.get("component_name"):
@@ -267,15 +303,15 @@ def component_form():
                           "hinzufügen wollen, klicken Sie bitte den  \"Absenden\"-Button erneut.")
                     session["affecting_components_empty_warning_received"] = True
 
-            else:  # component name StringField is empty
-                flash("Bitte geben Sie den Namen der Komponente ein!")
         # a button that is not the final submit button has been clicked
         elif form.affecting_component_submit.data:  # button that adds affecting components to list has been clicked
             if form.affecting_components.data not in get_session_variable_list("affecting_components"):
                 get_session_variable_list("affecting_components").append(form.affecting_components.data)
+                session.modified = True
 
         elif form.clear_affecting_components.data:  # button that clears the affecting component list has been clicked
             get_session_variable_list("affecting_components").clear()
+            session.modified = True
 
         elif form.existing_components_submit.data:  # user wants to see data for an existing component
             existing_component_name = form.existing_components.data
@@ -292,6 +328,7 @@ def component_form():
 
         elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("affecting_components").clear()
+            session.modified = True
             form.component_name.data = ""
 
     else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
@@ -472,6 +509,55 @@ def add_affected_by_removal_fact(component_name: str, facts_to_be_removed: list)
         ))
 
 
+def check_dtc_form(form: DTCForm) -> bool:
+    """
+    Checks if all user inputs to the DTC form are complete and correct.
+
+    If a problem has been found, a corresponding message is flashed.
+
+    :param form: the DTCForm that should be checked
+    :return: True if the form has been filled out completely and correctly, else False
+    """
+    if not form.dtc_name.data:
+        # the StringField for the DTC is empty
+        flash("Bitte geben Sie den DTC ein!")
+        return False
+    if invalid_characters(form.dtc_name.data):
+        # found an invalid special character in DTC
+        flash("Ungültiges Sonderzeichen im DTC-Eingabefeld!")
+        return False
+    if not dtc_sanity_check(form.dtc_name.data):
+        # invalid DTC pattern
+        flash("Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
+        return False
+    if form.dtc_name.data in get_session_variable_list("occurs_with_list"):
+        # DTC occurs with itself
+        flash("Sie haben eingegeben, dass der DTC häufig mit sich selbst zusammen auftritt. "
+              "Das ist nicht zulässig.")
+        return False
+    if not form.fault_condition.data:
+        # the StringField for the fault condition is empty
+        flash("Bitte geben Sie eine Beschreibung des Fehlerzustands ein!")
+        return False
+    if not (form.fault_condition.data not in kg_query_tool.query_all_fault_condition_instances() or
+            form.fault_condition.data in kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data)):
+        # fault condition already exists
+        flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Für jeden DTC muss ein "
+              "individueller Fehlerzustand eingegeben werden.")
+        return False
+    if not get_session_variable_list("symptom_list"):
+        # the list of symptoms is empty
+        flash(
+            "Bitte fügen Sie mindestens ein Symptom hinzu, das im Zusammenhang mit dem DTC "
+            "auftreten kann!")
+        return False
+    if not get_session_variable_list("component_list"):
+        # the list of suspect components is empty
+        flash("Bitte nennen Sie mindestens eine Komponente, die überprüft werden sollte!")
+        return False
+    return True
+
+
 @app.route('/dtc_form', methods=['GET', 'POST'])
 def dtc_form():
     """
@@ -482,102 +568,97 @@ def dtc_form():
 
     if form.validate_on_submit():
         if form.final_submit.data:
-            if form.dtc_name.data:
-                if form.fault_condition.data:
-                    if get_session_variable_list("symptom_list"):
-                        if get_session_variable_list("component_list"):
+            if check_dtc_form(form):
 
-                            warning_already_shown = form.dtc_name.data == session.get("dtc_name")
-                            # if the DTC already exists and there has not been a warning yet, flash a warning first
-                            if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
-                                    and not warning_already_shown:
-                                flash(
-                                    "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
-                                    "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
-                                session["dtc_name"] = form.dtc_name.data
-                            else:  # either the DTC does not exist yet, or the warning has already been flashed
-                                if not dtc_sanity_check(form.dtc_name.data):
-                                    flash(
-                                        "Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
-                                else:
-                                    # replacement confirmation given
-                                    if warning_already_shown:
-                                        dtc_name = session.get("dtc_name")
-                                        # construct all the facts that should be removed
-                                        facts_to_be_removed = []
-                                        add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
-                                        add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
-                                        add_symptom_removal_facts(dtc_name, facts_to_be_removed)
-                                        add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
-                                        # remove all the facts that are newly added now (replacement)
-                                        expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                                            facts_to_be_removed)
+                warning_already_shown = form.dtc_name.data == session.get("dtc_name")
+                # if the DTC already exists and there has not been a warning yet, flash a warning first
+                if form.dtc_name.data in kg_query_tool.query_all_dtc_instances(False) \
+                        and not warning_already_shown:
+                    flash(
+                        "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
+                        "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
+                    session["dtc_name"] = form.dtc_name.data
+                else:  # either the DTC does not exist yet, or the warning has already been flashed
 
-                                    # add the DTC to the knowledge graph
-                                    add_dtc_to_knowledge_graph(
-                                        dtc=form.dtc_name.data,
-                                        occurs_with=get_session_variable_list("occurs_with_list"),
-                                        fault_condition=form.fault_condition.data,
-                                        symptoms=get_session_variable_list("symptom_list"),
-                                        suspect_components=get_session_variable_list("component_list"))
+                    if warning_already_shown:  # replacement confirmation given
+                        dtc_name = session.get("dtc_name")
+                        # construct all the facts that should be removed
+                        facts_to_be_removed = []
+                        add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                        add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
+                        add_symptom_removal_facts(dtc_name, facts_to_be_removed)
+                        add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
+                        # remove all the facts that are newly added now (replacement)
+                        expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                            facts_to_be_removed)
 
-                                    # reset lists
-                                    get_session_variable_list("component_list").clear()
-                                    get_session_variable_list("symptom_list").clear()
-                                    get_session_variable_list("occurs_with_list").clear()
+                    # add the DTC to the knowledge graph
+                    add_dtc_to_knowledge_graph(
+                        dtc=form.dtc_name.data,
+                        occurs_with=get_session_variable_list("occurs_with_list"),
+                        fault_condition=form.fault_condition.data,
+                        symptoms=get_session_variable_list("symptom_list"),
+                        suspect_components=get_session_variable_list("component_list"))
 
-                                    # show success message
-                                    if form.dtc_name.data == session.get("dtc_name"):
-                                        flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
-                                    else:
-                                        flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
-                                    return redirect(url_for('dtc_form'))
-                        else:  # the list of suspect components is empty
-                            flash("Bitte nennen Sie mindestens eine Komponente, die überprüft werden sollte!")
-                    else:  # the list of symptoms is empty
-                        flash(
-                            "Bitte fügen Sie mindestens ein Symptom hinzu, das im Zusammenhang mit dem DTC "
-                            "auftreten kann!")
-                else:  # the StringField for the fault condition is empty
-                    flash("Bitte geben Sie eine Beschreibung des Fehlerzustands ein!")
-            else:  # the StringField for the DTC is empty
-                flash("Bitte geben Sie den DTC ein!")
+                    # reset lists
+                    get_session_variable_list("component_list").clear()
+                    get_session_variable_list("symptom_list").clear()
+                    get_session_variable_list("occurs_with_list").clear()
+                    session.modified = True
+
+                    # show success message
+                    if form.dtc_name.data == session.get("dtc_name"):
+                        flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
+                    else:
+                        flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
+                    return redirect(url_for('dtc_form'))
 
         # a button that is not the final submit button has been clicked
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
             if form.suspect_components.data not in get_session_variable_list("component_list"):
                 get_session_variable_list("component_list").append(form.suspect_components.data)
+                session.modified = True
 
         # button that adds symptoms from the SelectField to the symptom list has been clicked
         elif form.symptoms_submit.data:
             if form.symptoms.data not in get_session_variable_list("symptom_list"):
                 get_session_variable_list("symptom_list").append(form.symptoms.data)
+                session.modified = True
 
         # button that adds symptoms from the StringField to the symptom list has been clicked
         elif form.new_symptom_submit.data:
             if form.new_symptom.data:
-                if form.new_symptom.data not in get_session_variable_list("symptom_list"):
-                    get_session_variable_list("symptom_list").append(form.new_symptom.data)
-            else:
+                if not invalid_characters(form.new_symptom.data):
+                    if form.new_symptom.data not in get_session_variable_list("symptom_list"):
+                        get_session_variable_list("symptom_list").append(form.new_symptom.data)
+                        session.modified = True
+                else:  # found an invalid special character
+                    flash("Ungültiges Sonderzeichen im Symptom-Eingabefeld gefunden!")
+            else:  # no input text in the symptom StringField
                 flash("Bitte schreiben Sie das neue Symptom in das Textfeld, bevor Sie versuchen, es hinzuzufügen!")
 
         elif form.occurs_with_submit.data:  # button that adds other DTC to the occurs_with list has been clicked
             if form.occurs_with.data not in get_session_variable_list("occurs_with_list"):
                 get_session_variable_list("occurs_with_list").append(form.occurs_with.data)
+                session.modified = True
 
         elif form.clear_occurs_with.data:  # button that clears the occurs_with list has been clicked
             get_session_variable_list("occurs_with_list").clear()
+            session.modified = True
 
         elif form.clear_components.data:  # button that clears the component list has been clicked
             get_session_variable_list("component_list").clear()
+            session.modified = True
 
         elif form.clear_symptoms.data:  # button that clears the symptom list has been clicked
             get_session_variable_list("symptom_list").clear()
+            session.modified = True
 
         elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("occurs_with_list").clear()
             get_session_variable_list("component_list").clear()
             get_session_variable_list("symptom_list").clear()
+            session.modified = True
             form.dtc_name.data = ""
             form.fault_condition.data = ""
 
@@ -616,6 +697,35 @@ def dtc_form():
                            occurs_with_DTCs_variable_list=get_session_variable_list("occurs_with_list"))
 
 
+def check_component_set_form(form: ComponentSetForm) -> bool:
+    """
+    Checks if all user inputs to the component set form are complete and correct.
+
+    If a problem has been found, a corresponding message is flashed.
+
+    :param form: the ComponentSetForm that should be checked
+    :return: True if the form has been filled out completely and correctly, else False
+    """
+    if not form.set_name.data:
+        # the StringField for the component set name is empty
+        flash("Bitte geben Sie einen Namen für das Komponenten-Set ein!")
+        return False
+    if invalid_characters(form.set_name.data):
+        # found an invalid special character in the set name
+        flash("Ungültiges Sonderzeichen im Namen des Komponenten-Sets gefunden!")
+        return False
+    if not get_session_variable_list("comp_set_components"):
+        # the list of components belonging to the component set is empty
+        flash("Bitte nennen Sie die Komponenten, aus denen dieses Komponenten-Set besteht!")
+        return False
+    if not get_session_variable_list("verifying_components"):
+        # the list of verifying components is empty
+        flash("Nennen Sie bitte mindestens eine Komponente, durch die verifiziert werden kann, ob "
+              "dieses Komponenten-Set korrekt funktioniert!")
+        return False
+    return True
+
+
 @app.route('/component_set_form', methods=['GET', 'POST'])
 def component_set_form():
     """
@@ -625,75 +735,72 @@ def component_set_form():
 
     if form.validate_on_submit():
         if form.final_submit.data:
-            if form.set_name.data:
-                if get_session_variable_list("comp_set_components"):
-                    if get_session_variable_list("verifying_components"):
+            if check_component_set_form(form):
 
-                        warning_already_shown = form.set_name.data == session.get("comp_set_name")
-                        # if the comp set already exists and there has not been a warning yet, flash a warning first
-                        if form.set_name.data in kg_query_tool.query_all_component_set_instances() \
-                                and not warning_already_shown:
-                            flash(
-                                "WARNUNG: Dieses Fahrzeugkomponenten-Set existiert bereits! Wenn Sie sicher sind, "
-                                "dass Sie es überschreiben möchten, klicken Sie bitte noch einmal auf den"
-                                " \"Absenden\"-Button.")
-                            session["comp_set_name"] = form.set_name.data
-                        else:
-                            # replacement confirmation given
-                            if warning_already_shown:
-                                comp_set_name = session.get("comp_set_name")
-                                # construct all the facts that should be removed
-                                facts_to_be_removed = []
-                                add_included_component_removal_facts(comp_set_name, facts_to_be_removed)
-                                add_verifying_component_removal_facts(comp_set_name, facts_to_be_removed)
-                                # remove all the facts that are newly added now (replacement)
-                                expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                                    facts_to_be_removed
-                                )
-                            # add the component set to the knowledge graph
-                            add_component_set_to_knowledge_graph(
-                                component_set=form.set_name.data,
-                                includes=get_session_variable_list("comp_set_components"),
-                                verified_by=get_session_variable_list("verifying_components")
-                            )
-                            # reset lists
-                            get_session_variable_list("comp_set_components").clear()
-                            get_session_variable_list("verifying_components").clear()
-                            # show a success message
-                            if form.set_name.data == session.get("comp_set_name"):
-                                flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
-                                      f"wurde erfolgreich überschrieben.")
-                            else:
-                                flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
-                                      f"wurde erfolgreich hinzugefügt.")
-                            return redirect(url_for('component_set_form'))
-                    else:  # the list of verifying components is empty
-                        flash("Nennen Sie bitte mindestens eine Komponente, durch die verifiziert werden kann, ob "
-                              "dieses Komponenten-Set korrekt funktioniert!")
-                else:  # the list of components belonging to the component set is empty
-                    flash("Bitte nennen Sie die Komponenten, aus denen dieses Komponenten-Set besteht!")
-            else:  # the StringField for the component set name is empty
-                flash("Bitte geben Sie einen Namen für das Komponenten-Set ein!")
+                warning_already_shown = form.set_name.data == session.get("comp_set_name")
+                # if the comp set already exists and there has not been a warning yet, flash a warning first
+                if form.set_name.data in kg_query_tool.query_all_component_set_instances() \
+                        and not warning_already_shown:
+                    flash(
+                        "WARNUNG: Dieses Fahrzeugkomponenten-Set existiert bereits! Wenn Sie sicher sind, "
+                        "dass Sie es überschreiben möchten, klicken Sie bitte noch einmal auf den"
+                        " \"Absenden\"-Button.")
+                    session["comp_set_name"] = form.set_name.data
+                else:
+                    # replacement confirmation given
+                    if warning_already_shown:
+                        comp_set_name = session.get("comp_set_name")
+                        # construct all the facts that should be removed
+                        facts_to_be_removed = []
+                        add_included_component_removal_facts(comp_set_name, facts_to_be_removed)
+                        add_verifying_component_removal_facts(comp_set_name, facts_to_be_removed)
+                        # remove all the facts that are newly added now (replacement)
+                        expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
+                            facts_to_be_removed
+                        )
+                    # add the component set to the knowledge graph
+                    add_component_set_to_knowledge_graph(
+                        component_set=form.set_name.data,
+                        includes=get_session_variable_list("comp_set_components"),
+                        verified_by=get_session_variable_list("verifying_components")
+                    )
+                    # reset lists
+                    get_session_variable_list("comp_set_components").clear()
+                    get_session_variable_list("verifying_components").clear()
+                    session.modified = True
+                    # show a success message
+                    if form.set_name.data == session.get("comp_set_name"):
+                        flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
+                              f"wurde erfolgreich überschrieben.")
+                    else:
+                        flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
+                              f"wurde erfolgreich hinzugefügt.")
+                    return redirect(url_for('component_set_form'))
 
         # a button that is not the final submit button has been clicked
         elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
             if form.components.data not in get_session_variable_list("comp_set_components"):
                 get_session_variable_list("comp_set_components").append(form.components.data)
+                session.modified = True
 
         # button that adds components to the verified_by list has been clicked
         elif form.verifying_components_submit.data:
             if form.verifying_components.data not in get_session_variable_list("verifying_components"):
                 get_session_variable_list("verifying_components").append(form.verifying_components.data)
+                session.modified = True
 
         elif form.clear_components.data:  # button that clears the component list has been clicked
             get_session_variable_list("comp_set_components").clear()
+            session.modified = True
 
         elif form.clear_verifying_components.data:  # button that clears the verified_by list has been clicked
             get_session_variable_list("verifying_components").clear()
+            session.modified = True
 
         elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             get_session_variable_list("comp_set_components").clear()
             get_session_variable_list("verifying_components").clear()
+            session.modified = True
             form.set_name.data = ""
 
         elif form.existing_component_set_submit.data:  # user wants to see data for existing component sets
