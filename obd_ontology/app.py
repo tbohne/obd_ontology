@@ -34,7 +34,7 @@ csrf = CSRFProtect(app)
 csrf.init_app(app)
 
 if CERT_FILE and KEY_FILE:
-    context = SSL.Context()
+    context = SSL.Context(SSL.SSLv23_METHOD)
     context.use_privatekey_file(KEY_FILE)
     context.use_certificate_file(CERT_FILE)
 else:
