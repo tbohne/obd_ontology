@@ -6,6 +6,7 @@ import logging
 import os
 import re
 
+from OpenSSL import SSL
 from flask import Flask, render_template, redirect, flash, url_for, session
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
@@ -22,12 +23,22 @@ app = Flask(
     template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'templates')),
     static_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'static'))
 )
-app.debug = True
+
+CERT_FILE = os.getenv('CERT_FILE')
+KEY_FILE = os.getenv('KEY_FILE')
+
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 app.app_context()
 
 csrf = CSRFProtect(app)
 csrf.init_app(app)
+
+if CERT_FILE and KEY_FILE:
+    context = SSL.Context()
+    context.use_privatekey_file(KEY_FILE)
+    context.use_certificate_file(CERT_FILE)
+else:
+    context = 'adhoc'
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -829,5 +840,4 @@ def component_set_form():
 
 
 if __name__ == '__main__':
-    context = 'adhoc'
     app.run(debug=True, ssl_context=context)
