@@ -27,6 +27,8 @@ CERT_FILE = os.getenv('CERT_FILE')
 KEY_FILE = os.getenv('KEY_FILE')
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
+# transmit cookies via HTTPS
+app.config['SESSION_COOKIE_SECURE'] = True
 app.app_context()
 
 csrf = CSRFProtect(app)
