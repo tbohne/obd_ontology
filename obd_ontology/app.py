@@ -29,6 +29,8 @@ KEY_FILE = os.getenv('KEY_FILE')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 # transmit cookies via HTTPS
 app.config['SESSION_COOKIE_SECURE'] = True
+# cookies are only sent in requests that originate from the same site (top-level)
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.app_context()
 
 csrf = CSRFProtect(app)
