@@ -725,6 +725,7 @@ def check_component_set_form(form: ComponentSetForm) -> bool:
     if invalid_characters(form.set_name.data):
         # found an invalid special character in the set name
         flash("Ungültiges Sonderzeichen im Namen des Komponenten-Sets gefunden!")
+        form.set_name.data = ""
         return False
     if not get_session_variable_list("comp_set_components"):
         # the list of components belonging to the component set is empty
