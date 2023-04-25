@@ -617,11 +617,11 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_03f59c2b_5c6d_4158_8527_7297e2cfb97d">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
+        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_ccd23a6c_dc7a_48df_983d_c2b5146b3da3"/>
+        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_dd21dfb1_f0e2_4b76_8495_d21663e3150b"/>
         <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association0"/>
         <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association1"/>
         <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association2"/>
-        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association3"/>
-        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association4"/>
         <hasCategory rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_79460e91_17f7_4cf1_bf22_b53620cca4de"/>
         <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a"/>
         <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P2563</code>
@@ -743,9 +743,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_a24cc8ee_d3f2_404c_a223_278e91d7e182">
         <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
-        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association0"/>
-        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association1"/>
-        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association2"/>
+        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association3"/>
+        <hasAssociation rdf:resource="http://www.semanticweb.org/diag_ontology#diagnostic_association4"/>
         <hasCategory rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_7ffb25ca_4253_4e53_b2b1_70f51dde11d0"/>
         <represents rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_3a076db3_d7a0_4317_a0e4_e8662a67891b"/>
         <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P00AF</code>
@@ -789,6 +788,17 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_ccd23a6c_dc7a_48df_983d_c2b5146b3da3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_ccd23a6c_dc7a_48df_983d_c2b5146b3da3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DiagnosticAssociation"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_532f4467_41ec_4189_a96d_7aa9c2618562"/>
+        <priority_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4</priority_id>
+        <rdfs:label xml:lang="en">diag_asso_5</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_cf61ca91_26b3_4de4_bab2_1ad2f01a384e">
@@ -797,6 +807,17 @@
         <component_name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VTG-Abgasturbolader</component_name>
         <use_oscilloscope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</use_oscilloscope>
         <rdfs:label xml:lang="en">sus1</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_dd21dfb1_f0e2_4b76_8495_d21663e3150b -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_dd21dfb1_f0e2_4b76_8495_d21663e3150b">
+        <rdf:type rdf:resource="http://www.semanticweb.org/diag_ontology#DiagnosticAssociation"/>
+        <pointsTo rdf:resource="http://www.semanticweb.org/diag_ontology#OWLNamedIndividual_bc06b5bb_2f72_4ca0_b13e_f0749daca1f6"/>
+        <priority_id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</priority_id>
+        <rdfs:label xml:lang="en">diag_asso27</rdfs:label>
     </owl:NamedIndividual>
     
 
