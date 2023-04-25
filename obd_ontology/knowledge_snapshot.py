@@ -34,6 +34,8 @@ def knowledge_snapshot_dtc_perspective():
             print("\t\t-", ordered_sus_comp[i])
             print("\t\t\tuse oscilloscope:",
                   qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False))
+            print("\t\t\theatmaps for this diag association:",
+                  qt.query_generated_heatmaps_by_dtc_and_sus_comp(dtc, ordered_sus_comp[i], False))
             print("\t\t\taffected by:", qt.query_affected_by_relations_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tverifies:", qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tcontained in subsystem:", qt.query_contains_relation_by_suspect_component(
