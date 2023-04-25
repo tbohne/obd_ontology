@@ -188,7 +188,7 @@ class ExpertKnowledgeEnhancer:
 
             # making sure that there is only one diagnostic association, i.e. one priority ID, between any pair
             # of DTC and suspect component
-            diag_association = self.knowledge_graph_query_tool.query_diagnostic_association_by_dtc_and_sus_comp(
+            diag_association = self.knowledge_graph_query_tool.query_priority_id_by_dtc_and_sus_comp(
                 dtc_knowledge.dtc, comp
             )
             if len(diag_association) > 0:
@@ -289,6 +289,23 @@ class ExpertKnowledgeEnhancer:
             fact_list.append(Fact((verifying_comp_uuid, self.onto_namespace.verifies, comp_set_uuid)))
 
         return fact_list
+
+    def extend_kg_with_heatmap_facts(self, dtc: str, comp: str, heatmap: list) -> None:
+        """
+        Extends the knowledge graph with facts for the specified heatmap.
+
+        :param dtc: DTC to add heatmap for
+        :param comp: suspect component to add heatmap for
+        :param heatmap: heatmap do be added to the diagnostic association between dtc and comp
+        """
+        fact_list = []
+        # retrieve corresponding diagnostic association
+        da_instance = self.knowledge_graph_query_tool.query_diag_association_by_dtc_and_sus_comp(dtc, comp)
+        # the instance has to exist - the suggestion that lead to the heatmap always requires that there is one
+        assert len(da_instance) == 1
+        da_uuid = da_instance[0].split("#")[1]
+        fact_list.append(Fact((da_uuid, self.onto_namespace.generated_heatmap, heatmap), property_fact=True))
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
