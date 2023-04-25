@@ -838,6 +838,44 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_generated_heatmaps_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
+        """
+        Queries the generated heatmaps for the specified code and suspect component.
+
+        :param dtc: diagnostic trouble code to query generated heatmaps for
+        :param comp: suspect component to query generated heatmaps for
+        :param verbose: if true, logging is activated
+        :return: diagnostic association instance
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: generated heatmaps by dtc + suspect component: " + dtc + ", " +
+                          comp, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        diag_association_entry = self.complete_ontology_entry('DiagnosticAssociation')
+        suspect_component_entry = self.complete_ontology_entry('SuspectComponent')
+        code_entry = self.complete_ontology_entry('code')
+        has_association_entry = self.complete_ontology_entry('hasAssociation')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        points_to_entry = self.complete_ontology_entry('pointsTo')
+        heatmap_entry = self.complete_ontology_entry('generated_heatmaps')
+        s = f"""
+            SELECT ?heatmap_entry WHERE {{
+                ?diag_association a {diag_association_entry} .
+                ?diag_association {heatmap_entry} ?heatmap_entry .
+                ?dtc a {dtc_entry} .
+                ?dtc {code_entry} "{dtc}" .
+                ?dtc {has_association_entry} ?diag_association .
+                ?sus a {suspect_component_entry} .
+                ?sus {comp_name_entry} "{comp}" .
+                ?diag_association {points_to_entry} ?sus .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [row['heatmap_entry']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_dtcs_by_vin(self, vin: str) -> list:
         """
         Queries the DTCs (diagnostic trouble codes) for the specified VIN (vehicle identification number).
@@ -1247,6 +1285,7 @@ if __name__ == '__main__':
     qt.print_res(qt.query_fault_condition_instances_by_symptom(symptom_desc))
     qt.print_res(qt.query_priority_id_by_dtc_and_sus_comp(error_code, suspect_comp_name))
     qt.print_res(qt.query_diag_association_by_dtc_and_sus_comp(error_code, suspect_comp_name))
+    qt.print_res(qt.query_generated_heatmaps_by_dtc_and_sus_comp(error_code, suspect_comp_name))
     qt.print_res(qt.query_vehicle_instance_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_model(model))
