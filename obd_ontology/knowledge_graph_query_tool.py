@@ -859,7 +859,7 @@ class KnowledgeGraphQueryTool:
         has_association_entry = self.complete_ontology_entry('hasAssociation')
         comp_name_entry = self.complete_ontology_entry('component_name')
         points_to_entry = self.complete_ontology_entry('pointsTo')
-        heatmap_entry = self.complete_ontology_entry('generated_heatmaps')
+        heatmap_entry = self.complete_ontology_entry('generated_heatmap')
         s = f"""
             SELECT ?heatmap_entry WHERE {{
                 ?diag_association a {diag_association_entry} .
