@@ -682,7 +682,7 @@ def dtc_form():
                 session["occurs_with_list"] = kg_query_tool.query_co_occurring_trouble_codes(existing_dtc)
                 suspect_components = kg_query_tool.query_suspect_components_by_dtc(existing_dtc, False)
                 ordered_sus_comp = {
-                    int(kg_query_tool.query_diagnostic_association_by_dtc_and_sus_comp(existing_dtc, comp, False)[0]):
+                    int(kg_query_tool.query_priority_id_by_dtc_and_sus_comp(existing_dtc, comp, False)[0]):
                         comp for comp in suspect_components
                 }
                 session["component_list"] = [ordered_sus_comp[i] for i in range(len(suspect_components))]

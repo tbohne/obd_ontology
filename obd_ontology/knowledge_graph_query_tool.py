@@ -764,14 +764,14 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_diagnostic_association_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
+    def query_priority_id_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
         """
-        Queries the diagnostic association, i.e., the priority, for the specified code and suspect component.
+        Queries the priority ID of the diagnostic association for the specified code and suspect component.
 
-        :param dtc: diagnostic trouble code to query diagnostic association for
-        :param comp: suspect component to query diagnostic association for
+        :param dtc: diagnostic trouble code to query priority ID for
+        :param comp: suspect component to query priority ID for
         :param verbose: if true, logging is activated
-        :return: diagnostic association instance
+        :return: priority ID
         """
         if verbose:
             print("########################################################################")
@@ -1209,7 +1209,7 @@ if __name__ == '__main__':
     qt.print_res(qt.query_fault_condition_by_description(fault_cond_desc))
     qt.print_res(qt.query_symptoms_by_desc(symptom_desc))
     qt.print_res(qt.query_fault_condition_instances_by_symptom(symptom_desc))
-    qt.print_res(qt.query_diagnostic_association_by_dtc_and_sus_comp(error_code, suspect_comp_name))
+    qt.print_res(qt.query_priority_id_by_dtc_and_sus_comp(error_code, suspect_comp_name))
     qt.print_res(qt.query_vehicle_instance_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_vin(vin))
     qt.print_res(qt.query_dtcs_by_model(model))

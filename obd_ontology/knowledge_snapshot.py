@@ -27,7 +27,7 @@ def knowledge_snapshot_dtc_perspective():
         print("\t- indicates vehicle part(s):", qt.query_vehicle_part_by_subsystem(sub_name, False))
         print("\t- ordered suspect components:")
         suspect_components = qt.query_suspect_components_by_dtc(dtc, False)
-        ordered_sus_comp = {int(qt.query_diagnostic_association_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp
+        ordered_sus_comp = {int(qt.query_priority_id_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp
                             in suspect_components}
 
         for i in range(len(suspect_components)):
