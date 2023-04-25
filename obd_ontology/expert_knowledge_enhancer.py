@@ -8,13 +8,13 @@ from typing import Tuple
 from dtc_parser.parser import DTCParser
 from rdflib import Namespace, RDF
 
-from component_set_knowledge import ComponentSetKnowledge
-from config import ONTOLOGY_PREFIX
-from connection_controller import ConnectionController
-from dtc_knowledge import DTCKnowledge
-from fact import Fact
-from knowledge_graph_query_tool import KnowledgeGraphQueryTool
 from obd_ontology import expert_knowledge_parser
+from obd_ontology.component_set_knowledge import ComponentSetKnowledge
+from obd_ontology.config import ONTOLOGY_PREFIX
+from obd_ontology.connection_controller import ConnectionController
+from obd_ontology.dtc_knowledge import DTCKnowledge
+from obd_ontology.fact import Fact
+from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 
 class ExpertKnowledgeEnhancer:
