@@ -4,9 +4,9 @@
 
 from typing import Union
 
-from component_knowledge import ComponentKnowledge
-from component_set_knowledge import ComponentSetKnowledge
-from dtc_knowledge import DTCKnowledge
+from obd_ontology.component_knowledge import ComponentKnowledge
+from obd_ontology.component_set_knowledge import ComponentSetKnowledge
+from obd_ontology.dtc_knowledge import DTCKnowledge
 
 
 def parse_dtc_expert_template(lines: list) -> DTCKnowledge:
