@@ -8,13 +8,13 @@ from typing import Tuple
 from dtc_parser.parser import DTCParser
 from rdflib import Namespace, RDF
 
-import expert_knowledge_parser
 from component_set_knowledge import ComponentSetKnowledge
 from config import ONTOLOGY_PREFIX
 from connection_controller import ConnectionController
 from dtc_knowledge import DTCKnowledge
 from fact import Fact
 from knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology import expert_knowledge_parser
 
 
 class ExpertKnowledgeEnhancer:
