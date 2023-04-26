@@ -6,6 +6,32 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>Fahrzeugkomponenten-Set</title>
+    <script>
+        function checkSessionValues() {
+            fetch('/session_values')
+                .then(response => response.json())
+                .then(data => {
+                    // compare the returned values with the current values displayed on the page
+                    if (JSON.stringify(data.synchronized_comp_set_components) !== JSON.stringify(sessionStorage.getItem('synchronized_comp_set_components'))) {
+                        sessionStorage.setItem('synchronized_comp_set_components', JSON.stringify(data.synchronized_comp_set_components));
+                        updateList('sync_comp_set_components', data.synchronized_comp_set_components);
+                    }
+                    if (JSON.stringify(data.synchronized_verifying_components) !== JSON.stringify(sessionStorage.getItem('synchronized_verifying_components'))) {
+                        sessionStorage.setItem('synchronized_verifying_components', JSON.stringify(data.synchronized_verifying_components));
+                        updateList('sync_verifying_components', data.synchronized_verifying_components);
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+        function updateList(listId, list) {
+            const listEl = document.getElementById(listId);
+            listEl.textContent = list.join(', ');
+        }
+
+        // call the checkSessionValues function every 3 seconds
+        setInterval(checkSessionValues, 3000);
+    </script>
 </head>
 
 <body>
@@ -23,10 +49,11 @@
             <br>
             <p>
                 <i>Idee: Wenn ein Fahrzeugkomponenten-Set als nicht fehlerhaft verifiziert wurde, sind sämtliche
-                Komponenten, welche mit diesem assoziiert sind, ebenfalls i.O., was eine Menge redundanter
-                Oszilloskop-Messungen vermeidet.</i>
+                    Komponenten, welche mit diesem assoziiert sind, ebenfalls i.O., was eine Menge redundanter
+                    Oszilloskop-Messungen vermeidet.</i>
             </p>
-            <p></p><p></p>
+            <p></p>
+            <p></p>
             <p>
                 <b>Fahrzeugkomponenten-Set</b>: {{ form.set_name(size=20) }}
                 (alternativ bestehende Komponente auswählen und anpassen:
@@ -37,17 +64,24 @@
             </p>
             <div>{{ form.components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
             <p style="color: #B40404;">
+            <ol id="sync_comp_set_components">
                 {% for i in components_variable_list %}
-                    {{ i }},
-                {% endfor %}</p>
+                    {{ i }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </ol>
+            </p>
+
             <p><b>Komponenten</b>, die die korrekte Funktionalität des Komponenten-Sets <b>verifizieren</b> können
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
             <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>
             <p style="color: #B40404;">
+            <ol id="sync_verifying_components">
                 {% for i in verifying_components_list %}
-                    {{ i }},
-                {% endfor %}</p>
+                    {{ i }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </ol>
+            </p>
             <p>{{ form.final_submit }} {{ form.clear_everything }}</p>
         </form>
         <br>
