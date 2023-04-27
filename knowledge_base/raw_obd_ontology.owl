@@ -32,15 +32,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#deletes -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#deletes">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
-    </owl:ObjectProperty>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#hasAssociation -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#hasAssociation">
@@ -55,24 +46,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#hasCategory">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#hasCause -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#hasCause">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#implies -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#implies">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
     </owl:ObjectProperty>
     
 
@@ -133,15 +106,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#resolves -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#resolves">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCondition"/>
-    </owl:ObjectProperty>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#verifies -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#verifies">
@@ -189,15 +153,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#action_description -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#action_description">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#CorrectiveAction"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#affected_by -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#affected_by">
@@ -211,15 +166,6 @@
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#category_description">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCategory"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#cause_description -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#cause_description">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#FaultCause"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
@@ -285,15 +231,6 @@
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#occurs_with_DTC">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DTC"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#position_description -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#position_description">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#MeasuringPos"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
@@ -381,20 +318,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#CorrectiveAction -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#CorrectiveAction">
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#action_description"/>
-                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#DTC -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#DTC">
@@ -444,40 +367,12 @@
     
 
 
-    <!-- http://www.semanticweb.org/diag_ontology#FaultCause -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#FaultCause">
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#cause_description"/>
-                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    
-
-
     <!-- http://www.semanticweb.org/diag_ontology#FaultCondition -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#FaultCondition">
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#condition_description"/>
-                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#MeasuringPos -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#MeasuringPos">
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#position_description"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
             </owl:Restriction>
