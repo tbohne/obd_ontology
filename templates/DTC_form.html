@@ -6,6 +6,36 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>DTC</title>
+    <script>
+        function checkSessionValues() {
+            fetch('/session_values')
+                .then(response => response.json())
+                .then(data => {
+                    // compare the returned values with the current values displayed on the page
+                    if (JSON.stringify(data.synchronized_occurs_with_list) !== JSON.stringify(sessionStorage.getItem('synchronized_occurs_with_list'))) {
+                        sessionStorage.setItem('synchronized_occurs_with_list', JSON.stringify(data.synchronized_occurs_with_list));
+                        updateList('sync_occurs_with_list', data.synchronized_occurs_with_list);
+                    }
+                    if (JSON.stringify(data.synchronized_symptom_list) !== JSON.stringify(sessionStorage.getItem('synchronized_symptom_list'))) {
+                        sessionStorage.setItem('synchronized_symptom_list', JSON.stringify(data.synchronized_symptom_list));
+                        updateList('sync_symptom_list', data.synchronized_symptom_list);
+                    }
+                    if (JSON.stringify(data.synchronized_component_list) !== JSON.stringify(sessionStorage.getItem('synchronized_component_list'))) {
+                        sessionStorage.setItem('synchronized_component_list', JSON.stringify(data.synchronized_component_list));
+                        updateList('sync_component_list', data.synchronized_component_list);
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+        function updateList(listId, list) {
+            const listEl = document.getElementById(listId);
+            listEl.textContent = list.join(', ');
+        }
+
+        // call the checkSessionValues function every 3 seconds
+        setInterval(checkSessionValues, 3000);
+    </script>
 </head>
 
 <body>
@@ -30,20 +60,27 @@
             <p>Weitere DTCs, die erfahrungsgemäß <b>häufig zusammen mit dem angegebenen DTC</b>
                 auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
             <p style="color: #B40404;">
+            <ol id="sync_occurs_with_list">
                 {% for i in occurs_with_DTCs_variable_list %}
-                    {{ i }},
-                {% endfor %}</p>
+                    {{ i }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </ol>
+            </p>
             <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition }}</p>
             <p><b>Symptome</b>, die in Zusammenhang mit dem Fehlerzustand auftreten können:
-             {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }}
+                {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }}
             </p>
             <p>Ist ein Symptom nicht in der Liste enthalten, fügen Sie es bitte über das Textfeld
                 hinzu: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
             <p style="color: #B40404;">
+            <ol id="sync_symptom_list">
                 {% for i in symptoms_variable_list %}
-                    {{ i }},
-                {% endfor %}</p>
-            <p>Liste der <b>fehlerverdächtigen Komponenten</b>: Listen Sie alle Komponenten, die als Ursache infrage kommen,
+                    {{ i }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </ol>
+            </p>
+            <p>Liste der <b>fehlerverdächtigen Komponenten</b>: Listen Sie alle Komponenten, die als Ursache infrage
+                kommen,
                 der Reihe nach auf, sodass die Komponenten, die am wahrscheinlichsten die Ursache des Fehlers sind,
                 zuerst genannt werden. Es sollten nur Komponenten angegeben werden, die Teil des Subsystems sind,
                 mit dem dieser DTC in Verbindung steht. Falls Sie eine nicht ursächliche Komponente aus einem anderen
@@ -55,9 +92,12 @@
             <p>Wenn Sie eine Komponente hinzufügen möchten, die nicht in der Liste enthalten ist, nutzen Sie dafür bitte
                 <a href="component_form">dieses</a> Formular.</p>
             <p style="color: #B40404;">
+            <ol id="sync_component_list">
                 {% for i in suspect_components_variable_list %}
-                    {{ i }},
-                {% endfor %}</p>
+                    {{ i }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </ol>
+            </p>
             <p>{{ form.final_submit }} {{ form.clear_everything }}</p>
         </form>
         <br>

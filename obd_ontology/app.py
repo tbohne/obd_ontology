@@ -57,6 +57,9 @@ def get_session_values():
         "synchronized_comp_set_components": get_session_variable_list("comp_set_components"),
         "synchronized_verifying_components": get_session_variable_list("verifying_components"),
         "synchronized_affecting_components": get_session_variable_list("affecting_components"),
+        "synchronized_occurs_with_list": get_session_variable_list("occurs_with_list"),
+        "synchronized_symptom_list": get_session_variable_list("symptom_list"),
+        "synchronized_component_list": get_session_variable_list("component_list"),
     })
 
 
