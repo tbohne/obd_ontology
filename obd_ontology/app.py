@@ -56,6 +56,7 @@ def get_session_values():
     return jsonify({
         "synchronized_comp_set_components": get_session_variable_list("comp_set_components"),
         "synchronized_verifying_components": get_session_variable_list("verifying_components"),
+        "synchronized_affecting_components": get_session_variable_list("affecting_components"),
     })
 
 

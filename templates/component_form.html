@@ -6,6 +6,28 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>Fahrzeugkomponente</title>
+    <script>
+        function checkSessionValues() {
+            fetch('/session_values')
+                .then(response => response.json())
+                .then(data => {
+                    // compare the returned values with the current values displayed on the page
+                    if (JSON.stringify(data.synchronized_affecting_components) !== JSON.stringify(sessionStorage.getItem('synchronized_affecting_components'))) {
+                        sessionStorage.setItem('synchronized_affecting_components', JSON.stringify(data.synchronized_affecting_components));
+                        updateList('sync_affecting_components', data.synchronized_affecting_components);
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+
+        function updateList(listId, list) {
+            const listEl = document.getElementById(listId);
+            listEl.textContent = list.join(', ');
+        }
+
+        // call the checkSessionValues function every 3 seconds
+        setInterval(checkSessionValues, 3000);
+    </script>
 </head>
 
 <body>
@@ -22,14 +44,18 @@
             <br>
             <p><b>Fahrzeugkomponente</b>: {{ form.component_name(size=20) }} (alternativ bestehende Komponente auswählen
                 und anpassen: {{ form.existing_components }} {{ form.existing_components_submit }})</p>
-            <p>Sind <b>Oszilloskopmessungen</b> für diese Komponente möglich / sinnvoll? {{ form.measurements_possible }}</p>
+            <p>Sind <b>Oszilloskopmessungen</b> für diese Komponente möglich /
+                sinnvoll? {{ form.measurements_possible }}</p>
             <p><b>Komponenten</b>, deren Fehlverhalten das korrekte Funktionieren der betrachteten
                 Komponente <b>beeinträchtigen</b> könnte:</p>
             <div>{{ form.affecting_components }} {{ form.affecting_component_submit }} {{ form.clear_affecting_components }}</div>
             <p style="color: #B40404;">
+            <ol id='sync_affecting_components'>
                 {% for i in affecting_components_variable_list %}
-                    {{ i }},
-                {% endfor %}</p>
+                    {{ i }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </ol>
+            </p>
             {{ form.final_submit }} {{ form.clear_everything }}
         </form>
         <br>
