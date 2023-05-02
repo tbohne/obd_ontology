@@ -6,7 +6,7 @@ import logging
 import os
 import re
 
-from flask import Flask, render_template, redirect, flash, url_for, session
+from flask import Flask, render_template, redirect, flash, url_for, session, jsonify
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, SubmitField, SelectField
@@ -46,6 +46,21 @@ logging.basicConfig(level=logging.DEBUG)
 kg_query_tool = KnowledgeGraphQueryTool()
 
 expert_knowledge_enhancer = ExpertKnowledgeEnhancer("")
+
+
+@app.route('/session_values')
+def get_session_values():
+    """
+    This page shows the current state of session variable lists. It is used to synchronize the lists in other tabs.
+    """
+    return jsonify({
+        "synchronized_comp_set_components": get_session_variable_list("comp_set_components"),
+        "synchronized_verifying_components": get_session_variable_list("verifying_components"),
+        "synchronized_affecting_components": get_session_variable_list("affecting_components"),
+        "synchronized_occurs_with_list": get_session_variable_list("occurs_with_list"),
+        "synchronized_symptom_list": get_session_variable_list("symptom_list"),
+        "synchronized_component_list": get_session_variable_list("component_list"),
+    })
 
 
 def make_tuple_list(some_list) -> list:

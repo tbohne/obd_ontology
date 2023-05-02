@@ -115,3 +115,11 @@ footer {
 footer a {
     text-decoration: none;
 }
+
+ol {
+    font-size: 1.2rem;
+    max-width: 1600px;
+    line-height: 1.5;
+    color: #B40404;
+    margin-bottom: 1.5rem;
+}
