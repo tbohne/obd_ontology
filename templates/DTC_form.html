@@ -59,7 +59,7 @@
             </p>
             <p>Weitere DTCs, die erfahrungsgemäß <b>häufig zusammen mit dem angegebenen DTC</b>
                 auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
-            <p style="color: #B40404;">
+            <p>
             <ol id="sync_occurs_with_list">
                 {% for i in occurs_with_DTCs_variable_list %}
                     {{ i }}{% if not loop.last %}, {% endif %}
@@ -72,7 +72,7 @@
             </p>
             <p>Ist ein Symptom nicht in der Liste enthalten, fügen Sie es bitte über das Textfeld
                 hinzu: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
-            <p style="color: #B40404;">
+            <p>
             <ol id="sync_symptom_list">
                 {% for i in symptoms_variable_list %}
                     {{ i }}{% if not loop.last %}, {% endif %}
@@ -91,7 +91,7 @@
             </p>
             <p>Wenn Sie eine Komponente hinzufügen möchten, die nicht in der Liste enthalten ist, nutzen Sie dafür bitte
                 <a href="component_form">dieses</a> Formular.</p>
-            <p style="color: #B40404;">
+            <p>
             <ol id="sync_component_list">
                 {% for i in suspect_components_variable_list %}
                     {{ i }}{% if not loop.last %}, {% endif %}

@@ -52,8 +52,6 @@
                     Komponenten, welche mit diesem assoziiert sind, ebenfalls i.O., was eine Menge redundanter
                     Oszilloskop-Messungen vermeidet.</i>
             </p>
-            <p></p>
-            <p></p>
             <p>
                 <b>Fahrzeugkomponenten-Set</b>: {{ form.set_name(size=20) }}
                 (alternativ bestehende Komponente auswählen und anpassen:
@@ -63,7 +61,7 @@
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
             <div>{{ form.components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
-            <p style="color: #B40404;">
+            <p>
             <ol id="sync_comp_set_components">
                 {% for i in components_variable_list %}
                     {{ i }}{% if not loop.last %}, {% endif %}
@@ -75,7 +73,7 @@
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
             <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>
-            <p style="color: #B40404;">
+            <p>
             <ol id="sync_verifying_components">
                 {% for i in verifying_components_list %}
                     {{ i }}{% if not loop.last %}, {% endif %}
