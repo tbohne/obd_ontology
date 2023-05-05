@@ -51,7 +51,7 @@ class ConnectionController:
         graph = Graph()
         for fact in facts:
             # for very long facts, only print the first segment (e.g. heatmaps)
-            print("fact:", str(fact)[:200] if len(str(fact)) > 0 else fact)
+            print("fact:", str(fact)[:200] + "..." if len(str(fact)) > 0 else fact)
             if fact.property_fact:
                 graph.add((self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), Literal(fact.triple[2])))
             else:
