@@ -50,7 +50,8 @@ class ConnectionController:
         print(colored("\nextending knowledge graph..", "green", "on_grey", ["bold"]))
         graph = Graph()
         for fact in facts:
-            print("fact:", fact)
+            # for very long facts, only print the first segment (e.g. heatmaps)
+            print("fact:", fact[:50] if len(fact) > 0 else fact)
             if fact.property_fact:
                 graph.add((self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), Literal(fact.triple[2])))
             else:
