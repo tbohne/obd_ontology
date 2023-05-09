@@ -268,21 +268,21 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#max_num_of_parallel_rec -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#max_num_of_parallel_rec">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#ParallelRecOscillogramSet"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+        <rdfs:label xml:lang="en">num_of_parallel_rec</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#model -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#model">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#Vehicle"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/diag_ontology#num_of_parallel_rec -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#num_of_parallel_rec">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#ParallelRecOscillogramSet"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-        <rdfs:label xml:lang="en">num_of_parallel_rec</rdfs:label>
     </owl:DatatypeProperty>
     
 
@@ -503,7 +503,7 @@
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#ParallelRecOscillogramSet">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#num_of_parallel_rec"/>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/diag_ontology#max_num_of_parallel_rec"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
             </owl:Restriction>
