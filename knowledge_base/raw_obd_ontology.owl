@@ -48,7 +48,7 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#classifies">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#OscillogramClassification"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#Oscillogram"/>
-        <rdfs:label xml:lang="en">uses</rdfs:label>
+        <rdfs:label xml:lang="en">classifies</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -344,7 +344,7 @@
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/diag_ontology#max_num_of_parallel_rec">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#DiagLog"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-        <rdfs:label xml:lang="en">num_of_parallel_rec</rdfs:label>
+        <rdfs:label xml:lang="en">max_num_of_parallel_rec</rdfs:label>
     </owl:DatatypeProperty>
     
 
