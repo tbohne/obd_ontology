@@ -356,7 +356,7 @@ class ExpertKnowledgeEnhancer:
         )
 
         # connect to component
-        sus_comp_uuid = self.knowledge_graph_query_tool.query_suspect_component_by_name(suspect_comp)
+        sus_comp_uuid = self.knowledge_graph_query_tool.query_suspect_component_by_name(suspect_comp)[0].split("#")[1]
         fact_list.append(
             Fact((osci_classification_uuid, self.onto_namespace.checks, sus_comp_uuid))
         )
@@ -392,7 +392,7 @@ class ExpertKnowledgeEnhancer:
         ]
 
         # connect to component
-        sus_comp_uuid = self.knowledge_graph_query_tool.query_suspect_component_by_name(suspect_comp)
+        sus_comp_uuid = self.knowledge_graph_query_tool.query_suspect_component_by_name(suspect_comp)[0].split("#")[1]
         fact_list.append(
             Fact((manual_inspection_uuid, self.onto_namespace.checks, sus_comp_uuid))
         )
@@ -402,6 +402,8 @@ class ExpertKnowledgeEnhancer:
             fact_list.append(Fact((classification_reason, self.onto_namespace.ledTo, manual_inspection_uuid)))
         else:  # the reason is a classification instance (manual or osci)
             fact_list.append(Fact((classification_reason, self.onto_namespace.reasonFor, manual_inspection_uuid)))
+
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def extend_kg_with_parallel_rec_oscillogram_set_facts(self) -> str:
         """
@@ -469,9 +471,10 @@ class ExpertKnowledgeEnhancer:
         ]
         for dtc in dtc_list:
             dtc_uuid = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)
-            fact_list.append(
-                Fact((dtc_uuid, self.onto_namespace.appearsIn, diag_log_uuid))
-            )
+            if len(dtc_uuid) == 1:
+                fact_list.append(
+                    Fact((dtc_uuid[0].split("#")[1], self.onto_namespace.appearsIn, diag_log_uuid))
+                )
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return diag_log_uuid
 
@@ -497,7 +500,6 @@ class ExpertKnowledgeEnhancer:
         Parses the expert knowledge from the specified file and extends the knowledge graph with it.
         """
         print("parse expert knowledge..")
-
         fact_list = []
 
         if "dtc" in self.knowledge_file:
@@ -518,4 +520,3 @@ class ExpertKnowledgeEnhancer:
 
 if __name__ == '__main__':
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/dtc_expert_template.txt")
-    expert_knowledge_enhancer.extend_knowledge_graph()
