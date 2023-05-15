@@ -368,6 +368,40 @@ class ExpertKnowledgeEnhancer:
 
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
+    def extend_kg_with_manual_inspection_facts(
+            self, prediction: bool, classification_reason: str, suspect_comp: str, diag_log_uuid: str
+    ) -> None:
+        """
+        Extends the knowledge graph with facts for the specified manual inspection.
+
+        :param prediction: prediction of the classification model (True -> POS, False -> NEG)
+        :param classification_reason: diagnostic association or another classification instance
+        :param suspect_comp: vehicle component to which the oscillogram belongs
+        :param diag_log_uuid: ID of the diagnosis log to which the classification belongs
+        """
+        # either UUID of DA or UUID of another classification
+        assert "diag_association_" in classification_reason or "manual_inspection_" in classification_reason \
+               or "oscillogram_classification_" in classification_reason
+
+        manual_inspection_uuid = "manual_inspection_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((manual_inspection_uuid, RDF.type, self.onto_namespace["ManualInspection"].toPython())),
+            Fact((manual_inspection_uuid, self.onto_namespace.prediction, prediction), property_fact=True),
+            Fact((manual_inspection_uuid, self.onto_namespace.diagStep, diag_log_uuid))
+        ]
+
+        # connect to component
+        sus_comp_uuid = self.knowledge_graph_query_tool.query_suspect_component_by_name(suspect_comp)
+        fact_list.append(
+            Fact((manual_inspection_uuid, self.onto_namespace.checks, sus_comp_uuid))
+        )
+
+        # set reason
+        if "diag_association_" in classification_reason:
+            fact_list.append(Fact((classification_reason, self.onto_namespace.ledTo, manual_inspection_uuid)))
+        else:  # the reason is a classification instance (manual or osci)
+            fact_list.append(Fact((classification_reason, self.onto_namespace.reasonFor, manual_inspection_uuid)))
+
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
         Generates all facts obtained from the DTC form / template to be entered into the knowledge graph and extends
