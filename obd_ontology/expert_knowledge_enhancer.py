@@ -402,6 +402,19 @@ class ExpertKnowledgeEnhancer:
         else:  # the reason is a classification instance (manual or osci)
             fact_list.append(Fact((classification_reason, self.onto_namespace.reasonFor, manual_inspection_uuid)))
 
+    def extend_kg_with_parallel_rec_oscillogram_set_facts(self) -> str:
+        """
+        Extends the knowledge graph with facts for parallel recorded oscillograms.
+
+        :return: UUID of oscillogram set
+        """
+        parallel_rec_osci_set_uuid = "parallel_rec_oscillogram_set_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((parallel_rec_osci_set_uuid, RDF.type, self.onto_namespace["ParallelRecOscillogramSet"].toPython()))
+        ]
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return parallel_rec_osci_set_uuid
+
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
         Generates all facts obtained from the DTC form / template to be entered into the knowledge graph and extends
