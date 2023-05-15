@@ -40,7 +40,7 @@ def knowledge_snapshot_dtc_perspective():
             print("\t\t\tverifies:", qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False))
             print("\t\t\tcontained in subsystem:", qt.query_contains_relation_by_suspect_component(
                 ordered_sus_comp[i], False)
-            )
+                  )
         print()
     print("\n----------------------------------------------------------------------\n")
 
@@ -90,9 +90,26 @@ def knowledge_snapshot_component_perspective():
     print("\n----------------------------------------------------------------------\n")
 
 
+def knowledge_snapshot_parallel_osci_perspective():
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding parallel oscillogram sets.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - PARALLEL OSCILLOGRAM SET PERSPECTIVE")
+    print("###########################################################################\n")
+    osci_set_instances = qt.query_all_parallel_rec_oscillogram_set_instances(False)
+    for osci_set_id in osci_set_instances:
+        osci_set_id = osci_set_id.split("#")[1]
+        print(osci_set_id)
+        oscillogram_instances_by_set = qt.query_oscillograms_by_parallel_osci_set(osci_set_id, False)
+        for osci in oscillogram_instances_by_set:
+            print("\t- oscillogram instance:", osci.split("#")[1])
+
+
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     knowledge_snapshot_dtc_perspective()
     knowledge_snapshot_subsystem_perspective()
     knowledge_snapshot_component_perspective()
     knowledge_snapshot_component_set_perspective()
+    knowledge_snapshot_parallel_osci_perspective()
