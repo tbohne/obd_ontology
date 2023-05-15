@@ -106,6 +106,21 @@ def knowledge_snapshot_parallel_osci_perspective():
             print("\t- oscillogram instance:", osci.split("#")[1])
 
 
+def knowledge_snapshot_oscillogram_perspective():
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding oscillograms.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - OSCILLOGRAM PERSPECTIVE")
+    print("###########################################################################\n")
+    osci_instances = qt.query_all_recorded_oscillograms(False)
+    for osci in osci_instances:
+        osci_id = osci.split("#")[1]
+        print("osci:", osci)
+        time_series = qt.query_time_series_by_oscillogram_instance(osci_id, False)[0]
+        print("\t- time series excerpt:", time_series[:50], "...")
+
+
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     knowledge_snapshot_dtc_perspective()
@@ -113,3 +128,4 @@ if __name__ == '__main__':
     knowledge_snapshot_component_perspective()
     knowledge_snapshot_component_set_perspective()
     knowledge_snapshot_parallel_osci_perspective()
+    knowledge_snapshot_oscillogram_perspective()
