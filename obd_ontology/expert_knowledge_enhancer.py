@@ -28,7 +28,7 @@ class ExpertKnowledgeEnhancer:
     Furthermore, new knowledge can be provided as input to a web interface (cf. `app.py`).
     """
 
-    def __init__(self, knowledge_file: str) -> None:
+    def __init__(self, knowledge_file: str = None) -> None:
         self.knowledge_file = knowledge_file
         # establish connection to Apache Jena Fuseki server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
@@ -519,4 +519,25 @@ class ExpertKnowledgeEnhancer:
 
 
 if __name__ == '__main__':
-    expert_knowledge_enhancer = ExpertKnowledgeEnhancer("templates/dtc_expert_template.txt")
+    expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
+
+    # create some test instances
+    list_of_dtcs = ["P2563", "P0333", "P1234", "P0987"]
+    fault_path = "VTG-Abgasturbolader -> Ladedruck-Magnetventil -> Ladedruck-Regelventil"
+    causing_dtc = "P2563"
+    fault_cond_uuid = expert_knowledge_enhancer.knowledge_graph_query_tool.query_fault_condition_instance_by_code(
+        causing_dtc
+    )[0].split("#")[1]
+
+    diag_log_uuid = expert_knowledge_enhancer.extend_kg_with_diag_log(4, "vehicle_39458359345382458", list_of_dtcs)
+    expert_knowledge_enhancer.extend_kg_with_fault_path(fault_path, fault_cond_uuid, diag_log_uuid)
+    osci_set_id = expert_knowledge_enhancer.extend_kg_with_parallel_rec_oscillogram_set_facts()
+    oscillogram = [13.3, 13.6, 14.6, 16.7, 8.5, 9.7, 5.5, 3.6, 12.5, 12.7]
+    heatmap = [0.4, 0.3, 0.7, 0.7, 0.8, 0.9, 0.3, 0.2]
+    sus_comp = "VTG-Abgasturbolader"
+    expert_knowledge_enhancer.extend_kg_with_oscillogram_classification_facts(0.45, "test_model_id", True, oscillogram,
+                                                                              heatmap, osci_set_id, "GradCAM",
+                                                                              "diag_association_3592495", sus_comp,
+                                                                              diag_log_uuid)
+    expert_knowledge_enhancer.extend_kg_with_manual_inspection_facts(False, "oscillogram_classification_45395859345",
+                                                                     "Ladedruck-Magnetventil", diag_log_uuid)
