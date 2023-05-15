@@ -415,6 +415,21 @@ class ExpertKnowledgeEnhancer:
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return parallel_rec_osci_set_uuid
 
+    def extend_kg_with_oscillogram_recording(self, time_series: List[float]) -> str:
+        """
+        Extends the knowledge graph with facts for oscillogram recordings.
+
+        :param time_series: oscillogram recording (voltage values)
+        :return: UUID of generated oscillogram instance
+        """
+        osci_uuid = "oscillogram_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((osci_uuid, RDF.type, self.onto_namespace["Oscillogram"].toPython())),
+            Fact((osci_uuid, self.onto_namespace.time_series, str(time_series)), property_fact=True),
+        ]
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return osci_uuid
+
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
         Generates all facts obtained from the DTC form / template to be entered into the knowledge graph and extends
