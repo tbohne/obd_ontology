@@ -3,7 +3,6 @@
 # @author Tim Bohne
 
 import uuid
-from datetime import date
 from typing import Tuple, List
 
 from dtc_parser.parser import DTCParser
@@ -295,7 +294,7 @@ class ExpertKnowledgeEnhancer:
         """
         Extends the knowledge graph with facts for the specified heatmap.
 
-        :param heatmap: heatmap do be added to the diagnostic association between dtc and comp
+        :param heatmap: heatmap do be added to the KG
         :param gen_method: heatmap generation method, e.g. GradCAM
         :return: heatmap UUID
         """
@@ -307,6 +306,67 @@ class ExpertKnowledgeEnhancer:
         ]
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return heatmap_uuid
+
+    def extend_kg_with_oscillogram_classification_facts(
+            self, uncertainty: float, model_id: str, prediction: bool, oscillogram: List[float], heatmap: List[float],
+            osci_set_id: str, gen_method: str, classification_reason: str, suspect_comp: str, diag_log_uuid: str
+    ) -> None:
+        """
+        Extends the knowledge graph with facts for the specified oscillogram classification.
+
+        :param uncertainty: uncertainty of the classification
+        :param model_id: ID of the model that performed the classification
+        :param prediction: prediction of the classification model (True -> POS, False -> NEG)
+        :param oscillogram: classified oscillogram
+        :param heatmap: generated heatmap
+        :param osci_set_id: optional ID of a corresponding set of parallel recorded oscillograms
+        :param gen_method: heatmap generation method
+        :param classification_reason: diagnostic association or another classification instance
+        :param suspect_comp: vehicle component to which the oscillogram belongs
+        :param diag_log_uuid: ID of the diagnosis log to which the classification belongs
+        """
+        # either UUID of DA or UUID of another classification
+        assert "diag_association_" in classification_reason or "manual_inspection_" in classification_reason \
+               or "oscillogram_classification_" in classification_reason
+
+        osci_classification_uuid = "oscillogram_classification_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((osci_classification_uuid, RDF.type, self.onto_namespace["OscillogramClassification"].toPython())),
+            Fact((osci_classification_uuid, self.onto_namespace.model_id, model_id), property_fact=True),
+            Fact((osci_classification_uuid, self.onto_namespace.uncertainty, uncertainty), property_fact=True),
+            Fact((osci_classification_uuid, self.onto_namespace.prediction, prediction), property_fact=True),
+            Fact((osci_classification_uuid, self.onto_namespace.diagStep, diag_log_uuid))
+        ]
+        osci_uuid = self.extend_kg_with_oscillogram_recording(oscillogram)
+        fact_list.append(
+            Fact((osci_classification_uuid, self.onto_namespace.classifies, osci_uuid))
+        )
+
+        # if parallel osci set ID present, assign osci to set
+        if len(osci_set_id) > 0:
+            fact_list.append(
+                Fact((osci_uuid, self.onto_namespace.partOf, osci_set_id))
+            )
+
+        # connect to heatmap
+        heatmap_uuid = self.extend_kg_with_heatmap_facts(heatmap, gen_method)
+        fact_list.append(
+            Fact((osci_classification_uuid, self.onto_namespace.produces, heatmap_uuid))
+        )
+
+        # connect to component
+        sus_comp_uuid = self.knowledge_graph_query_tool.query_suspect_component_by_name(suspect_comp)
+        fact_list.append(
+            Fact((osci_classification_uuid, self.onto_namespace.checks, sus_comp_uuid))
+        )
+
+        # set reason
+        if "diag_association_" in classification_reason:
+            fact_list.append(Fact((classification_reason, self.onto_namespace.ledTo, osci_classification_uuid)))
+        else:  # the reason is a classification instance (manual or osci)
+            fact_list.append(Fact((classification_reason, self.onto_namespace.reasonFor, osci_classification_uuid)))
+
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
