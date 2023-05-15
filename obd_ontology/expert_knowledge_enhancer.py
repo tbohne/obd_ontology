@@ -3,7 +3,8 @@
 # @author Tim Bohne
 
 import uuid
-from typing import Tuple
+from datetime import date
+from typing import Tuple, List
 
 from dtc_parser.parser import DTCParser
 from rdflib import Namespace, RDF
@@ -290,22 +291,22 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def extend_kg_with_heatmap_facts(self, dtc: str, comp: str, heatmap: list) -> None:
+    def extend_kg_with_heatmap_facts(self, heatmap: List[float], gen_method: str) -> str:
         """
         Extends the knowledge graph with facts for the specified heatmap.
 
-        :param dtc: DTC to add heatmap for
-        :param comp: suspect component to add heatmap for
         :param heatmap: heatmap do be added to the diagnostic association between dtc and comp
+        :param gen_method:
+        :return:
         """
-        fact_list = []
-        # retrieve corresponding diagnostic association
-        da_instance = self.knowledge_graph_query_tool.query_diag_association_by_dtc_and_sus_comp(dtc, comp)
-        # the instance has to exist - the suggestion that lead to the heatmap always requires that there is one
-        assert len(da_instance) == 1
-        da_uuid = da_instance[0].split("#")[1]
-        fact_list.append(Fact((da_uuid, self.onto_namespace.generated_heatmap, heatmap), property_fact=True))
+        heatmap_uuid = "heatmap_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((heatmap_uuid, RDF.type, self.onto_namespace["Heatmap"].toPython())),
+            Fact((heatmap_uuid, self.onto_namespace.generated_heatmap, str(heatmap)), property_fact=True),
+            Fact((heatmap_uuid, self.onto_namespace.generation_method, gen_method), property_fact=True)
+        ]
         self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return heatmap_uuid
 
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
