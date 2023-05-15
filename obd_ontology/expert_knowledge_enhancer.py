@@ -3,6 +3,7 @@
 # @author Tim Bohne
 
 import uuid
+from datetime import date
 from typing import Tuple, List
 
 from dtc_parser.parser import DTCParser
@@ -448,6 +449,31 @@ class ExpertKnowledgeEnhancer:
         ]
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return fault_path_uuid
+
+    def extend_kg_with_diag_log(self, max_num_of_parallel_rec: int, vehicle_uuid: str, dtc_list: List[str]) -> str:
+        """
+        Extends the knowledge graph with diagnosis log facts.
+
+        :param max_num_of_parallel_rec: maximum number of parallel recordings based on workshop equipment
+        :param vehicle_uuid: UUID of associated vehicle
+        :param dtc_list: number of DTCs that are part of the diagnostic process (stored in vehicle ECU)
+        :return: UUID of diagnosis log
+        """
+        diag_log_uuid = "diag_log_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((diag_log_uuid, RDF.type, self.onto_namespace["DiagLog"].toPython())),
+            Fact((diag_log_uuid, self.onto_namespace.date, date.today()), property_fact=True),
+            Fact((diag_log_uuid, self.onto_namespace.max_num_of_parallel_rec, max_num_of_parallel_rec),
+                 property_fact=True),
+            Fact((diag_log_uuid, self.onto_namespace.createdFor, vehicle_uuid))
+        ]
+        for dtc in dtc_list:
+            dtc_uuid = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)
+            fact_list.append(
+                Fact((dtc_uuid, self.onto_namespace.appearsIn, diag_log_uuid))
+            )
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return diag_log_uuid
 
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
