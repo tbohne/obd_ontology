@@ -430,6 +430,25 @@ class ExpertKnowledgeEnhancer:
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return osci_uuid
 
+    def extend_kg_with_fault_path(self, description: str, fault_cond_uuid: str, diag_log_uuid: str) -> str:
+        """
+        Extends the knowledge graph with fault path facts.
+
+        :param description: fault path description
+        :param fault_cond_uuid: UUID of fault condition
+        :param diag_log_uuid: UUID of diagnosis log
+        :return: fault path UUID
+        """
+        fault_path_uuid = "fault_path_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((fault_path_uuid, RDF.type, self.onto_namespace["FaultPath"].toPython())),
+            Fact((fault_path_uuid, self.onto_namespace.path_description, description), property_fact=True),
+            Fact((fault_cond_uuid, self.onto_namespace.resultedIn, fault_path_uuid)),
+            Fact((diag_log_uuid, self.onto_namespace.entails, fault_path_uuid))
+        ]
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return fault_path_uuid
+
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
         """
         Generates all facts obtained from the DTC form / template to be entered into the knowledge graph and extends
