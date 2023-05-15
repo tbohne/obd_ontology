@@ -296,8 +296,8 @@ class ExpertKnowledgeEnhancer:
         Extends the knowledge graph with facts for the specified heatmap.
 
         :param heatmap: heatmap do be added to the diagnostic association between dtc and comp
-        :param gen_method:
-        :return:
+        :param gen_method: heatmap generation method, e.g. GradCAM
+        :return: heatmap UUID
         """
         heatmap_uuid = "heatmap_" + uuid.uuid4().hex
         fact_list = [
