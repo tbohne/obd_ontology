@@ -1196,6 +1196,50 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci_set']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_recorded_oscillograms(self, verbose: bool = True) -> list:
+        """
+        Queries all recorded oscillograms stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all rec oscillograms stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all rec oscillogram instances")
+            print("####################################")
+        osci_entry = self.complete_ontology_entry('Oscillogram')
+        s = f"""
+            SELECT ?osci WHERE {{
+                ?osci a {osci_entry} .
+            }}
+            """
+        return [row['osci']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_time_series_by_oscillogram_instance(self, osci_id: str, verbose: bool = True) -> list:
+        """
+        Queries the time series for the specified oscillogram instance.
+
+        :param osci_id: ID of the oscillogram instance to query time series for
+        :param verbose: if true, logging is activated
+        :return: time series for oscillogram instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: time series for the specified oscillogram:", osci_id)
+            print("####################################")
+        osci_entry = self.complete_ontology_entry('Oscillogram')
+        id_entry = self.complete_ontology_entry(osci_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        time_series_entry = self.complete_ontology_entry('time_series')
+        s = f"""
+            SELECT ?time_series WHERE {{
+                ?osci a {osci_entry} .
+                FILTER(STR(?osci) = "{id_entry}") .
+                ?osci {time_series_entry} ?time_series .
+            }}
+            """
+        return [row['time_series']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_oscillograms_by_parallel_osci_set(self, osci_set_id: str, verbose: bool = True) -> list:
         """
         Queries all parallel recorded oscillograms for the specified set.
