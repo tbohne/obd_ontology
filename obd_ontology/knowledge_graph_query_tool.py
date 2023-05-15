@@ -1168,14 +1168,58 @@ class KnowledgeGraphQueryTool:
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
         s = f"""
-        SELECT ?name WHERE {{
-            ?comp a {comp_entry} .
-            ?comp {name_entry} ?name.
-        }}
-        """
+            SELECT ?name WHERE {{
+                ?comp a {comp_entry} .
+                ?comp {name_entry} ?name.
+            }}
+            """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
         return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_all_parallel_rec_oscillogram_set_instances(self, verbose: bool = True) -> list:
+        """
+        Queries all parallel recorded oscillogram sets stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all parallel rec oscillogram sets stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all parallel rec oscillogram set instances")
+            print("####################################")
+        parallel_rec_set_entry = self.complete_ontology_entry('ParallelRecOscillogramSet')
+        s = f"""
+            SELECT ?osci_set WHERE {{
+                ?osci_set a {parallel_rec_set_entry} .
+            }}
+            """
+        return [row['osci_set']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_oscillograms_by_parallel_osci_set(self, osci_set_id: str, verbose: bool = True) -> list:
+        """
+        Queries all parallel recorded oscillograms for the specified set.
+
+        :param osci_set_id: ID of parallel recorded oscillogram set
+        :param verbose: if true, logging is activated
+        :return: parallel recorded oscillograms part of the set
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all parallel rec oscillograms for the specified set:", osci_set_id)
+            print("####################################")
+        parallel_rec_set_entry = self.complete_ontology_entry('ParallelRecOscillogramSet')
+        id_entry = self.complete_ontology_entry(osci_set_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        part_of_entry = self.complete_ontology_entry('partOf')
+        s = f"""
+            SELECT ?oscillogram WHERE {{
+                ?osci_set a {parallel_rec_set_entry} .
+                FILTER(STR(?osci_set) = "{id_entry}") .
+                ?oscillogram {part_of_entry} ?osci_set .
+            }}
+            """
+        return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_all_symptom_instances(self) -> list:
         """
