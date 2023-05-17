@@ -37,7 +37,7 @@ class OntologyInstanceGenerator:
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
     def extend_knowledge_graph(
-            self, model: str, hsn: str, tsn: str, vin: str, dtc: str, max_num_of_parallel_rec: int, diag_date: date
+            self, model: str, hsn: str, tsn: str, vin: str, dtc: str, max_num_of_parallel_rec: int, diag_date: str
     ) -> None:
         """
         Extends the knowledge graph based on the present vehicle information and performs a consistency check.
@@ -94,6 +94,11 @@ class OntologyInstanceGenerator:
             if fault_condition_id != "":
                 diag_log_uuid = "diag_log_" + str(uuid.uuid4())
                 fact_list.append(Fact((diag_log_uuid, RDF.type, onto_namespace["DiagLog"].toPython())))
+                fact_list.append(
+                    Fact((diag_log_uuid, onto_namespace.max_num_of_parallel_rec, max_num_of_parallel_rec),
+                         property_fact=True)
+                )
+                fact_list.append(Fact((diag_log_uuid, onto_namespace.date, diag_date), property_fact=True))
                 dtc_id = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)
                 fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_uuid)))
                 fact_list.append((diag_log_uuid, onto_namespace.createdFor, vehicle_uuid))
