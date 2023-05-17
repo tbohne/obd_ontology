@@ -101,7 +101,7 @@ class OntologyInstanceGenerator:
                 fact_list.append(Fact((diag_log_uuid, onto_namespace.date, diag_date), property_fact=True))
                 dtc_id = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)
                 fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_uuid)))
-                fact_list.append((diag_log_uuid, onto_namespace.createdFor, vehicle_uuid))
+                fact_list.append(Fact((diag_log_uuid, onto_namespace.createdFor, vehicle_uuid)))
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
