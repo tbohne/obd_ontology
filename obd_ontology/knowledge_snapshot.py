@@ -147,6 +147,9 @@ def knowledge_snapshot_oscillogram_classification_perspective():
         print("\t- checks:", suspect_comp_id)
         reason_for_instance = qt.query_reason_for_classification(osci_classification_id, False)
         reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
+        if reason_for_id == "":
+            reason_for_instance = qt.query_led_to_for_classification(osci_classification_id, False)
+            reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
         print("\t- reason for classification:", reason_for_id)
         prediction = qt.query_prediction_by_classification(osci_classification_id, False)
         print("\t- prediction:", prediction[0] if len(prediction) > 0 else "")
@@ -168,6 +171,9 @@ def knowledge_snapshot_manual_inspection_perspective():
         print("\t- checks:", suspect_comp_id)
         reason_for_instance = qt.query_reason_for_inspection(manual_inspection_id, False)
         reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
+        if reason_for_id == "":
+            reason_for_instance = qt.query_led_to_for_inspection(manual_inspection_id, False)
+            reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
         print("\t- reason for inspection:", reason_for_id)
         prediction = qt.query_prediction_by_inspection(manual_inspection_id, False)
         print("\t- prediction:", prediction[0] if len(prediction) > 0 else "")
