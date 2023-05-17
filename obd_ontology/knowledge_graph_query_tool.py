@@ -1430,7 +1430,7 @@ class KnowledgeGraphQueryTool:
 
     def query_reason_for_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
-        Queries the reason (other classification or diag association) for the specified classification.
+        Queries the reason (other classification) for the specified classification.
 
         :param osci_classification_id: ID of oscillogram classification instance
         :param verbose: if true, logging is activated
@@ -1453,9 +1453,34 @@ class KnowledgeGraphQueryTool:
             """
         return [row['reason_for']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_led_to_for_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
+        """
+        Queries the reason (diag association) for the specified classification.
+
+        :param osci_classification_id: ID of oscillogram classification instance
+        :param verbose: if true, logging is activated
+        :return: classification reason
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: classification reason for the specified classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        led_to_entry = self.complete_ontology_entry('ledTo')
+        s = f"""
+            SELECT ?led_to WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?led_to {led_to_entry} ?osci_classification .
+            }}
+            """
+        return [row['led_to']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_reason_for_inspection(self, manual_inspection_id: str, verbose: bool = True) -> list:
         """
-        Queries the reason (other classification or diag association) for the specified inspection.
+        Queries the reason (other classification) for the specified inspection.
 
         :param manual_inspection_id: ID of manual inspection instance
         :param verbose: if true, logging is activated
@@ -1477,6 +1502,31 @@ class KnowledgeGraphQueryTool:
             }}
             """
         return [row['reason_for']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_led_to_for_inspection(self, manual_inspection_id: str, verbose: bool = True) -> list:
+        """
+        Queries the reason (diag association) for the specified inspection.
+
+        :param manual_inspection_id: ID of manual inspection instance
+        :param verbose: if true, logging is activated
+        :return: classification reason
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: classification reason for the specified manual inspection:", manual_inspection_id)
+            print("####################################")
+        manual_inspection_entry = self.complete_ontology_entry('ManualInspection')
+        id_entry = self.complete_ontology_entry(manual_inspection_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        led_to_entry = self.complete_ontology_entry('ledTo')
+        s = f"""
+            SELECT ?led_to WHERE {{
+                ?manual_inspection a {manual_inspection_entry} .
+                FILTER(STR(?manual_inspection) = "{id_entry}") .
+                ?led_to {led_to_entry} ?manual_inspection .
+            }}
+            """
+        return [row['led_to']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_prediction_by_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
