@@ -1234,7 +1234,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci_classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_model_id_by_osci_classification_id(self, osci_classification_id, verbose: bool = True) -> list:
+    def query_model_id_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
         Queries the model ID for the specified oscillogram classification instance.
 
@@ -1258,6 +1258,31 @@ class KnowledgeGraphQueryTool:
             }}
             """
         return [row['model_id']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_uncertainty_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
+        """
+        Queries the uncertainty for the specified oscillogram classification instance.
+
+        :param osci_classification_id: ID of the oscillogram classification instance to query uncertainty for
+        :param verbose: if true, logging is activated
+        :return: uncertainty for oscillogram classification instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: uncertainty for the specified oscillogram classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        uncertainty_entry = self.complete_ontology_entry('uncertainty')
+        s = f"""
+            SELECT ?uncertainty WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?osci_classification {uncertainty_entry} ?uncertainty .
+            }}
+            """
+        return [row['uncertainty']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_time_series_by_oscillogram_instance(self, osci_id: str, verbose: bool = True) -> list:
         """
