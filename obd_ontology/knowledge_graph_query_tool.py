@@ -1334,6 +1334,31 @@ class KnowledgeGraphQueryTool:
             """
         return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_oscillogram_by_classification_instance(self, osci_classification_id: str, verbose: bool = True) -> list:
+        """
+        Queries the oscillogram instance for the specified classification.
+
+        :param osci_classification_id: ID of oscillogram classification instance
+        :param verbose: if true, logging is activated
+        :return: oscillogram instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: oscillogram instance for the specified classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        classifies_entry = self.complete_ontology_entry('classifies')
+        s = f"""
+            SELECT ?oscillogram WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?osci_classification {classifies_entry} ?oscillogram .
+            }}
+            """
+        return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_all_symptom_instances(self) -> list:
         """
         Queries all symptom instances stored in the knowledge graph.
