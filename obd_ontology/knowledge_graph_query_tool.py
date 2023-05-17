@@ -1272,6 +1272,25 @@ class KnowledgeGraphQueryTool:
             """
         return [row['diag_log']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_fault_path_instances(self, verbose: bool = True) -> list:
+        """
+        Queries all fault path instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all fault paths stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all fault path instances")
+            print("####################################")
+        fault_path_entry = self.complete_ontology_entry('FaultPath')
+        s = f"""
+            SELECT ?fault_path WHERE {{
+                ?fault_path a {fault_path_entry} .
+            }}
+            """
+        return [row['fault_path']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_model_id_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
         Queries the model ID for the specified oscillogram classification instance.
@@ -1397,6 +1416,31 @@ class KnowledgeGraphQueryTool:
             """
         return [row['max_num_of_parallel_rec']['value'] for row in
                 self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_resulted_in_by_fault_path(self, fault_path_id: str, verbose: bool = True) -> list:
+        """
+        Queries the fault conditions resulting in the specified fault path instance.
+
+        :param fault_path_id: ID of the fault path instance to query fault conditions for
+        :param verbose: if true, logging is activated
+        :return: fault conditions for fault path instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: fault conditions for the specified fault path:", fault_path_id)
+            print("####################################")
+        fault_path_entry = self.complete_ontology_entry('FaultPath')
+        id_entry = self.complete_ontology_entry(fault_path_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        resulted_in_entry = self.complete_ontology_entry('resultedIn')
+        s = f"""
+            SELECT ?fault_cond WHERE {{
+                ?fault_path a {fault_path_entry} .
+                FILTER(STR(?fault_path) = "{id_entry}") .
+                ?fault_cond {resulted_in_entry} ?fault_path .
+            }}
+            """
+        return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_dtcs_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
         """
