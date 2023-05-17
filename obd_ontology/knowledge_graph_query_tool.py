@@ -1359,6 +1359,81 @@ class KnowledgeGraphQueryTool:
             """
         return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_suspect_component_by_osci_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
+        """
+        Queries the suspect component for the specified classification.
+
+        :param osci_classification_id: ID of oscillogram classification instance
+        :param verbose: if true, logging is activated
+        :return: suspect component
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: suspect component for the specified classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        checks_entry = self.complete_ontology_entry('checks')
+        s = f"""
+            SELECT ?comp WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?osci_classification {checks_entry} ?comp .
+            }}
+            """
+        return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_reason_for_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
+        """
+        Queries the reason (other classification or diag association) for the specified classification.
+
+        :param osci_classification_id: ID of oscillogram classification instance
+        :param verbose: if true, logging is activated
+        :return: classification reason
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: classification reason for the specified classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        reason_for_entry = self.complete_ontology_entry('reasonFor')
+        s = f"""
+            SELECT ?reason_for WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?reason_for {reason_for_entry} ?osci_classification .
+            }}
+            """
+        return [row['reason_for']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_prediction_by_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
+        """
+        Queries the prediction for the specified classification.
+
+        :param osci_classification_id: ID of oscillogram classification instance
+        :param verbose: if true, logging is activated
+        :return: prediction
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: prediction for the specified classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        pred_entry = self.complete_ontology_entry('prediction')
+        s = f"""
+            SELECT ?pred WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?osci_classification {pred_entry} ?pred .
+            }}
+            """
+        return [row['pred']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_heatmap_by_classification_instance(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
         Queries the heatmap instance for the specified classification.
