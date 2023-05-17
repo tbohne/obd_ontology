@@ -208,6 +208,23 @@ def knowledge_snapshot_diag_log_perspective():
             print("\t\t-", diag_step.split("#")[1])
 
 
+def knowledge_snapshot_fault_path_perspective():
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding fault paths.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - FAULT PATH PERSPECTIVE")
+    print("###########################################################################\n")
+    fault_path_instances = qt.query_all_fault_path_instances(False)
+    for fault_path in fault_path_instances:
+        fault_path_id = fault_path.split("#")[1]
+        print(fault_path_id)
+        print("\t- fault conditions that resulted in this fault path:")
+        fault_conditions = qt.query_resulted_in_by_fault_path(fault_path_id, False)
+        for fc in fault_conditions:
+            print("\t\t-", fc.split("#")[1])
+
+
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     knowledge_snapshot_dtc_perspective()
@@ -219,3 +236,4 @@ if __name__ == '__main__':
     knowledge_snapshot_oscillogram_classification_perspective()
     knowledge_snapshot_manual_inspection_perspective()
     knowledge_snapshot_diag_log_perspective()
+    knowledge_snapshot_fault_path_perspective()
