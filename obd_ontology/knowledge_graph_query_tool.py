@@ -1440,13 +1440,13 @@ class KnowledgeGraphQueryTool:
         id_entry = id_entry.replace('<', '').replace('>', '')
         diag_step_entry = self.complete_ontology_entry('diagStep')
         s = f"""
-            SELECT ?osci WHERE {{
+            SELECT ?classification WHERE {{
                 ?diag_log a {diag_log_entry} .
                 FILTER(STR(?diag_log) = "{id_entry}") .
-                ?osci {diag_step_entry} ?diag_log .
+                ?classification {diag_step_entry} ?diag_log .
             }}
             """
-        return [row['osci']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+        return [row['classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_fault_path_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
         """
