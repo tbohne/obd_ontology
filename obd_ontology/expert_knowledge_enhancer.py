@@ -541,7 +541,7 @@ if __name__ == '__main__':
                                                                               diag_log_uuid)
     expert_knowledge_enhancer.extend_kg_with_oscillogram_classification_facts(0.85, "test_model_id", True, oscillogram,
                                                                               heatmap, osci_set_id, "GradCAM",
-                                                                              "diag_association_3592495", sus_comp,
-                                                                              diag_log_uuid)
+                                                                              "oscillogram_classification_3543595",
+                                                                              sus_comp, diag_log_uuid)
     expert_knowledge_enhancer.extend_kg_with_manual_inspection_facts(False, "oscillogram_classification_45395859345",
                                                                      "Ladedruck-Magnetventil", diag_log_uuid)
