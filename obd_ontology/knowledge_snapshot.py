@@ -179,6 +179,35 @@ def knowledge_snapshot_manual_inspection_perspective():
         print("\t- prediction:", prediction[0] if len(prediction) > 0 else "")
 
 
+def knowledge_snapshot_diag_log_perspective():
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding diagnosis logs.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - DIAGNOSIS LOG PERSPECTIVE")
+    print("###########################################################################\n")
+    diag_log_instances = qt.query_all_diag_log_instances(False)
+    for diag_log in diag_log_instances:
+        diag_log_id = diag_log.split("#")[1]
+        print(diag_log_id)
+        print("\t- date:", qt.query_date_by_diag_log(diag_log_id, False)[0])
+        print("\t- max number of parallel rec:", qt.query_max_num_of_parallel_rec_by_diag_log(diag_log_id, False)[0])
+        print("\t- appearing DTCs:")
+        appearing_dtcs = qt.query_dtcs_by_diag_log(diag_log_id, False)
+        for dtc in appearing_dtcs:
+            print("\t\t-", dtc.split("#")[1])
+        fault_path_instance = qt.query_fault_path_by_diag_log(diag_log_id, False)
+        fault_path_id = fault_path_instance[0].split("#")[1] if len(fault_path_instance) > 0 else ""
+        print("\t- entails fault path:", fault_path_id)
+        vehicle_instance = qt.query_vehicle_by_diag_log(diag_log_id, False)
+        vehicle_id = vehicle_instance[0].split("#")[1]
+        print("\t- created for vehicle:", vehicle_id)
+        print("\t- diagnostic steps:")
+        diag_steps = qt.query_diag_steps_by_diag_log(diag_log_id, False)
+        for diag_step in diag_steps:
+            print("\t\t-", diag_step.split("#")[1])
+
+
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     knowledge_snapshot_dtc_perspective()
@@ -189,3 +218,4 @@ if __name__ == '__main__':
     knowledge_snapshot_oscillogram_perspective()
     knowledge_snapshot_oscillogram_classification_perspective()
     knowledge_snapshot_manual_inspection_perspective()
+    knowledge_snapshot_diag_log_perspective()
