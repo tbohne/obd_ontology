@@ -1359,6 +1359,81 @@ class KnowledgeGraphQueryTool:
             """
         return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_heatmap_by_classification_instance(self, osci_classification_id: str, verbose: bool = True) -> list:
+        """
+        Queries the heatmap instance for the specified classification.
+
+        :param osci_classification_id: ID of oscillogram classification instance
+        :param verbose: if true, logging is activated
+        :return: generated heatmap
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: heatmap instance for the specified classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        produces_entry = self.complete_ontology_entry('produces')
+        s = f"""
+            SELECT ?heatmap WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?osci_classification {produces_entry} ?heatmap .
+            }}
+            """
+        return [row['heatmap']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_generation_method_by_heatmap(self, heatmap_id: str, verbose: bool = True) -> list:
+        """
+        Queries the heatmap generation method for the specified heatmap instance.
+
+        :param heatmap_id: ID of heatmap instance
+        :param verbose: if true, logging is activated
+        :return: heatmap generation method
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: heatmap generation method for the specified heatmap instance:", heatmap_id)
+            print("####################################")
+        heatmap_entry = self.complete_ontology_entry('Heatmap')
+        id_entry = self.complete_ontology_entry(heatmap_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        generation_method_entry = self.complete_ontology_entry('generation_method')
+        s = f"""
+            SELECT ?gen_method WHERE {{
+                ?heatmap a {heatmap_entry} .
+                FILTER(STR(?heatmap) = "{id_entry}") .
+                ?heatmap {generation_method_entry} ?gen_method .
+            }}
+            """
+        return [row['gen_method']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_heatmap_string_by_heatmap(self, heatmap_id: str, verbose: bool = True) -> list:
+        """
+        Queries the heatmap values for the specified heatmap instance.
+
+        :param heatmap_id: ID of heatmap instance
+        :param verbose: if true, logging is activated
+        :return: heatmap values (string)
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: heatmap values for the specified heatmap instance:", heatmap_id)
+            print("####################################")
+        heatmap_entry = self.complete_ontology_entry('Heatmap')
+        id_entry = self.complete_ontology_entry(heatmap_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        heatmap_values_entry = self.complete_ontology_entry('generated_heatmap')
+        s = f"""
+            SELECT ?gen_heatmap WHERE {{
+                ?heatmap a {heatmap_entry} .
+                FILTER(STR(?heatmap) = "{id_entry}") .
+                ?heatmap {heatmap_values_entry} ?gen_heatmap .
+            }}
+            """
+        return [row['gen_heatmap']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_all_symptom_instances(self) -> list:
         """
         Queries all symptom instances stored in the knowledge graph.
