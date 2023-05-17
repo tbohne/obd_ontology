@@ -1253,6 +1253,25 @@ class KnowledgeGraphQueryTool:
             """
         return [row['manual_inspection']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_diag_log_instances(self, verbose: bool = True) -> list:
+        """
+        Queries all diag log instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all diag logs stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all diag log instances")
+            print("####################################")
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        s = f"""
+            SELECT ?diag_log WHERE {{
+                ?diag_log a {diag_log_entry} .
+            }}
+            """
+        return [row['diag_log']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_model_id_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
         Queries the model ID for the specified oscillogram classification instance.
@@ -1327,6 +1346,157 @@ class KnowledgeGraphQueryTool:
             }}
             """
         return [row['uncertainty']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_date_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+        """
+        Queries the date for the specified diag log instance.
+
+        :param diag_log_id: ID of the diag log instance to query date for
+        :param verbose: if true, logging is activated
+        :return: date for diag log instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: date for the specified diag log:", diag_log_id)
+            print("####################################")
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        id_entry = self.complete_ontology_entry(diag_log_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        date_entry = self.complete_ontology_entry('date')
+        s = f"""
+            SELECT ?date WHERE {{
+                ?diag_log a {diag_log_entry} .
+                FILTER(STR(?diag_log) = "{id_entry}") .
+                ?diag_log {date_entry} ?date .
+            }}
+            """
+        return [row['date']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_max_num_of_parallel_rec_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+        """
+        Queries the max number of parallel recordings for the specified diag log instance.
+
+        :param diag_log_id: ID of the diag log instance to query max num of parallel rec for
+        :param verbose: if true, logging is activated
+        :return: max num of parallel rec for diag log instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: max num of parallel rec for the specified diag log:", diag_log_id)
+            print("####################################")
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        id_entry = self.complete_ontology_entry(diag_log_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        max_num_of_parallel_rec_entry = self.complete_ontology_entry('max_num_of_parallel_rec')
+        s = f"""
+            SELECT ?max_num_of_parallel_rec WHERE {{
+                ?diag_log a {diag_log_entry} .
+                FILTER(STR(?diag_log) = "{id_entry}") .
+                ?diag_log {max_num_of_parallel_rec_entry} ?max_num_of_parallel_rec .
+            }}
+            """
+        return [row['max_num_of_parallel_rec']['value'] for row in
+                self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_dtcs_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+        """
+        Queries the DTCs for the specified diag log instance.
+
+        :param diag_log_id: ID of the diag log instance to query DTCs for
+        :param verbose: if true, logging is activated
+        :return: DTCs for diag log instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: DTCs for the specified diag log:", diag_log_id)
+            print("####################################")
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        id_entry = self.complete_ontology_entry(diag_log_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        appears_in_entry = self.complete_ontology_entry('appearsIn')
+        s = f"""
+            SELECT ?dtc WHERE {{
+                ?diag_log a {diag_log_entry} .
+                FILTER(STR(?diag_log) = "{id_entry}") .
+                ?dtc {appears_in_entry} ?diag_log .
+            }}
+            """
+        return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_diag_steps_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+        """
+        Queries the diagnostic steps for the specified diag log instance.
+
+        :param diag_log_id: ID of the diag log instance to query diag steps for
+        :param verbose: if true, logging is activated
+        :return: diag steps for diag log instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: diag steps for the specified diag log:", diag_log_id)
+            print("####################################")
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        id_entry = self.complete_ontology_entry(diag_log_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        diag_step_entry = self.complete_ontology_entry('diagStep')
+        s = f"""
+            SELECT ?osci WHERE {{
+                ?diag_log a {diag_log_entry} .
+                FILTER(STR(?diag_log) = "{id_entry}") .
+                ?osci {diag_step_entry} ?diag_log .
+            }}
+            """
+        return [row['osci']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_fault_path_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+        """
+        Queries the fault path for the specified diag log instance.
+
+        :param diag_log_id: ID of the diag log instance to query fault path for
+        :param verbose: if true, logging is activated
+        :return: fault path for diag log instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: fault path for the specified diag log:", diag_log_id)
+            print("####################################")
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        id_entry = self.complete_ontology_entry(diag_log_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        entails_entry = self.complete_ontology_entry('entails')
+        s = f"""
+            SELECT ?fault_path WHERE {{
+                ?diag_log a {diag_log_entry} .
+                FILTER(STR(?diag_log) = "{id_entry}") .
+                ?diag_log {entails_entry} ?fault_path .
+            }}
+            """
+        return [row['fault_path']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_vehicle_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+        """
+        Queries the vehicle for the specified diag log instance.
+
+        :param diag_log_id: ID of the diag log instance to query vehicle for
+        :param verbose: if true, logging is activated
+        :return: vehicle for diag log instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: vehicle for the specified diag log:", diag_log_id)
+            print("####################################")
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        id_entry = self.complete_ontology_entry(diag_log_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        created_for_entry = self.complete_ontology_entry('createdFor')
+        s = f"""
+            SELECT ?vehicle WHERE {{
+                ?diag_log a {diag_log_entry} .
+                FILTER(STR(?diag_log) = "{id_entry}") .
+                ?diag_log {created_for_entry} ?vehicle .
+            }}
+            """
+        return [row['vehicle']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_time_series_by_oscillogram_instance(self, osci_id: str, verbose: bool = True) -> list:
         """
