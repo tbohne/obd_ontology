@@ -99,7 +99,7 @@ class OntologyInstanceGenerator:
                          property_fact=True)
                 )
                 fact_list.append(Fact((diag_log_uuid, onto_namespace.date, diag_date), property_fact=True))
-                dtc_id = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)
+                dtc_id = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)[0].split("#")[1]
                 fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_uuid)))
                 fact_list.append(Fact((diag_log_uuid, onto_namespace.createdFor, vehicle_uuid)))
             self.fuseki_connection.extend_knowledge_graph(fact_list)
