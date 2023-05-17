@@ -121,6 +121,58 @@ def knowledge_snapshot_oscillogram_perspective():
         print("\t- time series excerpt:", time_series[:50], "...")
 
 
+def knowledge_snapshot_oscillogram_classification_perspective():
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding oscillogram classifications.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - OSCILLOGRAM CLASSIFICATION PERSPECTIVE")
+    print("###########################################################################\n")
+    osci_classification_instances = qt.query_all_oscillogram_classifications(False)
+    for osci_classification in osci_classification_instances:
+        osci_classification_id = osci_classification.split("#")[1]
+        print(osci_classification_id)
+        print("\t- model id:", qt.query_model_id_by_osci_classification_id(osci_classification_id, False)[0])
+        print("\t- uncertainty:", qt.query_uncertainty_by_osci_classification_id(osci_classification_id, False)[0])
+        osci_instance = qt.query_oscillogram_by_classification_instance(osci_classification_id, False)
+        print("\t- classifies:", osci_instance[0].split("#")[1] if len(osci_instance) > 0 else "")
+        heatmap_instance = qt.query_heatmap_by_classification_instance(osci_classification_id, False)
+        heatmap_id = heatmap_instance[0].split("#")[1] if len(heatmap_instance) > 0 else ""
+        if len(heatmap_id) > 0:
+            print("\t- produces:", heatmap_id)
+            print("\t\t- generation_method:", qt.query_generation_method_by_heatmap(heatmap_id, False)[0])
+            print("\t\t- generated heatmap:", qt.query_heatmap_string_by_heatmap(heatmap_id, False)[0])
+        suspect_comp_instance = qt.query_suspect_component_by_osci_classification(osci_classification_id, False)
+        suspect_comp_id = suspect_comp_instance[0].split("#")[1] if len(suspect_comp_instance) > 0 else ""
+        print("\t- checks:", suspect_comp_id)
+        reason_for_instance = qt.query_reason_for_classification(osci_classification_id, False)
+        reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
+        print("\t- reason for classification:", reason_for_id)
+        prediction = qt.query_prediction_by_classification(osci_classification_id, False)
+        print("\t- prediction:", prediction[0] if len(prediction) > 0 else "")
+
+
+def knowledge_snapshot_manual_inspection_perspective():
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding manual inspections.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - MANUAL INSPECTION PERSPECTIVE")
+    print("###########################################################################\n")
+    manual_inspection_instances = qt.query_all_manual_inspection_instances(False)
+    for manual_inspection in manual_inspection_instances:
+        manual_inspection_id = manual_inspection.split("#")[1]
+        print(manual_inspection_id)
+        suspect_comp_instance = qt.query_suspect_component_by_manual_inspection_id(manual_inspection_id, False)
+        suspect_comp_id = suspect_comp_instance[0].split("#")[1] if len(suspect_comp_instance) > 0 else ""
+        print("\t- checks:", suspect_comp_id)
+        reason_for_instance = qt.query_reason_for_inspection(manual_inspection_id, False)
+        reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
+        print("\t- reason for inspection:", reason_for_id)
+        prediction = qt.query_prediction_by_inspection(manual_inspection_id, False)
+        print("\t- prediction:", prediction[0] if len(prediction) > 0 else "")
+
+
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool(local_kb=False)
     knowledge_snapshot_dtc_perspective()
@@ -129,3 +181,5 @@ if __name__ == '__main__':
     knowledge_snapshot_component_set_perspective()
     knowledge_snapshot_parallel_osci_perspective()
     knowledge_snapshot_oscillogram_perspective()
+    knowledge_snapshot_oscillogram_classification_perspective()
+    knowledge_snapshot_manual_inspection_perspective()
