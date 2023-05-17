@@ -1215,6 +1215,50 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_oscillogram_classifications(self, verbose: bool = True) -> list:
+        """
+        Queries all oscillogram classification instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all oscillogram classifications stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all oscillogram classification instances")
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        s = f"""
+            SELECT ?osci_classification WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+            }}
+            """
+        return [row['osci_classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_model_id_by_osci_classification_id(self, osci_classification_id, verbose: bool = True) -> list:
+        """
+        Queries the model ID for the specified oscillogram classification instance.
+
+        :param osci_classification_id: ID of the oscillogram classification instance to query model ID for
+        :param verbose: if true, logging is activated
+        :return: model ID for oscillogram classification instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: model ID for the specified oscillogram classification:", osci_classification_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        id_entry = self.complete_ontology_entry(osci_classification_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        model_id_entry = self.complete_ontology_entry('model_id')
+        s = f"""
+            SELECT ?model_id WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                FILTER(STR(?osci_classification) = "{id_entry}") .
+                ?osci_classification {model_id_entry} ?model_id .
+            }}
+            """
+        return [row['model_id']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_time_series_by_oscillogram_instance(self, osci_id: str, verbose: bool = True) -> list:
         """
         Queries the time series for the specified oscillogram instance.
