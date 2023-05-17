@@ -36,7 +36,9 @@ class OntologyInstanceGenerator:
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
-    def extend_knowledge_graph(self, model: str, hsn: str, tsn: str, vin: str, dtc: str, diag_log_id: str) -> None:
+    def extend_knowledge_graph(
+            self, model: str, hsn: str, tsn: str, vin: str, dtc: str, max_num_of_parallel_rec: int, diag_date: date
+    ) -> None:
         """
         Extends the knowledge graph based on the present vehicle information and performs a consistency check.
 
@@ -45,7 +47,8 @@ class OntologyInstanceGenerator:
         :param tsn:  type number ("Typschlüsselnummer")
         :param vin: vehicle identification number
         :param dtc: specified diagnostic trouble code
-        :param diag_log_id: ID of the diag log for the currently considered vehicle diag
+        :param max_num_of_parallel_rec: max number of parallel recordings based on workshop equipment
+        :param diag_date: date of the diagnosis
         """
         if self.local_kb:
             # TODO: deprecated
@@ -89,9 +92,11 @@ class OntologyInstanceGenerator:
                 ]
             # the connection to diag log should be entered either way (if the fault condition is part of the KG)
             if fault_condition_id != "":
+                diag_log_uuid = "diag_log_" + str(uuid.uuid4())
+                fact_list.append(Fact((diag_log_uuid, RDF.type, onto_namespace["DiagLog"].toPython())))
                 dtc_id = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)
-                fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_id)))
-                fact_list.append((diag_log_id, onto_namespace.createdFor, vehicle_uuid))
+                fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_uuid)))
+                fact_list.append((diag_log_uuid, onto_namespace.createdFor, vehicle_uuid))
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
