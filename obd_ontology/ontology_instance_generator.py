@@ -20,7 +20,7 @@ class OntologyInstanceGenerator:
     a particular car with corresponding background knowledge stored in the knowledge graph.
     E.g.: A particular DTC is recorded in a car:
         - vehicle is added to knowledge graph (with all its properties)
-        - vehicle is connected to knowledge about the particular DTC (symptoms etc.) via the `occurredIn` relation
+        - vehicle is connected to knowledge about the particular DTC (symptoms etc.) via the DiagLog
     """
 
     def __init__(self, ontology_path: str, local_kb=False) -> None:
@@ -36,7 +36,7 @@ class OntologyInstanceGenerator:
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
-    def extend_knowledge_graph(self, model: str, hsn: str, tsn: str, vin: str, dtc: str) -> None:
+    def extend_knowledge_graph(self, model: str, hsn: str, tsn: str, vin: str, dtc: str, diag_log_id: str) -> None:
         """
         Extends the knowledge graph based on the present vehicle information and performs a consistency check.
 
@@ -45,17 +45,20 @@ class OntologyInstanceGenerator:
         :param tsn:  type number ("Typschlüsselnummer")
         :param vin: vehicle identification number
         :param dtc: specified diagnostic trouble code
+        :param diag_log_id: ID of the diag log for the currently considered vehicle diag
         """
         if self.local_kb:
-            dtc_obj = self.onto.DTC()
-            fault_condition = list(dtc_obj.represents)[0]
-            vehicle = self.onto.Vehicle()
-            vehicle.model.append(model)
-            vehicle.HSN.append(hsn)
-            vehicle.TSN.append(tsn)
-            vehicle.VIN.append(vin)
-            fault_condition.occurredIn.append(vehicle)
-            self.check_consistency_and_save_to_file(hsn, tsn, vin)
+            # TODO: deprecated
+            print("LOCAL KB NO LONGER SUPPORTED - USE FUSEKI SERVER INSTEAD")
+            # dtc_obj = self.onto.DTC()
+            # fault_condition = list(dtc_obj.represents)[0]
+            # vehicle = self.onto.Vehicle()
+            # vehicle.model.append(model)
+            # vehicle.HSN.append(hsn)
+            # vehicle.TSN.append(tsn)
+            # vehicle.VIN.append(vin)
+            # fault_condition.occurredIn.append(vehicle)
+            # self.check_consistency_and_save_to_file(hsn, tsn, vin)
         else:
             onto_namespace = Namespace(ONTOLOGY_PREFIX)
 
@@ -84,10 +87,11 @@ class OntologyInstanceGenerator:
                     Fact((vehicle_uuid, onto_namespace.TSN, tsn), property_fact=True),
                     Fact((vehicle_uuid, onto_namespace.VIN, vin), property_fact=True)
                 ]
-            # the "occurred in" relation should be entered either way (if the fault condition is part of the KG)
+            # the connection to diag log should be entered either way (if the fault condition is part of the KG)
             if fault_condition_id != "":
-                fact_list.append(Fact((fault_condition_id, onto_namespace.occurredIn, vehicle_uuid)))
-
+                dtc_id = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)
+                fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_id)))
+                fact_list.append((diag_log_id, onto_namespace.createdFor, vehicle_uuid))
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:

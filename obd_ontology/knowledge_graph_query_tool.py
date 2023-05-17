@@ -541,7 +541,9 @@ class KnowledgeGraphQueryTool:
             print(colored("QUERY: vehicle associated with DTC " + dtc, "green", "on_grey", ["bold"]))
             print("########################################################################")
         dtc_entry = self.complete_ontology_entry('DTC')
-        occurred_in_entry = self.complete_ontology_entry('occurredIn')
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        appears_in_entry = self.complete_ontology_entry('appearsIn')
+        created_for_entry = self.complete_ontology_entry('createdFor')
         fault_cond_class = self.complete_ontology_entry('FaultCondition')
         vehicle_class = self.complete_ontology_entry('Vehicle')
         represents_entry = self.complete_ontology_entry('represents')
@@ -552,7 +554,9 @@ class KnowledgeGraphQueryTool:
         code_entry = self.complete_ontology_entry('code')
         s = f"""
             SELECT ?model ?hsn ?tsn ?vin WHERE {{
-                ?fc {occurred_in_entry} ?vehicle .
+                ?diag_log a {diag_log_entry} .
+                ?dtc {appears_in_entry} ?diag_log .
+                ?diag_log {created_for_entry} ?vehicle .
                 ?fc a {fault_cond_class} .
                 ?vehicle a {vehicle_class} .
                 ?dtc {represents_entry} ?fc .

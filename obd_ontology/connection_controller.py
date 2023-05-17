@@ -245,7 +245,6 @@ if __name__ == '__main__':
         Fact(("car_1", onto_namespace.model, 'Mazda3'), property_fact=True),
         Fact(("car_1", onto_namespace.HSN, '847984'), property_fact=True),
         Fact(("car_1", onto_namespace.TSN, '45539'), property_fact=True),
-        Fact(("car_1", onto_namespace.VIN, '1234567890ABCDEFGHJKLMNPRSTUVWXYZ'), property_fact=True),
-        Fact(("OWLNamedIndividual_181b81a8_3e76_4ab8_bee8_33d7508ac04a", onto_namespace.occurredIn, 'car_1'))
+        Fact(("car_1", onto_namespace.VIN, '1234567890ABCDEFGHJKLMNPRSTUVWXYZ'), property_fact=True)
     ]
     connection.extend_knowledge_graph(fact_list)
