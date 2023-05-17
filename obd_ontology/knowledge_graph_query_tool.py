@@ -1234,6 +1234,25 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci_classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_manual_inspection_instances(self, verbose: bool = True) -> list:
+        """
+        Queries all manual inspection instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all manual inspections stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all manual inspection instances")
+            print("####################################")
+        manual_inspection_entry = self.complete_ontology_entry('ManualInspection')
+        s = f"""
+            SELECT ?manual_inspection WHERE {{
+                ?manual_inspection a {manual_inspection_entry} .
+            }}
+            """
+        return [row['manual_inspection']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_model_id_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
         Queries the model ID for the specified oscillogram classification instance.
@@ -1258,6 +1277,31 @@ class KnowledgeGraphQueryTool:
             }}
             """
         return [row['model_id']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_suspect_component_by_manual_inspection_id(self, manual_inspection_id: str, verbose: bool = True) -> list:
+        """
+        Queries the suspect component for the specified manual inspection instance.
+
+        :param manual_inspection_id: ID of the manual inspection instance to query component for
+        :param verbose: if true, logging is activated
+        :return: suspect component for manual inspection instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: suspect component for the specified manual inspection:", manual_inspection_id)
+            print("####################################")
+        manual_inspection_entry = self.complete_ontology_entry('ManualInspection')
+        id_entry = self.complete_ontology_entry(manual_inspection_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        checks_entry = self.complete_ontology_entry('checks')
+        s = f"""
+            SELECT ?comp WHERE {{
+                ?manual_inspection a {manual_inspection_entry} .
+                FILTER(STR(?manual_inspection) = "{id_entry}") .
+                ?manual_inspection {checks_entry} ?comp .
+            }}
+            """
+        return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_uncertainty_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
@@ -1409,6 +1453,31 @@ class KnowledgeGraphQueryTool:
             """
         return [row['reason_for']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_reason_for_inspection(self, manual_inspection_id: str, verbose: bool = True) -> list:
+        """
+        Queries the reason (other classification or diag association) for the specified inspection.
+
+        :param manual_inspection_id: ID of manual inspection instance
+        :param verbose: if true, logging is activated
+        :return: classification reason
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: classification reason for the specified manual inspection:", manual_inspection_id)
+            print("####################################")
+        manual_inspection_entry = self.complete_ontology_entry('ManualInspection')
+        id_entry = self.complete_ontology_entry(manual_inspection_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        reason_for_entry = self.complete_ontology_entry('reasonFor')
+        s = f"""
+            SELECT ?reason_for WHERE {{
+                ?manual_inspection a {manual_inspection_entry} .
+                FILTER(STR(?manual_inspection) = "{id_entry}") .
+                ?reason_for {reason_for_entry} ?manual_inspection .
+            }}
+            """
+        return [row['reason_for']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_prediction_by_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
         Queries the prediction for the specified classification.
@@ -1430,6 +1499,31 @@ class KnowledgeGraphQueryTool:
                 ?osci_classification a {osci_classification_entry} .
                 FILTER(STR(?osci_classification) = "{id_entry}") .
                 ?osci_classification {pred_entry} ?pred .
+            }}
+            """
+        return [row['pred']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_prediction_by_inspection(self, manual_inspection_id: str, verbose: bool = True) -> list:
+        """
+        Queries the prediction for the specified inspection.
+
+        :param manual_inspection_id: ID of manual inspection instance
+        :param verbose: if true, logging is activated
+        :return: prediction
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: prediction for the specified manual inspection:", manual_inspection_id)
+            print("####################################")
+        manual_inspection_entry = self.complete_ontology_entry('ManualInspection')
+        id_entry = self.complete_ontology_entry(manual_inspection_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        pred_entry = self.complete_ontology_entry('prediction')
+        s = f"""
+            SELECT ?pred WHERE {{
+                ?manual_inspection a {manual_inspection_entry} .
+                FILTER(STR(?manual_inspection) = "{id_entry}") .
+                ?manual_inspection {pred_entry} ?pred .
             }}
             """
         return [row['pred']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
