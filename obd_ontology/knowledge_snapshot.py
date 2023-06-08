@@ -21,11 +21,15 @@ def knowledge_snapshot_dtc_perspective():
         print(colored(dtc, "yellow", "on_grey", ["bold"]))
         print(colored("\t- occurs with:", "blue", "on_grey", ["bold"]),
               qt.query_co_occurring_trouble_codes(dtc, False))
-        print(colored("\t- category:", "blue", "on_grey", ["bold"]), qt.query_fault_cat_by_dtc(dtc, False))
-        print(colored("\t- code type:", "blue", "on_grey", ["bold"]), qt.query_code_type_by_dtc(dtc, False))
+        print(colored("\t- category:", "blue", "on_grey", ["bold"]), qt.query_fault_cat_by_dtc(dtc, False)[0])
+        print(colored("\t- code type:", "blue", "on_grey", ["bold"]), qt.query_code_type_by_dtc(dtc, False)[0])
         print(colored("\t- fault condition:", "blue", "on_grey", ["bold"]),
-              qt.query_fault_condition_by_dtc(dtc, False))
-        print(colored("\t- vehicle occurrences:", "blue", "on_grey", ["bold"]), qt.query_vehicle_by_dtc(dtc, False))
+              qt.query_fault_condition_by_dtc(dtc, False)[0])
+        print(colored("\t- vehicle occurrences:", "blue", "on_grey", ["bold"]))
+        vehicle_occurrences = qt.query_vehicle_by_dtc(dtc, False)
+        for vehicle_occ in vehicle_occurrences:
+            print("\t\t-", vehicle_occ)
+
         print(colored("\t- symptoms:", "blue", "on_grey", ["bold"]), qt.query_symptoms_by_dtc(dtc, False))
 
         sub_name = qt.query_indicates_by_dtc(dtc, False)
@@ -43,7 +47,7 @@ def knowledge_snapshot_dtc_perspective():
         for i in range(len(suspect_components)):
             print(colored("\t\t- " + ordered_sus_comp[i], "yellow", "on_grey", ["bold"]))
             print(colored("\t\t\tuse oscilloscope:", "blue", "on_grey", ["bold"]),
-                  qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False))
+                  qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False)[0])
             print(colored("\t\t\taffected by:", "blue", "on_grey", ["bold"]),
                   qt.query_affected_by_relations_by_suspect_component(ordered_sus_comp[i], False))
             print(colored("\t\t\tverifies:", "blue", "on_grey", ["bold"]),
@@ -98,7 +102,7 @@ def knowledge_snapshot_component_perspective():
     for comp in component_instances:
         print(colored(comp, "yellow", "on_grey", ["bold"]))
         print(colored("\t- oscilloscope:", "blue", "on_grey", ["bold"]),
-              qt.query_oscilloscope_usage_by_suspect_component(comp, False))
+              qt.query_oscilloscope_usage_by_suspect_component(comp, False)[0])
         print(colored("\t- affected by:", "blue", "on_grey", ["bold"]),
               qt.query_affected_by_relations_by_suspect_component(comp, False))
         print(colored("\t- verifies:", "blue", "on_grey", ["bold"]),
