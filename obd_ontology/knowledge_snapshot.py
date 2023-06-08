@@ -114,10 +114,10 @@ def knowledge_snapshot_parallel_osci_perspective():
     osci_set_instances = qt.query_all_parallel_rec_oscillogram_set_instances(False)
     for osci_set_id in osci_set_instances:
         osci_set_id = osci_set_id.split("#")[1]
-        print(osci_set_id)
+        print(colored(osci_set_id, "yellow", "on_grey", ["bold"]))
         oscillogram_instances_by_set = qt.query_oscillograms_by_parallel_osci_set(osci_set_id, False)
         for osci in oscillogram_instances_by_set:
-            print("\t- oscillogram instance:", osci.split("#")[1])
+            print(colored("\t- oscillogram instance:", "blue", "on_grey", ["bold"]), osci.split("#")[1])
 
 
 def knowledge_snapshot_oscillogram_perspective():
@@ -130,9 +130,9 @@ def knowledge_snapshot_oscillogram_perspective():
     osci_instances = qt.query_all_recorded_oscillograms(False)
     for osci in osci_instances:
         osci_id = osci.split("#")[1]
-        print("osci:", osci)
+        print(colored("osci:", "yellow", "on_grey", ["bold"]), osci.split("#")[1])
         time_series = qt.query_time_series_by_oscillogram_instance(osci_id, False)[0]
-        print("\t- time series excerpt:", time_series[:50], "...")
+        print(colored("\t- time series excerpt:", "blue", "on_grey", ["bold"]), time_series[:50], "...")
 
 
 def knowledge_snapshot_oscillogram_classification_perspective():
@@ -145,28 +145,36 @@ def knowledge_snapshot_oscillogram_classification_perspective():
     osci_classification_instances = qt.query_all_oscillogram_classifications(False)
     for osci_classification in osci_classification_instances:
         osci_classification_id = osci_classification.split("#")[1]
-        print(osci_classification_id)
-        print("\t- model id:", qt.query_model_id_by_osci_classification_id(osci_classification_id, False)[0])
-        print("\t- uncertainty:", qt.query_uncertainty_by_osci_classification_id(osci_classification_id, False)[0])
+        print(colored(osci_classification_id, "yellow", "on_grey", ["bold"]))
+        print(colored("\t- model id:", "blue", "on_grey", ["bold"]),
+              qt.query_model_id_by_osci_classification_id(osci_classification_id, False)[0])
+        print(colored("\t- uncertainty:", "blue", "on_grey", ["bold"]),
+              qt.query_uncertainty_by_osci_classification_id(osci_classification_id, False)[0])
         osci_instance = qt.query_oscillogram_by_classification_instance(osci_classification_id, False)
-        print("\t- classifies:", osci_instance[0].split("#")[1] if len(osci_instance) > 0 else "")
+        print(colored("\t- classifies:", "blue", "on_grey", ["bold"]),
+              osci_instance[0].split("#")[1] if len(osci_instance) > 0 else "")
+
         heatmap_instance = qt.query_heatmap_by_classification_instance(osci_classification_id, False)
         heatmap_id = heatmap_instance[0].split("#")[1] if len(heatmap_instance) > 0 else ""
         if len(heatmap_id) > 0:
-            print("\t- produces:", heatmap_id)
-            print("\t\t- generation_method:", qt.query_generation_method_by_heatmap(heatmap_id, False)[0])
-            print("\t\t- generated heatmap:", qt.query_heatmap_string_by_heatmap(heatmap_id, False)[0])
+            print(colored("\t- produces:", "blue", "on_grey", ["bold"]), heatmap_id)
+            print(colored("\t\t- generation_method:", "blue", "on_grey", ["bold"]),
+                  qt.query_generation_method_by_heatmap(heatmap_id, False)[0])
+            print(colored("\t\t- generated heatmap:", "blue", "on_grey", ["bold"]),
+                  qt.query_heatmap_string_by_heatmap(heatmap_id, False)[0])
+
         suspect_comp_instance = qt.query_suspect_component_by_osci_classification(osci_classification_id, False)
         suspect_comp_id = suspect_comp_instance[0].split("#")[1] if len(suspect_comp_instance) > 0 else ""
-        print("\t- checks:", suspect_comp_id)
+        print(colored("\t- checks:", "blue", "on_grey", ["bold"]), suspect_comp_id)
+
         reason_for_instance = qt.query_reason_for_classification(osci_classification_id, False)
         reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
         if reason_for_id == "":
             reason_for_instance = qt.query_led_to_for_classification(osci_classification_id, False)
             reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
-        print("\t- reason for classification:", reason_for_id)
+        print(colored("\t- reason for classification:", "blue", "on_grey", ["bold"]), reason_for_id)
         prediction = qt.query_prediction_by_classification(osci_classification_id, False)
-        print("\t- prediction:", prediction[0] if len(prediction) > 0 else "")
+        print(colored("\t- prediction:", "blue", "on_grey", ["bold"]), prediction[0] if len(prediction) > 0 else "")
 
 
 def knowledge_snapshot_manual_inspection_perspective():
@@ -179,18 +187,18 @@ def knowledge_snapshot_manual_inspection_perspective():
     manual_inspection_instances = qt.query_all_manual_inspection_instances(False)
     for manual_inspection in manual_inspection_instances:
         manual_inspection_id = manual_inspection.split("#")[1]
-        print(manual_inspection_id)
+        print(colored(manual_inspection_id, "yellow", "on_grey", ["bold"]))
         suspect_comp_instance = qt.query_suspect_component_by_manual_inspection_id(manual_inspection_id, False)
         suspect_comp_id = suspect_comp_instance[0].split("#")[1] if len(suspect_comp_instance) > 0 else ""
-        print("\t- checks:", suspect_comp_id)
+        print(colored("\t- checks:", "blue", "on_grey", ["bold"]), suspect_comp_id)
         reason_for_instance = qt.query_reason_for_inspection(manual_inspection_id, False)
         reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
         if reason_for_id == "":
             reason_for_instance = qt.query_led_to_for_inspection(manual_inspection_id, False)
             reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
-        print("\t- reason for inspection:", reason_for_id)
+        print(colored("\t- reason for inspection:", "blue", "on_grey", ["bold"]), reason_for_id)
         prediction = qt.query_prediction_by_inspection(manual_inspection_id, False)
-        print("\t- prediction:", prediction[0] if len(prediction) > 0 else "")
+        print(colored("\t- prediction:", "blue", "on_grey", ["bold"]), prediction[0] if len(prediction) > 0 else "")
 
 
 def knowledge_snapshot_diag_log_perspective():
@@ -203,20 +211,25 @@ def knowledge_snapshot_diag_log_perspective():
     diag_log_instances = qt.query_all_diag_log_instances(False)
     for diag_log in diag_log_instances:
         diag_log_id = diag_log.split("#")[1]
-        print(diag_log_id)
-        print("\t- date:", qt.query_date_by_diag_log(diag_log_id, False)[0])
-        print("\t- max number of parallel rec:", qt.query_max_num_of_parallel_rec_by_diag_log(diag_log_id, False)[0])
-        print("\t- appearing DTCs:")
+        print(colored(diag_log_id, "yellow", "on_grey", ["bold"]))
+        print(colored("\t- date:", "blue", "on_grey", ["bold"]), qt.query_date_by_diag_log(diag_log_id, False)[0])
+        print(colored("\t- max number of parallel rec:", "blue", "on_grey", ["bold"]),
+              qt.query_max_num_of_parallel_rec_by_diag_log(diag_log_id, False)[0])
+        print(colored("\t- appearing DTCs:", "blue", "on_grey", ["bold"]))
+
         appearing_dtcs = qt.query_dtcs_by_diag_log(diag_log_id, False)
         for dtc in appearing_dtcs:
             print("\t\t-", dtc.split("#")[1])
+
         fault_path_instance = qt.query_fault_path_by_diag_log(diag_log_id, False)
         fault_path_id = fault_path_instance[0].split("#")[1] if len(fault_path_instance) > 0 else ""
-        print("\t- entails fault path:", fault_path_id)
+        print(colored("\t- entails fault path:", "blue", "on_grey", ["bold"]), fault_path_id)
+
         vehicle_instance = qt.query_vehicle_by_diag_log(diag_log_id, False)
         vehicle_id = vehicle_instance[0].split("#")[1]
-        print("\t- created for vehicle:", vehicle_id)
-        print("\t- diagnostic steps:")
+        print(colored("\t- created for vehicle:", "blue", "on_grey", ["bold"]), vehicle_id)
+
+        print(colored("\t- diagnostic steps:", "blue", "on_grey", ["bold"]))
         diag_steps = qt.query_diag_steps_by_diag_log(diag_log_id, False)
         for diag_step in diag_steps:
             print("\t\t-", diag_step.split("#")[1])
@@ -232,8 +245,8 @@ def knowledge_snapshot_fault_path_perspective():
     fault_path_instances = qt.query_all_fault_path_instances(False)
     for fault_path in fault_path_instances:
         fault_path_id = fault_path.split("#")[1]
-        print(fault_path_id)
-        print("\t- fault conditions that resulted in this fault path:")
+        print(colored(fault_path_id, "yellow", "on_grey", ["bold"]))
+        print(colored("\t- fault conditions that resulted in this fault path:", "blue", "on_grey", ["bold"]))
         fault_conditions = qt.query_resulted_in_by_fault_path(fault_path_id, False)
         for fc in fault_conditions:
             print("\t\t-", fc.split("#")[1])
