@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
+import argparse
+
 from termcolor import colored
 
 from knowledge_graph_query_tool import KnowledgeGraphQueryTool
@@ -253,18 +255,21 @@ def knowledge_snapshot_fault_path_perspective():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Knowledge snapshot - shows current content of KG')
+    parser.add_argument('--perspective', type=str, help='perspective of snapshot [expert | diag]',
+                        required=False, default='expert')
+    args = parser.parse_args()
     qt = KnowledgeGraphQueryTool(local_kb=False)
 
-    # expert knowledge
-    knowledge_snapshot_dtc_perspective()
-    knowledge_snapshot_subsystem_perspective()
-    knowledge_snapshot_component_perspective()
-    knowledge_snapshot_component_set_perspective()
-
-    # diagnosis
-    knowledge_snapshot_parallel_osci_perspective()
-    knowledge_snapshot_oscillogram_perspective()
-    knowledge_snapshot_oscillogram_classification_perspective()
-    knowledge_snapshot_manual_inspection_perspective()
-    knowledge_snapshot_diag_log_perspective()
-    knowledge_snapshot_fault_path_perspective()
+    if args.perspective == 'expert':  # expert knowledge
+        knowledge_snapshot_dtc_perspective()
+        knowledge_snapshot_subsystem_perspective()
+        knowledge_snapshot_component_perspective()
+        knowledge_snapshot_component_set_perspective()
+    elif args.perspective == 'diag':  # diagnosis
+        knowledge_snapshot_parallel_osci_perspective()
+        knowledge_snapshot_oscillogram_perspective()
+        knowledge_snapshot_oscillogram_classification_perspective()
+        knowledge_snapshot_manual_inspection_perspective()
+        knowledge_snapshot_diag_log_perspective()
+        knowledge_snapshot_fault_path_perspective()
