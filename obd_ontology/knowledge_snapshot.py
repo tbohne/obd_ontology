@@ -136,7 +136,7 @@ def knowledge_snapshot_oscillogram_perspective():
     osci_instances = qt.query_all_recorded_oscillograms(False)
     for osci in osci_instances:
         osci_id = osci.split("#")[1]
-        print(colored("osci:", "yellow", "on_grey", ["bold"]), osci.split("#")[1])
+        print(colored("osci: " + osci.split("#")[1], "yellow", "on_grey", ["bold"]))
         time_series = qt.query_time_series_by_oscillogram_instance(osci_id, False)[0]
         print(colored("\t- time series excerpt:", "blue", "on_grey", ["bold"]), time_series[:50], "...")
 
