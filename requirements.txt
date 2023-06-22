@@ -1,8 +1,8 @@
-rdflib
-Owlready2
-requests
-termcolor
-flask
-flask_wtf
-wtforms
+rdflib==6.2.0
+Owlready2==0.39
+requests==2.31.0
+termcolor==2.3.0
+flask==2.3.2
+flask_wtf==1.1.1
+wtforms==3.0.1
 git+https://github.com/tbohne/dtc_parser.git
