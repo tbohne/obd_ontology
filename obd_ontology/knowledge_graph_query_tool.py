@@ -1181,6 +1181,32 @@ class KnowledgeGraphQueryTool:
             return [row.dtc for row in self.graph.query(s)]
         return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_vehicle_instances(self, verbose: bool = True) -> list:
+        """
+        Queries all vehicle instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all vehicles stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all vehicle instances")
+            print("####################################")
+        vehicle_entry = self.complete_ontology_entry('Vehicle')
+        model_entry = self.complete_ontology_entry('model')
+        s = f"""
+            SELECT ?vehicle ?model WHERE {{
+                ?vehicle a {vehicle_entry} .
+                ?vehicle {model_entry} ?model .
+            }}
+            """
+        if self.local_kb:
+            return [row.dtc for row in self.graph.query(s)]
+        return [
+            (row['vehicle']['value'], row['model']['value'])
+            for row in self.fuseki_connection.query_knowledge_graph(s, verbose)
+        ]
+
     def query_all_parallel_rec_oscillogram_set_instances(self, verbose: bool = True) -> list:
         """
         Queries all parallel recorded oscillogram sets stored in the knowledge graph.
@@ -1445,6 +1471,39 @@ class KnowledgeGraphQueryTool:
             }}
             """
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_dtcs_recorded_in_vehicle(self, vehicle_id: str, verbose: bool = True) -> list:
+        """
+        Queries the DTCs recorded in the specified vehicle.
+
+        :param vehicle_id: ID of the vehicle to retrieve DTCs for
+        :param verbose: if true, logging is activated
+        :return: DTCs for the vehicle instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: DTCs for the specified vehicle:", vehicle_id)
+            print("####################################")
+        dtc_entry = self.complete_ontology_entry('DTC')
+        diag_log_entry = self.complete_ontology_entry('DiagLog')
+        vehicle_entry = self.complete_ontology_entry('Vehicle')
+        id_entry = self.complete_ontology_entry(vehicle_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        appears_in_entry = self.complete_ontology_entry('appearsIn')
+        created_for_entry = self.complete_ontology_entry('createdFor')
+        code_entry = self.complete_ontology_entry('code')
+        s = f"""
+        SELECT ?code WHERE {{
+            ?vehicle a {vehicle_entry} .
+            FILTER(STR(?vehicle) = "{id_entry}") .
+            ?diag_log a {diag_log_entry} .
+            ?dtc a {dtc_entry} .
+            ?dtc {appears_in_entry} ?diag_log .
+            ?diag_log {created_for_entry} ?vehicle .
+            ?dtc {code_entry} ?code .
+        }}
+        """
+        return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_dtcs_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
         """
