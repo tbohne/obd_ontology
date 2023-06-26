@@ -266,10 +266,14 @@ def knowledge_snapshot_vehicle_perspective():
     print("KNOWLEDGE SNAPSHOT - VEHICLE PERSPECTIVE")
     print("###########################################################################\n")
     vehicle_instances = qt.query_all_vehicle_instances()
-    for vehicle_id, model in vehicle_instances:
+    for vehicle_id, hsn, tsn, vin, model in vehicle_instances:
         vehicle_id = vehicle_id.split("#")[1]
-        print(colored(vehicle_id + ": " + model, "yellow", "on_grey", ["bold"]))
-        print(colored("\t- DTC recorded in this vehicle:", "blue", "on_grey", ["bold"]))
+        print(colored(vehicle_id, "yellow", "on_grey", ["bold"]))
+        print(colored("\t- HSN: " + hsn, "blue", "on_grey", ["bold"]))
+        print(colored("\t- TSN: " + tsn, "blue", "on_grey", ["bold"]))
+        print(colored("\t- VIN: " + vin, "blue", "on_grey", ["bold"]))
+        print(colored("\t- model: " + model, "blue", "on_grey", ["bold"]))
+        print(colored("\t- DTCs recorded in this vehicle:", "blue", "on_grey", ["bold"]))
         dtcs = qt.query_dtcs_recorded_in_vehicle(vehicle_id, False)
         for dtc in dtcs:
             print("\t\t-", dtc)
