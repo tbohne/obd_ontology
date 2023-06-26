@@ -1194,16 +1194,23 @@ class KnowledgeGraphQueryTool:
             print("####################################")
         vehicle_entry = self.complete_ontology_entry('Vehicle')
         model_entry = self.complete_ontology_entry('model')
+        hsn_entry = self.complete_ontology_entry('HSN')
+        tsn_entry = self.complete_ontology_entry('TSN')
+        vin_entry = self.complete_ontology_entry('VIN')
         s = f"""
-            SELECT ?vehicle ?model WHERE {{
+            SELECT ?vehicle ?hsn ?tsn ?vin ?model WHERE {{
                 ?vehicle a {vehicle_entry} .
+                ?vehicle {hsn_entry} ?hsn .
+                ?vehicle {tsn_entry} ?tsn .
+                ?vehicle {vin_entry} ?vin .
                 ?vehicle {model_entry} ?model .
             }}
             """
         if self.local_kb:
             return [row.dtc for row in self.graph.query(s)]
         return [
-            (row['vehicle']['value'], row['model']['value'])
+            (row['vehicle']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value'],
+             row['model']['value'])
             for row in self.fuseki_connection.query_knowledge_graph(s, verbose)
         ]
 
