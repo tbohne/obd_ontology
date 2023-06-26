@@ -4,6 +4,7 @@
 
 import uuid
 from datetime import date
+from typing import List
 
 from owlready2 import *
 from rdflib import Namespace, RDF
@@ -92,6 +93,40 @@ class OntologyInstanceGenerator:
                 fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_uuid)))
                 fact_list.append(Fact((diag_log_uuid, onto_namespace.createdFor, vehicle_uuid)))
             self.fuseki_connection.extend_knowledge_graph(fact_list)
+
+    def extend_knowledge_graph_with_diag_log(
+            self, diag_date: str, max_num_of_parallel_rec: int, dtc_instances: List[str],
+            fault_path_instances: List[str], classification_instances: List[str], vehicle_id: str
+    ) -> None:
+        """
+        Extends the knowledge graph with diagnosis log information.
+
+        :param diag_date: date of the diagnosis
+        :param max_num_of_parallel_rec: max number of parallel recordings based on workshop equipment
+        :param dtc_instances: IDs of DTC instances part of the diagnosis
+        :param fault_path_instances: IDs of fault path instances part of the diagnosis
+        :param classification_instances: IDs of classification instances part of the diagnosis
+        :param vehicle_id: ID of the vehicle the diag log is created for
+        """
+        onto_namespace = Namespace(ONTOLOGY_PREFIX)
+
+        diag_log_uuid = "diag_log_" + str(uuid.uuid4())
+        fact_list = [
+            Fact((diag_log_uuid, RDF.type, onto_namespace["DiagLog"].toPython())),
+            Fact((diag_log_uuid, onto_namespace.date, diag_date), property_fact=True),
+            Fact((diag_log_uuid, onto_namespace.max_num_of_parallel_rec, max_num_of_parallel_rec), property_fact=True)
+        ]
+        for dtc_id in dtc_instances:
+            fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_uuid)))
+
+        for fault_path_id in fault_path_instances:
+            fact_list.append(Fact((diag_log_uuid, onto_namespace.entails, fault_path_id)))
+
+        for classification_id in classification_instances:
+            fact_list.append(Fact((classification_id, onto_namespace.diagStep, diag_log_uuid)))
+
+        fact_list.append(Fact((diag_log_uuid, onto_namespace.createdFor, vehicle_id)))
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
         """
