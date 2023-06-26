@@ -16,8 +16,8 @@ from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 class OntologyInstanceGenerator:
     """
-    Enhances the knowledge graph with vehicle-specific instance data. Connects the on-board diagnosis data recorded in
-    a particular car with corresponding background knowledge stored in the knowledge graph.
+    Enhances the knowledge graph with vehicle- and diagnosis-specific instance data. Connects the on-board diagnosis
+    data recorded in a particular car with corresponding background knowledge stored in the knowledge graph.
     E.g.: A particular DTC is recorded in a car:
         - vehicle is added to knowledge graph (with all its properties)
         - vehicle is connected to knowledge about the particular DTC (symptoms etc.) via the DiagLog
@@ -36,7 +36,7 @@ class OntologyInstanceGenerator:
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
-    def extend_knowledge_graph(
+    def extend_knowledge_graph_with_vehicle_data(
             self, model: str, hsn: str, tsn: str, vin: str, dtc: str, max_num_of_parallel_rec: int, diag_date: str
     ) -> None:
         """
@@ -51,17 +51,7 @@ class OntologyInstanceGenerator:
         :param diag_date: date of the diagnosis
         """
         if self.local_kb:
-            # TODO: deprecated
             print("LOCAL KB NO LONGER SUPPORTED - USE FUSEKI SERVER INSTEAD")
-            # dtc_obj = self.onto.DTC()
-            # fault_condition = list(dtc_obj.represents)[0]
-            # vehicle = self.onto.Vehicle()
-            # vehicle.model.append(model)
-            # vehicle.HSN.append(hsn)
-            # vehicle.TSN.append(tsn)
-            # vehicle.VIN.append(vin)
-            # fault_condition.occurredIn.append(vehicle)
-            # self.check_consistency_and_save_to_file(hsn, tsn, vin)
         else:
             onto_namespace = Namespace(ONTOLOGY_PREFIX)
 
@@ -70,9 +60,8 @@ class OntologyInstanceGenerator:
             if len(fault_condition_instance) > 0:
                 # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
                 fault_condition_id = fault_condition_instance[0].split("#")[1]
-                # TODO: deactivated for demo, should be activated again later
-                # fault_condition = self.knowledge_graph_query_tool.query_fault_condition_by_dtc(dtc)
-                # print("FAULT CONDITION:", fault_condition[0])
+                fault_condition = self.knowledge_graph_query_tool.query_fault_condition_by_dtc(dtc)
+                print("FAULT CONDITION:", fault_condition[0])
             else:
                 print("Presented fault condition (" + dtc + ") not yet part of KG -- should be entered in advance")
 
@@ -126,4 +115,6 @@ class OntologyInstanceGenerator:
 
 if __name__ == '__main__':
     instance_gen = OntologyInstanceGenerator(".", local_kb=False)
-    instance_gen.extend_knowledge_graph("Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", "P2563")
+    instance_gen.extend_knowledge_graph_with_vehicle_data(
+        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", "P2563", 4, str(date.today())
+    )
