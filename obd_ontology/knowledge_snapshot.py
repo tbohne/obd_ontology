@@ -258,6 +258,23 @@ def knowledge_snapshot_fault_path_perspective():
             print("\t\t-", fc.split("#")[1])
 
 
+def knowledge_snapshot_vehicle_perspective():
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding vehicles.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - VEHICLE PERSPECTIVE")
+    print("###########################################################################\n")
+    vehicle_instances = qt.query_all_vehicle_instances()
+    for vehicle_id, model in vehicle_instances:
+        vehicle_id = vehicle_id.split("#")[1]
+        print(colored(vehicle_id + ": " + model, "yellow", "on_grey", ["bold"]))
+        print(colored("\t- DTC recorded in this vehicle:", "blue", "on_grey", ["bold"]))
+        dtcs = qt.query_dtcs_recorded_in_vehicle(vehicle_id, False)
+        for dtc in dtcs:
+            print("\t\t-", dtc)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Knowledge snapshot - shows current content of KG')
     parser.add_argument('--perspective', type=str, help='perspective of snapshot [expert | diag]',
@@ -277,3 +294,4 @@ if __name__ == '__main__':
         knowledge_snapshot_manual_inspection_perspective()
         knowledge_snapshot_diag_log_perspective()
         knowledge_snapshot_fault_path_perspective()
+        knowledge_snapshot_vehicle_perspective()
