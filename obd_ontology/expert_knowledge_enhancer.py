@@ -11,7 +11,7 @@ from rdflib import Namespace, RDF
 
 from obd_ontology import expert_knowledge_parser
 from obd_ontology.component_set_knowledge import ComponentSetKnowledge
-from obd_ontology.config import ONTOLOGY_PREFIX
+from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL
 from obd_ontology.connection_controller import ConnectionController
 from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.fact import Fact
@@ -28,10 +28,10 @@ class ExpertKnowledgeEnhancer:
     Furthermore, new knowledge can be provided as input to a web interface (cf. `app.py`).
     """
 
-    def __init__(self, knowledge_file: str = None) -> None:
+    def __init__(self, knowledge_file: str = None, kg_url: str = FUSEKI_URL) -> None:
         self.knowledge_file = knowledge_file
         # establish connection to Apache Jena Fuseki server
-        self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
+        self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
         self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
         self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
