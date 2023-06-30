@@ -7,7 +7,7 @@ import pathlib
 import rdflib
 from termcolor import colored
 
-from obd_ontology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE
+from obd_ontology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE, FUSEKI_URL
 from obd_ontology.connection_controller import ConnectionController
 
 
@@ -17,14 +17,14 @@ class KnowledgeGraphQueryTool:
     Works with both local knowledge graph (specified .owl file) and hosted knowledge graph on Fuseki server.
     """
 
-    def __init__(self, local_kb=False) -> None:
+    def __init__(self, local_kb: bool = False, kg_url: str = FUSEKI_URL) -> None:
         self.ontology_prefix = ONTOLOGY_PREFIX
         self.graph = rdflib.Graph()
         self.local_kb = local_kb
         if local_kb:
             self.init_local_knowledge_base()
         else:
-            self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
+            self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
 
     def init_local_knowledge_base(self) -> None:
         """
