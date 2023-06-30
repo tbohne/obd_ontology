@@ -9,7 +9,7 @@ from typing import List
 from owlready2 import *
 from rdflib import Namespace, RDF
 
-from obd_ontology.config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX
+from obd_ontology.config import KNOWLEDGE_GRAPH_FILE, ONTOLOGY_PREFIX, FUSEKI_URL
 from obd_ontology.connection_controller import ConnectionController
 from obd_ontology.fact import Fact
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
@@ -24,7 +24,7 @@ class OntologyInstanceGenerator:
         - vehicle is connected to knowledge about the particular DTC (symptoms etc.) via the DiagLog
     """
 
-    def __init__(self, ontology_path: str, local_kb=False) -> None:
+    def __init__(self, ontology_path: str, local_kb: bool = False, kg_url: str = FUSEKI_URL) -> None:
         self.local_kb = local_kb
 
         if self.local_kb:
@@ -34,7 +34,7 @@ class OntologyInstanceGenerator:
             self.onto.load()
         else:
             # establish connection to Apache Jena Fuseki server
-            self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX)
+            self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
     def extend_knowledge_graph_with_vehicle_data(
