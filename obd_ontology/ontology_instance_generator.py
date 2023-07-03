@@ -226,12 +226,12 @@ class OntologyInstanceGenerator:
 
     def extend_knowledge_graph_with_parallel_rec_osci_set(self) -> str:
         """
-        Extends the knowledge graph with information about a set of parallel recorded oscillograms.
+        Extends the knowledge graph with facts about a set of parallel recorded oscillograms.
 
         :return: oscillogram set ID
         """
         onto_namespace = Namespace(ONTOLOGY_PREFIX)
-        osci_set_uuid = "parallel_rec_oscillogram_set_" + str(uuid.uuid4())
+        osci_set_uuid = "parallel_rec_oscillogram_set_" + uuid.uuid4().hex
         fact_list = [Fact((osci_set_uuid, RDF.type, onto_namespace["ParallelRecOscillogramSet"].toPython()))]
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return osci_set_uuid
