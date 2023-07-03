@@ -205,19 +205,19 @@ class OntologyInstanceGenerator:
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return heatmap_uuid
 
-    def extend_knowledge_graph_with_oscillogram(self, time_series: str, parallel_rec_set_id: str = "") -> str:
+    def extend_knowledge_graph_with_oscillogram(self, time_series: List[float], parallel_rec_set_id: str = "") -> str:
         """
-        Extends the knowledge graph with oscillogram information.
+        Extends the knowledge graph with oscillogram facts.
 
         :param time_series: time series (voltage values), i.e., the oscillogram
         :param parallel_rec_set_id: optional ID of a set of parallel recordings this oscillogram should be assigned to
         :return: oscillogram ID
         """
         onto_namespace = Namespace(ONTOLOGY_PREFIX)
-        osci_uuid = "oscillogram_" + str(uuid.uuid4())
+        osci_uuid = "oscillogram_" + uuid.uuid4().hex
         fact_list = [
             Fact((osci_uuid, RDF.type, onto_namespace["Oscillogram"].toPython())),
-            Fact((osci_uuid, onto_namespace.time_series, time_series), property_fact=True)
+            Fact((osci_uuid, onto_namespace.time_series, str(time_series)), property_fact=True)
         ]
         if parallel_rec_set_id != "":  # oscillogram part of parallel recorded set?
             fact_list.append(Fact((osci_uuid, onto_namespace.partOf, parallel_rec_set_id)))
