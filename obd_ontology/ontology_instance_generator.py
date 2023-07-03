@@ -240,22 +240,26 @@ class OntologyInstanceGenerator:
             self, prediction: bool, classification_reason: str, comp_id: str
     ) -> None:
         """
-        Extends the knowledge graph with manual inspection information.
+        Extends the knowledge graph with manual inspection facts.
 
         :param prediction: prediction for the considered component (classification result)
         :param classification_reason: either a different classification or a diagnostic association
         :param comp_id: ID of the classified component
         """
+        # either ID of DA or ID of another classification
+        assert "diag_association_" in classification_reason or "manual_inspection_" in classification_reason \
+               or "oscillogram_classification_" in classification_reason
+
         onto_namespace = Namespace(ONTOLOGY_PREFIX)
-        classification_uuid = "manual_inspection_" + str(uuid.uuid4())
+        classification_uuid = "manual_inspection_" + uuid.uuid4().hex
         fact_list = [
             Fact((classification_uuid, RDF.type, onto_namespace["ManualInspection"].toPython())),
             Fact((classification_uuid, onto_namespace.prediction, prediction), property_fact=True),
             Fact((classification_uuid, onto_namespace.checks, comp_id))
         ]
-        if "diagnostic_association" in classification_reason:
+        if "diag_association_" in classification_reason:
             fact_list.append(Fact((classification_reason, onto_namespace.ledTo, classification_uuid)))
-        else:
+        else:  # the reason is a classification instance (manual or osci)
             fact_list.append(Fact((classification_reason, onto_namespace.reasonFor, classification_uuid)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
