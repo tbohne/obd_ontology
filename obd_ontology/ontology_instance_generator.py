@@ -158,7 +158,7 @@ class OntologyInstanceGenerator:
             osci_id: str, heatmap_id: str
     ) -> None:
         """
-        Extends the knowledge graph with oscillogram classification information.
+        Extends the knowledge graph with oscillogram classification facts.
 
         :param prediction: prediction for the considered oscillogram (classification result)
         :param classification_reason: either a different classification or a diagnostic association
@@ -168,8 +168,12 @@ class OntologyInstanceGenerator:
         :param osci_id: ID of the classified oscillogram
         :param heatmap_id: ID of the generated heatmap
         """
+        # either ID of DA or ID of another classification
+        assert "diag_association_" in classification_reason or "manual_inspection_" in classification_reason \
+               or "oscillogram_classification_" in classification_reason
+
         onto_namespace = Namespace(ONTOLOGY_PREFIX)
-        classification_uuid = "oscillogram_classification_" + str(uuid.uuid4())
+        classification_uuid = "oscillogram_classification_" + uuid.uuid4().hex
         fact_list = [
             Fact((classification_uuid, RDF.type, onto_namespace["OscillogramClassification"].toPython())),
             # properties
@@ -181,9 +185,9 @@ class OntologyInstanceGenerator:
             Fact((classification_uuid, onto_namespace.classifies, osci_id)),
             Fact((classification_uuid, onto_namespace.produces, heatmap_id))
         ]
-        if "diagnostic_association" in classification_reason:
+        if "diag_association_" in classification_reason:
             fact_list.append(Fact((classification_reason, onto_namespace.ledTo, classification_uuid)))
-        else:
+        else:  # the reason is a classification instance (manual or osci)
             fact_list.append(Fact((classification_reason, onto_namespace.reasonFor, classification_uuid)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
