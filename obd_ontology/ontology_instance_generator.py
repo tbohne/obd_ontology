@@ -128,6 +128,112 @@ class OntologyInstanceGenerator:
         fact_list.append(Fact((diag_log_uuid, onto_namespace.createdFor, vehicle_id)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
+    def extend_knowledge_graph_with_oscillogram_classification(
+            self, prediction: bool, classification_reason: str, comp_id: str, uncertainty: float, model_id: str,
+            osci_id: str, heatmap_id: str
+    ) -> None:
+        """
+        Extends the knowledge graph with oscillogram classification information.
+
+        :param prediction: prediction for the considered oscillogram (classification result)
+        :param classification_reason: either a different classification or a diagnostic association
+        :param comp_id: ID of the classified component
+        :param uncertainty: uncertainty of the prediction
+        :param model_id: ID of the used classification model
+        :param osci_id: ID of the classified oscillogram
+        :param heatmap_id: ID of the generated heatmap
+        """
+        onto_namespace = Namespace(ONTOLOGY_PREFIX)
+        classification_uuid = "oscillogram_classification_" + str(uuid.uuid4())
+        fact_list = [
+            Fact((classification_uuid, RDF.type, onto_namespace["OscillogramClassification"].toPython())),
+            # properties
+            Fact((classification_uuid, onto_namespace.prediction, prediction), property_fact=True),
+            Fact((classification_uuid, onto_namespace.uncertainty, uncertainty), property_fact=True),
+            Fact((classification_uuid, onto_namespace.model_id, model_id), property_fact=True),
+            # relations
+            Fact((classification_uuid, onto_namespace.checks, comp_id)),
+            Fact((classification_uuid, onto_namespace.classifies, osci_id)),
+            Fact((classification_uuid, onto_namespace.produces, heatmap_id))
+        ]
+        if "diagnostic_association" in classification_reason:
+            fact_list.append(Fact((classification_reason, onto_namespace.ledTo, classification_uuid)))
+        else:
+            fact_list.append(Fact((classification_reason, onto_namespace.reasonFor, classification_uuid)))
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
+    def extend_knowledge_graph_with_heatmap(self, gen_method: str, heatmap: str) -> str:
+        """
+        Extends the knowledge graph with heatmap information.
+
+        :param gen_method: used heatmap generation method
+        :param heatmap: generated heatmap (values)
+        :return: heatmap ID
+        """
+        onto_namespace = Namespace(ONTOLOGY_PREFIX)
+        heatmap_uuid = "heatmap_" + str(uuid.uuid4())
+        fact_list = [
+            Fact((heatmap_uuid, RDF.type, onto_namespace["Heatmap"].toPython())),
+            Fact((heatmap_uuid, onto_namespace.generation_method, gen_method), property_fact=True),
+            Fact((heatmap_uuid, onto_namespace.generated_heatmap, heatmap), property_fact=True)
+        ]
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return heatmap_uuid
+
+    def extend_knowledge_graph_with_oscillogram(self, time_series: str, parallel_rec_set_id: str = "") -> str:
+        """
+        Extends the knowledge graph with oscillogram information.
+
+        :param time_series: time series (voltage values), i.e., the oscillogram
+        :param parallel_rec_set_id: optional ID of a set of parallel recordings this oscillogram should be assigned to
+        :return: oscillogram ID
+        """
+        onto_namespace = Namespace(ONTOLOGY_PREFIX)
+        osci_uuid = "oscillogram_" + str(uuid.uuid4())
+        fact_list = [
+            Fact((osci_uuid, RDF.type, onto_namespace["Oscillogram"].toPython())),
+            Fact((osci_uuid, onto_namespace.time_series, time_series), property_fact=True)
+        ]
+        if parallel_rec_set_id != "":  # oscillogram part of parallel recorded set?
+            fact_list.append(Fact((osci_uuid, onto_namespace.partOf, parallel_rec_set_id)))
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return osci_uuid
+
+    def extend_knowledge_graph_with_parallel_rec_osci_set(self) -> str:
+        """
+        Extends the knowledge graph with information about a set of parallel recorded oscillograms.
+
+        :return: oscillogram set ID
+        """
+        onto_namespace = Namespace(ONTOLOGY_PREFIX)
+        osci_set_uuid = "parallel_rec_oscillogram_set_" + str(uuid.uuid4())
+        fact_list = [Fact((osci_set_uuid, RDF.type, onto_namespace["ParallelRecOscillogramSet"].toPython()))]
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return osci_set_uuid
+
+    def extend_knowledge_graph_with_manual_inspection(
+            self, prediction: bool, classification_reason: str, comp_id: str
+    ) -> None:
+        """
+        Extends the knowledge graph with manual inspection information.
+
+        :param prediction: prediction for the considered component (classification result)
+        :param classification_reason: either a different classification or a diagnostic association
+        :param comp_id: ID of the classified component
+        """
+        onto_namespace = Namespace(ONTOLOGY_PREFIX)
+        classification_uuid = "manual_inspection_" + str(uuid.uuid4())
+        fact_list = [
+            Fact((classification_uuid, RDF.type, onto_namespace["ManualInspection"].toPython())),
+            Fact((classification_uuid, onto_namespace.prediction, prediction), property_fact=True),
+            Fact((classification_uuid, onto_namespace.checks, comp_id))
+        ]
+        if "diagnostic_association" in classification_reason:
+            fact_list.append(Fact((classification_reason, onto_namespace.ledTo, classification_uuid)))
+        else:
+            fact_list.append(Fact((classification_reason, onto_namespace.reasonFor, classification_uuid)))
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
         """
         Checks the consistency of the generated ontology instance and saves it to file.
