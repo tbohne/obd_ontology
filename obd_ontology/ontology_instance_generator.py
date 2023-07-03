@@ -191,20 +191,20 @@ class OntologyInstanceGenerator:
             fact_list.append(Fact((classification_reason, onto_namespace.reasonFor, classification_uuid)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def extend_knowledge_graph_with_heatmap(self, gen_method: str, heatmap: str) -> str:
+    def extend_knowledge_graph_with_heatmap(self, gen_method: str, heatmap: List[float]) -> str:
         """
-        Extends the knowledge graph with heatmap information.
+        Extends the knowledge graph with heatmap facts.
 
-        :param gen_method: used heatmap generation method
+        :param gen_method: used heatmap generation method, e.g. GradCAM
         :param heatmap: generated heatmap (values)
         :return: heatmap ID
         """
         onto_namespace = Namespace(ONTOLOGY_PREFIX)
-        heatmap_uuid = "heatmap_" + str(uuid.uuid4())
+        heatmap_uuid = "heatmap_" + uuid.uuid4().hex
         fact_list = [
             Fact((heatmap_uuid, RDF.type, onto_namespace["Heatmap"].toPython())),
             Fact((heatmap_uuid, onto_namespace.generation_method, gen_method), property_fact=True),
-            Fact((heatmap_uuid, onto_namespace.generated_heatmap, heatmap), property_fact=True)
+            Fact((heatmap_uuid, onto_namespace.generated_heatmap, str(heatmap)), property_fact=True)
         ]
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return heatmap_uuid
