@@ -133,13 +133,12 @@ class OntologyInstanceGenerator:
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return diag_log_uuid
 
-    def extend_kg_with_fault_path(self, description: str, fault_cond_uuid: str, diag_log_uuid: str) -> str:
+    def extend_knowledge_graph_with_fault_path(self, description: str, fault_cond_id: str) -> str:
         """
         Extends the knowledge graph with fault path facts.
 
         :param description: fault path description
-        :param fault_cond_uuid: UUID of fault condition
-        :param diag_log_uuid: UUID of diagnosis log
+        :param fault_cond_id: UUID of fault condition
         :return: fault path UUID
         """
         onto_namespace = Namespace(ONTOLOGY_PREFIX)
@@ -147,8 +146,7 @@ class OntologyInstanceGenerator:
         fact_list = [
             Fact((fault_path_uuid, RDF.type, onto_namespace["FaultPath"].toPython())),
             Fact((fault_path_uuid, onto_namespace.path_description, description), property_fact=True),
-            Fact((fault_cond_uuid, onto_namespace.resultedIn, fault_path_uuid)),
-            Fact((diag_log_uuid, onto_namespace.entails, fault_path_uuid))
+            Fact((fault_cond_id, onto_namespace.resultedIn, fault_path_uuid))
         ]
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return fault_path_uuid
@@ -156,7 +154,7 @@ class OntologyInstanceGenerator:
     def extend_knowledge_graph_with_oscillogram_classification(
             self, prediction: bool, classification_reason: str, comp_id: str, uncertainty: float, model_id: str,
             osci_id: str, heatmap_id: str
-    ) -> None:
+    ) -> str:
         """
         Extends the knowledge graph with oscillogram classification facts.
 
@@ -167,6 +165,7 @@ class OntologyInstanceGenerator:
         :param model_id: ID of the used classification model
         :param osci_id: ID of the classified oscillogram
         :param heatmap_id: ID of the generated heatmap
+        :return ID of oscillogram classification instance
         """
         # either ID of DA or ID of another classification
         assert "diag_association_" in classification_reason or "manual_inspection_" in classification_reason \
@@ -190,6 +189,7 @@ class OntologyInstanceGenerator:
         else:  # the reason is a classification instance (manual or osci)
             fact_list.append(Fact((classification_reason, onto_namespace.reasonFor, classification_uuid)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return classification_uuid
 
     def extend_knowledge_graph_with_heatmap(self, gen_method: str, heatmap: List[float]) -> str:
         """
@@ -242,13 +242,14 @@ class OntologyInstanceGenerator:
 
     def extend_knowledge_graph_with_manual_inspection(
             self, prediction: bool, classification_reason: str, comp_id: str
-    ) -> None:
+    ) -> str:
         """
         Extends the knowledge graph with manual inspection facts.
 
         :param prediction: prediction for the considered component (classification result)
         :param classification_reason: either a different classification or a diagnostic association
         :param comp_id: ID of the classified component
+        :return ID of manual inspection instance
         """
         # either ID of DA or ID of another classification
         assert "diag_association_" in classification_reason or "manual_inspection_" in classification_reason \
@@ -266,6 +267,7 @@ class OntologyInstanceGenerator:
         else:  # the reason is a classification instance (manual or osci)
             fact_list.append(Fact((classification_reason, onto_namespace.reasonFor, classification_uuid)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
+        return classification_uuid
 
     def check_consistency_and_save_to_file(self, hsn, tsn, vin) -> None:
         """
@@ -291,4 +293,36 @@ if __name__ == '__main__':
     instance_gen = OntologyInstanceGenerator(".", local_kb=False)
     instance_gen.extend_knowledge_graph_with_vehicle_data(
         "Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", "P2563", 4, str(date.today())
+    )
+    # create some test instances
+    causing_dtc = "P2563"
+    fault_cond_uuid = instance_gen.knowledge_graph_query_tool.query_fault_condition_instance_by_code(
+        causing_dtc)[0].split("#")[1]
+    list_of_dtcs = ["P2563", "P0333", "P1234", "P0987"]
+    fault_path = "VTG-Abgasturbolader -> Ladedruck-Magnetventil -> Ladedruck-Regelventil"
+    osci_set_id = instance_gen.extend_knowledge_graph_with_parallel_rec_osci_set()
+    oscillogram = [13.3, 13.6, 14.6, 16.7, 8.5, 9.7, 5.5, 3.6, 12.5, 12.7]
+    heatmap = [0.4, 0.3, 0.7, 0.7, 0.8, 0.9, 0.3, 0.2]
+    sus_comp = "VTG-Abgasturbolader"
+    manual_sus_comp = "Ladedruck-Magnetventil"
+    comp_id = instance_gen.knowledge_graph_query_tool.query_suspect_component_by_name(sus_comp)[0].split("#")[1]
+    manual_sus_comp_id = instance_gen.knowledge_graph_query_tool.query_suspect_component_by_name(
+        manual_sus_comp)[0].split("#")[1]
+    osci_id = instance_gen.extend_knowledge_graph_with_oscillogram(oscillogram)
+    heatmap_id = instance_gen.extend_knowledge_graph_with_heatmap("GradCAM", heatmap)
+    fault_path_id = instance_gen.extend_knowledge_graph_with_fault_path(fault_path, fault_cond_uuid)
+
+    classification_instances = [
+        instance_gen.extend_knowledge_graph_with_oscillogram_classification(
+            True, "diag_association_3592495", comp_id, 0.45, "test_model_id", osci_id, heatmap_id
+        ),
+        instance_gen.extend_knowledge_graph_with_oscillogram_classification(
+            True, "oscillogram_classification_3543595", comp_id, 0.85, "test_model_id", osci_id, heatmap_id
+        ),
+        instance_gen.extend_knowledge_graph_with_manual_inspection(
+            False, "oscillogram_classification_45395859345", manual_sus_comp_id
+        )
+    ]
+    diag_log_uuid = instance_gen.extend_knowledge_graph_with_diag_log(
+        "03.07.2023", 4, list_of_dtcs, [fault_path_id], classification_instances, "vehicle_39458359345382458"
     )

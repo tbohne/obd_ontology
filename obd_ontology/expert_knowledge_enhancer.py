@@ -332,11 +332,3 @@ class ExpertKnowledgeEnhancer:
 
 if __name__ == '__main__':
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
-
-    # create some test instances
-    list_of_dtcs = ["P2563", "P0333", "P1234", "P0987"]
-    fault_path = "VTG-Abgasturbolader -> Ladedruck-Magnetventil -> Ladedruck-Regelventil"
-    causing_dtc = "P2563"
-    fault_cond_uuid = expert_knowledge_enhancer.knowledge_graph_query_tool.query_fault_condition_instance_by_code(
-        causing_dtc
-    )[0].split("#")[1]
