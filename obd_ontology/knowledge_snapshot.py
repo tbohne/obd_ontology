@@ -203,7 +203,7 @@ def knowledge_snapshot_manual_inspection_perspective():
             reason_for_instance = qt.query_led_to_for_inspection(manual_inspection_id, False)
             reason_for_id = reason_for_instance[0].split("#")[1] if len(reason_for_instance) > 0 else ""
         print(colored("\t- reason for inspection:", "blue", "on_grey", ["bold"]), reason_for_id)
-        prediction = qt.query_prediction_by_inspection(manual_inspection_id, False)
+        prediction = qt.query_prediction_by_classification(manual_inspection_id, False)
         print(colored("\t- prediction:", "blue", "on_grey", ["bold"]), prediction[0] if len(prediction) > 0 else "")
 
 
