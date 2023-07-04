@@ -1378,6 +1378,31 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_suspect_component_name_by_id(self, component_id: str, verbose: bool = True) -> list:
+        """
+        Queries the suspect component name for the specified component ID.
+
+        :param component_id: ID of the component instance to query name for
+        :param verbose: if true, logging is activated
+        :return: component name for component instance
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: suspect component name for the specified instance:", component_id)
+            print("####################################")
+        suspect_comp_entry = self.complete_ontology_entry('SuspectComponent')
+        id_entry = self.complete_ontology_entry(component_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        s = f"""
+            SELECT ?comp_name WHERE {{
+                ?sus_comp a {suspect_comp_entry} .
+                FILTER(STR(?sus_comp) = "{id_entry}") .
+                ?sus_comp {comp_name_entry} ?comp_name .
+            }}
+            """
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_uncertainty_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
         """
         Queries the uncertainty for the specified oscillogram classification instance.
