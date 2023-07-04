@@ -1712,27 +1712,27 @@ class KnowledgeGraphQueryTool:
             """
         return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_suspect_component_by_osci_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
+    def query_suspect_component_by_classification(self, classification_id: str, verbose: bool = True) -> list:
         """
         Queries the suspect component for the specified classification.
 
-        :param osci_classification_id: ID of oscillogram classification instance
+        :param classification_id: ID of classification instance
         :param verbose: if true, logging is activated
         :return: suspect component
         """
         if verbose:
             print("####################################")
-            print("QUERY: suspect component for the specified classification:", osci_classification_id)
+            print("QUERY: suspect component for the specified classification:", classification_id)
             print("####################################")
-        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
-        id_entry = self.complete_ontology_entry(osci_classification_id)
+        classification_entry = self.complete_ontology_entry('Classification')
+        id_entry = self.complete_ontology_entry(classification_id)
         id_entry = id_entry.replace('<', '').replace('>', '')
         checks_entry = self.complete_ontology_entry('checks')
         s = f"""
             SELECT ?comp WHERE {{
-                ?osci_classification a {osci_classification_entry} .
-                FILTER(STR(?osci_classification) = "{id_entry}") .
-                ?osci_classification {checks_entry} ?comp .
+                ?classification a {classification_entry} .
+                FILTER(STR(?classification) = "{id_entry}") .
+                ?classification {checks_entry} ?comp .
             }}
             """
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]

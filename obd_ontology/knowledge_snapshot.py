@@ -169,7 +169,7 @@ def knowledge_snapshot_oscillogram_classification_perspective():
             print(colored("\t\t- generated heatmap:", "blue", "on_grey", ["bold"]),
                   qt.query_heatmap_string_by_heatmap(heatmap_id, False)[0])
 
-        suspect_comp_instance = qt.query_suspect_component_by_osci_classification(osci_classification_id, False)
+        suspect_comp_instance = qt.query_suspect_component_by_classification(osci_classification_id, False)
         suspect_comp_id = suspect_comp_instance[0].split("#")[1] if len(suspect_comp_instance) > 0 else ""
         print(colored("\t- checks:", "blue", "on_grey", ["bold"]), suspect_comp_id)
 
