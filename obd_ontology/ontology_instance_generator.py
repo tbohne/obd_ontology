@@ -152,7 +152,7 @@ class OntologyInstanceGenerator:
         return fault_path_uuid
 
     def extend_knowledge_graph_with_oscillogram_classification(
-            self, prediction: bool, classification_reason: str, comp_id: str, uncertainty: float, model_id: str,
+            self, prediction: bool, classification_reason: str, comp: str, uncertainty: float, model_id: str,
             osci_id: str, heatmap_id: str
     ) -> str:
         """
@@ -160,7 +160,7 @@ class OntologyInstanceGenerator:
 
         :param prediction: prediction for the considered oscillogram (classification result)
         :param classification_reason: either a different classification or a diagnostic association
-        :param comp_id: ID of the classified component
+        :param comp: classified component
         :param uncertainty: uncertainty of the prediction
         :param model_id: ID of the used classification model
         :param osci_id: ID of the classified oscillogram
@@ -170,6 +170,8 @@ class OntologyInstanceGenerator:
         # either ID of DA or ID of another classification
         assert "diag_association_" in classification_reason or "manual_inspection_" in classification_reason \
                or "oscillogram_classification_" in classification_reason
+
+        comp_id = self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)[0].split("#")[1]
 
         onto_namespace = Namespace(ONTOLOGY_PREFIX)
         classification_uuid = "oscillogram_classification_" + uuid.uuid4().hex
@@ -305,7 +307,6 @@ if __name__ == '__main__':
     heatmap = [0.4, 0.3, 0.7, 0.7, 0.8, 0.9, 0.3, 0.2]
     sus_comp = "VTG-Abgasturbolader"
     manual_sus_comp = "Ladedruck-Magnetventil"
-    comp_id = instance_gen.knowledge_graph_query_tool.query_suspect_component_by_name(sus_comp)[0].split("#")[1]
     manual_sus_comp_id = instance_gen.knowledge_graph_query_tool.query_suspect_component_by_name(
         manual_sus_comp)[0].split("#")[1]
     osci_id = instance_gen.extend_knowledge_graph_with_oscillogram(oscillogram)
@@ -314,10 +315,10 @@ if __name__ == '__main__':
 
     classification_instances = [
         instance_gen.extend_knowledge_graph_with_oscillogram_classification(
-            True, "diag_association_3592495", comp_id, 0.45, "test_model_id", osci_id, heatmap_id
+            True, "diag_association_3592495", sus_comp, 0.45, "test_model_id", osci_id, heatmap_id
         ),
         instance_gen.extend_knowledge_graph_with_oscillogram_classification(
-            True, "oscillogram_classification_3543595", comp_id, 0.85, "test_model_id", osci_id, heatmap_id
+            True, "oscillogram_classification_3543595", sus_comp, 0.85, "test_model_id", osci_id, heatmap_id
         ),
         instance_gen.extend_knowledge_graph_with_manual_inspection(
             False, "oscillogram_classification_45395859345", manual_sus_comp_id
