@@ -194,7 +194,7 @@ def knowledge_snapshot_manual_inspection_perspective():
     for manual_inspection in manual_inspection_instances:
         manual_inspection_id = manual_inspection.split("#")[1]
         print(colored(manual_inspection_id, "yellow", "on_grey", ["bold"]))
-        suspect_comp_instance = qt.query_suspect_component_by_manual_inspection_id(manual_inspection_id, False)
+        suspect_comp_instance = qt.query_suspect_component_by_classification(manual_inspection_id, False)
         suspect_comp_id = suspect_comp_instance[0].split("#")[1] if len(suspect_comp_instance) > 0 else ""
         print(colored("\t- checks:", "blue", "on_grey", ["bold"]), suspect_comp_id)
         reason_for_instance = qt.query_reason_for_inspection(manual_inspection_id, False)

@@ -1724,13 +1724,16 @@ class KnowledgeGraphQueryTool:
             print("####################################")
             print("QUERY: suspect component for the specified classification:", classification_id)
             print("####################################")
-        classification_entry = self.complete_ontology_entry('Classification')
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        manual_inspection_entry = self.complete_ontology_entry('ManualInspection')
         id_entry = self.complete_ontology_entry(classification_id)
         id_entry = id_entry.replace('<', '').replace('>', '')
         checks_entry = self.complete_ontology_entry('checks')
         s = f"""
             SELECT ?comp WHERE {{
-                ?classification a {classification_entry} .
+                {{ ?classification a {osci_classification_entry} . }}
+                UNION
+                {{ ?classification a {manual_inspection_entry} . }}
                 FILTER(STR(?classification) = "{id_entry}") .
                 ?classification {checks_entry} ?comp .
             }}
