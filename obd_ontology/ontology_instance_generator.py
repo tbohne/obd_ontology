@@ -37,9 +37,7 @@ class OntologyInstanceGenerator:
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False, kg_url=kg_url)
 
-    def extend_knowledge_graph_with_vehicle_data(
-            self, model: str, hsn: str, tsn: str, vin: str, dtc: str, max_num_of_parallel_rec: int, diag_date: str
-    ) -> None:
+    def extend_knowledge_graph_with_vehicle_data(self, model: str, hsn: str, tsn: str, vin: str, dtc: str) -> None:
         """
         Extends the knowledge graph based on the present vehicle information and performs a consistency check.
 
@@ -48,8 +46,6 @@ class OntologyInstanceGenerator:
         :param tsn:  type number ("Typschlüsselnummer")
         :param vin: vehicle identification number
         :param dtc: specified diagnostic trouble code
-        :param max_num_of_parallel_rec: max number of parallel recordings based on workshop equipment
-        :param diag_date: date of the diagnosis
         """
         if self.local_kb:
             print("LOCAL KB NO LONGER SUPPORTED - USE FUSEKI SERVER INSTEAD")
@@ -80,18 +76,6 @@ class OntologyInstanceGenerator:
                     Fact((vehicle_uuid, onto_namespace.TSN, tsn), property_fact=True),
                     Fact((vehicle_uuid, onto_namespace.VIN, vin), property_fact=True)
                 ]
-            # the connection to diag log should be entered either way (if the fault condition is part of the KG)
-            if fault_condition_id != "":
-                diag_log_uuid = "diag_log_" + str(uuid.uuid4())
-                fact_list.append(Fact((diag_log_uuid, RDF.type, onto_namespace["DiagLog"].toPython())))
-                fact_list.append(
-                    Fact((diag_log_uuid, onto_namespace.max_num_of_parallel_rec, max_num_of_parallel_rec),
-                         property_fact=True)
-                )
-                fact_list.append(Fact((diag_log_uuid, onto_namespace.date, diag_date), property_fact=True))
-                dtc_id = self.knowledge_graph_query_tool.query_dtc_instance_by_code(dtc)[0].split("#")[1]
-                fact_list.append(Fact((dtc_id, onto_namespace.appearsIn, diag_log_uuid)))
-                fact_list.append(Fact((diag_log_uuid, onto_namespace.createdFor, vehicle_uuid)))
             self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def extend_knowledge_graph_with_diag_log(
@@ -295,7 +279,7 @@ class OntologyInstanceGenerator:
 if __name__ == '__main__':
     instance_gen = OntologyInstanceGenerator(".", local_kb=False)
     instance_gen.extend_knowledge_graph_with_vehicle_data(
-        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", "P2563", 4, str(date.today())
+        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", "P2563"
     )
     # create some test instances
     causing_dtc = "P2563"
