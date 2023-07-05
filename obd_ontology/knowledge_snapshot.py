@@ -251,11 +251,13 @@ def knowledge_snapshot_fault_path_perspective():
     fault_path_instances = qt.query_all_fault_path_instances(False)
     for fault_path in fault_path_instances:
         fault_path_id = fault_path.split("#")[1]
-        print(colored(fault_path_id, "yellow", "on_grey", ["bold"]))
+        fault_path_desc = qt.query_fault_path_description_by_id(fault_path_id, False)
+        print(colored("fault path: " + str(fault_path_desc), "yellow", "on_grey", ["bold"]))
         print(colored("\t- fault conditions that resulted in this fault path:", "blue", "on_grey", ["bold"]))
         fault_conditions = qt.query_resulted_in_by_fault_path(fault_path_id, False)
         for fc in fault_conditions:
-            print("\t\t-", fc.split("#")[1])
+            fault_condition_desc = qt.query_fault_condition_description_by_id(fc.split("#")[1], False)[0]
+            print("\t\t-", fault_condition_desc)
 
 
 def knowledge_snapshot_vehicle_perspective():
