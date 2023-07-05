@@ -1587,6 +1587,56 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fault_path']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_fault_path_description_by_id(self, fault_path_id: str, verbose: bool = True) -> list:
+        """
+        Queries the fault path description for the specified fault path ID.
+
+        :param fault_path_id: ID of the fault path instance to query description for
+        :param verbose: if true, logging is activated
+        :return: fault path description for the specified ID
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: fault path description for the specified ID:", fault_path_id)
+            print("####################################")
+        fault_path_entry = self.complete_ontology_entry('FaultPath')
+        id_entry = self.complete_ontology_entry(fault_path_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        desc_entry = self.complete_ontology_entry('path_description')
+        s = f"""
+            SELECT ?path_desc WHERE {{
+                ?fault_path a {fault_path_entry} .
+                FILTER(STR(?fault_path) = "{id_entry}") .
+                ?fault_path {desc_entry} ?path_desc .
+            }}
+            """
+        return [row['path_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_fault_condition_description_by_id(self, fault_condition_id: str, verbose: bool = True) -> list:
+        """
+        Queries the fault condition description for the specified fault condition ID.
+
+        :param fault_condition_id: ID of the fault condition instance to query description for
+        :param verbose: if true, logging is activated
+        :return: fault condition description for the specified ID
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: fault condition description for the specified ID:", fault_condition_id)
+            print("####################################")
+        fault_condition_entry = self.complete_ontology_entry('FaultCondition')
+        id_entry = self.complete_ontology_entry(fault_condition_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        desc_entry = self.complete_ontology_entry('condition_description')
+        s = f"""
+            SELECT ?cond_desc WHERE {{
+                ?fault_cond a {fault_condition_entry} .
+                FILTER(STR(?fault_cond) = "{id_entry}") .
+                ?fault_cond {desc_entry} ?cond_desc .
+            }}
+            """
+        return [row['cond_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_vehicle_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
         """
         Queries the vehicle for the specified diag log instance.
