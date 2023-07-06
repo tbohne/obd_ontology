@@ -37,7 +37,7 @@ class OntologyInstanceGenerator:
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
             self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False, kg_url=kg_url)
 
-    def extend_knowledge_graph_with_vehicle_data(self, model: str, hsn: str, tsn: str, vin: str, dtc: str) -> None:
+    def extend_knowledge_graph_with_vehicle_data(self, model: str, hsn: str, tsn: str, vin: str) -> None:
         """
         Extends the knowledge graph based on the present vehicle information and performs a consistency check.
 
@@ -45,29 +45,16 @@ class OntologyInstanceGenerator:
         :param hsn: manufacturer key ("Herstellerschlüsselnummer")
         :param tsn:  type number ("Typschlüsselnummer")
         :param vin: vehicle identification number
-        :param dtc: specified diagnostic trouble code
         """
         if self.local_kb:
             print("LOCAL KB NO LONGER SUPPORTED - USE FUSEKI SERVER INSTEAD")
         else:
             onto_namespace = Namespace(ONTOLOGY_PREFIX)
-
-            fault_condition_instance = self.knowledge_graph_query_tool.query_fault_condition_instance_by_code(dtc)
-            fault_condition_id = ""
-            if len(fault_condition_instance) > 0:
-                # identifier of the FaultCondition instance in the knowledge graph corresponding to the specified code
-                fault_condition_id = fault_condition_instance[0].split("#")[1]
-                fault_condition = self.knowledge_graph_query_tool.query_fault_condition_by_dtc(dtc)
-                print("FAULT CONDITION:", fault_condition[0])
-            else:
-                print("Presented fault condition (" + dtc + ") not yet part of KG -- should be entered in advance")
-
             vehicle_uuid = "vehicle_" + str(uuid.uuid4())
             fact_list = []
             vehicle_instance = self.knowledge_graph_query_tool.query_vehicle_instance_by_vin(vin)
             if len(vehicle_instance) > 0:
                 print("Vehicle (" + vin + ") already part of the KG")
-                vehicle_uuid = vehicle_instance[0].split("#")[1]
             else:
                 fact_list = [
                     Fact((vehicle_uuid, RDF.type, onto_namespace["Vehicle"].toPython())),
