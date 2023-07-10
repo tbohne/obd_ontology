@@ -11,9 +11,6 @@ from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, SubmitField, SelectField
 
-from obd_ontology.component_knowledge import ComponentKnowledge
-from obd_ontology.component_set_knowledge import ComponentSetKnowledge
-from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
@@ -98,7 +95,7 @@ def invalid_characters(input_string: str) -> bool:
     :param input_string: string that should be checked
     :return: boolean that indicates whether an invalid special character has been found
     """
-    valid_special_characters = " ,'()-:&"
+    valid_special_characters = " ,'()-:&/"
     return any(not c.isalnum() and c not in valid_special_characters for c in input_string)
 
 
@@ -174,67 +171,6 @@ class SuspectComponentsForm(FlaskForm):
     clear_everything = SubmitField("Eingaben löschen")
 
 
-def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
-    """
-    Adds a component instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
-
-    :param suspect_component: component to be checked
-    :param affected_by: list of components whose misbehavior could affect the correct functioning of the component
-                        under consideration
-    :param oscilloscope: whether oscilloscope measurement possible / reasonable
-    """
-    assert isinstance(suspect_component, str)
-    assert isinstance(affected_by, list)
-    assert isinstance(oscilloscope, bool)
-
-    new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
-                                                 affected_by=affected_by)
-    fact_list = expert_knowledge_enhancer.generate_suspect_component_facts([new_component_knowledge])
-    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
-
-
-def add_dtc_to_knowledge_graph(dtc: str, occurs_with: list, fault_condition: str, symptoms: list,
-                               suspect_components: list) -> None:
-    """
-    Adds a DTC instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
-
-    :param dtc: diagnostic trouble code to be considered
-    :param occurs_with: other DTCs frequently occurring with the considered one
-    :param fault_condition: fault condition associated with the considered DTC
-    :param symptoms: symptoms associated with the considered DTC
-    :param suspect_components: components that should be checked when this DTC occurs
-                               (order defines suggestion priority)
-    """
-    assert isinstance(dtc, str)
-    assert isinstance(occurs_with, list)
-    assert isinstance(fault_condition, str)
-    assert isinstance(symptoms, list)
-    assert isinstance(suspect_components, list)
-
-    new_dtc_knowledge = DTCKnowledge(dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition,
-                                     symptoms=symptoms, suspect_components=suspect_components)
-    fact_list = expert_knowledge_enhancer.generate_dtc_related_facts(new_dtc_knowledge)
-    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
-
-
-def add_component_set_to_knowledge_graph(component_set: str, includes: list, verified_by: list) -> None:
-    """
-    Adds a component set instance to the knowledge graph using the ExpertKnowledgeEnhancer.
-
-    :param component_set: vehicle component set to be represented
-    :param includes: suspect components assigned to this component set
-    :param verified_by: component set can be verified by checking this suspect component
-    """
-    assert isinstance(component_set, str)
-    assert isinstance(includes, list)
-    assert isinstance(verified_by, list)
-
-    new_comp_set_knowledge = ComponentSetKnowledge(component_set=component_set, includes=includes,
-                                                   verified_by=verified_by)
-    fact_list = expert_knowledge_enhancer.generate_component_set_facts(new_comp_set_knowledge)
-    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
-
-
 @app.route('/', methods=['POST', 'GET'])
 def main():
     """
@@ -301,9 +237,10 @@ def component_form():
                     # add component to the knowledge graph
                     assert form.measurements_possible.data == "Ja" or form.measurements_possible.data == "Nein"
                     oscilloscope_useful = True if form.measurements_possible.data == "Ja" else False
-                    add_component_to_knowledge_graph(suspect_component=form.component_name.data,
-                                                     affected_by=entered_affecting_comps,
-                                                     oscilloscope=oscilloscope_useful)
+                    expert_knowledge_enhancer.add_component_to_knowledge_graph(
+                        suspect_component=form.component_name.data,
+                        affected_by=entered_affecting_comps,
+                        oscilloscope=oscilloscope_useful)
                     # update SelectField
                     form.affecting_components.choices = kg_query_tool.query_all_component_instances()
                     # reset variables related to the newly added component
@@ -620,7 +557,7 @@ def dtc_form():
                             facts_to_be_removed)
 
                     # add the DTC to the knowledge graph
-                    add_dtc_to_knowledge_graph(
+                    expert_knowledge_enhancer.add_dtc_to_knowledge_graph(
                         dtc=form.dtc_name.data,
                         occurs_with=get_session_variable_list("occurs_with_list"),
                         fault_condition=form.fault_condition.data,
@@ -787,7 +724,7 @@ def component_set_form():
                             facts_to_be_removed
                         )
                     # add the component set to the knowledge graph
-                    add_component_set_to_knowledge_graph(
+                    expert_knowledge_enhancer.add_component_set_to_knowledge_graph(
                         component_set=form.set_name.data,
                         includes=get_session_variable_list("comp_set_components"),
                         verified_by=get_session_variable_list("verifying_components")
