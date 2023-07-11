@@ -503,6 +503,10 @@ def check_dtc_form(form: DTCForm) -> bool:
         # the StringField for the fault condition is empty
         flash("Bitte geben Sie eine Beschreibung des Fehlerzustands ein!")
         return False
+    if invalid_characters(form.fault_condition.data):
+        # found an invalid special character in the fault condition
+        flash("Ungültiges Sonderzeichen im Fehlerzustand-Eingabefeld!")
+        return False
     if not (form.fault_condition.data not in kg_query_tool.query_all_fault_condition_instances() or
             form.fault_condition.data in kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data)):
         # fault condition already exists
