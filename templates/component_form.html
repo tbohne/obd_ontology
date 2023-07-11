@@ -22,7 +22,7 @@
 
         function updateList(listId, list) {
             const listEl = document.getElementById(listId);
-            listEl.textContent = list.join(', ');
+            listEl.textContent = list.join('; ');
         }
 
         // call the checkSessionValues function every 3 seconds
@@ -52,7 +52,7 @@
             <p>
             <ol id='sync_affecting_components'>
                 {% for i in affecting_components_variable_list %}
-                    {{ i }}{% if not loop.last %}, {% endif %}
+                    {{ i }}{% if not loop.last %}; {% endif %}
                 {% endfor %}
             </ol>
             </p>
