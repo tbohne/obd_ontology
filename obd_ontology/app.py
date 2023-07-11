@@ -104,16 +104,16 @@ class DTCForm(FlaskForm):
     Form for the DTC page.
     """
     dtc_name = StringField("")
-    existing_dtcs = SelectField("", choices=kg_query_tool.query_all_dtc_instances(),
+    existing_dtcs = SelectField("", choices=sorted(kg_query_tool.query_all_dtc_instances()),
                                 validate_choice=False)
     existing_dtc_submit = SubmitField("Daten anzeigen")
     occurs_with = SelectField("",
-                              choices=make_tuple_list(kg_query_tool.query_all_dtc_instances(False)),
+                              choices=make_tuple_list(sorted(kg_query_tool.query_all_dtc_instances(False))),
                               validate_choice=False)
     occurs_with_submit = SubmitField("DTC hinzufügen")
     clear_occurs_with = SubmitField("Liste leeren")
     fault_condition = StringField("")
-    symptoms_list = make_tuple_list(kg_query_tool.query_all_symptom_instances())
+    symptoms_list = make_tuple_list(sorted(kg_query_tool.query_all_symptom_instances()))
     symptoms = SelectField("", choices=symptoms_list,
                            validate_choice=False)
     symptoms_submit = SubmitField("Symptom hinzufügen")
@@ -122,7 +122,7 @@ class DTCForm(FlaskForm):
     new_symptom_submit = SubmitField("Neues Symptom hinzufügen")
     suspect_components = SelectField(
         "",
-        choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False)
+        choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())), validate_choice=False)
     add_component_submit = SubmitField("Komponente hinzufügen")
     clear_components = SubmitField("Liste leeren")
     final_submit = SubmitField("Absenden")
@@ -134,16 +134,16 @@ class ComponentSetForm(FlaskForm):
     Form for the component set page.
     """
     set_name = StringField("")
-    existing_component_sets = SelectField("", choices=kg_query_tool.query_all_component_set_instances(),
+    existing_component_sets = SelectField("", choices=sorted(kg_query_tool.query_all_component_set_instances()),
                                           validate_choice=False)
     existing_component_set_submit = SubmitField("Daten anzeigen")
     components = SelectField("",
-                             choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                             choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                              validate_choice=False)
     add_component_submit = SubmitField("Komponente hinzufügen")
     clear_components = SubmitField("Liste leeren")
     verifying_components = SelectField("",
-                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                                        validate_choice=False)
     verifying_components_submit = SubmitField("Komponente hinzufügen")
     clear_verifying_components = SubmitField("Liste leeren")
@@ -157,7 +157,7 @@ class SuspectComponentsForm(FlaskForm):
     """
     component_name = StringField("")
     existing_components = SelectField("",
-                                      choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                      choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                                       validate_choice=False)
     existing_components_submit = SubmitField("Daten anzeigen")
     boolean_choices = [("Nein", "Nein",), ("Ja", "Ja")]
@@ -166,7 +166,7 @@ class SuspectComponentsForm(FlaskForm):
     clear_affecting_components = SubmitField("Liste leeren")
     measurements_possible = SelectField(choices=boolean_choices)
     affecting_components = SelectField("",
-                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                                        validate_choice=False)
     clear_everything = SubmitField("Eingaben löschen")
 
@@ -242,7 +242,7 @@ def component_form():
                         affected_by=entered_affecting_comps,
                         oscilloscope=oscilloscope_useful)
                     # update SelectField
-                    form.affecting_components.choices = kg_query_tool.query_all_component_instances()
+                    form.affecting_components.choices = sorted(kg_query_tool.query_all_component_instances())
                     # reset variables related to the newly added component
                     get_session_variable_list("affecting_components").clear()
                     session.modified = True
@@ -301,8 +301,8 @@ def component_form():
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
     # update SelectField choices
-    form.affecting_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
-    form.existing_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
+    form.affecting_components.choices = make_tuple_list(sorted(kg_query_tool.query_all_component_instances()))
+    form.existing_components.choices = make_tuple_list(sorted(kg_query_tool.query_all_component_instances()))
 
     return render_template('component_form.html', form=form,
                            affecting_components_variable_list=get_session_variable_list("affecting_components"))
@@ -528,7 +528,7 @@ def dtc_form():
     Renders the DTC page and processes the form data.
     """
     form = DTCForm()
-    form.suspect_components.choices = kg_query_tool.query_all_component_instances()
+    form.suspect_components.choices = sorted(kg_query_tool.query_all_component_instances())
 
     if form.validate_on_submit():
         if form.final_submit.data:
@@ -650,10 +650,10 @@ def dtc_form():
         session["dtc_name"] = None
 
     # update choices of the SelectFields
-    form.symptoms.choices = kg_query_tool.query_all_symptom_instances()
-    form.suspect_components.choices = kg_query_tool.query_all_component_instances()
-    form.occurs_with.choices = kg_query_tool.query_all_dtc_instances(False)
-    form.existing_dtcs.choices = kg_query_tool.query_all_dtc_instances()
+    form.symptoms.choices = sorted(kg_query_tool.query_all_symptom_instances())
+    form.suspect_components.choices = sorted(kg_query_tool.query_all_component_instances())
+    form.occurs_with.choices = sorted(kg_query_tool.query_all_dtc_instances(False))
+    form.existing_dtcs.choices = sorted(kg_query_tool.query_all_dtc_instances())
 
     return render_template('DTC_form.html', form=form,
                            suspect_components_variable_list=get_session_variable_list("component_list"),
@@ -784,9 +784,9 @@ def component_set_form():
         session["comp_set_name"] = None
 
     # update choices for the SelectFields
-    form.components.choices = kg_query_tool.query_all_component_instances()
-    form.verifying_components.choices = kg_query_tool.query_all_component_instances()
-    form.existing_component_sets.choices = kg_query_tool.query_all_component_set_instances()
+    form.components.choices = sorted(kg_query_tool.query_all_component_instances())
+    form.verifying_components.choices = sorted(kg_query_tool.query_all_component_instances())
+    form.existing_component_sets.choices = sorted(kg_query_tool.query_all_component_set_instances())
 
     return render_template('component_set_form.html', form=form,
                            components_variable_list=get_session_variable_list("comp_set_components"),
