@@ -546,9 +546,12 @@ def dtc_form():
                         dtc_name = session.get("dtc_name")
                         # construct all the facts that should be removed
                         facts_to_be_removed = []
-                        add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                        try:  # if a DTC has no fault condition, this will be skipped
+                            add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                            add_symptom_removal_facts(dtc_name, facts_to_be_removed)
+                        except IndexError:
+                            pass
                         add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
-                        add_symptom_removal_facts(dtc_name, facts_to_be_removed)
                         add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
                         # remove all the facts that are newly added now (replacement)
                         expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
