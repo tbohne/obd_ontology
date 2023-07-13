@@ -40,7 +40,7 @@ def create_dtc_dictionary(path: str) -> dict:
                 elif british_fault_cond != "nan":
                     dtc_dict[dtc] = [british_fault_cond]
                 else:
-                    dtc_dict[dtc] = [None]
+                    dtc_dict[dtc] = [""]
 
             if comp != "nan":
                 dtc_dict[dtc].append([pos, comp])
@@ -94,36 +94,26 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
     :param dtc_dict: dictionary with DTCs as keys and a list containing fault condition and tuples of position and
     component as values, e.g. [fault_cond, [1, comp1], [2, comp2]]
     """
-    dtcs_without_components = []
-    dtcs_without_fault_cond = []
     counter = 0
 
     for dtc in dtc_dict:
         dtc_data = dtc_dict[dtc]
         # check that we only add DTCs that have a fault condition and at least one component
-        if dtc_data[0] is not None:
-            if len(dtc_data) > 1:
-                fault_cond = dtc_data[0]
-                components = dtc_data[1:]
-                order_of_components = np.argsort([sublist[0] for sublist in components])
-                ordered_components = np.array(components)[order_of_components, 1].tolist()
-                print(ordered_components)
+        dtc = remove_invalid_characters(dtc)
+        fault_cond = dtc_data[0]
+        fault_cond = remove_invalid_characters(fault_cond)
 
-                dtc = remove_invalid_characters(dtc)
-                fault_cond = remove_invalid_characters(fault_cond)
-                ordered_components = [remove_invalid_characters(comp) for comp in ordered_components]
-                expert_knowledge_enhancer.add_dtc_to_knowledge_graph(dtc, [], fault_cond, [], ordered_components)
-                counter += 1
-            else:
-                dtcs_without_components.append(dtc)
+        if len(dtc_data) > 1:
+            components = dtc_data[1:]
+            order_of_components = np.argsort([sublist[0] for sublist in components])
+            ordered_components = np.array(components)[order_of_components, 1].tolist()
+            ordered_components = [remove_invalid_characters(comp) for comp in ordered_components]
         else:
-            dtcs_without_fault_cond.append(dtc)
+            ordered_components = []
+        expert_knowledge_enhancer.add_dtc_to_knowledge_graph(dtc, [], fault_cond, [], ordered_components)
+        counter += 1
 
     print("Added {} DTCs to the knowledge graph.".format(counter))
-    print("DTCs that do not have a fault condition - please remember to add fault conditions in the future: ",
-          dtcs_without_fault_cond)
-    print("DTCs that do not have components assigned to them - please remember to add fault conditions in the future: ",
-          dtcs_without_components)
 
 
 if __name__ == '__main__':
