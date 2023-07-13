@@ -513,12 +513,6 @@ def check_dtc_form(form: DTCForm) -> bool:
         flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Für jeden DTC muss ein "
               "individueller Fehlerzustand eingegeben werden.")
         return False
-    if not get_session_variable_list("symptom_list"):
-        # the list of symptoms is empty
-        flash(
-            "Bitte fügen Sie mindestens ein Symptom hinzu, das im Zusammenhang mit dem DTC "
-            "auftreten kann!")
-        return False
     if not get_session_variable_list("component_list"):
         # the list of suspect components is empty
         flash("Bitte nennen Sie mindestens eine Komponente, die überprüft werden sollte!")
