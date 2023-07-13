@@ -4,6 +4,8 @@ import numpy as np
 
 from expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 
+valid_special_characters = " ,()-:&/"
+
 expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
 
 
@@ -55,10 +57,12 @@ def remove_invalid_characters(item: str) -> str:
     :param item: string which should be cleared of the certain special characters
     :return: string with certain special characters removed
     """
-    invalid_characters = ["\n", "\""]
-    for invalid_character in invalid_characters:
-        item = item.replace(invalid_character, "")
-    return item
+    item = item.replace("\n", "")
+    temp_item = item
+    for character in item:
+        if not character.isalnum() and character not in valid_special_characters:
+            temp_item = temp_item.replace(character, "")
+    return temp_item
 
 
 def add_components_to_knowledge_graph(dtc_dict: dict) -> None:

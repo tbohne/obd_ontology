@@ -13,6 +13,7 @@ from wtforms import StringField, SubmitField, SelectField
 
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology.extract_dtcs_and_components_from_excel_file import  valid_special_characters
 
 app = Flask(
     __name__,
@@ -95,7 +96,6 @@ def invalid_characters(input_string: str) -> bool:
     :param input_string: string that should be checked
     :return: boolean that indicates whether an invalid special character has been found
     """
-    valid_special_characters = " ,'()-:&/"
     return any(not c.isalnum() and c not in valid_special_characters for c in input_string)
 
 
