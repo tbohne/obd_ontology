@@ -26,6 +26,7 @@ def create_dtc_dictionary(path: str) -> dict:
         comp = str(data["Element ID"][i])
         fault_cond = str(data["Fehlercodes"][i])
         alternative_fault_cond = str(data["Alternative Klartexte der P0 Codes"][i])
+        klavkarr_fault_cond = str(data["klavkarr Fehlercodes"][i])
         british_fault_cond = str(data["British Standard ISO 15031-6 (2005)"][i])
 
         if dtc != "nan":
@@ -34,6 +35,8 @@ def create_dtc_dictionary(path: str) -> dict:
                     dtc_dict[dtc] = [fault_cond]
                 elif alternative_fault_cond != "nan":
                     dtc_dict[dtc] = [alternative_fault_cond]
+                elif klavkarr_fault_cond != "nan":
+                    dtc_dict[dtc] = [klavkarr_fault_cond]
                 elif british_fault_cond != "nan":
                     dtc_dict[dtc] = [british_fault_cond]
                 else:
