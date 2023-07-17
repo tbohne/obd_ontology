@@ -266,7 +266,7 @@ class OntologyInstanceGenerator:
 if __name__ == '__main__':
     instance_gen = OntologyInstanceGenerator(".", local_kb=False)
     instance_gen.extend_knowledge_graph_with_vehicle_data(
-        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", "P2563"
+        "Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     )
     # create some test instances
     causing_dtc = "P2563"
