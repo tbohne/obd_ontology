@@ -2,9 +2,8 @@ import argparse
 import pandas
 import numpy as np
 
-from expert_knowledge_enhancer import ExpertKnowledgeEnhancer
-
-valid_special_characters = " ,()-:&/"
+from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
+from obd_ontology.config import valid_special_characters
 
 expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
 
@@ -14,15 +13,14 @@ def create_dtc_dictionary(path: str) -> dict:
     Reads the MSI excel file and extracts the relevant information concerning DTCs and components.
 
     :param path: path to the excel file
-    :return: dictionary with DTCs as keys and a list containing fault condition and tuples of position and
-    component as values, e.g. [fault_cond, [1, comp1], [2, comp2]]
+    :return: dictionary with DTCs as keys and a list containing fault condition and tuples of position (priority of the
+     component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
     """
     dtc_dict = {}
 
     data = pandas.read_excel(path, sheet_name="DTC - Element ID - Baum")
 
     for i in range(len(data)):
-
         dtc = str(data["DTC"][i])
         pos = data["Ursachenposition"][i]
         comp = str(data["Element ID"][i])
@@ -45,7 +43,7 @@ def create_dtc_dictionary(path: str) -> dict:
                     dtc_dict[dtc] = [""]
 
             if comp != "nan":
-                dtc_dict[dtc].append([pos, comp])
+                dtc_dict[dtc].append((pos, comp))
 
     return dtc_dict
 
@@ -69,8 +67,8 @@ def add_components_to_knowledge_graph(dtc_dict: dict) -> None:
     """
     Extracts all components from the DTC dictionary and adds them to the knowledge graph.
 
-    :param dtc_dict: dictionary with DTCs as keys and a list containing fault condition and tuples of position and
-    component as values, e.g. [fault_cond, [1, comp1], [2, comp2]]
+    :param dtc_dict: dictionary with DTCs as keys and a list containing fault condition and tuples of position
+    (priority of the component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
     """
     counter = 0
     all_comps = []
@@ -95,8 +93,8 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
 
     Only DTCs with a fault condition and at least one linked component are added.
 
-    :param dtc_dict: dictionary with DTCs as keys and a list containing fault condition and tuples of position and
-    component as values, e.g. [fault_cond, [1, comp1], [2, comp2]]
+    :param dtc_dict: dictionary with DTCs as keys and a list containing fault condition and tuples of position
+    (priority of the component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
     """
     counter = 0
 

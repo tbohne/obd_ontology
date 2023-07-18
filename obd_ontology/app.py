@@ -13,7 +13,7 @@ from wtforms import StringField, SubmitField, SelectField
 
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
-from obd_ontology.extract_dtcs_and_components_from_excel_file import  valid_special_characters
+from obd_ontology.config import valid_special_characters
 
 app = Flask(
     __name__,
