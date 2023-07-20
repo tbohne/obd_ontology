@@ -1,11 +1,35 @@
 import argparse
+import re
+
 import pandas
 import numpy as np
 
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
-from obd_ontology.config import VALID_SPECIAL_CHARACTERS
+from obd_ontology.config import VALID_SPECIAL_CHARACTERS, DTC_REGEX
 
 expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
+
+
+def remove_dtc_from_fault_cond(fault_cond: str, dtc: str) -> str:
+    """
+    Deletes DTCs that appear at the beginning of the fault condition string, as well as spaces and dashes.
+
+    It first tries to delete anything at the beginning of the fault condition that matches the DTC pattern. This is done
+    because there are cases in which the DTC in fault_cond is not the same as the DTC that the fault condition belongs
+    to. As there can be DTCs that do not match the DTC pattern, it also tries to delete the DTC itself from the
+    beginning of fault_cond
+
+    :param fault_cond: string containing the fault condition description
+    :param dtc: the DTC code as string
+    :return: fault condition string with DTC in the beginning removed
+    """
+    #
+    pattern = re.compile(DTC_REGEX)
+    if pattern.match(fault_cond[:5]):
+        fault_cond = fault_cond[5:]
+    else:  # some DTCs might not match the pattern. Try to remove them by removing that specific DTC
+        fault_cond = fault_cond.removeprefix(dtc)
+    return fault_cond.lstrip(" -")
 
 
 def create_dtc_dictionary(path: str) -> dict:
@@ -32,15 +56,18 @@ def create_dtc_dictionary(path: str) -> dict:
         if dtc != "nan":
             if dtc not in dtc_dict:
                 if fault_cond != "nan":
-                    dtc_dict[dtc] = [fault_cond]
+                    available_fault_cond = fault_cond
                 elif alternative_fault_cond != "nan":
-                    dtc_dict[dtc] = [alternative_fault_cond]
+                    available_fault_cond = alternative_fault_cond
                 elif klavkarr_fault_cond != "nan":
-                    dtc_dict[dtc] = [klavkarr_fault_cond]
+                    available_fault_cond = klavkarr_fault_cond
                 elif british_fault_cond != "nan":
-                    dtc_dict[dtc] = [british_fault_cond]
+                    available_fault_cond = british_fault_cond
                 else:
-                    dtc_dict[dtc] = [""]
+                    available_fault_cond = ""
+
+                available_fault_cond = remove_dtc_from_fault_cond(available_fault_cond, dtc)
+                dtc_dict[dtc] = [available_fault_cond]
 
             if comp != "nan":
                 dtc_dict[dtc].append((pos, comp))

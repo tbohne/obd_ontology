@@ -13,7 +13,7 @@ from wtforms import StringField, SubmitField, SelectField
 
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
-from obd_ontology.config import VALID_SPECIAL_CHARACTERS
+from obd_ontology.config import VALID_SPECIAL_CHARACTERS, DTC_REGEX
 
 app = Flask(
     __name__,
@@ -315,7 +315,7 @@ def dtc_sanity_check(dtc: str) -> bool:
     :param dtc: DTC to check pattern for
     :return whether the specified DTC matches the pattern
     """
-    pattern = re.compile("[PCBU][012]\d{3}")
+    pattern = re.compile(DTC_REGEX)
     print("match:", pattern.match(dtc))
     return pattern.match(dtc) and len(dtc) == 5
 
