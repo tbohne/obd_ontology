@@ -333,7 +333,7 @@ class ExpertKnowledgeEnhancer:
     def add_dtc_to_knowledge_graph(self, dtc: str, occurs_with: list, fault_condition: str, symptoms: list,
                                    suspect_components: list) -> None:
         """
-        Adds a DTC instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
+        Adds a DTC instance with the given properties to the knowledge graph.
 
         :param dtc: diagnostic trouble code to be considered
         :param occurs_with: other DTCs frequently occurring with the considered one
@@ -355,7 +355,7 @@ class ExpertKnowledgeEnhancer:
 
     def add_component_to_knowledge_graph(self, suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
         """
-        Adds a component instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
+        Adds a component instance with the given properties to the knowledge graph.
 
         :param suspect_component: component to be checked
         :param affected_by: list of components whose misbehavior could affect the correct functioning of the component
@@ -373,7 +373,7 @@ class ExpertKnowledgeEnhancer:
 
     def add_component_set_to_knowledge_graph(self, component_set: str, includes: list, verified_by: list) -> None:
         """
-        Adds a component set instance to the knowledge graph using the ExpertKnowledgeEnhancer.
+        Adds a component set instance to the knowledge graph.
 
         :param component_set: vehicle component set to be represented
         :param includes: suspect components assigned to this component set

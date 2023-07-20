@@ -17,7 +17,7 @@ def remove_dtc_from_fault_cond(fault_cond: str, dtc: str) -> str:
     It first tries to delete anything at the beginning of the fault condition that matches the DTC pattern. This is done
     because there are cases in which the DTC in fault_cond is not the same as the DTC that the fault condition belongs
     to. As there can be DTCs that do not match the DTC pattern, it also tries to delete the DTC itself from the
-    beginning of fault_cond
+    beginning of fault_cond.
 
     :param fault_cond: string containing the fault condition description
     :param dtc: the DTC code as string
