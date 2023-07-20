@@ -66,7 +66,7 @@
                 {% endfor %}
             </ol>
             </p>
-            <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition }}</p>
+            <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition(size = 70) }}</p>
             <p><b>Symptome</b>, die in Zusammenhang mit dem Fehlerzustand auftreten können:
                 {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }}
             </p>
