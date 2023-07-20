@@ -3,7 +3,7 @@ import pandas
 import numpy as np
 
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
-from obd_ontology.config import valid_special_characters
+from obd_ontology.config import VALID_SPECIAL_CHARACTERS
 
 expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
 
@@ -58,7 +58,7 @@ def remove_invalid_characters(item: str) -> str:
     item = item.replace("\n", "")
     temp_item = item
     for character in item:
-        if not character.isalnum() and character not in valid_special_characters:
+        if not character.isalnum() and character not in VALID_SPECIAL_CHARACTERS:
             temp_item = temp_item.replace(character, "")
     return temp_item
 
