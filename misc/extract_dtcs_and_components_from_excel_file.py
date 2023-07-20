@@ -100,7 +100,6 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
 
     for dtc in dtc_dict:
         dtc_data = dtc_dict[dtc]
-        # check that we only add DTCs that have a fault condition and at least one component
         dtc = remove_invalid_characters(dtc)
         fault_cond = dtc_data[0]
         fault_cond = remove_invalid_characters(fault_cond)
