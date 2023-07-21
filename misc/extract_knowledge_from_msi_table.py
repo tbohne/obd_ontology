@@ -64,7 +64,7 @@ def create_dtc_dictionary(path: str) -> dict:
                 elif british_fault_cond != "nan":
                     available_fault_cond = british_fault_cond
                 else:
-                    available_fault_cond = ""
+                    available_fault_cond = "Bitte Fehlerzustands-Beschreibung für {} eingeben".format(dtc)
 
                 available_fault_cond = remove_dtc_from_fault_cond(available_fault_cond, dtc)
                 dtc_dict[dtc] = [available_fault_cond]
