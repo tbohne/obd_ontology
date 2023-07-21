@@ -11,11 +11,9 @@ from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from wtforms import StringField, SubmitField, SelectField
 
-from obd_ontology.component_knowledge import ComponentKnowledge
-from obd_ontology.component_set_knowledge import ComponentSetKnowledge
-from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology.config import VALID_SPECIAL_CHARACTERS, DTC_REGEX
 
 app = Flask(
     __name__,
@@ -98,8 +96,7 @@ def invalid_characters(input_string: str) -> bool:
     :param input_string: string that should be checked
     :return: boolean that indicates whether an invalid special character has been found
     """
-    valid_special_characters = " ,'()-:&"
-    return any(not c.isalnum() and c not in valid_special_characters for c in input_string)
+    return any(not c.isalnum() and c not in VALID_SPECIAL_CHARACTERS for c in input_string)
 
 
 class DTCForm(FlaskForm):
@@ -107,16 +104,16 @@ class DTCForm(FlaskForm):
     Form for the DTC page.
     """
     dtc_name = StringField("")
-    existing_dtcs = SelectField("", choices=kg_query_tool.query_all_dtc_instances(),
+    existing_dtcs = SelectField("", choices=sorted(kg_query_tool.query_all_dtc_instances()),
                                 validate_choice=False)
     existing_dtc_submit = SubmitField("Daten anzeigen")
     occurs_with = SelectField("",
-                              choices=make_tuple_list(kg_query_tool.query_all_dtc_instances(False)),
+                              choices=make_tuple_list(sorted(kg_query_tool.query_all_dtc_instances(False))),
                               validate_choice=False)
     occurs_with_submit = SubmitField("DTC hinzufügen")
     clear_occurs_with = SubmitField("Liste leeren")
     fault_condition = StringField("")
-    symptoms_list = make_tuple_list(kg_query_tool.query_all_symptom_instances())
+    symptoms_list = make_tuple_list(sorted(kg_query_tool.query_all_symptom_instances()))
     symptoms = SelectField("", choices=symptoms_list,
                            validate_choice=False)
     symptoms_submit = SubmitField("Symptom hinzufügen")
@@ -125,7 +122,7 @@ class DTCForm(FlaskForm):
     new_symptom_submit = SubmitField("Neues Symptom hinzufügen")
     suspect_components = SelectField(
         "",
-        choices=make_tuple_list(kg_query_tool.query_all_component_instances()), validate_choice=False)
+        choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())), validate_choice=False)
     add_component_submit = SubmitField("Komponente hinzufügen")
     clear_components = SubmitField("Liste leeren")
     final_submit = SubmitField("Absenden")
@@ -137,16 +134,16 @@ class ComponentSetForm(FlaskForm):
     Form for the component set page.
     """
     set_name = StringField("")
-    existing_component_sets = SelectField("", choices=kg_query_tool.query_all_component_set_instances(),
+    existing_component_sets = SelectField("", choices=sorted(kg_query_tool.query_all_component_set_instances()),
                                           validate_choice=False)
     existing_component_set_submit = SubmitField("Daten anzeigen")
     components = SelectField("",
-                             choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                             choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                              validate_choice=False)
     add_component_submit = SubmitField("Komponente hinzufügen")
     clear_components = SubmitField("Liste leeren")
     verifying_components = SelectField("",
-                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                                        validate_choice=False)
     verifying_components_submit = SubmitField("Komponente hinzufügen")
     clear_verifying_components = SubmitField("Liste leeren")
@@ -160,7 +157,7 @@ class SuspectComponentsForm(FlaskForm):
     """
     component_name = StringField("")
     existing_components = SelectField("",
-                                      choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                      choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                                       validate_choice=False)
     existing_components_submit = SubmitField("Daten anzeigen")
     boolean_choices = [("Nein", "Nein",), ("Ja", "Ja")]
@@ -169,70 +166,9 @@ class SuspectComponentsForm(FlaskForm):
     clear_affecting_components = SubmitField("Liste leeren")
     measurements_possible = SelectField(choices=boolean_choices)
     affecting_components = SelectField("",
-                                       choices=make_tuple_list(kg_query_tool.query_all_component_instances()),
+                                       choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())),
                                        validate_choice=False)
     clear_everything = SubmitField("Eingaben löschen")
-
-
-def add_component_to_knowledge_graph(suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
-    """
-    Adds a component instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
-
-    :param suspect_component: component to be checked
-    :param affected_by: list of components whose misbehavior could affect the correct functioning of the component
-                        under consideration
-    :param oscilloscope: whether oscilloscope measurement possible / reasonable
-    """
-    assert isinstance(suspect_component, str)
-    assert isinstance(affected_by, list)
-    assert isinstance(oscilloscope, bool)
-
-    new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
-                                                 affected_by=affected_by)
-    fact_list = expert_knowledge_enhancer.generate_suspect_component_facts([new_component_knowledge])
-    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
-
-
-def add_dtc_to_knowledge_graph(dtc: str, occurs_with: list, fault_condition: str, symptoms: list,
-                               suspect_components: list) -> None:
-    """
-    Adds a DTC instance with the given properties to the knowledge graph using the ExpertKnowledgeEnhancer.
-
-    :param dtc: diagnostic trouble code to be considered
-    :param occurs_with: other DTCs frequently occurring with the considered one
-    :param fault_condition: fault condition associated with the considered DTC
-    :param symptoms: symptoms associated with the considered DTC
-    :param suspect_components: components that should be checked when this DTC occurs
-                               (order defines suggestion priority)
-    """
-    assert isinstance(dtc, str)
-    assert isinstance(occurs_with, list)
-    assert isinstance(fault_condition, str)
-    assert isinstance(symptoms, list)
-    assert isinstance(suspect_components, list)
-
-    new_dtc_knowledge = DTCKnowledge(dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition,
-                                     symptoms=symptoms, suspect_components=suspect_components)
-    fact_list = expert_knowledge_enhancer.generate_dtc_related_facts(new_dtc_knowledge)
-    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
-
-
-def add_component_set_to_knowledge_graph(component_set: str, includes: list, verified_by: list) -> None:
-    """
-    Adds a component set instance to the knowledge graph using the ExpertKnowledgeEnhancer.
-
-    :param component_set: vehicle component set to be represented
-    :param includes: suspect components assigned to this component set
-    :param verified_by: component set can be verified by checking this suspect component
-    """
-    assert isinstance(component_set, str)
-    assert isinstance(includes, list)
-    assert isinstance(verified_by, list)
-
-    new_comp_set_knowledge = ComponentSetKnowledge(component_set=component_set, includes=includes,
-                                                   verified_by=verified_by)
-    fact_list = expert_knowledge_enhancer.generate_component_set_facts(new_comp_set_knowledge)
-    expert_knowledge_enhancer.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -301,11 +237,12 @@ def component_form():
                     # add component to the knowledge graph
                     assert form.measurements_possible.data == "Ja" or form.measurements_possible.data == "Nein"
                     oscilloscope_useful = True if form.measurements_possible.data == "Ja" else False
-                    add_component_to_knowledge_graph(suspect_component=form.component_name.data,
-                                                     affected_by=entered_affecting_comps,
-                                                     oscilloscope=oscilloscope_useful)
+                    expert_knowledge_enhancer.add_component_to_knowledge_graph(
+                        suspect_component=form.component_name.data,
+                        affected_by=entered_affecting_comps,
+                        oscilloscope=oscilloscope_useful)
                     # update SelectField
-                    form.affecting_components.choices = kg_query_tool.query_all_component_instances()
+                    form.affecting_components.choices = sorted(kg_query_tool.query_all_component_instances())
                     # reset variables related to the newly added component
                     get_session_variable_list("affecting_components").clear()
                     session.modified = True
@@ -364,8 +301,8 @@ def component_form():
     if form.component_name.data != session.get("component_name"):
         session["component_name"] = None
     # update SelectField choices
-    form.affecting_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
-    form.existing_components.choices = make_tuple_list(kg_query_tool.query_all_component_instances())
+    form.affecting_components.choices = make_tuple_list(sorted(kg_query_tool.query_all_component_instances()))
+    form.existing_components.choices = make_tuple_list(sorted(kg_query_tool.query_all_component_instances()))
 
     return render_template('component_form.html', form=form,
                            affecting_components_variable_list=get_session_variable_list("affecting_components"))
@@ -378,7 +315,7 @@ def dtc_sanity_check(dtc: str) -> bool:
     :param dtc: DTC to check pattern for
     :return whether the specified DTC matches the pattern
     """
-    pattern = re.compile("[PCBU][012]\d{3}")
+    pattern = re.compile(DTC_REGEX)
     print("match:", pattern.match(dtc))
     return pattern.match(dtc) and len(dtc) == 5
 
@@ -566,17 +503,15 @@ def check_dtc_form(form: DTCForm) -> bool:
         # the StringField for the fault condition is empty
         flash("Bitte geben Sie eine Beschreibung des Fehlerzustands ein!")
         return False
+    if invalid_characters(form.fault_condition.data):
+        # found an invalid special character in the fault condition
+        flash("Ungültiges Sonderzeichen im Fehlerzustand-Eingabefeld!")
+        return False
     if not (form.fault_condition.data not in kg_query_tool.query_all_fault_condition_instances() or
             form.fault_condition.data in kg_query_tool.query_fault_condition_by_dtc(form.dtc_name.data)):
         # fault condition already exists
         flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Für jeden DTC muss ein "
               "individueller Fehlerzustand eingegeben werden.")
-        return False
-    if not get_session_variable_list("symptom_list"):
-        # the list of symptoms is empty
-        flash(
-            "Bitte fügen Sie mindestens ein Symptom hinzu, das im Zusammenhang mit dem DTC "
-            "auftreten kann!")
         return False
     if not get_session_variable_list("component_list"):
         # the list of suspect components is empty
@@ -591,7 +526,7 @@ def dtc_form():
     Renders the DTC page and processes the form data.
     """
     form = DTCForm()
-    form.suspect_components.choices = kg_query_tool.query_all_component_instances()
+    form.suspect_components.choices = sorted(kg_query_tool.query_all_component_instances())
 
     if form.validate_on_submit():
         if form.final_submit.data:
@@ -611,16 +546,19 @@ def dtc_form():
                         dtc_name = session.get("dtc_name")
                         # construct all the facts that should be removed
                         facts_to_be_removed = []
-                        add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                        try:  # if a DTC has no fault condition, this will be skipped
+                            add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+                            add_symptom_removal_facts(dtc_name, facts_to_be_removed)
+                        except IndexError:
+                            pass
                         add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
-                        add_symptom_removal_facts(dtc_name, facts_to_be_removed)
                         add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
                         # remove all the facts that are newly added now (replacement)
                         expert_knowledge_enhancer.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
                             facts_to_be_removed)
 
                     # add the DTC to the knowledge graph
-                    add_dtc_to_knowledge_graph(
+                    expert_knowledge_enhancer.add_dtc_to_knowledge_graph(
                         dtc=form.dtc_name.data,
                         occurs_with=get_session_variable_list("occurs_with_list"),
                         fault_condition=form.fault_condition.data,
@@ -713,10 +651,10 @@ def dtc_form():
         session["dtc_name"] = None
 
     # update choices of the SelectFields
-    form.symptoms.choices = kg_query_tool.query_all_symptom_instances()
-    form.suspect_components.choices = kg_query_tool.query_all_component_instances()
-    form.occurs_with.choices = kg_query_tool.query_all_dtc_instances(False)
-    form.existing_dtcs.choices = kg_query_tool.query_all_dtc_instances()
+    form.symptoms.choices = sorted(kg_query_tool.query_all_symptom_instances())
+    form.suspect_components.choices = sorted(kg_query_tool.query_all_component_instances())
+    form.occurs_with.choices = sorted(kg_query_tool.query_all_dtc_instances(False))
+    form.existing_dtcs.choices = sorted(kg_query_tool.query_all_dtc_instances())
 
     return render_template('DTC_form.html', form=form,
                            suspect_components_variable_list=get_session_variable_list("component_list"),
@@ -787,7 +725,7 @@ def component_set_form():
                             facts_to_be_removed
                         )
                     # add the component set to the knowledge graph
-                    add_component_set_to_knowledge_graph(
+                    expert_knowledge_enhancer.add_component_set_to_knowledge_graph(
                         component_set=form.set_name.data,
                         includes=get_session_variable_list("comp_set_components"),
                         verified_by=get_session_variable_list("verifying_components")
@@ -847,9 +785,9 @@ def component_set_form():
         session["comp_set_name"] = None
 
     # update choices for the SelectFields
-    form.components.choices = kg_query_tool.query_all_component_instances()
-    form.verifying_components.choices = kg_query_tool.query_all_component_instances()
-    form.existing_component_sets.choices = kg_query_tool.query_all_component_set_instances()
+    form.components.choices = sorted(kg_query_tool.query_all_component_instances())
+    form.verifying_components.choices = sorted(kg_query_tool.query_all_component_instances())
+    form.existing_component_sets.choices = sorted(kg_query_tool.query_all_component_set_instances())
 
     return render_template('component_set_form.html', form=form,
                            components_variable_list=get_session_variable_list("comp_set_components"),

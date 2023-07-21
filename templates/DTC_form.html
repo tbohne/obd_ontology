@@ -30,7 +30,7 @@
 
         function updateList(listId, list) {
             const listEl = document.getElementById(listId);
-            listEl.textContent = list.join(', ');
+            listEl.textContent = list.join("; ");
         }
 
         // call the checkSessionValues function every 3 seconds
@@ -62,11 +62,11 @@
             <p>
             <ol id="sync_occurs_with_list">
                 {% for i in occurs_with_DTCs_variable_list %}
-                    {{ i }}{% if not loop.last %}, {% endif %}
+                    {{ i }}{% if not loop.last %}; {% endif %}
                 {% endfor %}
             </ol>
             </p>
-            <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition }}</p>
+            <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition(size = 70) }}</p>
             <p><b>Symptome</b>, die in Zusammenhang mit dem Fehlerzustand auftreten können:
                 {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }}
             </p>
@@ -75,7 +75,7 @@
             <p>
             <ol id="sync_symptom_list">
                 {% for i in symptoms_variable_list %}
-                    {{ i }}{% if not loop.last %}, {% endif %}
+                    {{ i }}{% if not loop.last %}; {% endif %}
                 {% endfor %}
             </ol>
             </p>
@@ -94,7 +94,7 @@
             <p>
             <ol id="sync_component_list">
                 {% for i in suspect_components_variable_list %}
-                    {{ i }}{% if not loop.last %}, {% endif %}
+                    {{ i }}{% if not loop.last %}; {% endif %}
                 {% endfor %}
             </ol>
             </p>

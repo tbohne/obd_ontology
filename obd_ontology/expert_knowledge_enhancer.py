@@ -9,6 +9,7 @@ from dtc_parser.parser import DTCParser
 from rdflib import Namespace, RDF
 
 from obd_ontology import expert_knowledge_parser
+from obd_ontology.component_knowledge import ComponentKnowledge
 from obd_ontology.component_set_knowledge import ComponentSetKnowledge
 from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL
 from obd_ontology.connection_controller import ConnectionController
@@ -327,6 +328,64 @@ class ExpertKnowledgeEnhancer:
             fact_list = self.generate_component_set_facts(subsystem_knowledge)
 
         # enter facts into knowledge graph
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
+    def add_dtc_to_knowledge_graph(self, dtc: str, occurs_with: list, fault_condition: str, symptoms: list,
+                                   suspect_components: list) -> None:
+        """
+        Adds a DTC instance with the given properties to the knowledge graph.
+
+        :param dtc: diagnostic trouble code to be considered
+        :param occurs_with: other DTCs frequently occurring with the considered one
+        :param fault_condition: fault condition associated with the considered DTC
+        :param symptoms: symptoms associated with the considered DTC
+        :param suspect_components: components that should be checked when this DTC occurs
+                                   (order defines suggestion priority)
+        """
+        assert isinstance(dtc, str)
+        assert isinstance(occurs_with, list)
+        assert isinstance(fault_condition, str)
+        assert isinstance(symptoms, list)
+        assert isinstance(suspect_components, list)
+
+        new_dtc_knowledge = DTCKnowledge(dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition,
+                                         symptoms=symptoms, suspect_components=suspect_components)
+        fact_list = self.generate_dtc_related_facts(new_dtc_knowledge)
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
+    def add_component_to_knowledge_graph(self, suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
+        """
+        Adds a component instance with the given properties to the knowledge graph.
+
+        :param suspect_component: component to be checked
+        :param affected_by: list of components whose misbehavior could affect the correct functioning of the component
+                            under consideration
+        :param oscilloscope: whether oscilloscope measurement possible / reasonable
+        """
+        assert isinstance(suspect_component, str)
+        assert isinstance(affected_by, list)
+        assert isinstance(oscilloscope, bool)
+
+        new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
+                                                     affected_by=affected_by)
+        fact_list = self.generate_suspect_component_facts([new_component_knowledge])
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
+    def add_component_set_to_knowledge_graph(self, component_set: str, includes: list, verified_by: list) -> None:
+        """
+        Adds a component set instance to the knowledge graph.
+
+        :param component_set: vehicle component set to be represented
+        :param includes: suspect components assigned to this component set
+        :param verified_by: component set can be verified by checking this suspect component
+        """
+        assert isinstance(component_set, str)
+        assert isinstance(includes, list)
+        assert isinstance(verified_by, list)
+
+        new_comp_set_knowledge = ComponentSetKnowledge(component_set=component_set, includes=includes,
+                                                       verified_by=verified_by)
+        fact_list = self.generate_component_set_facts(new_comp_set_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
