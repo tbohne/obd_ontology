@@ -39,14 +39,14 @@
 </head>
 
 <body>
-<header><h1>Aufnahme von DTC-bezogenem Expertenwissen</h1></header>
+<header><h1>Aquisition of DTC-related expert knowledge</h1></header>
 
 <section>
     <article>
         <p>
-            <a href="/">Startseite</a>
-            <a href="component_form">Fahrzeugkomponenten</a>
-            <a href="component_set_form">Fahrzeugkomponenten-Sets</a>
+            <a href="/">Start page</a>
+            <a href="component_form">Components</a>
+            <a href="component_set_form">Component sets</a>
         </p>
 
         <form method="POST">
@@ -54,47 +54,47 @@
             <br>
             <p>
                 <b>DTC</b>: {{ form.dtc_name(size=20) }}
-                (alternativ bestehenden DTC auswählen und anpassen:
+                (alternativley select and modify an existing DTC:
                 {{ form.existing_dtcs }} {{ form.existing_dtc_submit }})
             </p>
-            <p>Weitere DTCs, die erfahrungsgemäß <b>häufig zusammen mit dem angegebenen DTC</b>
-                auftreten: {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
+            <p>Further DTCs that empirically <b>occur together with the given DTC</b>
+                : {{ form.occurs_with }} {{ form.occurs_with_submit }} {{ form.clear_occurs_with }}</p>
             <p>
             <ol id="sync_occurs_with_list">
                 {% for i in occurs_with_DTCs_variable_list %}
-                    {{ i }}{% if not loop.last %}; {% endif %}
+                {{ i }}{% if not loop.last %}; {% endif %}
                 {% endfor %}
             </ol>
             </p>
-            <p><b>Fehlerzustand</b>, den der DTC beschreibt: {{ form.fault_condition(size = 70) }}</p>
-            <p><b>Symptome</b>, die in Zusammenhang mit dem Fehlerzustand auftreten können:
+            <p><b>Fault condition</b> which describes the DTC: {{ form.fault_condition(size = 70) }}</p>
+            <p><b>Symptoms</b> that may appear in the context of the fault condition:
                 {{ form.symptoms }} {{ form.symptoms_submit }} {{ form.clear_symptoms }}
             </p>
-            <p>Ist ein Symptom nicht in der Liste enthalten, fügen Sie es bitte über das Textfeld
-                hinzu: {{ form.new_symptom }} {{ form.new_symptom_submit }}</p>
+            <p>If a symptom is not in the list, please add it via the text field: {{ form.new_symptom }} {{
+                form.new_symptom_submit }}</p>
             <p>
             <ol id="sync_symptom_list">
                 {% for i in symptoms_variable_list %}
-                    {{ i }}{% if not loop.last %}; {% endif %}
+                {{ i }}{% if not loop.last %}; {% endif %}
                 {% endfor %}
             </ol>
             </p>
-            <p>Liste der <b>fehlerverdächtigen Komponenten</b>: Listen Sie alle Komponenten, die als Ursache infrage
-                kommen,
-                der Reihe nach auf, sodass die Komponenten, die am wahrscheinlichsten die Ursache des Fehlers sind,
-                zuerst genannt werden. Es sollten nur Komponenten angegeben werden, die Teil des Subsystems sind,
-                mit dem dieser DTC in Verbindung steht. Falls Sie eine nicht ursächliche Komponente aus einem anderen
-                Subsystem angeben möchten, die dennoch in der Lage ist,
-                das korrekte Funktionieren einer oder mehrerer Komponenten innerhalb des Subsystems zu verifizieren,
-                definieren Sie ein <a href="component_set_form" class="intext_a">Fahrzeugkomponenten-Set</a>.
+            <p>List of the <b>suspect components</b>: List all components that are likely to be the cause in
+                order, such that the components most likely to be the cause of the fault are listed first. Only
+                components that are part of the subsystem with which this DTC is associated should be specified. If you
+                want to
+                specify a component from another subsystem which is not the cause of the fault but which is still able
+                to verify the correct
+                functioning of one or more components within the subsystem, please define a <a
+                        href="component_set_form" class="intext_a">component set</a>.
             <div>{{ form.suspect_components }} {{ form.add_component_submit }} {{ form.clear_components }}</div>
             </p>
-            <p>Wenn Sie eine Komponente hinzufügen möchten, die nicht in der Liste enthalten ist, nutzen Sie dafür bitte
-                <a href="component_form">dieses</a> Formular.</p>
+            <p>If you would like to add a component that is not included in the list, please use
+                <a href="component_form">this</a> form.</p>
             <p>
             <ol id="sync_component_list">
                 {% for i in suspect_components_variable_list %}
-                    {{ i }}{% if not loop.last %}; {% endif %}
+                {{ i }}{% if not loop.last %}; {% endif %}
                 {% endfor %}
             </ol>
             </p>
@@ -102,13 +102,13 @@
         </form>
         <br>
         {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class=flashes>
-                    {% for message in messages %}
-                        <li><p style="color: #B40404;">{{ message }}</p></li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li><p style="color: #B40404;">{{ message }}</p></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% endwith %}
     </article>
 </section>

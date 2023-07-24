@@ -106,27 +106,27 @@ class DTCForm(FlaskForm):
     dtc_name = StringField("")
     existing_dtcs = SelectField("", choices=sorted(kg_query_tool.query_all_dtc_instances()),
                                 validate_choice=False)
-    existing_dtc_submit = SubmitField("Daten anzeigen")
+    existing_dtc_submit = SubmitField("display data")
     occurs_with = SelectField("",
                               choices=make_tuple_list(sorted(kg_query_tool.query_all_dtc_instances(False))),
                               validate_choice=False)
-    occurs_with_submit = SubmitField("DTC hinzufügen")
-    clear_occurs_with = SubmitField("Liste leeren")
+    occurs_with_submit = SubmitField("add DTC")
+    clear_occurs_with = SubmitField("empty list")
     fault_condition = StringField("")
     symptoms_list = make_tuple_list(sorted(kg_query_tool.query_all_symptom_instances()))
     symptoms = SelectField("", choices=symptoms_list,
                            validate_choice=False)
-    symptoms_submit = SubmitField("Symptom hinzufügen")
-    clear_symptoms = SubmitField("Liste leeren")
+    symptoms_submit = SubmitField("add symptom")
+    clear_symptoms = SubmitField("empty list")
     new_symptom = StringField("")
-    new_symptom_submit = SubmitField("Neues Symptom hinzufügen")
+    new_symptom_submit = SubmitField("add new symptom")
     suspect_components = SelectField(
         "",
         choices=make_tuple_list(sorted(kg_query_tool.query_all_component_instances())), validate_choice=False)
-    add_component_submit = SubmitField("Komponente hinzufügen")
-    clear_components = SubmitField("Liste leeren")
-    final_submit = SubmitField("Absenden")
-    clear_everything = SubmitField("Eingaben löschen")
+    add_component_submit = SubmitField("add component")
+    clear_components = SubmitField("empty list")
+    final_submit = SubmitField("submit")
+    clear_everything = SubmitField("clear entries")
 
 
 class ComponentSetForm(FlaskForm):
