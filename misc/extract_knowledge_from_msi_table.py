@@ -82,7 +82,7 @@ def create_dtc_dictionary(path: str) -> dict:
                 elif available_fault_cond not in existing_fault_conds:
                     dtc_dict[dtc] = [available_fault_cond]
                 else:
-                    new_fault_cond = dtc+" - "+available_fault_cond
+                    new_fault_cond = dtc + " - " + available_fault_cond
                     assert new_fault_cond not in existing_fault_conds
                     dtc_dict[dtc] = [new_fault_cond]
 
@@ -130,6 +130,20 @@ def add_components_to_knowledge_graph(dtc_dict: dict) -> None:
     print("Added {} components to the knowledge graph.".format(counter))
 
 
+def remove_duplicates_from_list(some_list: list) -> list:
+    """
+    Removes duplicates from a list while preserving the order.
+
+    :param some_list: list that may contain duplicates
+    :return: list without duplicates
+    """
+    list_without_duplicates = []
+    for item in some_list:
+        if item not in list_without_duplicates:
+            list_without_duplicates.append(item)
+    return list_without_duplicates
+
+
 def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
     """
     Adds DTCs from the DTC dictionary to the knowledge graph.
@@ -149,6 +163,7 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
             components = dtc_data[1:]
             order_of_components = np.argsort([sublist[0] for sublist in components])
             ordered_components = np.array(components)[order_of_components, 1].tolist()
+            ordered_components = remove_duplicates_from_list(ordered_components)
         else:
             ordered_components = []
         expert_knowledge_enhancer.add_dtc_to_knowledge_graph(dtc, [], fault_cond, [], ordered_components)
