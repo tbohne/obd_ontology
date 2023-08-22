@@ -44,10 +44,18 @@ def create_dtc_dictionary(path: str) -> dict:
 
     data = pandas.read_excel(path, sheet_name="DTC - Element ID - Baum")
 
+    def get_existing_fault_conditions() -> list:
+        """
+        Returns a list of all fault conditions that are stored in the dtc_dict at that moment.
+
+        :return: list of all fault conditions in the dtc_dict
+        """
+        return [dtc_data[0] for dtc_data in dtc_dict.values()]
+
     for i in range(len(data)):
-        dtc = str(data["DTC"][i])
+        dtc = remove_invalid_characters(str(data["DTC"][i]))
         pos = data["Ursachenposition"][i]
-        comp = str(data["Element ID"][i])
+        comp = remove_invalid_characters(str(data["Element ID"][i]))
         fault_cond = str(data["Fehlercodes"][i])
         alternative_fault_cond = str(data["Alternative Klartexte der P0 Codes"][i])
         klavkarr_fault_cond = str(data["klavkarr Fehlercodes"][i])
@@ -64,10 +72,19 @@ def create_dtc_dictionary(path: str) -> dict:
                 elif british_fault_cond != "nan":
                     available_fault_cond = british_fault_cond
                 else:
-                    available_fault_cond = ""
+                    available_fault_cond = "Bitte Fehlerzustands-Beschreibung für {} eingeben".format(dtc)
 
-                available_fault_cond = remove_dtc_from_fault_cond(available_fault_cond, dtc)
-                dtc_dict[dtc] = [available_fault_cond]
+                available_fault_cond = remove_invalid_characters(available_fault_cond)
+                cleaned_fault_cond = remove_dtc_from_fault_cond(available_fault_cond, dtc)
+                existing_fault_conds = get_existing_fault_conditions()
+                if cleaned_fault_cond not in existing_fault_conds:
+                    dtc_dict[dtc] = [cleaned_fault_cond]
+                elif available_fault_cond not in existing_fault_conds:
+                    dtc_dict[dtc] = [available_fault_cond]
+                else:
+                    new_fault_cond = dtc + " - " + available_fault_cond
+                    assert new_fault_cond not in existing_fault_conds
+                    dtc_dict[dtc] = [new_fault_cond]
 
             if comp != "nan":
                 dtc_dict[dtc].append((pos, comp))
@@ -107,11 +124,24 @@ def add_components_to_knowledge_graph(dtc_dict: dict) -> None:
     all_comps = set(all_comps)
 
     for comp in all_comps:
-        comp = remove_invalid_characters(comp)
         expert_knowledge_enhancer.add_component_to_knowledge_graph(comp, [], False)
         counter += 1
 
     print("Added {} components to the knowledge graph.".format(counter))
+
+
+def remove_duplicates_from_list(some_list: list) -> list:
+    """
+    Removes duplicates from a list while preserving the order.
+
+    :param some_list: list that may contain duplicates
+    :return: list without duplicates
+    """
+    list_without_duplicates = []
+    for item in some_list:
+        if item not in list_without_duplicates:
+            list_without_duplicates.append(item)
+    return list_without_duplicates
 
 
 def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
@@ -127,15 +157,13 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
 
     for dtc in dtc_dict:
         dtc_data = dtc_dict[dtc]
-        dtc = remove_invalid_characters(dtc)
         fault_cond = dtc_data[0]
-        fault_cond = remove_invalid_characters(fault_cond)
 
         if len(dtc_data) > 1:
             components = dtc_data[1:]
             order_of_components = np.argsort([sublist[0] for sublist in components])
             ordered_components = np.array(components)[order_of_components, 1].tolist()
-            ordered_components = [remove_invalid_characters(comp) for comp in ordered_components]
+            ordered_components = remove_duplicates_from_list(ordered_components)
         else:
             ordered_components = []
         expert_knowledge_enhancer.add_dtc_to_knowledge_graph(dtc, [], fault_cond, [], ordered_components)
