@@ -113,11 +113,11 @@ vin = "ID2342713"
 qt.print_res(qt.query_vehicle_instance_by_vin(vin)
 ...
 ```
-This is also used as part of [vehicle_diag_smach](https://github.com/tbohne/vehicle_diag_smach), which essentially guides the diagnostic process based on knowledge graph queries.
+This is also used as part of [vehicle_diag_smach](https://github.com/tbohne/vehicle_diag_smach), which essentially guides the diagnostic process based on knowledge graph queries (symbolic reasoning).
 
 ## Knowledge Snapshot
 
-The idea of the knowledge snapshot is to output the knowledge currently stored in the knowledge graph on a concept-by-concept basis. This is useful, for instance, to compare different states via `diff`.
+The idea of the knowledge snapshot is to output the knowledge currently stored in the knowledge graph on a concept-by-concept basis. This is useful, for instance, to compare different states via `diff`. As anticipated, there are two themes to the ontology - expert knowledge and diagnostic knowledge, for each of which there is a corresponding knowledge snapshot.
 ```
 $ python obd_ontology/knowledge_snapshot.py [--perspective {expert | diag}]
 ```
