@@ -53,7 +53,7 @@ Creates a backup in `fuseki_root/run/backups/`.
 
 The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.ttl` so that it can be interpreted directly, e.g., when launching it on the server (see above).
 
-## Expert Knowledge Acquisition Web Interface)
+## Expert Knowledge Acquisition Web Interface
 
 The `ExpertKnowledgeEnhancer` can be used to augment the knowledge graph hosted by the *Fuseki* server with **vehicle-agnostic expert knowledge**. In particular, it generates semantic facts based on the information entered through a web interface and connects these facts in a meaningful way to what is already available in the knowledge graph, i.e., it serves as a backend for the knowledge acquisition component. Finally, all generated facts are concatenated and sent to the `ConnectionController`. Quite a number of semantic facts have to be generated when an expert enters few information. There are front- and back-end functionalities, i.e., expert knowledge input via the web interface and corresponding generation of semantic facts in the backend, for each concept. All of this is accompanied by a series of input validation mechanisms. This way, a simple knowledge graph extension for the expert goes hand in hand with an automatic proper “wiring” of semantic facts in the background.
 
