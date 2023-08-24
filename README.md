@@ -13,12 +13,8 @@ All three levels combined constitute the knowledge graph (`knowledge_base/live_k
 
 ## Dependencies
 
-- [**rdflib**](https://rdflib.readthedocs.io/en/stable/): pure Python package for working with RDF
-- [**owlready2**](https://pypi.org/project/Owlready2/): package for ontology-oriented programming in Python
-- [**requests**](https://pypi.org/project/requests/): HTTP lib for Python
-- [**dtc_parser**](https://github.com/tbohne/dtc_parser): parser for diagnostic trouble codes (DTCs) used by vehicle onboard diagnosis (OBD)
+- for Python requirements, cf. `requirements.txt`
 - [**Apache Jena Fuseki**](https://jena.apache.org/documentation/fuseki2/): SPARQL server hosting / maintaining the knowledge graph
-- [**termcolor**](https://pypi.org/project/termcolor/): ANSI color formatting for output in terminal
 
 ## Installation
 ```
