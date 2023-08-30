@@ -12,16 +12,25 @@
                 .then(response => response.json())
                 .then(data => {
                     // compare the returned values with the current values displayed on the page
-                    if (JSON.stringify(data.synchronized_occurs_with_list) !== JSON.stringify(sessionStorage.getItem('synchronized_occurs_with_list'))) {
-                        sessionStorage.setItem('synchronized_occurs_with_list', JSON.stringify(data.synchronized_occurs_with_list));
+                    if (JSON.stringify(data.synchronized_occurs_with_list)
+                        !== JSON.stringify(sessionStorage.getItem('synchronized_occurs_with_list'))) {
+                        sessionStorage.setItem(
+                            'synchronized_occurs_with_list', JSON.stringify(data.synchronized_occurs_with_list)
+                        );
                         updateList('sync_occurs_with_list', data.synchronized_occurs_with_list);
                     }
-                    if (JSON.stringify(data.synchronized_symptom_list) !== JSON.stringify(sessionStorage.getItem('synchronized_symptom_list'))) {
-                        sessionStorage.setItem('synchronized_symptom_list', JSON.stringify(data.synchronized_symptom_list));
+                    if (JSON.stringify(data.synchronized_symptom_list)
+                        !== JSON.stringify(sessionStorage.getItem('synchronized_symptom_list'))) {
+                        sessionStorage.setItem(
+                            'synchronized_symptom_list', JSON.stringify(data.synchronized_symptom_list)
+                        );
                         updateList('sync_symptom_list', data.synchronized_symptom_list);
                     }
-                    if (JSON.stringify(data.synchronized_component_list) !== JSON.stringify(sessionStorage.getItem('synchronized_component_list'))) {
-                        sessionStorage.setItem('synchronized_component_list', JSON.stringify(data.synchronized_component_list));
+                    if (JSON.stringify(data.synchronized_component_list)
+                        !== JSON.stringify(sessionStorage.getItem('synchronized_component_list'))) {
+                        sessionStorage.setItem(
+                            'synchronized_component_list', JSON.stringify(data.synchronized_component_list)
+                        );
                         updateList('sync_component_list', data.synchronized_component_list);
                     }
                 })
