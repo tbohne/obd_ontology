@@ -15,12 +15,16 @@ for i in range(len(required)):
 setup(
     name='obd_ontology',
     version=__version__,
-    description='Ontology for capturing knowledge about on-board diagnosis (DTCs).',
+    description='Ontology (KG) for capturing knowledge about automotive on-board diagnostics (OBD) '
+                '- knowledge acquisition, enhancement & retrieval.',
     author='Tim Bohne',
     author_email='tim.bohne@dfki.de',
     url=URL,
     download_url=f'{URL}/archive/{__version__}.tar.gz',
     keywords=[
+        'sparql',
+        'rdf',
+        'semantic-web',
         'ontology',
         'knowledge-graph',
         'knowledge-base'
