@@ -12,12 +12,18 @@
                 .then(response => response.json())
                 .then(data => {
                     // compare the returned values with the current values displayed on the page
-                    if (JSON.stringify(data.synchronized_comp_set_components) !== JSON.stringify(sessionStorage.getItem('synchronized_comp_set_components'))) {
-                        sessionStorage.setItem('synchronized_comp_set_components', JSON.stringify(data.synchronized_comp_set_components));
+                    if (JSON.stringify(data.synchronized_comp_set_components)
+                        !== JSON.stringify(sessionStorage.getItem('synchronized_comp_set_components'))) {
+                        sessionStorage.setItem(
+                            'synchronized_comp_set_components', JSON.stringify(data.synchronized_comp_set_components)
+                        );
                         updateList('sync_comp_set_components', data.synchronized_comp_set_components);
                     }
-                    if (JSON.stringify(data.synchronized_verifying_components) !== JSON.stringify(sessionStorage.getItem('synchronized_verifying_components'))) {
-                        sessionStorage.setItem('synchronized_verifying_components', JSON.stringify(data.synchronized_verifying_components));
+                    if (JSON.stringify(data.synchronized_verifying_components)
+                        !== JSON.stringify(sessionStorage.getItem('synchronized_verifying_components'))) {
+                        sessionStorage.setItem(
+                            'synchronized_verifying_components', JSON.stringify(data.synchronized_verifying_components)
+                        );
                         updateList('sync_verifying_components', data.synchronized_verifying_components);
                     }
                 })
@@ -72,7 +78,11 @@
             <p><b>Komponenten</b>, die die korrekte Funktionalität des Komponenten-Sets <b>verifizieren</b> können
                 (<a href="component_form">fehlende Komponente ergänzen</a>):
             </p>
-            <div> {{ form.verifying_components }} {{ form.verifying_components_submit }} {{ form.clear_verifying_components }}</div>
+            <div>
+                {{ form.verifying_components }}
+                {{ form.verifying_components_submit }}
+                {{ form.clear_verifying_components }}
+            </div>
             <p>
             <ol id="sync_verifying_components">
                 {% for i in verifying_components_list %}
