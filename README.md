@@ -1,5 +1,8 @@
 # OBD Ontology
 
+![unstable](https://img.shields.io/badge/stability-unstable-orange)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > Ontology for capturing knowledge about automotive [on-board diagnostics](https://en.wikipedia.org/wiki/On-board_diagnostics) (OBD), particularly [diagnostic trouble codes](https://en.wikipedia.org/wiki/OBD-II_PIDs) (DTCs). The objective is to build up a knowledge graph based on this ontology by populating it with large amounts of instance data (cf. `knowledge_base/live_kg_backups/`) as well as functionalities for knowledge acquisition, enhancement and retrieval.
 
 ![](img/obd_ontology_v16.svg)
@@ -119,6 +122,6 @@ The idea of the knowledge snapshot is to output the knowledge currently stored i
 $ python obd_ontology/knowledge_snapshot.py [--perspective {expert | diag}]
 ```
 
-## Paper Reference
+## Related Publications
 
 TBD.
