@@ -13,6 +13,7 @@ from flask_wtf.csrf import CSRFProtect
 from obd_ontology.app_classes import SuspectComponentsForm, DTCForm, ComponentSetForm
 from obd_ontology.config import VALID_SPECIAL_CHARACTERS, DTC_REGEX
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
+from obd_ontology.fact import Fact
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 from obd_ontology.util import make_tuple_list
 
@@ -46,6 +47,8 @@ EXPERT_KNOWLEDGE_ENHANCER = ExpertKnowledgeEnhancer("")
 def get_session_values() -> wrappers.Response:
     """
     This page shows the current state of session variable lists. It is used to synchronize the lists in other tabs.
+
+    :return: JSON response for session values
     """
     return jsonify({
         "synchronized_comp_set_components": get_session_variable_list("comp_set_components"),
@@ -267,7 +270,7 @@ def component_form() -> Union[str, wrappers.Response]:
             display_component_info(form)
         elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
             clear_component_info(form)
-    else:  # no submit button has been pressed - reset variable that specifies whether warning has been shown
+    else:  # no submit button has been clicked - reset variable that specifies whether warning has been shown
         session["affecting_components_empty_warning_received"] = None
     # reset variable that specifies whether warning has been shown
     if form.component_name.data != session.get("component_name"):
@@ -292,7 +295,7 @@ def dtc_sanity_check(dtc: str) -> bool:
     return pattern.match(dtc) and len(dtc) == 5
 
 
-def add_fault_condition_removal_fact(dtc_name: str, facts_to_be_removed: list) -> None:
+def add_fault_condition_removal_fact(dtc_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     If necessary, adds the fault condition removal fact to the list of facts to be removed.
 
@@ -309,7 +312,7 @@ def add_fault_condition_removal_fact(dtc_name: str, facts_to_be_removed: list) -
         ))
 
 
-def add_co_occurring_dtc_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
+def add_co_occurring_dtc_removal_facts(dtc_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     Adds the co-occurring DTC facts to be removed.
 
@@ -326,7 +329,7 @@ def add_co_occurring_dtc_removal_facts(dtc_name: str, facts_to_be_removed: list)
         ))
 
 
-def add_symptom_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
+def add_symptom_removal_facts(dtc_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     Adds the symptom facts to be removed.
 
@@ -344,7 +347,7 @@ def add_symptom_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
         ))
 
 
-def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed: list) -> None:
+def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     Adds the diagnostic association facts to be removed.
 
@@ -358,7 +361,7 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
         diag_association_uuid = KG_QUERY_TOOL.query_diag_association_instance_by_dtc_and_sus_comp(dtc_name, comp, False)
         diag_association_uuid = diag_association_uuid[0].split("#")[1]
 
-        # remove the 'has' connection between DTC and diagnostic association
+        # remove the 'hasAssociation' connection between DTC and diagnostic association
         facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_has_association_fact(
             dtc_uuid, diag_association_uuid, False
         ))
@@ -387,7 +390,7 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
             ))
 
 
-def add_included_component_removal_facts(comp_set_name: str, facts_to_be_removed: list) -> None:
+def add_included_component_removal_facts(comp_set_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     Adds the `includes` facts to be removed.
 
@@ -402,7 +405,7 @@ def add_included_component_removal_facts(comp_set_name: str, facts_to_be_removed
         ))
 
 
-def add_verifying_component_removal_facts(component_set_name: str, facts_to_be_removed: list) -> None:
+def add_verifying_component_removal_facts(component_set_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     Adds the `verifies` facts to be removed.
 
@@ -417,7 +420,7 @@ def add_verifying_component_removal_facts(component_set_name: str, facts_to_be_r
         ))
 
 
-def add_use_oscilloscope_removal_fact(component_name: str, facts_to_be_removed: list) -> None:
+def add_use_oscilloscope_removal_fact(component_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     Adds the `use_oscilloscope` facts to be removed.
 
@@ -431,7 +434,7 @@ def add_use_oscilloscope_removal_fact(component_name: str, facts_to_be_removed: 
     ))
 
 
-def add_affected_by_removal_fact(component_name: str, facts_to_be_removed: list) -> None:
+def add_affected_by_removal_fact(component_name: str, facts_to_be_removed: List[Fact]) -> None:
     """
     Adds the `affected_by` facts to be removed.
 
@@ -448,190 +451,302 @@ def add_affected_by_removal_fact(component_name: str, facts_to_be_removed: list)
 def check_dtc_form(form: DTCForm) -> bool:
     """
     Checks if all user inputs to the DTC form are complete and correct.
-
-    If a problem has been found, a corresponding message is flashed.
+    If a problem is found, a corresponding message is flashed.
 
     :param form: the DTCForm that should be checked
-    :return: True if the form has been filled out completely and correctly, else False
+    :return: true if the form is filled out completely and correctly, else false
     """
     if not form.dtc_name.data:
-        # the StringField for the DTC is empty
-        flash("Bitte geben Sie den DTC ein!")
+        flash("Bitte geben Sie den DTC ein!")  # the StringField for the DTC is empty
         return False
-    if invalid_characters(form.dtc_name.data):
-        # found an invalid special character in DTC
-        flash("Ungültiges Sonderzeichen im DTC-Eingabefeld!")
+    elif invalid_characters(form.dtc_name.data):
+        flash("Ungültiges Sonderzeichen im DTC-Eingabefeld!")  # found an invalid special character in DTC
         return False
-    if not dtc_sanity_check(form.dtc_name.data):
-        # invalid DTC pattern
-        flash("Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)
+    elif not dtc_sanity_check(form.dtc_name.data):
+        flash("Ungültiger DTC (entspricht nicht dem erwarteten Muster): " + form.dtc_name.data)  # invalid DTC pattern
         return False
-    if form.dtc_name.data in get_session_variable_list("occurs_with_list"):
+    elif form.dtc_name.data in get_session_variable_list("occurs_with_list"):
         # DTC occurs with itself
-        flash("Sie haben eingegeben, dass der DTC häufig mit sich selbst zusammen auftritt. "
-              "Das ist nicht zulässig.")
+        flash("Sie haben eingegeben, dass der DTC häufig mit sich selbst zusammen auftritt. Das ist nicht zulässig.")
         return False
-    if not form.fault_condition.data:
+    elif not form.fault_condition.data:
         # the StringField for the fault condition is empty
         flash("Bitte geben Sie eine Beschreibung des Fehlerzustands ein!")
         return False
-    if invalid_characters(form.fault_condition.data):
+    elif invalid_characters(form.fault_condition.data):
         # found an invalid special character in the fault condition
         flash("Ungültiges Sonderzeichen im Fehlerzustand-Eingabefeld!")
         return False
-    if not (form.fault_condition.data not in KG_QUERY_TOOL.query_all_fault_condition_instances() or
-            form.fault_condition.data in KG_QUERY_TOOL.query_fault_condition_by_dtc(form.dtc_name.data)):
+    elif not (form.fault_condition.data not in KG_QUERY_TOOL.query_all_fault_condition_instances() or
+              form.fault_condition.data in KG_QUERY_TOOL.query_fault_condition_by_dtc(form.dtc_name.data)):
         # fault condition already exists
         flash("Der Fehlerzustand existiert bereits für einen anderen DTC. Für jeden DTC muss ein "
               "individueller Fehlerzustand eingegeben werden.")
         return False
-    if not get_session_variable_list("component_list"):
+    elif not get_session_variable_list("component_list"):
         # the list of suspect components is empty
         flash("Bitte nennen Sie mindestens eine Komponente, die überprüft werden sollte!")
         return False
     return True
 
 
-@app.route('/dtc_form', methods=['GET', 'POST'])
-def dtc_form():
+def show_dtc_exists_warning_msg(form: DTCForm) -> None:
     """
-    Renders the DTC page and processes the form data.
+    Shows the 'DTC already exists' warning message for the entered DTC.
+
+    :param form: DTC form with user input
     """
-    form = DTCForm()
-    form.suspect_components.choices = sorted(KG_QUERY_TOOL.query_all_component_instances())
+    flash("WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
+          "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
+    session["dtc_name"] = form.dtc_name.data
 
-    if form.validate_on_submit():
-        if form.final_submit.data:
-            if check_dtc_form(form):
 
-                warning_already_shown = form.dtc_name.data == session.get("dtc_name")
-                # if the DTC already exists and there has not been a warning yet, flash a warning first
-                if form.dtc_name.data in KG_QUERY_TOOL.query_all_dtc_instances(False) \
-                        and not warning_already_shown:
-                    flash(
-                        "WARNUNG: Dieser DTC existiert bereits! Wenn Sie sicher sind, dass Sie ihn "
-                        "überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button")
-                    session["dtc_name"] = form.dtc_name.data
-                else:  # either the DTC does not exist yet, or the warning has already been flashed
+def remove_deprecated_dtc_facts() -> None:
+    """
+    Removes deprecated DTC facts form the KG.
+    """
+    dtc_name = session.get("dtc_name")
+    # construct all the facts that should be removed
+    facts_to_be_removed = []
+    try:  # if a DTC has no fault condition, this will be skipped
+        add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
+        add_symptom_removal_facts(dtc_name, facts_to_be_removed)
+    except IndexError:
+        pass
+    add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
+    add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
+    # remove all the facts that are newly added now (replacement)
+    EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.remove_outdated_facts_from_knowledge_graph(facts_to_be_removed)
 
-                    if warning_already_shown:  # replacement confirmation given
-                        dtc_name = session.get("dtc_name")
-                        # construct all the facts that should be removed
-                        facts_to_be_removed = []
-                        try:  # if a DTC has no fault condition, this will be skipped
-                            add_fault_condition_removal_fact(dtc_name, facts_to_be_removed)
-                            add_symptom_removal_facts(dtc_name, facts_to_be_removed)
-                        except IndexError:
-                            pass
-                        add_co_occurring_dtc_removal_facts(dtc_name, facts_to_be_removed)
-                        add_diagnostic_association_removal_facts(dtc_name, facts_to_be_removed)
-                        # remove all the facts that are newly added now (replacement)
-                        EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                            facts_to_be_removed)
 
-                    # add the DTC to the knowledge graph
-                    EXPERT_KNOWLEDGE_ENHANCER.add_dtc_to_knowledge_graph(
-                        dtc=form.dtc_name.data,
-                        occurs_with=get_session_variable_list("occurs_with_list"),
-                        fault_condition=form.fault_condition.data,
-                        symptoms=get_session_variable_list("symptom_list"),
-                        suspect_components=get_session_variable_list("component_list"))
+def add_dtc_to_kg(form: DTCForm) -> None:
+    """
+    Adds the entered DTC to the KG.
 
-                    # reset lists
-                    get_session_variable_list("component_list").clear()
-                    get_session_variable_list("symptom_list").clear()
-                    get_session_variable_list("occurs_with_list").clear()
-                    session.modified = True
+    :param form: DTC form with user input
+    """
+    EXPERT_KNOWLEDGE_ENHANCER.add_dtc_to_knowledge_graph(
+        dtc=form.dtc_name.data,
+        occurs_with=get_session_variable_list("occurs_with_list"),
+        fault_condition=form.fault_condition.data,
+        symptoms=get_session_variable_list("symptom_list"),
+        suspect_components=get_session_variable_list("component_list"))
 
-                    # show success message
-                    if form.dtc_name.data == session.get("dtc_name"):
-                        flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
-                    else:
-                        flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
-                    return redirect(url_for('dtc_form'))
 
-        # a button that is not the final submit button has been clicked
-        elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
-            if form.suspect_components.data not in get_session_variable_list("component_list"):
-                get_session_variable_list("component_list").append(form.suspect_components.data)
+def reset_dtc_lists() -> None:
+    """
+    Resets the DTC-related session variable lists.
+    """
+    get_session_variable_list("component_list").clear()
+    get_session_variable_list("symptom_list").clear()
+    get_session_variable_list("occurs_with_list").clear()
+    session.modified = True
+
+
+def show_dtc_success_msg(form: DTCForm) -> None:
+    """
+    Shows the success message for entered DTCs.
+
+    :param form: DTC form with user input
+    """
+    if form.dtc_name.data == session.get("dtc_name"):
+        flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
+    else:
+        flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
+
+
+def add_components(form: DTCForm) -> None:
+    """
+    Adds components to the DTC's component list.
+
+    :param form: DTC form with user input
+    """
+    if form.suspect_components.data not in get_session_variable_list("component_list"):
+        get_session_variable_list("component_list").append(form.suspect_components.data)
+        session.modified = True
+
+
+def add_symptoms(form: DTCForm) -> None:
+    """
+    Adds selected symptoms to the DTC's symptom list.
+
+    :param form: DTC form with user input
+    """
+    if form.symptoms.data not in get_session_variable_list("symptom_list"):
+        get_session_variable_list("symptom_list").append(form.symptoms.data)
+        session.modified = True
+
+
+def add_new_symptoms(form: DTCForm) -> None:
+    """
+    Adds new (entered) symptoms to the DTC's symptom list.
+
+    :param form: DTC form with user input
+    """
+    if form.new_symptom.data:
+        if not invalid_characters(form.new_symptom.data):
+            if form.new_symptom.data not in get_session_variable_list("symptom_list"):
+                get_session_variable_list("symptom_list").append(form.new_symptom.data)
                 session.modified = True
+        else:  # found an invalid special character
+            flash("Ungültiges Sonderzeichen im Symptom-Eingabefeld gefunden!")
+    else:  # no input text in the symptom StringField
+        flash("Bitte schreiben Sie das neue Symptom in das Textfeld, bevor Sie versuchen, es hinzuzufügen!")
 
-        # button that adds symptoms from the SelectField to the symptom list has been clicked
-        elif form.symptoms_submit.data:
-            if form.symptoms.data not in get_session_variable_list("symptom_list"):
-                get_session_variable_list("symptom_list").append(form.symptoms.data)
-                session.modified = True
 
-        # button that adds symptoms from the StringField to the symptom list has been clicked
-        elif form.new_symptom_submit.data:
-            if form.new_symptom.data:
-                if not invalid_characters(form.new_symptom.data):
-                    if form.new_symptom.data not in get_session_variable_list("symptom_list"):
-                        get_session_variable_list("symptom_list").append(form.new_symptom.data)
-                        session.modified = True
-                else:  # found an invalid special character
-                    flash("Ungültiges Sonderzeichen im Symptom-Eingabefeld gefunden!")
-            else:  # no input text in the symptom StringField
-                flash("Bitte schreiben Sie das neue Symptom in das Textfeld, bevor Sie versuchen, es hinzuzufügen!")
+def add_occurs_with(form: DTCForm) -> None:
+    """
+    Adds 'occurs with' information to the DTC's list.
 
-        elif form.occurs_with_submit.data:  # button that adds other DTC to the occurs_with list has been clicked
-            if form.occurs_with.data not in get_session_variable_list("occurs_with_list"):
-                get_session_variable_list("occurs_with_list").append(form.occurs_with.data)
-                session.modified = True
+    :param form: DTC form with user input
+    """
+    if form.occurs_with.data not in get_session_variable_list("occurs_with_list"):
+        get_session_variable_list("occurs_with_list").append(form.occurs_with.data)
+        session.modified = True
 
-        elif form.clear_occurs_with.data:  # button that clears the occurs_with list has been clicked
-            get_session_variable_list("occurs_with_list").clear()
-            session.modified = True
 
-        elif form.clear_components.data:  # button that clears the component list has been clicked
-            get_session_variable_list("component_list").clear()
-            session.modified = True
+def clear_occurs_with() -> None:
+    """
+    Clears the 'occurs with' list.
+    """
+    get_session_variable_list("occurs_with_list").clear()
+    session.modified = True
 
-        elif form.clear_symptoms.data:  # button that clears the symptom list has been clicked
-            get_session_variable_list("symptom_list").clear()
-            session.modified = True
 
-        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
-            get_session_variable_list("occurs_with_list").clear()
-            get_session_variable_list("component_list").clear()
-            get_session_variable_list("symptom_list").clear()
-            session.modified = True
-            form.dtc_name.data = ""
+def clear_components() -> None:
+    """
+    Clears the component list.
+    """
+    get_session_variable_list("component_list").clear()
+    session.modified = True
+
+
+def clear_symptoms() -> None:
+    """
+    Clears the symptom list.
+    """
+    get_session_variable_list("symptom_list").clear()
+    session.modified = True
+
+
+def clear_all_dtc_fields(form: DTCForm) -> None:
+    """
+    Clears all the DTC input fields.
+
+    :param form: DTC form with user input
+    """
+    get_session_variable_list("occurs_with_list").clear()
+    get_session_variable_list("component_list").clear()
+    get_session_variable_list("symptom_list").clear()
+    session.modified = True
+    form.dtc_name.data = ""
+    form.fault_condition.data = ""
+
+
+def display_dtc_info(form: DTCForm) -> None:
+    """
+    Displays all the available DTC info for the user.
+
+    :param form: DTC form with user input
+    """
+    existing_dtc = form.existing_dtcs.data
+    if existing_dtc is None:
+        flash("Keine Daten verfügbar")
+    else:
+        session["occurs_with_list"] = KG_QUERY_TOOL.query_co_occurring_trouble_codes(existing_dtc)
+        suspect_components = KG_QUERY_TOOL.query_suspect_components_by_dtc(existing_dtc, False)
+        ordered_sus_comp = {
+            int(KG_QUERY_TOOL.query_priority_id_by_dtc_and_sus_comp(existing_dtc, comp, False)[0]):
+                comp for comp in suspect_components
+        }
+        session["component_list"] = [ordered_sus_comp[i] for i in range(len(suspect_components))]
+        session["symptom_list"] = KG_QUERY_TOOL.query_symptoms_by_dtc(existing_dtc)
+        form.dtc_name.data = existing_dtc
+        try:
+            form.fault_condition.data = KG_QUERY_TOOL.query_fault_condition_by_dtc(existing_dtc)[0]
+        except IndexError:
             form.fault_condition.data = ""
 
-        elif form.existing_dtc_submit.data:  # user wants to see data for existing DTCs
-            existing_dtc = form.existing_dtcs.data
-            if existing_dtc is None:
-                flash("Keine Daten verfügbar")
-            else:
-                session["occurs_with_list"] = KG_QUERY_TOOL.query_co_occurring_trouble_codes(existing_dtc)
-                suspect_components = KG_QUERY_TOOL.query_suspect_components_by_dtc(existing_dtc, False)
-                ordered_sus_comp = {
-                    int(KG_QUERY_TOOL.query_priority_id_by_dtc_and_sus_comp(existing_dtc, comp, False)[0]):
-                        comp for comp in suspect_components
-                }
-                session["component_list"] = [ordered_sus_comp[i] for i in range(len(suspect_components))]
-                session["symptom_list"] = KG_QUERY_TOOL.query_symptoms_by_dtc(existing_dtc)
-                form.dtc_name.data = existing_dtc
-                try:
-                    form.fault_condition.data = KG_QUERY_TOOL.query_fault_condition_by_dtc(existing_dtc)[0]
-                except IndexError:
-                    form.fault_condition.data = ""
 
-    # reset variable that specifies whether warning has been shown
+def reset_dtc_warning(form: DTCForm) -> None:
+    """
+    Resets the variable that specifies whether a warning has been shown.
+
+    :param form: DTC form with user input
+    """
     if form.dtc_name.data != session.get("dtc_name"):
         session["dtc_name"] = None
 
-    # update choices of the SelectFields
+
+def update_dtc_select_fields(form: DTCForm) -> None:
+    """
+    Updates the DTC page's select fields (choices).
+
+    :param form: DTC form with user input
+    """
     form.symptoms.choices = sorted(KG_QUERY_TOOL.query_all_symptom_instances())
     form.suspect_components.choices = sorted(KG_QUERY_TOOL.query_all_component_instances())
     form.occurs_with.choices = sorted(KG_QUERY_TOOL.query_all_dtc_instances(False))
     form.existing_dtcs.choices = sorted(KG_QUERY_TOOL.query_all_dtc_instances())
 
+
+def render_dtc_template(form: DTCForm) -> str:
+    """
+    Renders the DTC page, i.e., constructs the HTML string.
+
+    :param form: DTC form with user input
+    :return: HTML string for the DTC page
+    """
     return render_template('DTC_form.html', form=form,
                            suspect_components_variable_list=get_session_variable_list("component_list"),
                            symptoms_variable_list=get_session_variable_list("symptom_list"),
                            occurs_with_DTCs_variable_list=get_session_variable_list("occurs_with_list"))
+
+
+@app.route('/dtc_form', methods=['GET', 'POST'])
+def dtc_form() -> Union[str, wrappers.Response]:
+    """
+    Renders the DTC page and processes the form data.
+
+    :return: HTML string for the DTC page
+    """
+    form = DTCForm()
+    form.suspect_components.choices = sorted(KG_QUERY_TOOL.query_all_component_instances())
+    if form.validate_on_submit():
+        if form.final_submit.data:
+            if check_dtc_form(form):
+                warning_already_shown = form.dtc_name.data == session.get("dtc_name")
+                # if the DTC already exists and there has not been a warning yet, flash a warning first
+                if form.dtc_name.data in KG_QUERY_TOOL.query_all_dtc_instances(False) and not warning_already_shown:
+                    show_dtc_exists_warning_msg(form)
+                else:  # either the DTC does not exist yet, or the warning has already been flashed
+                    if warning_already_shown:  # replacement confirmation given
+                        remove_deprecated_dtc_facts()
+                    add_dtc_to_kg(form)
+                    reset_dtc_lists()
+                    show_dtc_success_msg(form)
+                    return redirect(url_for('dtc_form'))
+        elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
+            add_components(form)
+        elif form.symptoms_submit.data:  # button that adds symptoms from the SelectField has been clicked
+            add_symptoms(form)
+        elif form.new_symptom_submit.data:  # button that adds symptoms from the StringField has been clicked
+            add_new_symptoms(form)
+        elif form.occurs_with_submit.data:  # button that adds other DTC to the occurs_with list has been clicked
+            add_occurs_with(form)
+        elif form.clear_occurs_with.data:  # button that clears the occurs_with list has been clicked
+            clear_occurs_with()
+        elif form.clear_components.data:  # button that clears the component list has been clicked
+            clear_components()
+        elif form.clear_symptoms.data:  # button that clears the symptom list has been clicked
+            clear_symptoms()
+        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
+            clear_all_dtc_fields(form)
+        elif form.existing_dtc_submit.data:  # user wants to see data for existing DTCs
+            display_dtc_info(form)
+    reset_dtc_warning(form)
+    update_dtc_select_fields(form)
+    return render_dtc_template(form)
 
 
 def check_component_set_form(form: ComponentSetForm) -> bool:
