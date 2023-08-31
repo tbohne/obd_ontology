@@ -752,133 +752,225 @@ def dtc_form() -> Union[str, wrappers.Response]:
 def check_component_set_form(form: ComponentSetForm) -> bool:
     """
     Checks if all user inputs to the component set form are complete and correct.
-
-    If a problem has been found, a corresponding message is flashed.
+    If a problem is found, a corresponding message is flashed.
 
     :param form: the ComponentSetForm that should be checked
-    :return: True if the form has been filled out completely and correctly, else False
+    :return: true if the form is filled out completely and correctly, else false
     """
     if not form.set_name.data:
-        # the StringField for the component set name is empty
-        flash("Bitte geben Sie einen Namen für das Komponenten-Set ein!")
+        flash("Bitte geben Sie einen Namen für das Komponenten-Set ein!")  # StringField for name is empty
         return False
-    if invalid_characters(form.set_name.data):
-        # found an invalid special character in the set name
-        flash("Ungültiges Sonderzeichen im Namen des Komponenten-Sets gefunden!")
+    elif invalid_characters(form.set_name.data):
+        flash("Ungültiges Sonderzeichen im Namen des Komponenten-Sets gefunden!")  # invalid special character
         form.set_name.data = ""
         return False
-    if not get_session_variable_list("comp_set_components"):
-        # the list of components belonging to the component set is empty
+    elif not get_session_variable_list("comp_set_components"):
+        # list of components belonging to the component set is empty
         flash("Bitte nennen Sie die Komponenten, aus denen dieses Komponenten-Set besteht!")
         return False
-    if not get_session_variable_list("verifying_components"):
-        # the list of verifying components is empty
+    elif not get_session_variable_list("verifying_components"):
+        # list of verifying components is empty
         flash("Nennen Sie bitte mindestens eine Komponente, durch die verifiziert werden kann, ob "
               "dieses Komponenten-Set korrekt funktioniert!")
         return False
     return True
 
 
-@app.route('/component_set_form', methods=['GET', 'POST'])
-def component_set_form():
+def show_comp_set_exists_warning_msg(form: ComponentSetForm) -> None:
     """
-    Renders the component set page and processes the form data.
+    Shows the 'component set already exists' warning message for entered component sets.
+
+    :param form: component set form with user input
     """
-    form = ComponentSetForm()
+    flash("WARNUNG: Dieses Fahrzeugkomponenten-Set existiert bereits! Wenn Sie sicher sind, "
+          "dass Sie es überschreiben möchten, klicken Sie bitte noch einmal auf den \"Absenden\"-Button.")
+    session["comp_set_name"] = form.set_name.data
 
-    if form.validate_on_submit():
-        if form.final_submit.data:
-            if check_component_set_form(form):
 
-                warning_already_shown = form.set_name.data == session.get("comp_set_name")
-                # if the comp set already exists and there has not been a warning yet, flash a warning first
-                if form.set_name.data in KG_QUERY_TOOL.query_all_component_set_instances() \
-                        and not warning_already_shown:
-                    flash(
-                        "WARNUNG: Dieses Fahrzeugkomponenten-Set existiert bereits! Wenn Sie sicher sind, "
-                        "dass Sie es überschreiben möchten, klicken Sie bitte noch einmal auf den"
-                        " \"Absenden\"-Button.")
-                    session["comp_set_name"] = form.set_name.data
-                else:
-                    # replacement confirmation given
-                    if warning_already_shown:
-                        comp_set_name = session.get("comp_set_name")
-                        # construct all the facts that should be removed
-                        facts_to_be_removed = []
-                        add_included_component_removal_facts(comp_set_name, facts_to_be_removed)
-                        add_verifying_component_removal_facts(comp_set_name, facts_to_be_removed)
-                        # remove all the facts that are newly added now (replacement)
-                        EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.remove_outdated_facts_from_knowledge_graph(
-                            facts_to_be_removed
-                        )
-                    # add the component set to the knowledge graph
-                    EXPERT_KNOWLEDGE_ENHANCER.add_component_set_to_knowledge_graph(
-                        component_set=form.set_name.data,
-                        includes=get_session_variable_list("comp_set_components"),
-                        verified_by=get_session_variable_list("verifying_components")
-                    )
-                    # reset lists
-                    get_session_variable_list("comp_set_components").clear()
-                    get_session_variable_list("verifying_components").clear()
-                    session.modified = True
-                    # show a success message
-                    if form.set_name.data == session.get("comp_set_name"):
-                        flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
-                              f"wurde erfolgreich überschrieben.")
-                    else:
-                        flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} "
-                              f"wurde erfolgreich hinzugefügt.")
-                    return redirect(url_for('component_set_form'))
+def remove_deprecated_component_set_facts() -> None:
+    """
+    Removes deprecated component set facts from the KG.
+    """
+    comp_set_name = session.get("comp_set_name")
+    # construct all the facts that should be removed
+    facts_to_be_removed = []
+    add_included_component_removal_facts(comp_set_name, facts_to_be_removed)
+    add_verifying_component_removal_facts(comp_set_name, facts_to_be_removed)
+    # remove all the facts that are newly added now (replacement)
+    EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.remove_outdated_facts_from_knowledge_graph(facts_to_be_removed)
 
-        # a button that is not the final submit button has been clicked
-        elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
-            if form.components.data not in get_session_variable_list("comp_set_components"):
-                get_session_variable_list("comp_set_components").append(form.components.data)
-                session.modified = True
 
-        # button that adds components to the verified_by list has been clicked
-        elif form.verifying_components_submit.data:
-            if form.verifying_components.data not in get_session_variable_list("verifying_components"):
-                get_session_variable_list("verifying_components").append(form.verifying_components.data)
-                session.modified = True
+def add_component_set_to_kg(form: ComponentSetForm) -> None:
+    """
+    Adds the entered component set to the KG.
 
-        elif form.clear_components.data:  # button that clears the component list has been clicked
-            get_session_variable_list("comp_set_components").clear()
-            session.modified = True
+    :param form: component set form with user input
+    """
+    EXPERT_KNOWLEDGE_ENHANCER.add_component_set_to_knowledge_graph(
+        component_set=form.set_name.data,
+        includes=get_session_variable_list("comp_set_components"),
+        verified_by=get_session_variable_list("verifying_components")
+    )
 
-        elif form.clear_verifying_components.data:  # button that clears the verified_by list has been clicked
-            get_session_variable_list("verifying_components").clear()
-            session.modified = True
 
-        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
-            get_session_variable_list("comp_set_components").clear()
-            get_session_variable_list("verifying_components").clear()
-            session.modified = True
-            form.set_name.data = ""
+def reset_comp_set_lists() -> None:
+    """
+    Resets the component set lists.
+    """
+    get_session_variable_list("comp_set_components").clear()
+    get_session_variable_list("verifying_components").clear()
+    session.modified = True
 
-        elif form.existing_component_set_submit.data:  # user wants to see data for existing component sets
-            component_set_name = form.existing_component_sets.data
-            if component_set_name is None:
-                flash("Keine Daten verfügbar")
-            else:
-                session["comp_set_components"] = KG_QUERY_TOOL.query_includes_relation_by_component_set(
-                    component_set_name)
-                session["verifying_components"] = KG_QUERY_TOOL.query_verifies_relations_by_component_set(
-                    component_set_name)
-                form.set_name.data = component_set_name
 
-    # reset variable that specifies whether warning has been shown
+def show_comp_set_success_msg(form: ComponentSetForm) -> None:
+    """
+    Shows the success message for entered component sets.
+
+    :param form: component set form with user input
+    """
+    if form.set_name.data == session.get("comp_set_name"):
+        flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} wurde erfolgreich überschrieben.")
+    else:
+        flash(f"Das Fahrzeugkomponenten-Set mit dem Namen {form.set_name.data} wurde erfolgreich hinzugefügt.")
+
+
+def add_comp_set_components(form: ComponentSetForm) -> None:
+    """
+    Adds the components for the component set to the session variable list.
+
+    :param form: component set form with user input
+    """
+    if form.components.data not in get_session_variable_list("comp_set_components"):
+        get_session_variable_list("comp_set_components").append(form.components.data)
+        session.modified = True
+
+
+def add_verifying_components(form: ComponentSetForm) -> None:
+    """
+    Adds the verifying components for the component set to the session variable list.
+
+    :param form: component set form with user input
+    """
+    if form.verifying_components.data not in get_session_variable_list("verifying_components"):
+        get_session_variable_list("verifying_components").append(form.verifying_components.data)
+        session.modified = True
+
+
+def clear_comp_set_components() -> None:
+    """
+    Clears the component list session variable for the component set.
+    """
+    get_session_variable_list("comp_set_components").clear()
+    session.modified = True
+
+
+def clear_verifying_components() -> None:
+    """
+    Clears the verifying component list session variable for the component set.
+    """
+    get_session_variable_list("verifying_components").clear()
+    session.modified = True
+
+
+def clear_all_comp_set_fields(form: ComponentSetForm) -> None:
+    """
+    Clears all the session variable fields for the component set.
+
+    :param form: component set form with user input
+    """
+    get_session_variable_list("comp_set_components").clear()
+    get_session_variable_list("verifying_components").clear()
+    session.modified = True
+    form.set_name.data = ""
+
+
+def display_comp_set_info(form: ComponentSetForm) -> None:
+    """
+    Displays all the available component set info for the user.
+
+    :param form: component set form with user input
+    """
+    component_set_name = form.existing_component_sets.data
+    if component_set_name is None:
+        flash("Keine Daten verfügbar")
+    else:
+        session["comp_set_components"] = KG_QUERY_TOOL.query_includes_relation_by_component_set(component_set_name)
+        session["verifying_components"] = KG_QUERY_TOOL.query_verifies_relations_by_component_set(component_set_name)
+        form.set_name.data = component_set_name
+
+
+def reset_comp_set_warning(form: ComponentSetForm) -> None:
+    """
+    Resets the variable that specifies whether a warning has been shown.
+
+    :param form: component set form with user input
+    """
     if form.set_name.data != session.get("comp_set_name"):
         session["comp_set_name"] = None
 
-    # update choices for the SelectFields
+
+def update_comp_set_select_fields(form: ComponentSetForm) -> None:
+    """
+    Updates the choices for the component set select fields.
+
+    :param form: component set form with user input
+    """
     form.components.choices = sorted(KG_QUERY_TOOL.query_all_component_instances())
     form.verifying_components.choices = sorted(KG_QUERY_TOOL.query_all_component_instances())
     form.existing_component_sets.choices = sorted(KG_QUERY_TOOL.query_all_component_set_instances())
 
+
+def render_comp_set_template(form: ComponentSetForm) -> str:
+    """
+    Renders the component set page, i.e., constructs the HTML string.
+
+    :param form: component set form with user input
+    :return: HTML string for the component set page
+    """
     return render_template('component_set_form.html', form=form,
                            components_variable_list=get_session_variable_list("comp_set_components"),
                            verifying_components_list=get_session_variable_list("verifying_components"))
+
+
+@app.route('/component_set_form', methods=['GET', 'POST'])
+def component_set_form() -> Union[str, wrappers.Response]:
+    """
+    Renders the component set page and processes the form data.
+
+    :return: HTML string for the component set page
+    """
+    form = ComponentSetForm()
+    if form.validate_on_submit():
+        if form.final_submit.data:
+            if check_component_set_form(form):
+                warning_already_shown = form.set_name.data == session.get("comp_set_name")
+                # if the comp set already exists and there has not been a warning yet, flash a warning first
+                if (form.set_name.data in KG_QUERY_TOOL.query_all_component_set_instances()
+                        and not warning_already_shown):
+                    show_comp_set_exists_warning_msg(form)
+                else:
+                    if warning_already_shown:  # replacement confirmation given
+                        remove_deprecated_component_set_facts()
+                    add_component_set_to_kg(form)
+                    reset_comp_set_lists()
+                    show_comp_set_success_msg(form)
+                    return redirect(url_for('component_set_form'))
+        elif form.add_component_submit.data:  # button that adds components to the component list has been clicked
+            add_comp_set_components(form)
+        elif form.verifying_components_submit.data:  # button that adds components to verified_by has been clicked
+            add_verifying_components(form)
+        elif form.clear_components.data:  # button that clears the component list has been clicked
+            clear_comp_set_components()
+        elif form.clear_verifying_components.data:  # button that clears the verified_by list has been clicked
+            clear_verifying_components()
+        elif form.clear_everything.data:  # button that clears all lists and text fields has been clicked
+            clear_all_comp_set_fields(form)
+        elif form.existing_component_set_submit.data:  # user wants to see data for existing component sets
+            display_comp_set_info(form)
+
+    reset_comp_set_warning(form)
+    update_comp_set_select_fields(form)
+    return render_comp_set_template(form)
 
 
 if __name__ == '__main__':
