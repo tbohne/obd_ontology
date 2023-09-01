@@ -3,7 +3,7 @@
 # @author Tim Bohne
 
 import re
-from typing import List, Dict
+from typing import List, Dict, Union
 
 import requests
 from rdflib import Namespace, RDF, Literal, Graph, URIRef
@@ -69,7 +69,7 @@ class ConnectionController:
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
 
-    def remove_outdated_facts_from_knowledge_graph(self, facts: list) -> None:
+    def remove_outdated_facts_from_knowledge_graph(self, facts: List[Fact]) -> None:
         """
         Sends an HTTP request containing the facts to be removed from the knowledge graph.
 
@@ -88,9 +88,7 @@ class ConnectionController:
             else:
                 f = (self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2]))
                 query = f"DELETE DATA {{ <{f[0]}> <{f[1]}> <{f[2]}> . }}"
-
-            print("******************************************** DELETION QUERY:", query)
-
+            print("*** DELETION QUERY:", query)
             res = requests.post(
                 self.fuseki_url + UPDATE_ENDPOINT,
                 data=query.encode(),
@@ -99,7 +97,7 @@ class ConnectionController:
             if res.status_code != 200 and res.status_code != 204:
                 print("HTTP status code:", res.status_code)
 
-    def get_uri(self, triple_ele: str) -> URIRef:
+    def get_uri(self, triple_ele: str) -> Union[URIRef, str]:
         """
         Returns the specified triple element as feasible URI reference.
 
@@ -116,12 +114,10 @@ class ConnectionController:
 
 if __name__ == '__main__':
     connection = ConnectionController(ONTOLOGY_PREFIX)
-
     # query example
     q = "SELECT ?s ?p ?o WHERE { ?s ?p ?o } LIMIT 25"
     response = connection.query_knowledge_graph(q, True)
     print(response)
-
     # extension example
     onto_namespace = Namespace(ONTOLOGY_PREFIX)
     fact_list = [
@@ -129,6 +125,6 @@ if __name__ == '__main__':
         Fact(("car_1", onto_namespace.model, 'Mazda3'), property_fact=True),
         Fact(("car_1", onto_namespace.HSN, '847984'), property_fact=True),
         Fact(("car_1", onto_namespace.TSN, '45539'), property_fact=True),
-        Fact(("car_1", onto_namespace.VIN, '1234567890ABCDEFGHJKLMNPRSTUVWXYZ'), property_fact=True)
+        Fact(("car_1", onto_namespace.VIN, '2342813'), property_fact=True)
     ]
     connection.extend_knowledge_graph(fact_list)
