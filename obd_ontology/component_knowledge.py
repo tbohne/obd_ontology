@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
+from typing import List
+
+
 class ComponentKnowledge:
     """
     Representation of vehicle-component-related expert knowledge.
     """
 
-    def __init__(self, suspect_component: str, oscilloscope: bool, affected_by: list) -> None:
+    def __init__(self, suspect_component: str, oscilloscope: bool, affected_by: List[str]) -> None:
         """
         Initializes the component knowledge.
 
@@ -20,6 +23,11 @@ class ComponentKnowledge:
         self.oscilloscope = oscilloscope
         self.affected_by = affected_by
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the component knowledge.
+
+        :return: string representation of component knowledge
+        """
         return "Suspect Component: " + self.suspect_component + "\nUse Oscilloscope: " + str(self.oscilloscope) \
-               + "\nAffected By: " + str(self.affected_by)
+            + "\nAffected By: " + str(self.affected_by)
