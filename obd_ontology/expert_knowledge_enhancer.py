@@ -35,6 +35,129 @@ class ExpertKnowledgeEnhancer:
         self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
         self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
 
+    def generate_condition_description_fact(self, fc_uuid: str, fault_cond: str, prop: bool) -> Fact:
+        """
+        Generates a `condition_description` fact (RDF) based on the provided properties.
+
+        :param fc_uuid: UUID of the fault condition instance to generate fact for
+        :param fault_cond: the fault condition description
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((fc_uuid, self.onto_namespace.condition_description, fault_cond), property_fact=prop)
+
+    def generate_co_occurring_dtc_fact(self, dtc_uuid: str, code: str, prop: bool) -> Fact:
+        """
+        Generates an `occurs_with_DTC` fact (RDF) based on the provided properties.
+
+        :param dtc_uuid: UUID of the DTC to generate fact for
+        :param code: code of the co-occurring DTC
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=prop)
+
+    def generate_symptom_fact(self, fc_uuid: str, symptom_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `manifestedBy` fact (RDF) based on the provided properties.
+
+        :param fc_uuid: UUID of the fault condition to generate the fact for
+        :param symptom_uuid: UUID of the symptom to generate the fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((fc_uuid, self.onto_namespace.manifestedBy, symptom_uuid), property_fact=prop)
+
+    def generate_has_association_fact(self, dtc_uuid: str, da_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `hasAssociation` fact (RDF) based on the provided properties.
+
+        :param dtc_uuid: UUID of the DTC to generate fact for
+        :param da_uuid: UUID of the diagnostic association to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((dtc_uuid, self.onto_namespace.hasAssociation, da_uuid), property_fact=prop)
+
+    def generate_points_to_fact(self, da_uuid: str, comp_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `pointsTo` fact (RDF) based on the provided properties.
+
+        :param da_uuid: UUID of the diagnostic association to generate fact for
+        :param comp_uuid: UUID of the suspect component to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((da_uuid, self.onto_namespace.pointsTo, comp_uuid), property_fact=prop)
+
+    def generate_diagnostic_association_fact(self, da_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `DiagnosticAssociation` fact (RDF) based on the provided properties.
+
+        :param da_uuid: UUID of the diagnostic association to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact(
+            (da_uuid, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", self.onto_namespace.DiagnosticAssociation),
+            property_fact=prop
+        )
+
+    def generate_contains_fact(self, subsystem_uuid: str, comp_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `contains` fact (RDF) based on the provided properties.
+
+        :param subsystem_uuid: UUID of the subsystem to generate fact for
+        :param comp_uuid: UUID of the suspect component to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid), property_fact=prop)
+
+    def generate_includes_fact(self, component_set_uuid: str, comp_uuid: str, prop: bool) -> Fact:
+        """
+        Generates an `includes` fact (RDF) based on the provided properties.
+
+        :param component_set_uuid: UUID of the component set to generate fact for
+        :param comp_uuid: UUID of the suspect component to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((component_set_uuid, self.onto_namespace.includes, comp_uuid), property_fact=prop)
+
+    def generate_verifies_fact(self, comp_uuid: str, subsystem_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `verifies` fact (RDF) based on the provided properties.
+
+        :param comp_uuid: UUID of the component to generate fact for
+        :param subsystem_uuid: UUID of the subsystem to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((comp_uuid, self.onto_namespace.verifies, subsystem_uuid), property_fact=prop)
+
+    def generate_use_oscilloscope_fact(self, comp_uuid: str, osci_usage: bool, prop: bool) -> Fact:
+        """
+        Generates a `use_oscilloscope` fact (RDF) based on the provided properties.
+
+        :param comp_uuid: UUID of the component to generate fact for
+        :param osci_usage: oscilloscope usage value (literal)
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((comp_uuid, self.onto_namespace.use_oscilloscope, osci_usage), property_fact=prop)
+
+    def generate_affected_by_fact(self, comp_uuid: str, comp_name: str, prop: bool) -> Fact:
+        """
+        Generates an `affected_by` fact (RDF) based on the provided properties.
+
+        :param comp_uuid: UUID of the component to generate fact for
+        :param comp_name: name of the affecting component
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((comp_uuid, self.onto_namespace.affected_by, comp_name), property_fact=prop)
+
     def generate_dtc_facts(self, dtc_knowledge: DTCKnowledge) -> Tuple[str, str, list]:
         """
         Generates the DTC-related facts to be entered into the knowledge graph.

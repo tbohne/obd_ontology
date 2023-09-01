@@ -307,7 +307,7 @@ def add_fault_condition_removal_fact(dtc_name: str, facts_to_be_removed: List[Fa
     fc = KG_QUERY_TOOL.query_fault_condition_by_description(fault_condition)
     if len(fc) > 0:
         fault_cond_uuid = fc[0].split("#")[1]
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_condition_description_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_condition_description_fact(
             fault_cond_uuid, fault_condition, True
         ))
 
@@ -324,7 +324,7 @@ def add_co_occurring_dtc_removal_facts(dtc_name: str, facts_to_be_removed: List[
     dtc_uuid = dtc_instance[0].split("#")[1]
 
     for code in co_occurring_dtcs:
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_co_occurring_dtc_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_co_occurring_dtc_fact(
             dtc_uuid, code, True
         ))
 
@@ -342,7 +342,7 @@ def add_symptom_removal_facts(dtc_name: str, facts_to_be_removed: List[Fact]) ->
 
     for symptom in symptoms:
         symptom_uuid = KG_QUERY_TOOL.query_symptoms_by_desc(symptom)[0].split("#")[1]
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_symptom_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_symptom_fact(
             fault_cond_uuid, symptom_uuid, False
         ))
 
@@ -362,15 +362,15 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
         diag_association_uuid = diag_association_uuid[0].split("#")[1]
 
         # remove the 'hasAssociation' connection between DTC and diagnostic association
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_has_association_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_has_association_fact(
             dtc_uuid, diag_association_uuid, False
         ))
         # remove the 'pointsTo' connection between diagnostic association and suspect component
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_points_to_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_points_to_fact(
             diag_association_uuid, comp_uuid, False
         ))
         # remove diagnostic association for the considered DTC
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_diagnostic_association_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_diagnostic_association_fact(
             diag_association_uuid, False
         ))
 
@@ -385,7 +385,7 @@ def add_diagnostic_association_removal_facts(dtc_name: str, facts_to_be_removed:
         else:
             print("there is no other DTC causing the `contains` relation, removing it..")
             subsystem_uuid = KG_QUERY_TOOL.query_vehicle_subsystem_by_name(subsystem_name)[0].split("#")[1]
-            facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_contains_fact(
+            facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_contains_fact(
                 subsystem_uuid, comp_uuid, False
             ))
 
@@ -400,7 +400,7 @@ def add_included_component_removal_facts(comp_set_name: str, facts_to_be_removed
     comp_set_uuid = KG_QUERY_TOOL.query_component_set_by_name(comp_set_name)[0].split("#")[1]
     for comp in KG_QUERY_TOOL.query_includes_relation_by_component_set(comp_set_name, False):
         comp_uuid = KG_QUERY_TOOL.query_suspect_component_by_name(comp)[0].split("#")[1]
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_includes_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_includes_fact(
             comp_set_uuid, comp_uuid, False
         ))
 
@@ -415,7 +415,7 @@ def add_verifying_component_removal_facts(component_set_name: str, facts_to_be_r
     component_set_uuid = KG_QUERY_TOOL.query_component_set_by_name(component_set_name)[0].split("#")[1]
     for comp in KG_QUERY_TOOL.query_verifies_relations_by_component_set(component_set_name, False):
         comp_uuid = KG_QUERY_TOOL.query_suspect_component_by_name(comp)[0].split("#")[1]
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_verifies_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_verifies_fact(
             comp_uuid, component_set_uuid, False
         ))
 
@@ -429,7 +429,7 @@ def add_use_oscilloscope_removal_fact(component_name: str, facts_to_be_removed: 
     """
     component_uuid = KG_QUERY_TOOL.query_suspect_component_by_name(component_name)[0].split("#")[1]
     usage = KG_QUERY_TOOL.query_oscilloscope_usage_by_suspect_component(component_name, False)[0]
-    facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_use_oscilloscope_fact(
+    facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_use_oscilloscope_fact(
         component_uuid, f"\"{str(usage).lower()}\"^^<http://www.w3.org/2001/XMLSchema#boolean>", True
     ))
 
@@ -443,7 +443,7 @@ def add_affected_by_removal_fact(component_name: str, facts_to_be_removed: List[
     """
     component_uuid = KG_QUERY_TOOL.query_suspect_component_by_name(component_name)[0].split("#")[1]
     for comp in KG_QUERY_TOOL.query_affected_by_relations_by_suspect_component(component_name, False):
-        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.generate_affected_by_fact(
+        facts_to_be_removed.append(EXPERT_KNOWLEDGE_ENHANCER.generate_affected_by_fact(
             component_uuid, comp, True
         ))
 
