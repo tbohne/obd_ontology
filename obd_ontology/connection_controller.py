@@ -3,6 +3,7 @@
 # @author Tim Bohne
 
 import re
+from typing import List, Dict
 
 import requests
 from rdflib import Namespace, RDF, Literal, Graph, URIRef
@@ -14,23 +15,29 @@ from obd_ontology.fact import Fact
 
 class ConnectionController:
     """
-    Establishes the connection to the knowledge graph hosted by the Apache Jena Fuseki server.
+    Establishes the connection to the knowledge graph hosted by the 'Apache Jena Fuseki' server.
     Performs queries as well as knowledge graph extensions via HTTP requests.
     """
 
-    def __init__(self, namespace: str, fuseki_url=FUSEKI_URL) -> None:
+    def __init__(self, namespace: str, fuseki_url: str = FUSEKI_URL) -> None:
+        """
+        Initializes the connection controller.
+
+        :param namespace: ontology namespace (prefix URI)
+        :param fuseki_url: URL of the 'Fuseki' server hosting the knowledge graph
+        """
         self.namespace = Namespace(namespace)
         self.fuseki_url = fuseki_url
         self.graph = Graph()
         self.graph.bind("", self.namespace)
 
-    def query_knowledge_graph(self, query: str, verbose: bool) -> list:
+    def query_knowledge_graph(self, query: str, verbose: bool) -> List[Dict[Dict[str]]]:
         """
         Sends an HTTP request containing the specified query to the knowledge graph server.
 
         :param query: query to be sent to knowledge graph server
         :param verbose: if true, queries are logged
-        :return: query results
+        :return: query results (JSON list)
         """
         if verbose:
             print("query knowledge graph..")
@@ -41,7 +48,7 @@ class ConnectionController:
             print("HTTP status code:", res.status_code)
         return res.json()["results"]["bindings"]
 
-    def extend_knowledge_graph(self, facts: list) -> None:
+    def extend_knowledge_graph(self, facts: List[Fact]) -> None:
         """
         Sends an HTTP request containing the facts to be entered into the knowledge graph to the knowledge graph server.
 
