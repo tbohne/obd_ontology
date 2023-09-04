@@ -3,6 +3,7 @@
 # @author Tim Bohne
 
 import uuid
+from typing import List
 from typing import Tuple
 
 from dtc_parser.parser import DTCParser
@@ -20,10 +21,20 @@ from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 class ExpertKnowledgeEnhancer:
     """
     Extends the knowledge graph hosted by the Fuseki server with vehicle-agnostic expert knowledge.
-    The knowledge can be provided as input to a web interface (cf. `app.py`).
+
+    The acquisition of expert knowledge is accomplished via a web interface (collaborative knowledge acquisition
+    component) through which the knowledge is entered, stored in the Resource Description Framework (RDF) format,
+    and hosted on an Apache Jena Fuseki server (cf. `app.py`).
+
+    This class deals with semantic fact generation for the vehicle-agnostic expert knowledge.
     """
 
     def __init__(self, kg_url: str = FUSEKI_URL) -> None:
+        """
+        Initializes the expert knowledge enhancer.
+
+        :param kg_url: URL for the knowledge graph server
+        """
         # establish connection to 'Apache Jena Fuseki' server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
         self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
@@ -152,12 +163,12 @@ class ExpertKnowledgeEnhancer:
         """
         return Fact((comp_uuid, self.onto_namespace.affected_by, comp_name), property_fact=prop)
 
-    def generate_dtc_facts(self, dtc_knowledge: DTCKnowledge) -> Tuple[str, str, list]:
+    def generate_dtc_facts(self, dtc_knowledge: DTCKnowledge) -> Tuple[str, str, List[Fact]]:
         """
         Generates the DTC-related facts to be entered into the knowledge graph.
 
         :param dtc_knowledge: parsed DTC knowledge
-        :return: [DTC UUID, subsystem UUID, generated fact list]
+        :return: (DTC UUID, subsystem UUID, generated fact list)
         """
         dtc_uuid = "dtc_" + uuid.uuid4().hex
         fact_list = []
@@ -172,8 +183,7 @@ class ExpertKnowledgeEnhancer:
         if len(dtc_instance) > 0:
             print("Specified DTC (" + dtc_knowledge.dtc + ") already present in KG")
             dtc_uuid = dtc_instance[0].split("#")[1]
-            # subsystem already part of KG
-            assert len(subsystem_instance) > 0
+            assert len(subsystem_instance) > 0  # subsystem already part of KG
             subsystem_uuid = subsystem_instance[0].split("#")[1]
         else:
             code_type = parsed_code["code_type"]
@@ -183,31 +193,28 @@ class ExpertKnowledgeEnhancer:
                 Fact((dtc_uuid, self.onto_namespace.code, dtc_knowledge.dtc), property_fact=True),
                 Fact((dtc_uuid, self.onto_namespace.code_type, code_type), property_fact=True)
             ]
-            # subsystems already part of KG
-            if len(subsystem_instance) > 0:
+            if len(subsystem_instance) > 0:  # subsystems already part of KG
                 subsystem_uuid = subsystem_instance[0].split("#")[1]
-            else:
-                # creating new subsystem
+            else:  # creating new subsystem
                 subsystem_uuid = "vehicle_subsystem_" + uuid.uuid4().hex
                 fact_list.append(Fact((subsystem_uuid, RDF.type, self.onto_namespace["VehicleSubsystem"].toPython())))
                 fact_list.append(
                     Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_name), property_fact=True))
                 fact_list.append(
                     Fact((subsystem_uuid, self.onto_namespace.vehicle_part, vehicle_part), property_fact=True))
-
             fact_list.append(Fact((dtc_uuid, self.onto_namespace.indicates, subsystem_uuid)))
 
         for code in dtc_knowledge.occurs_with:
             fact_list.append(Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=True))
         return dtc_uuid, subsystem_uuid, fact_list
 
-    def generate_fault_cat_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
+    def generate_fault_cat_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, List[Fact]]:
         """
-        Generates the FaultCategory-related facts to be entered into the knowledge graph.
+        Generates the `FaultCategory`-related facts to be entered into the knowledge graph.
 
         :param dtc_uuid: DTC UUID used to draw the connection to the trouble code
         :param dtc_knowledge: parsed DTC knowledge
-        :return: [fault category UUID, generated fact list]
+        :return: (fault category UUID, generated fact list)
         """
         fault_cat_uuid = "fault_cat_" + uuid.uuid4().hex
         dtc_parser = DTCParser()
@@ -226,13 +233,13 @@ class ExpertKnowledgeEnhancer:
         fact_list.append(Fact((dtc_uuid, self.onto_namespace.hasCategory, fault_cat_uuid)))
         return fault_cat_uuid, fact_list
 
-    def generate_fault_cond_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, list]:
+    def generate_fault_cond_facts(self, dtc_uuid: str, dtc_knowledge: DTCKnowledge) -> Tuple[str, List[Fact]]:
         """
-        Generates the FaultCondition-related facts to be entered into the knowledge graph.
+        Generates the `FaultCondition`-related facts to be entered into the knowledge graph.
 
         :param dtc_uuid: DTC UUID used to draw the connection to the trouble code
         :param dtc_knowledge: parsed DTC knowledge
-        :return: [fault condition UUID, generated fact list]
+        :return: (fault condition UUID, generated fact list)
         """
         fault_cond_uuid = "fault_cond_" + uuid.uuid4().hex
         fault_cond = dtc_knowledge.fault_condition
@@ -253,11 +260,11 @@ class ExpertKnowledgeEnhancer:
             ]
         return fault_cond_uuid, fact_list
 
-    def generate_symptom_facts(self, fault_cond_uuid: str, dtc_knowledge: DTCKnowledge) -> list:
+    def generate_symptom_facts(self, fault_cond_uuid: str, dtc_knowledge: DTCKnowledge) -> List[Fact]:
         """
-        Generates the Symptom-related facts to be entered into the knowledge graph.
+        Generates the `Symptom`-related facts to be entered into the knowledge graph.
 
-        :param fault_cond_uuid: FaultCondition UUID used to draw the connection to a fault condition
+        :param fault_cond_uuid: fault condition UUID used to draw the connection to a fault condition
         :param dtc_knowledge: parsed DTC knowledge
         :return: generated fact list
         """
@@ -273,20 +280,18 @@ class ExpertKnowledgeEnhancer:
             else:
                 fact_list.append(Fact((symptom_uuid, RDF.type, self.onto_namespace["Symptom"].toPython())))
                 fact_list.append(
-                    Fact((symptom_uuid, self.onto_namespace.symptom_description, symptom), property_fact=True))
-
+                    Fact((symptom_uuid, self.onto_namespace.symptom_description, symptom), property_fact=True)
+                )
             # there can be more than one `manifestedBy` relation per symptom
             fault_condition_instances_already_present = \
                 self.knowledge_graph_query_tool.query_fault_condition_instances_by_symptom(symptom)
-
             if fault_cond_uuid not in [fc.split("#")[1] for fc in fault_condition_instances_already_present]:
                 # symptom can already be present, but not associated with this fault condition
                 fact_list.append(Fact((fault_cond_uuid, self.onto_namespace.manifestedBy, symptom_uuid)))
-
         return fact_list
 
     def generate_facts_to_connect_components_and_dtc(self, dtc_uuid: str, subsystem_uuid: str,
-                                                     dtc_knowledge: DTCKnowledge) -> list:
+                                                     dtc_knowledge: DTCKnowledge) -> List[Fact]:
         """
         Generates the facts that connect the present DTC with associated suspect components, i.e., generating
         the diagnostic associations.
@@ -303,7 +308,6 @@ class ExpertKnowledgeEnhancer:
             # ensure that all the suspect components considered here are already part of the KG
             assert len(component_by_name) == 1
             comp_uuid = component_by_name[0].split("#")[1]
-
             # making sure that there is only one diagnostic association, i.e. one priority ID, between any pair
             # of DTC and suspect component
             diag_association = self.knowledge_graph_query_tool.query_priority_id_by_dtc_and_sus_comp(
@@ -316,16 +320,17 @@ class ExpertKnowledgeEnhancer:
                 # creating diagnostic association between DTC and SuspectComponent
                 diag_association_uuid = "diag_association_" + uuid.uuid4().hex
                 fact_list.append(
-                    Fact((diag_association_uuid, RDF.type, self.onto_namespace["DiagnosticAssociation"].toPython())))
+                    Fact((diag_association_uuid, RDF.type, self.onto_namespace["DiagnosticAssociation"].toPython()))
+                )
                 fact_list.append(Fact((dtc_uuid, self.onto_namespace.hasAssociation, diag_association_uuid)))
                 fact_list.append(
-                    Fact((diag_association_uuid, self.onto_namespace.priority_id, idx), property_fact=True))
+                    Fact((diag_association_uuid, self.onto_namespace.priority_id, idx), property_fact=True)
+                )
                 fact_list.append(Fact((diag_association_uuid, self.onto_namespace.pointsTo, comp_uuid)))
 
                 # automatically adding the suspect component to the vehicle subsystem associated with the DTC
                 dtc_parser = DTCParser()
                 subsystem_name = dtc_parser.parse_code_machine_readable(dtc_knowledge.dtc)["vehicle_subsystem"]
-
                 # only add fact if it's not already part of the KG (important because suspect components can be
                 # associated with many DTCs)
                 components_by_subsystem = self.knowledge_graph_query_tool.query_suspect_components_by_subsystem_name(
@@ -336,14 +341,13 @@ class ExpertKnowledgeEnhancer:
                 else:
                     print("comp:", comp, "not yet part of:", subsystem_name, "- adding it..")
                     fact_list.append(Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid)))
-
         return fact_list
 
-    def generate_suspect_component_facts(self, comp_knowledge_list: list) -> list:
+    def generate_suspect_component_facts(self, comp_knowledge_list: List[ComponentKnowledge]) -> List[Fact]:
         """
-        Generates the SuspectComponent-related facts to be entered into the knowledge graph.
+        Generates the `SuspectComponent`-related facts to be entered into the knowledge graph.
 
-        :param comp_knowledge_list: list of parsed SuspectComponents
+        :param comp_knowledge_list: list of parsed suspect components
         :return: generated fact list
         """
         fact_list = []
@@ -369,11 +373,11 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def generate_component_set_facts(self, comp_set_knowledge: ComponentSetKnowledge) -> list:
+    def generate_component_set_facts(self, comp_set_knowledge: ComponentSetKnowledge) -> List[Fact]:
         """
         Generates vehicle component set facts to be entered into the knowledge graph.
 
-        :param comp_set_knowledge: parsed ComponentSet knowledge
+        :param comp_set_knowledge: parsed component set knowledge
         :return: generated fact list
         """
         fact_list = []
@@ -389,7 +393,6 @@ class ExpertKnowledgeEnhancer:
                 Fact((comp_set_uuid, RDF.type, self.onto_namespace["ComponentSet"].toPython())),
                 Fact((comp_set_uuid, self.onto_namespace.set_name, comp_set_name), property_fact=True)
             ]
-
         for containing_comp in comp_set_knowledge.includes:
             # relate knowledge to already existing facts
             sus_comp = self.knowledge_graph_query_tool.query_suspect_component_by_name(containing_comp)
@@ -408,10 +411,10 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> list:
+    def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> List[Fact]:
         """
         Generates all facts obtained from the DTC form / template to be entered into the knowledge graph and extends
-        it with automatically obtained information from the dtc_parser.
+        it with automatically obtained information from the DTC parser.
 
         :param dtc_knowledge: parsed DTC knowledge
         :return: generated fact list
@@ -425,8 +428,8 @@ class ExpertKnowledgeEnhancer:
         fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
         return fact_list
 
-    def add_dtc_to_knowledge_graph(self, dtc: str, occurs_with: list, fault_condition: str, symptoms: list,
-                                   suspect_components: list) -> None:
+    def add_dtc_to_knowledge_graph(self, dtc: str, occurs_with: List[str], fault_condition: str, symptoms: List[str],
+                                   suspect_components: List[str]) -> None:
         """
         Adds a DTC instance with the given properties to the knowledge graph.
 
@@ -448,7 +451,8 @@ class ExpertKnowledgeEnhancer:
         fact_list = self.generate_dtc_related_facts(new_dtc_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def add_component_to_knowledge_graph(self, suspect_component: str, affected_by: list, oscilloscope: bool) -> None:
+    def add_component_to_knowledge_graph(self, suspect_component: str, affected_by: List[str],
+                                         oscilloscope: bool) -> None:
         """
         Adds a component instance with the given properties to the knowledge graph.
 
@@ -466,7 +470,8 @@ class ExpertKnowledgeEnhancer:
         fact_list = self.generate_suspect_component_facts([new_component_knowledge])
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def add_component_set_to_knowledge_graph(self, component_set: str, includes: list, verified_by: list) -> None:
+    def add_component_set_to_knowledge_graph(self, component_set: str, includes: List[str],
+                                             verified_by: List[str]) -> None:
         """
         Adds a component set instance to the knowledge graph.
 
