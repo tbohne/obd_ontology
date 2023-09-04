@@ -8,7 +8,6 @@ from typing import Tuple
 from dtc_parser.parser import DTCParser
 from rdflib import Namespace, RDF
 
-from obd_ontology import expert_knowledge_parser
 from obd_ontology.component_knowledge import ComponentKnowledge
 from obd_ontology.component_set_knowledge import ComponentSetKnowledge
 from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL
@@ -20,17 +19,12 @@ from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 
 class ExpertKnowledgeEnhancer:
     """
-    Extends the knowledge graph hosted by the Fuseki server with vehicle-agnostic OBD knowledge (codes, symptoms, etc.).
-
-    The knowledge can be provided in the form of `templates/dtc_expert_template.txt`,
-    `templates/component_expert_template.txt`, and `templates/subsystem_expert_template.txt`.
-
-    Furthermore, new knowledge can be provided as input to a web interface (cf. `app.py`).
+    Extends the knowledge graph hosted by the Fuseki server with vehicle-agnostic expert knowledge.
+    The knowledge can be provided as input to a web interface (cf. `app.py`).
     """
 
-    def __init__(self, knowledge_file: str = None, kg_url: str = FUSEKI_URL) -> None:
-        self.knowledge_file = knowledge_file
-        # establish connection to Apache Jena Fuseki server
+    def __init__(self, kg_url: str = FUSEKI_URL) -> None:
+        # establish connection to 'Apache Jena Fuseki' server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
         self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
         self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
@@ -430,28 +424,6 @@ class ExpertKnowledgeEnhancer:
                                                                                    dtc_knowledge)
         fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
         return fact_list
-
-    def extend_knowledge_graph(self) -> None:
-        """
-        Parses the expert knowledge from the specified file and extends the knowledge graph with it.
-        """
-        print("parse expert knowledge..")
-        fact_list = []
-
-        if "dtc" in self.knowledge_file:
-            dtc_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            fact_list = self.generate_dtc_related_facts(self, dtc_knowledge)
-
-        elif "component" in self.knowledge_file:
-            comp_knowledge_list = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            fact_list = self.generate_suspect_component_facts(comp_knowledge_list)
-
-        elif "subsystem" in self.knowledge_file:
-            subsystem_knowledge = expert_knowledge_parser.parse_knowledge(self.knowledge_file)
-            fact_list = self.generate_component_set_facts(subsystem_knowledge)
-
-        # enter facts into knowledge graph
-        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def add_dtc_to_knowledge_graph(self, dtc: str, occurs_with: list, fault_condition: str, symptoms: list,
                                    suspect_components: list) -> None:

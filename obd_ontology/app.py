@@ -40,7 +40,7 @@ csrf.init_app(app)
 logging.basicConfig(level=logging.ERROR)
 
 KG_QUERY_TOOL = KnowledgeGraphQueryTool()
-EXPERT_KNOWLEDGE_ENHANCER = ExpertKnowledgeEnhancer("")
+EXPERT_KNOWLEDGE_ENHANCER = ExpertKnowledgeEnhancer()
 
 
 @app.route('/session_values')
