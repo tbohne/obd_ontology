@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
-from typing import Union
+from typing import Union, List
 
 from obd_ontology.component_knowledge import ComponentKnowledge
 from obd_ontology.component_set_knowledge import ComponentSetKnowledge
 from obd_ontology.dtc_knowledge import DTCKnowledge
 
 
-def parse_dtc_expert_template(lines: list) -> DTCKnowledge:
+def parse_dtc_expert_template(lines: List[str]) -> DTCKnowledge:
     """
     Parses the DTC expert template.
 
@@ -45,7 +45,7 @@ def parse_dtc_expert_template(lines: list) -> DTCKnowledge:
     return DTCKnowledge(dtc, occurs_with, fault_condition, symptoms, suspect_components)
 
 
-def parse_component_expert_template(lines: list) -> list:
+def parse_component_expert_template(lines: List[str]) -> List[ComponentKnowledge]:
     """
     Parses the suspect component expert template.
 
@@ -68,7 +68,7 @@ def parse_component_expert_template(lines: list) -> list:
     return suspect_components
 
 
-def parse_subsystem_expert_template(lines: list) -> ComponentSetKnowledge:
+def parse_subsystem_expert_template(lines: List[str]) -> ComponentSetKnowledge:
     """
     Parses the vehicle component set expert template.
 
@@ -95,7 +95,7 @@ def parse_subsystem_expert_template(lines: list) -> ComponentSetKnowledge:
     return ComponentSetKnowledge(component_set, includes, verified_by)
 
 
-def parse_knowledge(knowledge_file: str) -> Union[DTCKnowledge, list, ComponentKnowledge, None]:
+def parse_knowledge(knowledge_file: str) -> Union[DTCKnowledge, List[ComponentKnowledge], ComponentSetKnowledge, None]:
     """
     Parses OBD-related expert knowledge from template file (cf. `templates/dtc_expert_template.txt`,
     `templates/component_expert_template`, `templates/subsystem_expert_template.txt`).
