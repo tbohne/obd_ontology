@@ -51,7 +51,7 @@ Now the knowledge graph is hosted on the *Fuseki* server and can be queried, ext
 
 Creates a backup in `fuseki_root/run/backups/`.
 
-The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.ttl` so that it can be interpreted directly, e.g., when launching it on the server (see above).
+The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.ttl` so that it can be interpreted directly, e.g., when launching it on the server (see above). The backups are stored in `knowledge_base/live_kg_backups/`.
 
 ## Expert Knowledge Acquisition Web Interface
 
@@ -70,7 +70,7 @@ $ python obd_ontology/app.py
 
 The `OntologyInstanceGenerator`, on the other hand, enhances the knowledge graph hosted by the *Fuseki* server with **diagnosis-specific instance data**, i.e., it connects the on-board diagnosis data recorded in a particular vehicle, as well as sensor readings, classifications, etc. generated during the diagnostic process, with corresponding background knowledge stored in the knowledge graph, e.g.:
 ```python
-instance_gen = OntologyInstanceGenerator(".", local_kb=False)
+instance_gen = OntologyInstanceGenerator(kg_url='http://127.0.0.1:3030')
 instance_gen.extend_knowledge_graph_with_vehicle_data(
     "Mazda 3", "123", "456", "ID2342713"
 )
