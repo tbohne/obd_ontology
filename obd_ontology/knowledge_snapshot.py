@@ -287,7 +287,7 @@ if __name__ == '__main__':
     parser.add_argument('--perspective', type=str, help='perspective of snapshot [expert | diag]',
                         required=False, default='expert')
     args = parser.parse_args()
-    qt = KnowledgeGraphQueryTool(local_kb=False)
+    qt = KnowledgeGraphQueryTool()
 
     if args.perspective == 'expert':  # expert knowledge
         knowledge_snapshot_dtc_perspective()

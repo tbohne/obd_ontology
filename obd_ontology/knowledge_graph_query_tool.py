@@ -2,36 +2,21 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
-import pathlib
-
-import rdflib
 from termcolor import colored
 
-from obd_ontology.config import ONTOLOGY_PREFIX, KNOWLEDGE_GRAPH_FILE, FUSEKI_URL
+from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL
 from obd_ontology.connection_controller import ConnectionController
 
 
 class KnowledgeGraphQueryTool:
     """
-    Library of predefined queries for accessing useful information stored in the knowledge graph.
-    Works with both local knowledge graph (specified .owl file) and hosted knowledge graph on Fuseki server.
+    Library of numerous predefined SPARQL queries and response processing for accessing useful information stored in
+    the knowledge graph hosted on a Fuseki server.
     """
 
-    def __init__(self, local_kb: bool = False, kg_url: str = FUSEKI_URL) -> None:
+    def __init__(self, kg_url: str = FUSEKI_URL) -> None:
         self.ontology_prefix = ONTOLOGY_PREFIX
-        self.graph = rdflib.Graph()
-        self.local_kb = local_kb
-        if local_kb:
-            self.init_local_knowledge_base()
-        else:
-            self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
-
-    def init_local_knowledge_base(self) -> None:
-        """
-        Initializes the local knowledge base (locally stored .owl file).
-        """
-        self.graph = self.graph.parse(str(pathlib.Path(__file__).parent.resolve()) + "/" + KNOWLEDGE_GRAPH_FILE,
-                                      format='xml')
+        self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
 
     def complete_ontology_entry(self, entry: str) -> str:
         """
@@ -69,8 +54,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        if self.local_kb:
-            return [row.cause_desc for row in self.graph.query(s)]
         return [row['cause_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_condition_by_dtc(self, dtc: str, verbose: bool = True) -> list:
@@ -98,8 +81,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        if self.local_kb:
-            return [row.condition_desc for row in self.graph.query(s)]
         return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_fault_condition_by_description(self, desc: str) -> list:
@@ -121,8 +102,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?desc) = "{desc}")
             }}
             """
-        if self.local_kb:
-            return [row.condition_desc for row in self.graph.query(s)]
         return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_symptoms_by_dtc(self, dtc: str, verbose: bool = True) -> list:
@@ -153,8 +132,6 @@ class KnowledgeGraphQueryTool:
                 ?symptom {symptom_desc_entry} ?symptom_desc .
             }}
             """
-        if self.local_kb:
-            return [row.symptom_desc for row in self.graph.query(s)]
         return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_indicates_by_dtc(self, dtc: str, verbose: bool = True) -> list:
@@ -228,8 +205,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?symptom_desc) = "{desc}")
             }}
             """
-        if self.local_kb:
-            return [row.symptom_desc for row in self.graph.query(s)]
         return [row['symptom']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_corrective_actions_by_dtc(self, dtc: str) -> list:
@@ -263,8 +238,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        if self.local_kb:
-            return [row.action_desc for row in self.graph.query(s)]
         return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_cat_by_dtc(self, dtc: str, verbose: bool = True) -> list:
@@ -294,8 +267,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        if self.local_kb:
-            return [row.cat_name for row in self.graph.query(s)]
         return [row['cat_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_fault_cat_by_description(self, desc: str) -> list:
@@ -317,8 +288,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?fc_desc) = "{desc}")
             }}
             """
-        if self.local_kb:
-            return [row.cat_name for row in self.graph.query(s)]
         return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_measuring_pos_by_dtc(self, dtc: str) -> list:
@@ -346,8 +315,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        if self.local_kb:
-            return [row.measuring_pos_desc for row in self.graph.query(s)]
         return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_suspect_components_by_dtc(self, dtc: str, verbose: bool = True) -> list:
@@ -380,8 +347,6 @@ class KnowledgeGraphQueryTool:
                 ?dtc {has_association_entry} ?da .
             }}
             """
-        if self.local_kb:
-            return [row.comp_name for row in self.graph.query(s)]
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_suspect_components_by_subsystem_name(self, subsystem_name: str, verbose: bool = True) -> list:
@@ -431,8 +396,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?comp_name) = "{component_name}")
             }}
             """
-        if self.local_kb:
-            return [row.comp_name for row in self.graph.query(s)]
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_vehicle_subsystem_by_name(self, subsystem_name: str) -> list:
@@ -454,8 +417,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?subsystem_name) = "{subsystem_name}")
             }}
             """
-        if self.local_kb:
-            return [row.comp_name for row in self.graph.query(s)]
         return [row['subsystem']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_component_set_by_name(self, set_name: str) -> list:
@@ -497,8 +458,6 @@ class KnowledgeGraphQueryTool:
                 ?car {vin_entry} "{vin}" .
             }}
             """
-        if self.local_kb:
-            return [row.comp_name for row in self.graph.query(s)]
         return [row['car']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_co_occurring_trouble_codes(self, dtc: str, verbose: bool = True) -> list:
@@ -524,8 +483,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        if self.local_kb:
-            return [row.other for row in self.graph.query(s)]
         return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_vehicle_by_dtc(self, dtc: str, verbose: bool = True) -> list:
@@ -569,8 +526,6 @@ class KnowledgeGraphQueryTool:
                 FILTER(STR(?dtc_code) = "{dtc}")
             }}
             """
-        if self.local_kb:
-            return [(str(row.model), str(row.hsn), str(row.tsn), str(row.vin)) for row in self.graph.query(s)]
         return [(row['model']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value']) for row in
                 self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
@@ -593,8 +548,6 @@ class KnowledgeGraphQueryTool:
                 ?instance {code_entry} ?dtc .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_all_fault_condition_instances(self, verbose: bool = True) -> list:
@@ -616,8 +569,6 @@ class KnowledgeGraphQueryTool:
                 ?instance {condition_desc_entry} ?desc .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_fault_condition_instance_by_code(self, dtc: str) -> list:
@@ -640,8 +591,6 @@ class KnowledgeGraphQueryTool:
                 ?dtc {represents_entry} ?fault_cond .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_fault_condition_instances_by_symptom(self, symptom: str) -> list:
@@ -666,8 +615,6 @@ class KnowledgeGraphQueryTool:
                 ?symptom {symptom_desc_entry} "{symptom}" .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_dtc_instance_by_code(self, code: str) -> list:
@@ -688,8 +635,6 @@ class KnowledgeGraphQueryTool:
                 ?dtc {code_entry} "{code}" .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_dtcs_by_suspect_comp_and_vehicle_subsystem(self, comp: str, subsystem: str, verbose: bool = True) -> list:
@@ -764,8 +709,6 @@ class KnowledgeGraphQueryTool:
                 ?diag_association {points_to_entry} ?sus .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_priority_id_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
@@ -802,8 +745,6 @@ class KnowledgeGraphQueryTool:
                 ?diag_association {points_to_entry} ?sus .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['prio']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_diag_association_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
@@ -838,8 +779,6 @@ class KnowledgeGraphQueryTool:
                 ?diag_association {points_to_entry} ?sus .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_generated_heatmaps_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
@@ -876,8 +815,6 @@ class KnowledgeGraphQueryTool:
                 ?diag_association {points_to_entry} ?sus .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['heatmap_entry']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_dtcs_by_vin(self, vin: str) -> list:
@@ -902,8 +839,6 @@ class KnowledgeGraphQueryTool:
                 ?vehicle {vin_entry} "{vin}" .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_dtcs_by_model(self, model: str) -> list:
@@ -928,8 +863,6 @@ class KnowledgeGraphQueryTool:
                 ?vehicle {model_entry} "{model}" .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_oscilloscope_usage_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
@@ -955,8 +888,6 @@ class KnowledgeGraphQueryTool:
                 ?comp {oscilloscope_entry} ?use_oscilloscope .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [True if row['use_oscilloscope']['value'] == "true" else False
                 for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
@@ -983,8 +914,6 @@ class KnowledgeGraphQueryTool:
                 ?comp {affected_by_entry} ?affected_by .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_verifies_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
@@ -1072,8 +1001,6 @@ class KnowledgeGraphQueryTool:
                 ?sub {contains_entry} ?comp .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_contains_relation_by_subsystem(self, subsystem_name: str, verbose: bool = True) -> list:
@@ -1102,8 +1029,6 @@ class KnowledgeGraphQueryTool:
                 ?sub {contains_entry} ?comp .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_includes_relation_by_component_set(self, comp_set_name: str, verbose: bool = True) -> list:
@@ -1177,8 +1102,6 @@ class KnowledgeGraphQueryTool:
                 ?comp {name_entry} ?name.
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_all_vehicle_instances(self, verbose: bool = True) -> list:
@@ -1206,8 +1129,6 @@ class KnowledgeGraphQueryTool:
                 ?vehicle {model_entry} ?model .
             }}
             """
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [
             (row['vehicle']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value'],
              row['model']['value'])
@@ -1985,9 +1906,6 @@ class KnowledgeGraphQueryTool:
             ?symp {symptom_desc_entry} ?desc.
         }}
         """
-
-        if self.local_kb:
-            return [row.dtc for row in self.graph.query(s)]
         return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
     def query_all_vehicle_subsystem_instances(self, verbose: bool = True) -> list:
@@ -2009,8 +1927,6 @@ class KnowledgeGraphQueryTool:
                 ?subsystem {subsystem_name_entry} ?subsystem_name .
             }}
             """
-        if self.local_kb:
-            return [row.comp_name for row in self.graph.query(s)]
         return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_all_component_set_instances(self, verbose: bool = True) -> list:
@@ -2046,7 +1962,7 @@ class KnowledgeGraphQueryTool:
 
 
 if __name__ == '__main__':
-    qt = KnowledgeGraphQueryTool(local_kb=False)
+    qt = KnowledgeGraphQueryTool()
     qt.print_res(qt.query_all_dtc_instances())
     error_code = "P2563"
     suspect_comp_name = "Ladedruck-Regelventil"

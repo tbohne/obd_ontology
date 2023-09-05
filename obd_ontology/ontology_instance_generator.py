@@ -35,7 +35,7 @@ class OntologyInstanceGenerator:
         else:
             # establish connection to Apache Jena Fuseki server
             self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
-            self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False, kg_url=kg_url)
+            self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(kg_url=kg_url)
 
     def extend_knowledge_graph_with_vehicle_data(self, model: str, hsn: str, tsn: str, vin: str) -> None:
         """

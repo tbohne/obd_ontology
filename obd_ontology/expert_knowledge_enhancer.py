@@ -38,7 +38,7 @@ class ExpertKnowledgeEnhancer:
         # establish connection to 'Apache Jena Fuseki' server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
         self.onto_namespace = Namespace(ONTOLOGY_PREFIX)
-        self.knowledge_graph_query_tool = KnowledgeGraphQueryTool(local_kb=False)
+        self.knowledge_graph_query_tool = KnowledgeGraphQueryTool()
 
     def generate_condition_description_fact(self, fc_uuid: str, fault_cond: str, prop: bool) -> Fact:
         """
