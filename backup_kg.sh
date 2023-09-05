@@ -4,6 +4,7 @@ FUSEKI_URL="http://127.0.0.1:3030"
 DATASET_NAME="OBD"
 BACKUP_DIR="knowledge_base/live_kg_backups"
 BACKUP_FILE="$BACKUP_DIR/backup_$(date +\%Y\%m\%d_\%H\%M\%S).nt"
+KG_SNAPSHOT_FILE="$BACKUP_DIR/kg_snapshot_$(date +\%Y\%m\%d_\%H\%M\%S).txt"
 
 # construct URL for backup request
 BACKUP_URL="$FUSEKI_URL/$DATASET_NAME/data?graph=default"
@@ -22,3 +23,7 @@ if [ -s "$BACKUP_FILE" ]; then
 else
   echo "backup failed"
 fi
+
+echo "creating the KG snapshot.."
+python obd_ontology/knowledge_snapshot.py --perspective diag >> $KG_SNAPSHOT_FILE
+python obd_ontology/knowledge_snapshot.py --perspective expert >> $KG_SNAPSHOT_FILE
