@@ -1,11 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @author Patricia Windler, Tim Bohne
+
 import argparse
 import re
+from typing import List
 
-import pandas
 import numpy as np
+import pandas
 
-from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 from obd_ontology.config import VALID_SPECIAL_CHARACTERS, DTC_REGEX
+from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 
 expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
 
@@ -20,31 +25,29 @@ def remove_dtc_from_fault_cond(fault_cond: str, dtc: str) -> str:
     beginning of fault_cond.
 
     :param fault_cond: string containing the fault condition description
-    :param dtc: the DTC code as string
+    :param dtc: the DTC as string
     :return: fault condition string with DTC in the beginning removed
     """
-    #
     pattern = re.compile(DTC_REGEX)
     if pattern.match(fault_cond[:5]):
         fault_cond = fault_cond[5:]
-    else:  # some DTCs might not match the pattern. Try to remove them by removing that specific DTC
+    else:  # some DTCs might not match the pattern; try to remove them by removing that specific DTC
         fault_cond = fault_cond.removeprefix(dtc)
     return fault_cond.lstrip(" -")
 
 
 def create_dtc_dictionary(path: str) -> dict:
     """
-    Reads the MSI excel file and extracts the relevant information concerning DTCs and components.
+    Reads the MSI Excel file and extracts the relevant information concerning DTCs and components.
 
-    :param path: path to the excel file
+    :param path: path to the Excel file
     :return: dictionary with DTCs as keys and a list containing fault condition and tuples of position (priority of the
      component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
     """
     dtc_dict = {}
-
     data = pandas.read_excel(path, sheet_name="DTC - Element ID - Baum")
 
-    def get_existing_fault_conditions() -> list:
+    def get_existing_fault_conditions() -> List[str]:
         """
         Returns a list of all fault conditions that are stored in the dtc_dict at that moment.
 
@@ -73,7 +76,6 @@ def create_dtc_dictionary(path: str) -> dict:
                     available_fault_cond = british_fault_cond
                 else:
                     available_fault_cond = "Bitte Fehlerzustands-Beschreibung für {} eingeben".format(dtc)
-
                 available_fault_cond = remove_invalid_characters(available_fault_cond)
                 cleaned_fault_cond = remove_dtc_from_fault_cond(available_fault_cond, dtc)
                 existing_fault_conds = get_existing_fault_conditions()
@@ -85,10 +87,8 @@ def create_dtc_dictionary(path: str) -> dict:
                     new_fault_cond = dtc + " - " + available_fault_cond
                     assert new_fault_cond not in existing_fault_conds
                     dtc_dict[dtc] = [new_fault_cond]
-
             if comp != "nan":
                 dtc_dict[dtc].append((pos, comp))
-
     return dtc_dict
 
 
@@ -116,21 +116,18 @@ def add_components_to_knowledge_graph(dtc_dict: dict) -> None:
     """
     counter = 0
     all_comps = []
-
     for dtc_data in dtc_dict.values():
         if len(dtc_data) > 1:
             for comp_tuple in dtc_data[1:]:
                 all_comps.append(comp_tuple[1])
     all_comps = set(all_comps)
-
     for comp in all_comps:
         expert_knowledge_enhancer.add_component_to_knowledge_graph(comp, [], False)
         counter += 1
-
     print("Added {} components to the knowledge graph.".format(counter))
 
 
-def remove_duplicates_from_list(some_list: list) -> list:
+def remove_duplicates_from_list(some_list: List[str]) -> List[str]:
     """
     Removes duplicates from a list while preserving the order.
 
@@ -154,11 +151,9 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
     (priority of the component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
     """
     counter = 0
-
     for dtc in dtc_dict:
         dtc_data = dtc_dict[dtc]
         fault_cond = dtc_data[0]
-
         if len(dtc_data) > 1:
             components = dtc_data[1:]
             order_of_components = np.argsort([sublist[0] for sublist in components])
@@ -168,16 +163,13 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
             ordered_components = []
         expert_knowledge_enhancer.add_dtc_to_knowledge_graph(dtc, [], fault_cond, [], ordered_components)
         counter += 1
-
     print("Added {} DTCs to the knowledge graph.".format(counter))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', type=str, help='path to the excel file',
-                        required=True)
+    parser.add_argument('--file_path', type=str, help='path to the excel file', required=True)
     args = parser.parse_args()
-
     dtc_dict = create_dtc_dictionary(args.file_path)
     add_components_to_knowledge_graph(dtc_dict)
     add_dtcs_to_knowledge_graph(dtc_dict)
