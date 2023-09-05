@@ -83,6 +83,7 @@ def knowledge_snapshot_component_set_perspective() -> None:
               qt.query_verifies_relations_by_component_set(comp_set, False))
         print(colored("\t- includes:", "blue", "on_grey", ["bold"]),
               qt.query_includes_relation_by_component_set(comp_set, False))
+    print("\n----------------------------------------------------------------------\n")
 
 
 def knowledge_snapshot_component_perspective() -> None:
@@ -116,6 +117,7 @@ def knowledge_snapshot_parallel_osci_perspective() -> None:
         oscillogram_instances_by_set = qt.query_oscillograms_by_parallel_osci_set(osci_set_id, False)
         for osci in oscillogram_instances_by_set:
             print(colored("\t- oscillogram instance:", "blue", "on_grey", ["bold"]), osci.split("#")[1])
+    print("\n----------------------------------------------------------------------\n")
 
 
 def knowledge_snapshot_oscillogram_perspective() -> None:
@@ -130,6 +132,7 @@ def knowledge_snapshot_oscillogram_perspective() -> None:
         print(colored("osci: " + osci.split("#")[1], "yellow", "on_grey", ["bold"]))
         time_series = qt.query_time_series_by_oscillogram_instance(osci_id, False)[0]
         print(colored("\t- time series excerpt:", "blue", "on_grey", ["bold"]), time_series[:50], "...")
+    print("\n----------------------------------------------------------------------\n")
 
 
 def knowledge_snapshot_oscillogram_classification_perspective() -> None:
@@ -171,6 +174,7 @@ def knowledge_snapshot_oscillogram_classification_perspective() -> None:
         print(colored("\t- reason for classification:", "blue", "on_grey", ["bold"]), reason_for_id)
         prediction = qt.query_prediction_by_classification(osci_classification_id, False)
         print(colored("\t- prediction:", "blue", "on_grey", ["bold"]), prediction[0] if len(prediction) > 0 else "")
+    print("\n----------------------------------------------------------------------\n")
 
 
 def knowledge_snapshot_manual_inspection_perspective() -> None:
@@ -194,6 +198,7 @@ def knowledge_snapshot_manual_inspection_perspective() -> None:
         print(colored("\t- reason for inspection:", "blue", "on_grey", ["bold"]), reason_for_id)
         prediction = qt.query_prediction_by_classification(manual_inspection_id, False)
         print(colored("\t- prediction:", "blue", "on_grey", ["bold"]), prediction[0] if len(prediction) > 0 else "")
+    print("\n----------------------------------------------------------------------\n")
 
 
 def knowledge_snapshot_diag_log_perspective() -> None:
@@ -227,6 +232,7 @@ def knowledge_snapshot_diag_log_perspective() -> None:
         diag_steps = qt.query_diag_steps_by_diag_log(diag_log_id, False)
         for diag_step in diag_steps:
             print("\t\t-", diag_step.split("#")[1])
+    print("\n----------------------------------------------------------------------\n")
 
 
 def knowledge_snapshot_fault_path_perspective() -> None:
@@ -246,6 +252,7 @@ def knowledge_snapshot_fault_path_perspective() -> None:
         for fc in fault_conditions:
             fault_condition_desc = qt.query_fault_condition_description_by_id(fc.split("#")[1], False)[0]
             print("\t\t-", fault_condition_desc)
+    print("\n----------------------------------------------------------------------\n")
 
 
 def knowledge_snapshot_vehicle_perspective() -> None:
@@ -266,6 +273,7 @@ def knowledge_snapshot_vehicle_perspective() -> None:
         dtcs = qt.query_dtcs_recorded_in_vehicle(vehicle_id, False)
         for dtc in dtcs:
             print("\t\t-", dtc)
+    print("\n----------------------------------------------------------------------\n")
 
 
 if __name__ == '__main__':
@@ -276,11 +284,21 @@ if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool()
 
     if args.perspective == 'expert':  # expert knowledge
+        print("###########################################################################")
+        print("###########################################################################")
+        print("#################### EXPERT KNOWLEDGE STORED IN THE KG ####################")
+        print("###########################################################################")
+        print("###########################################################################\n")
         knowledge_snapshot_dtc_perspective()
         knowledge_snapshot_subsystem_perspective()
         knowledge_snapshot_component_perspective()
         knowledge_snapshot_component_set_perspective()
     elif args.perspective == 'diag':  # diagnosis
+        print("###########################################################################")
+        print("###########################################################################")
+        print("################## DIAGNOSIS KNOWLEDGE STORED IN THE KG ###################")
+        print("###########################################################################")
+        print("###########################################################################\n")
         knowledge_snapshot_parallel_osci_perspective()
         knowledge_snapshot_oscillogram_perspective()
         knowledge_snapshot_oscillogram_classification_perspective()
