@@ -24,6 +24,6 @@ else
   echo "backup failed"
 fi
 
-echo "creating the KG snapshot.."
-python obd_ontology/knowledge_snapshot.py --perspective diag >> $KG_SNAPSHOT_FILE
+echo "creating KG snapshot.."
 python obd_ontology/knowledge_snapshot.py --perspective expert >> $KG_SNAPSHOT_FILE
+python obd_ontology/knowledge_snapshot.py --perspective diag >> $KG_SNAPSHOT_FILE
