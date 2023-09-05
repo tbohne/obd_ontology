@@ -95,7 +95,7 @@ This is used as part of [vehicle_diag_smach](https://github.com/tbohne/vehicle_d
 
 The `KnowledgeGraphQueryTool` provides a library of numerous predefined SPARQL queries and response processing to access information stored in the knowledge graph that is used in the diagnostic process, e.g.:
 ```python
-qt = KnowledgeGraphQueryTool(local_kb=False)
+qt = KnowledgeGraphQueryTool(kg_url='http://127.0.0.1:3030')
 qt.print_res(qt.query_all_dtc_instances())
 dtc = "P2563"
 qt.print_res(qt.query_fault_condition_by_dtc(dtc))
