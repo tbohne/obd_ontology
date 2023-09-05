@@ -31,7 +31,7 @@ class ConnectionController:
         self.graph = Graph()
         self.graph.bind("", self.namespace)
 
-    def query_knowledge_graph(self, query: str, verbose: bool) -> List[Dict[Dict[str]]]:
+    def query_knowledge_graph(self, query: str, verbose: bool) -> List[Dict]:
         """
         Sends an HTTP request containing the specified query to the knowledge graph server.
 
