@@ -262,7 +262,7 @@ def knowledge_snapshot_vehicle_perspective() -> None:
     print("###########################################################################")
     print("KNOWLEDGE SNAPSHOT - VEHICLE PERSPECTIVE")
     print("###########################################################################\n")
-    for vehicle_id, hsn, tsn, vin, model in qt.query_all_vehicle_instances():
+    for vehicle_id, hsn, tsn, vin, model in qt.query_all_vehicle_instances(False):
         vehicle_id = vehicle_id.split("#")[1]
         print(colored(vehicle_id, "yellow", "on_grey", ["bold"]))
         print(colored("\t- HSN: " + hsn, "blue", "on_grey", ["bold"]))
