@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
+from typing import List, Tuple
+
 from termcolor import colored
 
 from obd_ontology.config import ONTOLOGY_PREFIX, FUSEKI_URL
@@ -15,6 +17,11 @@ class KnowledgeGraphQueryTool:
     """
 
     def __init__(self, kg_url: str = FUSEKI_URL) -> None:
+        """
+        Initializes the KG query tool.
+
+        :param kg_url: URL for the server hosting the knowledge graph
+        """
         self.ontology_prefix = ONTOLOGY_PREFIX
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
 
@@ -27,7 +34,7 @@ class KnowledgeGraphQueryTool:
         """
         return "<" + self.ontology_prefix.replace('#', '#' + entry) + ">"
 
-    def query_fault_causes_by_dtc(self, dtc: str) -> list:
+    def query_fault_causes_by_dtc(self, dtc: str) -> List[str]:
         """
         Queries the fault causes for the specified DTC.
 
@@ -56,7 +63,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['cause_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_fault_condition_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_fault_condition_by_dtc(self, dtc: str, verbose: bool = True) -> List[str]:
         """
         Queries the fault condition for the specified DTC.
 
@@ -83,7 +90,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['condition_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_fault_condition_by_description(self, desc: str) -> list:
+    def query_fault_condition_by_description(self, desc: str) -> List[str]:
         """
         Queries the fault condition instance for the specified description.
 
@@ -104,7 +111,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_symptoms_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_symptoms_by_dtc(self, dtc: str, verbose: bool = True) -> List[str]:
         """
         Queries the symptoms for the specified DTC.
 
@@ -134,7 +141,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['symptom_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_indicates_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_indicates_by_dtc(self, dtc: str, verbose: bool = True) -> List[str]:
         """
         Queries the indicated subsystem for the specified DTC.
 
@@ -162,9 +169,9 @@ class KnowledgeGraphQueryTool:
             """
         return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_vehicle_part_by_subsystem(self, subsystem: str, verbose: bool = True) -> list:
+    def query_vehicle_part_by_subsystem(self, subsystem: str, verbose: bool = True) -> List[str]:
         """
-        Queries the `vehicle_part`s for the specified subsystem.
+        Queries the vehicle parts for the specified subsystem.
 
         :param subsystem: vehicle subsystem to query vehicle part(s) for
         :param verbose: if true, logging is activated
@@ -186,7 +193,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['vehicle_part']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_symptoms_by_desc(self, desc: str) -> list:
+    def query_symptoms_by_desc(self, desc: str) -> List[str]:
         """
         Queries the symptom instance for the specified description.
 
@@ -207,40 +214,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['symptom']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_corrective_actions_by_dtc(self, dtc: str) -> list:
-        """
-        Queries the corrective actions for the specified DTC.
-
-        :param dtc: diagnostic trouble code to query corrective actions for
-        :return: corrective actions
-        """
-        print("########################################################################")
-        print(colored("QUERY: corrective actions for " + dtc, "green", "on_grey", ["bold"]))
-        print("########################################################################")
-        dtc_entry = self.complete_ontology_entry('DTC')
-        represents_entry = self.complete_ontology_entry('represents')
-        deletes_entry = self.complete_ontology_entry('deletes')
-        resolves_entry = self.complete_ontology_entry('resolves')
-        condition_entry = self.complete_ontology_entry('FaultCondition')
-        action_entry = self.complete_ontology_entry('CorrectiveAction')
-        action_desc_entry = self.complete_ontology_entry('action_description')
-        code_entry = self.complete_ontology_entry('code')
-        s = f"""
-            SELECT ?action_desc WHERE {{
-                ?dtc a {dtc_entry} .
-                ?dtc {represents_entry} ?condition .
-                ?dtc {code_entry} ?dtc_code .
-                ?action {deletes_entry} ?dtc .
-                ?action {resolves_entry} ?condition .
-                ?condition a {condition_entry} .
-                ?action a {action_entry} .
-                ?action {action_desc_entry} ?action_desc .
-                FILTER(STR(?dtc_code) = "{dtc}")
-            }}
-            """
-        return [row['action_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
-
-    def query_fault_cat_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_fault_cat_by_dtc(self, dtc: str, verbose: bool = True) -> List[str]:
         """
         Queries the fault category of the specified DTC.
 
@@ -269,7 +243,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['cat_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_fault_cat_by_description(self, desc: str) -> list:
+    def query_fault_cat_by_description(self, desc: str) -> List[str]:
         """
         Queries the fault category instance by the specified fault description.
 
@@ -290,34 +264,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_measuring_pos_by_dtc(self, dtc: str) -> list:
-        """
-        Queries the measuring positions for the specified DTC.
-
-        :param dtc: diagnostic trouble code to query measuring positions for
-        :return: measuring positions
-        """
-        print("########################################################################")
-        print(colored("QUERY: measuring pos for " + dtc, "green", "on_grey", ["bold"]))
-        print("########################################################################")
-        dtc_entry = self.complete_ontology_entry('DTC')
-        implies_entry = self.complete_ontology_entry('implies')
-        measuring_pos = self.complete_ontology_entry('MeasuringPos')
-        pos_desc_entry = self.complete_ontology_entry('position_description')
-        code_entry = self.complete_ontology_entry('code')
-        s = f"""
-            SELECT ?measuring_pos_desc WHERE {{
-                ?dtc a {dtc_entry} .
-                ?dtc  {implies_entry} ?measuring_pos .
-                ?dtc {code_entry} ?dtc_code .
-                ?measuring_pos a {measuring_pos} .
-                ?measuring_pos {pos_desc_entry} ?measuring_pos_desc .
-                FILTER(STR(?dtc_code) = "{dtc}")
-            }}
-            """
-        return [row['measuring_pos_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
-
-    def query_suspect_components_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_suspect_components_by_dtc(self, dtc: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect components associated with the specified DTC.
 
@@ -349,7 +296,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_suspect_components_by_subsystem_name(self, subsystem_name: str, verbose: bool = True) -> list:
+    def query_suspect_components_by_subsystem_name(self, subsystem_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect components associated with the specified subsystem.
 
@@ -377,7 +324,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_suspect_component_by_name(self, component_name: str) -> list:
+    def query_suspect_component_by_name(self, component_name: str) -> List[str]:
         """
         Queries a suspect component by its component name.
 
@@ -398,7 +345,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_vehicle_subsystem_by_name(self, subsystem_name: str) -> list:
+    def query_vehicle_subsystem_by_name(self, subsystem_name: str) -> List[str]:
         """
         Queries a vehicle subsystem by its name.
 
@@ -419,7 +366,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['subsystem']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_component_set_by_name(self, set_name: str) -> list:
+    def query_component_set_by_name(self, set_name: str) -> List[str]:
         """
         Queries a component set by its name.
 
@@ -440,7 +387,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp_set']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_vehicle_instance_by_vin(self, vin: str) -> list:
+    def query_vehicle_instance_by_vin(self, vin: str) -> List[str]:
         """
         Queries a vehicle instance by the vehicle identification number.
 
@@ -460,7 +407,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['car']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_co_occurring_trouble_codes(self, dtc: str, verbose: bool = True) -> list:
+    def query_co_occurring_trouble_codes(self, dtc: str, verbose: bool = True) -> List[str]:
         """
         Queries DTCs regularly occurring with the specified DTC.
 
@@ -485,9 +432,9 @@ class KnowledgeGraphQueryTool:
             """
         return [row['other']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_vehicle_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_vehicle_by_dtc(self, dtc: str, verbose: bool = True) -> List[Tuple[str, str, str, str]]:
         """
-        Queries vehicles where the specified DTC has occurred in the past.
+        Queries vehicles in which the specified DTC occurred in the past.
 
         :param dtc: diagnostic trouble code to query vehicles for
         :param verbose: if true, logging is activated
@@ -529,7 +476,7 @@ class KnowledgeGraphQueryTool:
         return [(row['model']['value'], row['hsn']['value'], row['tsn']['value'], row['vin']['value']) for row in
                 self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_dtc_instances(self, verbose: bool = True) -> list:
+    def query_all_dtc_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all DTC instances stored in the knowledge graph.
 
@@ -550,7 +497,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_fault_condition_instances(self, verbose: bool = True) -> list:
+    def query_all_fault_condition_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all fault condition instances stored in the knowledge graph.
 
@@ -571,7 +518,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_fault_condition_instance_by_code(self, dtc: str) -> list:
+    def query_fault_condition_instance_by_code(self, dtc: str) -> List[str]:
         """
         Queries the fault condition instance represented by the specified DTC.
 
@@ -593,7 +540,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_fault_condition_instances_by_symptom(self, symptom: str) -> list:
+    def query_fault_condition_instances_by_symptom(self, symptom: str) -> List[str]:
         """
         Queries the fault condition instances manifested by the specified symptom.
 
@@ -617,7 +564,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_dtc_instance_by_code(self, code: str) -> list:
+    def query_dtc_instance_by_code(self, code: str) -> List[str]:
         """
         Queries the DTC instance for the specified code.
 
@@ -637,7 +584,8 @@ class KnowledgeGraphQueryTool:
             """
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_dtcs_by_suspect_comp_and_vehicle_subsystem(self, comp: str, subsystem: str, verbose: bool = True) -> list:
+    def query_dtcs_by_suspect_comp_and_vehicle_subsystem(
+            self, comp: str, subsystem: str, verbose: bool = True) -> List[str]:
         """
         Queries the DTCs associated with the specified suspect component and vehicle subsystem.
 
@@ -677,7 +625,8 @@ class KnowledgeGraphQueryTool:
             """
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_diag_association_instance_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
+    def query_diag_association_instance_by_dtc_and_sus_comp(
+            self, dtc: str, comp: str, verbose: bool = True) -> List[str]:
         """
         Queries the diagnostic association instance for the specified code and suspect component.
 
@@ -711,7 +660,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_priority_id_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
+    def query_priority_id_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> List[str]:
         """
         Queries the priority ID of the diagnostic association for the specified code and suspect component.
 
@@ -747,7 +696,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['prio']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_diag_association_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
+    def query_diag_association_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> List[str]:
         """
         Queries the diagnostic association for the specified code and suspect component.
 
@@ -781,7 +730,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['diag_association']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_generated_heatmaps_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> list:
+    def query_generated_heatmaps_by_dtc_and_sus_comp(self, dtc: str, comp: str, verbose: bool = True) -> List[str]:
         """
         Queries the generated heatmaps for the specified code and suspect component.
 
@@ -817,7 +766,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['heatmap_entry']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_dtcs_by_vin(self, vin: str) -> list:
+    def query_dtcs_by_vin(self, vin: str) -> List[str]:
         """
         Queries the DTCs (diagnostic trouble codes) for the specified VIN (vehicle identification number).
 
@@ -841,7 +790,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_dtcs_by_model(self, model: str) -> list:
+    def query_dtcs_by_model(self, model: str) -> List[str]:
         """
         Queries the DTCs (diagnostic trouble codes) for the specified car model.
 
@@ -865,7 +814,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
-    def query_oscilloscope_usage_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
+    def query_oscilloscope_usage_by_suspect_component(self, component_name: str, verbose: bool = True) -> List[bool]:
         """
         Queries whether an oscilloscope should be used to diagnose the specified component.
 
@@ -875,8 +824,8 @@ class KnowledgeGraphQueryTool:
         """
         if verbose:
             print("########################################################################")
-            print(
-                colored("QUERY: oscilloscope usage by component name " + component_name, "green", "on_grey", ["bold"]))
+            print(colored("QUERY: oscilloscope usage by component name "
+                          + component_name, "green", "on_grey", ["bold"]))
             print("########################################################################")
         comp_entry = self.complete_ontology_entry('SuspectComponent')
         name_entry = self.complete_ontology_entry('component_name')
@@ -891,7 +840,7 @@ class KnowledgeGraphQueryTool:
         return [True if row['use_oscilloscope']['value'] == "true" else False
                 for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_affected_by_relations_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
+    def query_affected_by_relations_by_suspect_component(self, component_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the affecting components for the specified suspect component.
 
@@ -916,7 +865,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['affected_by']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_verifies_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
+    def query_verifies_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the vehicle component set that can be verified by the specified suspect component.
 
@@ -945,7 +894,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['set_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_verifies_relations_by_component_set(self, set_name: str, verbose: bool = True) -> list:
+    def query_verifies_relations_by_component_set(self, set_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect components that can verify the specified component set.
 
@@ -974,7 +923,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_contains_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> list:
+    def query_contains_relation_by_suspect_component(self, component_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the vehicle subsystem that the specified suspect component is part of.
 
@@ -1003,7 +952,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['sub_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_contains_relation_by_subsystem(self, subsystem_name: str, verbose: bool = True) -> list:
+    def query_contains_relation_by_subsystem(self, subsystem_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect components that are contained in the specified vehicle subsystem.
 
@@ -1031,7 +980,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_includes_relation_by_component_set(self, comp_set_name: str, verbose: bool = True) -> list:
+    def query_includes_relation_by_component_set(self, comp_set_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect components that are included in the specified component set.
 
@@ -1059,7 +1008,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_code_type_by_dtc(self, dtc: str, verbose: bool = True) -> list:
+    def query_code_type_by_dtc(self, dtc: str, verbose: bool = True) -> List[str]:
         """
         Queries the code type for the specified DTC.
 
@@ -1083,7 +1032,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['code_type']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_all_component_instances(self, verbose: bool = True) -> list:
+    def query_all_component_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all component instances stored in the knowledge graph.
 
@@ -1104,7 +1053,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_vehicle_instances(self, verbose: bool = True) -> list:
+    def query_all_vehicle_instances(self, verbose: bool = True) -> List[Tuple[str, str, str, str, str]]:
         """
         Queries all vehicle instances stored in the knowledge graph.
 
@@ -1135,7 +1084,7 @@ class KnowledgeGraphQueryTool:
             for row in self.fuseki_connection.query_knowledge_graph(s, verbose)
         ]
 
-    def query_all_parallel_rec_oscillogram_set_instances(self, verbose: bool = True) -> list:
+    def query_all_parallel_rec_oscillogram_set_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all parallel recorded oscillogram sets stored in the knowledge graph.
 
@@ -1154,7 +1103,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci_set']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_recorded_oscillograms(self, verbose: bool = True) -> list:
+    def query_all_recorded_oscillograms(self, verbose: bool = True) -> List[str]:
         """
         Queries all recorded oscillograms stored in the knowledge graph.
 
@@ -1173,7 +1122,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_oscillogram_classifications(self, verbose: bool = True) -> list:
+    def query_all_oscillogram_classifications(self, verbose: bool = True) -> List[str]:
         """
         Queries all oscillogram classification instances stored in the knowledge graph.
 
@@ -1192,7 +1141,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci_classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_manual_inspection_instances(self, verbose: bool = True) -> list:
+    def query_all_manual_inspection_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all manual inspection instances stored in the knowledge graph.
 
@@ -1211,7 +1160,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['manual_inspection']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_diag_log_instances(self, verbose: bool = True) -> list:
+    def query_all_diag_log_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all diag log instances stored in the knowledge graph.
 
@@ -1230,7 +1179,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['diag_log']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_fault_path_instances(self, verbose: bool = True) -> list:
+    def query_all_fault_path_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all fault path instances stored in the knowledge graph.
 
@@ -1249,7 +1198,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fault_path']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_model_id_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
+    def query_model_id_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the model ID for the specified oscillogram classification instance.
 
@@ -1274,7 +1223,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['model_id']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_suspect_component_name_by_id(self, component_id: str, verbose: bool = True) -> list:
+    def query_suspect_component_name_by_id(self, component_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect component name for the specified component ID.
 
@@ -1299,7 +1248,8 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_uncertainty_by_osci_classification_id(self, osci_classification_id: str, verbose: bool = True) -> list:
+    def query_uncertainty_by_osci_classification_id(
+            self, osci_classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the uncertainty for the specified oscillogram classification instance.
 
@@ -1324,7 +1274,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['uncertainty']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_date_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+    def query_date_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the date for the specified diag log instance.
 
@@ -1349,7 +1299,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['date']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_max_num_of_parallel_rec_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+    def query_max_num_of_parallel_rec_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the max number of parallel recordings for the specified diag log instance.
 
@@ -1375,7 +1325,7 @@ class KnowledgeGraphQueryTool:
         return [row['max_num_of_parallel_rec']['value'] for row in
                 self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_resulted_in_by_fault_path(self, fault_path_id: str, verbose: bool = True) -> list:
+    def query_resulted_in_by_fault_path(self, fault_path_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the fault conditions resulting in the specified fault path instance.
 
@@ -1400,7 +1350,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fault_cond']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_dtcs_recorded_in_vehicle(self, vehicle_id: str, verbose: bool = True) -> list:
+    def query_dtcs_recorded_in_vehicle(self, vehicle_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the DTCs recorded in the specified vehicle.
 
@@ -1421,19 +1371,19 @@ class KnowledgeGraphQueryTool:
         created_for_entry = self.complete_ontology_entry('createdFor')
         code_entry = self.complete_ontology_entry('code')
         s = f"""
-        SELECT ?code WHERE {{
-            ?vehicle a {vehicle_entry} .
-            FILTER(STR(?vehicle) = "{id_entry}") .
-            ?diag_log a {diag_log_entry} .
-            ?dtc a {dtc_entry} .
-            ?dtc {appears_in_entry} ?diag_log .
-            ?diag_log {created_for_entry} ?vehicle .
-            ?dtc {code_entry} ?code .
-        }}
-        """
+            SELECT ?code WHERE {{
+                ?vehicle a {vehicle_entry} .
+                FILTER(STR(?vehicle) = "{id_entry}") .
+                ?diag_log a {diag_log_entry} .
+                ?dtc a {dtc_entry} .
+                ?dtc {appears_in_entry} ?diag_log .
+                ?diag_log {created_for_entry} ?vehicle .
+                ?dtc {code_entry} ?code .
+            }}
+            """
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_dtcs_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+    def query_dtcs_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the DTCs for the specified diag log instance.
 
@@ -1458,7 +1408,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_diag_steps_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+    def query_diag_steps_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the diagnostic steps for the specified diag log instance.
 
@@ -1483,7 +1433,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_fault_path_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+    def query_fault_path_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the fault path for the specified diag log instance.
 
@@ -1508,7 +1458,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['fault_path']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_fault_path_description_by_id(self, fault_path_id: str, verbose: bool = True) -> list:
+    def query_fault_path_description_by_id(self, fault_path_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the fault path description for the specified fault path ID.
 
@@ -1533,7 +1483,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['path_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_fault_condition_description_by_id(self, fault_condition_id: str, verbose: bool = True) -> list:
+    def query_fault_condition_description_by_id(self, fault_condition_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the fault condition description for the specified fault condition ID.
 
@@ -1558,7 +1508,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['cond_desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_vehicle_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> list:
+    def query_vehicle_by_diag_log(self, diag_log_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the vehicle for the specified diag log instance.
 
@@ -1583,7 +1533,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['vehicle']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_time_series_by_oscillogram_instance(self, osci_id: str, verbose: bool = True) -> list:
+    def query_time_series_by_oscillogram_instance(self, osci_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the time series for the specified oscillogram instance.
 
@@ -1608,7 +1558,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['time_series']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_oscillograms_by_parallel_osci_set(self, osci_set_id: str, verbose: bool = True) -> list:
+    def query_oscillograms_by_parallel_osci_set(self, osci_set_id: str, verbose: bool = True) -> List[str]:
         """
         Queries all parallel recorded oscillograms for the specified set.
 
@@ -1633,7 +1583,8 @@ class KnowledgeGraphQueryTool:
             """
         return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_oscillogram_by_classification_instance(self, osci_classification_id: str, verbose: bool = True) -> list:
+    def query_oscillogram_by_classification_instance(
+            self, osci_classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the oscillogram instance for the specified classification.
 
@@ -1658,7 +1609,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_suspect_component_by_classification(self, classification_id: str, verbose: bool = True) -> list:
+    def query_suspect_component_by_classification(self, classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect component for the specified classification.
 
@@ -1686,7 +1637,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_reason_for_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
+    def query_reason_for_classification(self, osci_classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the reason (other classification) for the specified classification.
 
@@ -1711,7 +1662,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['reason_for']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_led_to_for_classification(self, osci_classification_id: str, verbose: bool = True) -> list:
+    def query_led_to_for_classification(self, osci_classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the reason (diag association) for the specified classification.
 
@@ -1736,7 +1687,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['led_to']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_reason_for_inspection(self, manual_inspection_id: str, verbose: bool = True) -> list:
+    def query_reason_for_inspection(self, manual_inspection_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the reason (other classification) for the specified inspection.
 
@@ -1761,7 +1712,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['reason_for']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_led_to_for_inspection(self, manual_inspection_id: str, verbose: bool = True) -> list:
+    def query_led_to_for_inspection(self, manual_inspection_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the reason (diag association) for the specified inspection.
 
@@ -1786,7 +1737,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['led_to']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_prediction_by_classification(self, classification_id: str, verbose: bool = True) -> list:
+    def query_prediction_by_classification(self, classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the prediction for the specified classification.
 
@@ -1814,7 +1765,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['pred']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_heatmap_by_classification_instance(self, osci_classification_id: str, verbose: bool = True) -> list:
+    def query_heatmap_by_classification_instance(self, osci_classification_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the heatmap instance for the specified classification.
 
@@ -1839,7 +1790,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['heatmap']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_generation_method_by_heatmap(self, heatmap_id: str, verbose: bool = True) -> list:
+    def query_generation_method_by_heatmap(self, heatmap_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the heatmap generation method for the specified heatmap instance.
 
@@ -1864,7 +1815,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['gen_method']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_heatmap_string_by_heatmap(self, heatmap_id: str, verbose: bool = True) -> list:
+    def query_heatmap_string_by_heatmap(self, heatmap_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the heatmap values for the specified heatmap instance.
 
@@ -1889,7 +1840,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['gen_heatmap']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_symptom_instances(self) -> list:
+    def query_all_symptom_instances(self) -> List[str]:
         """
         Queries all symptom instances stored in the knowledge graph.
 
@@ -1901,14 +1852,14 @@ class KnowledgeGraphQueryTool:
         symptom_entry = self.complete_ontology_entry('Symptom')
         symptom_desc_entry = self.complete_ontology_entry('symptom_description')
         s = f"""
-        SELECT ?desc WHERE {{
-            ?symp a {symptom_entry} .
-            ?symp {symptom_desc_entry} ?desc.
-        }}
-        """
+            SELECT ?desc WHERE {{
+                ?symp a {symptom_entry} .
+                ?symp {symptom_desc_entry} ?desc.
+            }}
+            """
         return [row['desc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
-    def query_all_vehicle_subsystem_instances(self, verbose: bool = True) -> list:
+    def query_all_vehicle_subsystem_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all subsystem instances stored in the knowledge graph.
 
@@ -1929,7 +1880,7 @@ class KnowledgeGraphQueryTool:
             """
         return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_all_component_set_instances(self, verbose: bool = True) -> list:
+    def query_all_component_set_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all component set instances stored in the knowledge graph.
 
@@ -1971,14 +1922,12 @@ if __name__ == '__main__':
                           " ---, vehicle speed control, idle control systems, and auxiliary inputs, ---}"
     fault_cond_desc = "Ladedrucksteller-Positionssensor / Signal unplausibel"
     symptom_desc = "Glühkontrollleuchte leuchtet"
-    vin = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    model = "Mazda 3"
+    dummy_vin = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    dummy_model = "Mazda 3"
     qt.print_res(qt.query_fault_causes_by_dtc(error_code))
     qt.print_res(qt.query_fault_condition_by_dtc(error_code))
     qt.print_res(qt.query_symptoms_by_dtc(error_code))
-    qt.print_res(qt.query_corrective_actions_by_dtc(error_code))
     qt.print_res(qt.query_fault_cat_by_dtc(error_code))
-    qt.print_res(qt.query_measuring_pos_by_dtc(error_code))
     qt.print_res(qt.query_suspect_components_by_dtc(error_code))
     qt.print_res(qt.query_co_occurring_trouble_codes(error_code))
     qt.print_res(qt.query_vehicle_by_dtc(error_code))
@@ -1993,9 +1942,9 @@ if __name__ == '__main__':
     qt.print_res(qt.query_priority_id_by_dtc_and_sus_comp(error_code, suspect_comp_name))
     qt.print_res(qt.query_diag_association_by_dtc_and_sus_comp(error_code, suspect_comp_name))
     qt.print_res(qt.query_generated_heatmaps_by_dtc_and_sus_comp(error_code, suspect_comp_name))
-    qt.print_res(qt.query_vehicle_instance_by_vin(vin))
-    qt.print_res(qt.query_dtcs_by_vin(vin))
-    qt.print_res(qt.query_dtcs_by_model(model))
+    qt.print_res(qt.query_vehicle_instance_by_vin(dummy_vin))
+    qt.print_res(qt.query_dtcs_by_vin(dummy_vin))
+    qt.print_res(qt.query_dtcs_by_model(dummy_model))
     qt.print_res(qt.query_oscilloscope_usage_by_suspect_component(suspect_comp_name))
     qt.print_res(qt.query_affected_by_relations_by_suspect_component(suspect_comp_name))
     qt.print_res(qt.query_code_type_by_dtc(error_code))
