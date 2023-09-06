@@ -34,24 +34,24 @@ $ pip install .
 $ ./fuseki-server
 ```
 
-**<u>Launch knowledge graph from `.owl` / `.ttl` file:</u>**
+**<u>Launch knowledge graph from RDF serialization (e.g. `.nt` / `.owl` / `.ttl` file):</u>**
 - navigate to `localhost:3030`
 - `manage` -> `new dataset`
     - Dataset name: `OBD`
     - Dataset type: `Persistent (TDB2) – dataset will persist across Fuseki restarts`
 - `create dataset`
 - `add data` -> `select files`
-    - select knowledge graph file, e.g., `knowledge_base/test_kg.ttl`
+    - select knowledge graph file, e.g., `knowledge_base/test_kg.nt`
     - `upload now`
 
 Now the knowledge graph is hosted on the *Fuseki* server and can be queried, extended or updated via the SPARQL endpoints `/OBD/sparql`, `/OBD/data` and `/OBD/update` respectively.
 
-**<u>Backup knowledge graph:</u>**
+**<u>Manually backup knowledge graph:</u>**
 - `manage` -> `backup`
 
 Creates a backup in `fuseki_root/run/backups/`.
 
-The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.ttl` so that it can be interpreted directly, e.g., when launching it on the server (see above). The backups are stored in `knowledge_base/live_kg_backups/`.
+The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.nt` so that the n-triples file can be interpreted directly, e.g., when launching it on the server (see above). The backups are stored in `knowledge_base/live_kg_backups/`.
 
 ## Expert Knowledge Acquisition Web Interface
 
@@ -121,6 +121,13 @@ The idea of the knowledge snapshot is to output the knowledge currently stored i
 ```
 $ python obd_ontology/knowledge_snapshot.py [--perspective {expert | diag}]
 ```
+
+## Automated Backup & Knowledge Graph Snapshot Generation
+
+```
+$ ./backup_kg.sh http://127.0.0.1:3030 OBD
+```
+This creates two files in `knowledge_base/live_kg_backups/`, one is the KG backup in n-triples serialization and the other is a knowledge snapshot using both perspectives (`expert` and `diag`).
 
 ## Related Publications
 
