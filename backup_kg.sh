@@ -9,8 +9,8 @@ fi
 FUSEKI_URL="$1"
 DATASET_NAME="$2"
 BACKUP_DIR="knowledge_base/live_kg_backups"
-BACKUP_FILE="$BACKUP_DIR/backup_$(date +\%Y\%m\%d_\%H\%M\%S).nt"
-KG_SNAPSHOT_FILE="$BACKUP_DIR/kg_snapshot_$(date +\%Y\%m\%d_\%H\%M\%S).txt"
+BACKUP_FILE="$BACKUP_DIR/backup_$(date +\%Y_\%m_\%d-\%H_\%M_\%S).nt"
+KG_SNAPSHOT_FILE="$BACKUP_DIR/kg_snapshot_$(date +\%Y_\%m_\%d-\%H_\%M_\%S).txt"
 
 # construct URL for backup request
 BACKUP_URL="$FUSEKI_URL/$DATASET_NAME/data?graph=default"
