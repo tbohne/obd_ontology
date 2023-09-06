@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Check if at least two command-line arguments are provided
+# check if at least two command-line arguments are provided
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 FUSEKI_URL DATASET_NAME"
+  echo "Usage: $0 KG_URL DATASET_NAME"
   exit 1
 fi
 
