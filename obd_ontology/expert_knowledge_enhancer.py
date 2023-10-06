@@ -73,6 +73,17 @@ class ExpertKnowledgeEnhancer:
         """
         return Fact((heatmap_uuid, self.onto_namespace.generated_heatmap, heatmap), property_fact=prop)
 
+    def generate_time_series_fact(self, oscillogram_uuid: str, time_series: str, prop: bool) -> Fact:
+        """
+        Generates a `time_series` fact (RDF) based on the provided properties.
+
+        :param oscillogram_uuid: UUID of the oscillogram to generate fact for
+        :param time_series: time series string
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((oscillogram_uuid, self.onto_namespace.time_series, time_series), property_fact=prop)
+
     def generate_heatmap_generation_method_fact(self, heatmap_uuid: str, gen_method: str, prop: bool) -> Fact:
         """
         Generates a `generation_method` fact (RDF) based on the provided properties.
@@ -143,6 +154,19 @@ class ExpertKnowledgeEnhancer:
             property_fact=prop
         )
 
+    def generate_oscillogram_fact(self, oscillogram_uuid: str, prop: bool) -> Fact:
+        """
+        Generates an `Oscillogram` fact (RDF) based on the provided properties.
+
+        :param oscillogram_uuid: UUID of the oscillogram to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact(
+            (oscillogram_uuid, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", self.onto_namespace.Heatmap),
+            property_fact=prop
+        )
+
     def generate_contains_fact(self, subsystem_uuid: str, comp_uuid: str, prop: bool) -> Fact:
         """
         Generates a `contains` fact (RDF) based on the provided properties.
@@ -164,6 +188,17 @@ class ExpertKnowledgeEnhancer:
         :return: generated fact
         """
         return Fact((classification_uuid, self.onto_namespace.produces, heatmap_uuid), property_fact=prop)
+
+    def generate_classifies_fact(self, osci_classification_id: str, osci_id: str, prop: bool) -> Fact:
+        """
+        Generates a `classifies` fact (RDF) based on the provided properties.
+
+        :param osci_classification_id: UUID of the oscillogram classification to generate fact for
+        :param osci_id: UUID of the oscillogram to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((osci_classification_id, self.onto_namespace.classifies, osci_id), property_fact=prop)
 
     def generate_includes_fact(self, component_set_uuid: str, comp_uuid: str, prop: bool) -> Fact:
         """
