@@ -1141,6 +1141,33 @@ class KnowledgeGraphQueryTool:
             """
         return [row['osci_classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_oscillogram_classification_by_heatmap(self, heatmap_id: str, verbose: bool = True) -> List[str]:
+        """
+        Queries the oscillogram classification instance that produces the specified heatmap.
+
+        :param heatmap_id: heatmap instance to query oscillogram classification for
+        :param verbose: if true, logging is activated
+        :return: all oscillogram classifications stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: oscillogram classification instances for the specified heatmap:", heatmap_id)
+            print("####################################")
+        osci_classification_entry = self.complete_ontology_entry('OscillogramClassification')
+        heatmap_entry = self.complete_ontology_entry('Heatmap')
+        produces_entry = self.complete_ontology_entry('produces')
+        id_entry = self.complete_ontology_entry(heatmap_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        s = f"""
+            SELECT ?osci_classification WHERE {{
+                ?osci_classification a {osci_classification_entry} .
+                ?heatmap a {heatmap_entry} .
+                ?osci_classification {produces_entry} ?heatmap .
+                FILTER(STR(?heatmap) = "{id_entry}") .
+            }}
+            """
+        return [row['osci_classification']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_all_manual_inspection_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all manual inspection instances stored in the knowledge graph.
@@ -1880,6 +1907,25 @@ class KnowledgeGraphQueryTool:
             """
         return [row['subsystem_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_all_heatmap_instances(self, verbose: bool = True) -> List[str]:
+        """
+        Queries all heatmap instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all heatmaps stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all heatmap instances")
+            print("####################################")
+        heatmap_entry = self.complete_ontology_entry('Heatmap')
+        s = f"""
+            SELECT ?heatmap WHERE {{
+                ?heatmap a {heatmap_entry} .
+            }}
+            """
+        return [row['heatmap']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_all_component_set_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all component set instances stored in the knowledge graph.
@@ -1949,3 +1995,4 @@ if __name__ == '__main__':
     qt.print_res(qt.query_affected_by_relations_by_suspect_component(suspect_comp_name))
     qt.print_res(qt.query_code_type_by_dtc(error_code))
     qt.print_res(qt.query_all_component_set_instances(False))
+    qt.print_res(qt.query_all_heatmap_instances(False))
