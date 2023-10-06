@@ -163,7 +163,7 @@ class ExpertKnowledgeEnhancer:
         :return: generated fact
         """
         return Fact(
-            (oscillogram_uuid, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", self.onto_namespace.Heatmap),
+            (oscillogram_uuid, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", self.onto_namespace.Oscillogram),
             property_fact=prop
         )
 
