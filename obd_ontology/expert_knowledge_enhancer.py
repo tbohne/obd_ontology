@@ -62,6 +62,28 @@ class ExpertKnowledgeEnhancer:
         """
         return Fact((dtc_uuid, self.onto_namespace.occurs_with_DTC, code), property_fact=prop)
 
+    def generate_generated_heatmap_fact(self, heatmap_uuid: str, heatmap: str, prop: bool) -> Fact:
+        """
+        Generates a `generated_heatmap` fact (RDF) based on the provided properties.
+
+        :param heatmap_uuid: UUID of the heatmap to generate fact for
+        :param heatmap: heatmap string
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((heatmap_uuid, self.onto_namespace.generated_heatmap, heatmap), property_fact=prop)
+
+    def generate_heatmap_generation_method_fact(self, heatmap_uuid: str, gen_method: str, prop: bool) -> Fact:
+        """
+        Generates a `generation_method` fact (RDF) based on the provided properties.
+
+        :param heatmap_uuid: UUID of the heatmap to generate fact for
+        :param gen_method: heatmap generation method (e.g. tf-keras-gradcam)
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((heatmap_uuid, self.onto_namespace.generation_method, gen_method), property_fact=prop)
+
     def generate_symptom_fact(self, fc_uuid: str, symptom_uuid: str, prop: bool) -> Fact:
         """
         Generates a `manifestedBy` fact (RDF) based on the provided properties.
@@ -108,6 +130,19 @@ class ExpertKnowledgeEnhancer:
             property_fact=prop
         )
 
+    def generate_heatmap_fact(self, heatmap_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `Heatmap` fact (RDF) based on the provided properties.
+
+        :param heatmap_uuid: UUID of the heatmap to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact(
+            (heatmap_uuid, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", self.onto_namespace.Heatmap),
+            property_fact=prop
+        )
+
     def generate_contains_fact(self, subsystem_uuid: str, comp_uuid: str, prop: bool) -> Fact:
         """
         Generates a `contains` fact (RDF) based on the provided properties.
@@ -118,6 +153,17 @@ class ExpertKnowledgeEnhancer:
         :return: generated fact
         """
         return Fact((subsystem_uuid, self.onto_namespace.contains, comp_uuid), property_fact=prop)
+
+    def generate_produces_fact(self, classification_uuid: str, heatmap_uuid: str, prop: bool) -> Fact:
+        """
+        Generates a `produces` fact (RDF) based on the provided properties.
+
+        :param classification_uuid: UUID of the oscillogram classification to generate fact for
+        :param heatmap_uuid: UUID of the heatmap to generate fact for
+        :param prop: determines whether it's a property fact
+        :return: generated fact
+        """
+        return Fact((classification_uuid, self.onto_namespace.produces, heatmap_uuid), property_fact=prop)
 
     def generate_includes_fact(self, component_set_uuid: str, comp_uuid: str, prop: bool) -> Fact:
         """
