@@ -131,4 +131,20 @@ This creates two files in `knowledge_base/live_kg_backups/`, one is the KG backu
 
 ## Related Publications
 
-TBD.
+```bibtex
+@inproceedings{10.1145/3587259.3627546,
+    author = {Bohne, Tim and Windler, Anne-Kathrin Patricia and Atzmueller, Martin},
+    title = {A Neuro-Symbolic Approach for Anomaly Detection and Complex Fault Diagnosis Exemplified in the Automotive Domain},
+    year = {2023},
+    isbn = {9798400701412},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://doi.org/10.1145/3587259.3627546},
+    doi = {10.1145/3587259.3627546},
+    booktitle = {Proceedings of the 12th Knowledge Capture Conference 2023},
+    pages = {35–43},
+    numpages = {9},
+    location = {Pensacola, FL, USA},
+    series = {K-CAP '23}
+}
+```
