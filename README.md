@@ -51,7 +51,7 @@ Now the knowledge graph is hosted on the *Fuseki* server and can be queried, ext
 
 Creates a backup in `fuseki_root/run/backups/`.
 
-The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.nt` so that the n-triples file can be interpreted directly, e.g., when launching it on the server (see above). The backups are stored in `knowledge_base/live_kg_backups/`.
+The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.nt` so that the n-triples file can be interpreted directly, e.g., when launching it on the server (see above). The backups are stored in `knowledge_base/live_kg_backups/`. For automated backups, see below.
 
 ## Expert Knowledge Acquisition Web Interface
 
@@ -125,9 +125,13 @@ $ python obd_ontology/knowledge_snapshot.py [--perspective {expert | diag}]
 ## Automated Backup & Knowledge Graph Snapshot Generation
 
 ```
+$ ./backup_kg.sh FUSEKI_URL:PORT DATASET_NAME
+```
+e.g.:
+```
 $ ./backup_kg.sh http://127.0.0.1:3030 OBD
 ```
-This creates two files in `knowledge_base/live_kg_backups/`, one is the KG backup in n-triples serialization and the other is a knowledge snapshot using both perspectives (`expert` and `diag`).
+This creates two files in `knowledge_base/live_kg_backups/`, one is the gzip compressed KG backup in n-triples serialization and the other is a knowledge snapshot using both perspectives (`expert` and `diag`).
 
 ## Related Publications
 
