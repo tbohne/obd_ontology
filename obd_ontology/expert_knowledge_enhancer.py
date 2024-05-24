@@ -16,6 +16,7 @@ from obd_ontology.connection_controller import ConnectionController
 from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.fact import Fact
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
+from obd_ontology.model_knowledge import ModelKnowledge
 
 
 class ExpertKnowledgeEnhancer:
@@ -503,7 +504,59 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
-    # TODO: generate model + channel facts here
+    def generate_model_facts(self, model_knowledge: ModelKnowledge) -> List[Fact]:
+        """
+        Generates classification model facts to be entered into the knowledge graph.
+
+        :param model_knowledge: model knowledge
+        :return: generated fact list
+        """
+        model_uuid = "model_" + uuid.uuid4().hex
+        # model property facts
+        fact_list = [
+            Fact((model_uuid, RDF.type, self.onto_namespace["Model"].toPython())),
+            Fact((model_uuid, self.onto_namespace.input_length, model_knowledge.input_len), property_fact=True),
+            Fact((model_uuid, self.onto_namespace.exp_normalization_method, model_knowledge.exp_norm_method),
+                 property_fact=True),
+            Fact((model_uuid, self.onto_namespace.measuring_instruction, model_knowledge.measuring_instruction),
+                 property_fact=True),
+            Fact((model_uuid, self.onto_namespace.model_id, model_knowledge.model_id), property_fact=True),
+            Fact((model_uuid, self.onto_namespace.architecture, model_knowledge.architecture), property_fact=True)
+        ]
+
+        # input channel requirements
+        for idx, channel in model_knowledge.input_chan_req:
+            channel_instance = self.knowledge_graph_query_tool.query_channel_by_name(channel)
+            channel_uuid = channel_instance[0].split("#")[1]
+            input_chan_req_uuid = "input_chan_req_" + uuid.uuid4().hex
+            fact_list.append(
+                Fact((input_chan_req_uuid, RDF.type, self.onto_namespace["InputChannelRequirement"].toPython()))
+            )
+            fact_list.append(
+                Fact((input_chan_req_uuid, self.onto_namespace.channel_idx, idx), property_fact=True),
+            )
+            fact_list.append(Fact((input_chan_req_uuid, self.onto_namespace.expects, channel_uuid)))
+            fact_list.append(Fact((model_uuid, self.onto_namespace.hasRequirement, input_chan_req_uuid)))
+
+        # suspect component to be assessed
+        sus_comp = self.knowledge_graph_query_tool.query_suspect_component_by_name(model_knowledge.classified_comp)
+        sus_comp_uuid = sus_comp[0].split("#")[1]
+        fact_list.append(Fact((model_uuid, self.onto_namespace.assesses, sus_comp_uuid)))
+        return fact_list
+
+    def generate_channel_facts(self, channel_name: str) -> List[Fact]:
+        """
+        Generates channel facts to be entered into the knowledge graph.
+
+        :param channel_name: name of the channel
+        :return: generated fact list
+        """
+        channel_uuid = "channel_" + uuid.uuid4().hex
+        fact_list = [
+            Fact((channel_uuid, RDF.type, self.onto_namespace["Channel"].toPython())),
+            Fact((channel_uuid, self.onto_namespace.channel_name, channel_name), property_fact=True)
+        ]
+        return fact_list
 
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> List[Fact]:
         """
