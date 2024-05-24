@@ -276,6 +276,82 @@ def knowledge_snapshot_vehicle_perspective() -> None:
     print("\n----------------------------------------------------------------------\n")
 
 
+def knowledge_snapshot_model_perspective() -> None:
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding classification models.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - MODEL PERSPECTIVE")
+    print("###########################################################################\n")
+
+    model_instances = qt.query_all_model_instances(False)
+    for model_instance, input_len, exp_norm_meth, measuring_instruction, model_id, architecture in model_instances:
+        model_uuid = model_instance.split("#")[1]
+        sus_comp = qt.query_suspect_component_name_by_model(model_uuid)[0]
+        print(colored(model_uuid, "yellow", "on_grey", ["bold"]))
+        print(colored("\t- input len: " + input_len, "blue", "on_grey", ["bold"]))
+        print(colored("\t- exp. norm. meth.: " + exp_norm_meth, "blue", "on_grey", ["bold"]))
+        print(colored("\t- measuring inst.: " + measuring_instruction, "blue", "on_grey", ["bold"]))
+        print(colored("\t- model ID: " + model_id, "blue", "on_grey", ["bold"]))
+        print(colored("\t- architecture: " + architecture, "blue", "on_grey", ["bold"]))
+        print(colored("\t- assesses: " + sus_comp, "blue", "on_grey", ["bold"]))
+
+        for input_chan_req_instance, chan_idx in qt.query_input_chan_req_by_model(model_uuid):
+            input_chan_req_uuid = input_chan_req_instance.split("#")[1]
+            print(colored("\t- has requirement: " + input_chan_req_uuid, "blue", "on_grey", ["bold"]))
+            print(colored("\t\t- chan idx: " + chan_idx, "blue", "on_grey", ["bold"]))
+            chan_instance, chan_name = qt.query_channel_by_input_req(input_chan_req_uuid)[0]
+            chan_uuid = chan_instance.split("#")[1]
+            print(colored("\t\t- expected channel: " + chan_uuid, "blue", "on_grey", ["bold"]))
+            print(colored("\t\t- channel name: " + chan_name, "blue", "on_grey", ["bold"]))
+
+            # 'hasChannel' relation -- not available for every channel
+            has_chan_res = qt.query_suspect_component_name_by_channel(chan_uuid)
+            if len(has_chan_res) > 0:
+                comp_instance, comp_name = has_chan_res[0]
+                comp_instance_uuid = comp_instance.split("#")[1]
+                print(colored("\t\t\t- associated with component ('hasChannel'): " + comp_instance_uuid, "yellow",
+                              "on_grey", ["bold"]))
+                print(colored("\t\t\t- comp name: " + comp_name, "yellow", "on_grey", ["bold"]))
+
+            # 'hasCOI' relation -- not available for every channel
+            has_coi_res = qt.query_suspect_components_by_channel(chan_uuid)
+            if len(has_coi_res) > 0:
+                comp_instance, comp_name = has_coi_res[0]
+                comp_instance_uuid = comp_instance.split("#")[1]
+                print(colored("\t\t\t- associated with component ('hasCOI'): " + comp_instance_uuid, "yellow",
+                              "on_grey", ["bold"]))
+                print(colored("\t\t\t- comp name: " + comp_name, "yellow", "on_grey", ["bold"]))
+    print("\n----------------------------------------------------------------------\n")
+
+
+def knowledge_snapshot_channel_perspective() -> None:
+    """
+    Presents a snapshot of the knowledge currently stored in the KG regarding channels.
+    """
+    print("###########################################################################")
+    print("KNOWLEDGE SNAPSHOT - CHANNEL PERSPECTIVE")
+    print("###########################################################################\n")
+    for chan_instance, chan_name in qt.query_all_channel_instances(False):
+        chan_uuid = chan_instance.split("#")[1]
+        print(colored(chan_uuid, "yellow", "on_grey", ["bold"]))
+        print(colored("\t- chan name: " + chan_name, "blue", "on_grey", ["bold"]))
+        models = qt.query_models_by_channel(chan_uuid)
+        for m in models:
+            print(colored("\t- input for model: " + str(m).split("#")[1], "blue", "on_grey", ["bold"]))
+        has_chan_res = qt.query_suspect_component_name_by_channel(chan_uuid)
+        has_chan_str = "belongs to component:"
+        if len(has_chan_res) > 0:
+            print(colored("\t- " + has_chan_str + " " + has_chan_res[0][1], "blue", "on_grey", ["bold"]))
+        else:
+            print(colored("\t- " + has_chan_str + " ---", "blue", "on_grey", ["bold"]))
+        has_coi_res = qt.query_suspect_components_by_channel(chan_uuid)
+        if len(has_coi_res) > 0:
+            for coi in has_coi_res:
+                print(colored("\t- is of interest for component:" + " " + coi[1], "blue", "on_grey", ["bold"]))
+    print("\n----------------------------------------------------------------------\n")
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Knowledge snapshot - shows current content of KG')
     parser.add_argument('--perspective', type=str, help='perspective of snapshot [expert | diag]',
@@ -293,6 +369,8 @@ if __name__ == '__main__':
         knowledge_snapshot_subsystem_perspective()
         knowledge_snapshot_component_perspective()
         knowledge_snapshot_component_set_perspective()
+        knowledge_snapshot_model_perspective()
+        knowledge_snapshot_channel_perspective()
     elif args.perspective == 'diag':  # diagnosis
         print("###########################################################################")
         print("###########################################################################")
