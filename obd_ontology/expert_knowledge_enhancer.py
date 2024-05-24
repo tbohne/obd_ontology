@@ -645,7 +645,41 @@ class ExpertKnowledgeEnhancer:
         fact_list = self.generate_component_set_facts(new_comp_set_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    # TODO: add model and chan KG addition here
+    def add_model_to_knowledge_graph(self, input_len: int, exp_norm_method: str, measuring_instruction: str,
+                                     model_id: str, classified_comp: str, input_chan_req: List[Tuple[int, str]],
+                                     architecture: str):
+        """
+        Adds a model instance to the knowledge graph.
+
+        :param input_len: model's expected input length
+        :param exp_norm_method: expected normalization method for input data
+        :param measuring_instruction: instructions to be satisfied while recording new data
+        :param model_id: ID of the model
+        :param classified_comp: component the model is suited to classify
+        :param input_chan_req: input channel requirements
+        :param architecture: architecture type of the model
+        """
+        assert isinstance(input_len, int)
+        assert isinstance(exp_norm_method, str)
+        assert isinstance(measuring_instruction, str)
+        assert isinstance(model_id, str)
+        assert isinstance(classified_comp, str)
+        assert isinstance(architecture, str)
+
+        new_model_knowledge = ModelKnowledge(input_len, exp_norm_method, measuring_instruction, model_id,
+                                             classified_comp, input_chan_req, architecture)
+        fact_list = self.generate_model_facts(new_model_knowledge)
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
+    def add_channel_to_knowledge_graph(self, channel_name: str):
+        """
+        Adds a channel instance to the knowledge graph.
+
+        :param channel_name: name of the channel
+        """
+        assert isinstance(channel_name, str)
+        fact_list = self.generate_channel_facts(channel_name)
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
 
 if __name__ == '__main__':
