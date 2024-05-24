@@ -447,6 +447,17 @@ class ExpertKnowledgeEnhancer:
             fact_list.append(
                 Fact((comp_uuid, self.onto_namespace.use_oscilloscope, comp_knowledge.oscilloscope), property_fact=True)
             )
+
+            # draw channel connections - assumes that the channels are already part of the KG
+            associated_chan_instance = self.knowledge_graph_query_tool.query_channel_by_name(
+                comp_knowledge.associated_chan)
+            associated_chan_uuid = associated_chan_instance[0].split("#")[1]
+            fact_list.append(Fact((comp_uuid, self.onto_namespace.hasChannel, associated_chan_uuid)))
+            for coi in comp_knowledge.chan_of_interest:
+                channel_instance = self.knowledge_graph_query_tool.query_channel_by_name(coi)
+                channel_uuid = channel_instance[0].split("#")[1]
+                fact_list.append(Fact((comp_uuid, self.onto_namespace.hasCOI, channel_uuid)))
+
             for comp in comp_knowledge.affected_by:
                 # all components in the affected_by list should be defined in the KG, i.e., should have ex. 1 result
                 assert len(self.knowledge_graph_query_tool.query_suspect_component_by_name(comp)) == 1
@@ -492,6 +503,8 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
+    # TODO: generate model + channel facts here
+
     def generate_dtc_related_facts(self, dtc_knowledge: DTCKnowledge) -> List[Fact]:
         """
         Generates all facts obtained from the DTC form / template to be entered into the knowledge graph and extends
@@ -532,8 +545,14 @@ class ExpertKnowledgeEnhancer:
         fact_list = self.generate_dtc_related_facts(new_dtc_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def add_component_to_knowledge_graph(self, suspect_component: str, affected_by: List[str],
-                                         oscilloscope: bool) -> None:
+    def add_component_to_knowledge_graph(
+            self,
+            suspect_component: str,
+            affected_by: List[str],
+            oscilloscope: bool,
+            associated_chan: str = "",
+            chan_of_interest: List[str] = []
+    ) -> None:
         """
         Adds a component instance with the given properties to the knowledge graph.
 
@@ -541,13 +560,17 @@ class ExpertKnowledgeEnhancer:
         :param affected_by: list of components whose misbehavior could affect the correct functioning of the component
                             under consideration
         :param oscilloscope: whether oscilloscope measurement possible / reasonable
+        :param associated_chan: channel associated with the component (via 'hasChannel')
+        :param chan_of_interest: list of channels associated with the component (via 'hasCOI')
         """
         assert isinstance(suspect_component, str)
         assert isinstance(affected_by, list)
         assert isinstance(oscilloscope, bool)
-
+        assert isinstance(associated_chan, str)
+        assert isinstance(chan_of_interest, list)
         new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
-                                                     affected_by=affected_by)
+                                                     affected_by=affected_by, associated_chan=associated_chan,
+                                                     chan_of_interest=chan_of_interest)
         fact_list = self.generate_suspect_component_facts([new_component_knowledge])
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
@@ -569,6 +592,23 @@ class ExpertKnowledgeEnhancer:
         fact_list = self.generate_component_set_facts(new_comp_set_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
+    # TODO: add model and chan KG addition here
+
 
 if __name__ == '__main__':
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
+
+    # create channels before model
+    expert_knowledge_enhancer.add_channel_to_knowledge_graph("chan0")
+    expert_knowledge_enhancer.add_channel_to_knowledge_graph("chan1")
+    expert_knowledge_enhancer.add_channel_to_knowledge_graph("chan2")
+
+    expert_knowledge_enhancer.add_component_to_knowledge_graph(
+        "TestComp", [], True, "chan0", ["chan1", "chan2"]
+    )
+
+    # create model
+    expert_knowledge_enhancer.add_model_to_knowledge_graph(
+        42, "z-norm", "measure x", "42qq#34",
+        "TestComp", [(0, "chan0"), (1, "chan1"), (2, "chan2")], "CNN"
+    )
