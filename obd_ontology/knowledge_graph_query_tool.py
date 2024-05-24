@@ -345,6 +345,27 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
+    def query_channel_by_name(self, chan_name: str) -> List[str]:
+        """
+        Queries an oscilloscope channel by its name.
+
+        :param chan_name: name to query channel for
+        :return: osci channel
+        """
+        print("########################################################################")
+        print(colored("QUERY: osci channel by name - " + chan_name, "green", "on_grey", ["bold"]))
+        print("########################################################################")
+        chan_entry = self.complete_ontology_entry('Channel')
+        chan_name_entry = self.complete_ontology_entry('channel_name')
+        s = f"""
+            SELECT ?chan WHERE {{
+                ?chan a {chan_entry} .
+                ?chan {chan_name_entry} ?chan_name .
+                FILTER(STR(?chan_name) = "{chan_name}")
+            }}
+            """
+        return [row['chan']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+
     def query_vehicle_subsystem_by_name(self, subsystem_name: str) -> List[str]:
         """
         Queries a vehicle subsystem by its name.
@@ -1084,6 +1105,63 @@ class KnowledgeGraphQueryTool:
             for row in self.fuseki_connection.query_knowledge_graph(s, verbose)
         ]
 
+    def query_all_model_instances(self, verbose: bool = True) -> List[Tuple[str, str, str, str, str, str]]:
+        """
+        Queries all model instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all models stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all model instances")
+            print("####################################")
+        model_entry = self.complete_ontology_entry('Model')
+        input_len_entry = self.complete_ontology_entry('input_length')
+        exp_norm_meth_entry = self.complete_ontology_entry('exp_normalization_method')
+        measuring_instruction_entry = self.complete_ontology_entry('measuring_instruction')
+        model_id_entry = self.complete_ontology_entry('model_id')
+        architecture_entry = self.complete_ontology_entry('architecture')
+        s = f"""
+            SELECT ?model ?input_len ?exp_norm_meth ?measuring_instruction ?model_id ?archi WHERE {{
+                ?model a {model_entry} .
+                ?model {input_len_entry} ?input_len .
+                ?model {exp_norm_meth_entry} ?exp_norm_meth .
+                ?model {measuring_instruction_entry} ?measuring_instruction .
+                ?model {model_id_entry} ?model_id .
+                ?model {architecture_entry} ?archi .
+            }}
+            """
+        return [
+            (row['model']['value'], row['input_len']['value'], row['exp_norm_meth']['value'],
+             row['measuring_instruction']['value'], row['model_id']['value'], row['archi']['value'])
+            for row in self.fuseki_connection.query_knowledge_graph(s, verbose)
+        ]
+
+    def query_all_channel_instances(self, verbose: bool = True) -> List[Tuple[str, str]]:
+        """
+        Queries all channel instances stored in the knowledge graph.
+
+        :param verbose: if true, logging is activated
+        :return: all channels stored in the knowledge graph
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: all channel instances")
+            print("####################################")
+        channel_entry = self.complete_ontology_entry('Channel')
+        channel_name_entry = self.complete_ontology_entry('channel_name')
+        s = f"""
+            SELECT ?chan ?chan_name WHERE {{
+                ?chan a {channel_entry} .
+                ?chan {channel_name_entry} ?chan_name .
+            }}
+            """
+        return [
+            (row['chan']['value'], row['chan_name']['value'])
+            for row in self.fuseki_connection.query_knowledge_graph(s, verbose)
+        ]
+
     def query_all_parallel_rec_oscillogram_set_instances(self, verbose: bool = True) -> List[str]:
         """
         Queries all parallel recorded oscillogram sets stored in the knowledge graph.
@@ -1663,6 +1741,174 @@ class KnowledgeGraphQueryTool:
             }}
             """
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_suspect_component_name_by_model(self, model_id: str, verbose: bool = False) -> List[str]:
+        """
+        Queries the suspect component for the specified classification model.
+
+        :param model_id: ID of model instance
+        :param verbose: if true, logging is activated
+        :return: suspect component
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: suspect component for the specified classification model:", model_id)
+            print("####################################")
+        model_entry = self.complete_ontology_entry('Model')
+        id_entry = self.complete_ontology_entry(model_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        assesses_entry = self.complete_ontology_entry('assesses')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        s = f"""
+            SELECT ?comp_name WHERE {{
+                {{ ?model a {model_entry} . }}
+                FILTER(STR(?model) = "{id_entry}") .
+                ?model {assesses_entry} ?comp .
+                ?comp {comp_name_entry} ?comp_name .
+            }}
+            """
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_input_chan_req_by_model(self, model_id: str, verbose: bool = False) -> List[Tuple[str, str]]:
+        """
+        Queries the input channel requirements for the specified model.
+
+        :param model_id: ID of model instance
+        :param verbose: if true, logging is activated
+        :return: input channel requirements
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: input channel requirements for the specified model:", model_id)
+            print("####################################")
+        model_entry = self.complete_ontology_entry('Model')
+        id_entry = self.complete_ontology_entry(model_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        has_req_entry = self.complete_ontology_entry('hasRequirement')
+        chan_idx_entry = self.complete_ontology_entry('channel_idx')
+        s = f"""
+            SELECT ?input_chan_req ?chan_idx WHERE {{
+                {{ ?model a {model_entry} . }}
+                FILTER(STR(?model) = "{id_entry}") .
+                ?model {has_req_entry} ?input_chan_req .
+                ?input_chan_req {chan_idx_entry} ?chan_idx .
+            }}
+            """
+        return [(row['input_chan_req']['value'], row['chan_idx']['value']) for row in
+                self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_channel_by_input_req(self, input_req_id: str, verbose: bool = False) -> List[Tuple[str, str]]:
+        """
+        Queries the channel for the specified input requirements.
+
+        :param input_req_id: ID of input req instance
+        :param verbose: if true, logging is activated
+        :return: channel
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: channel for the specified input requirements:", input_req_id)
+            print("####################################")
+        input_req_entry = self.complete_ontology_entry('InputChannelRequirement')
+        id_entry = self.complete_ontology_entry(input_req_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        expects_entry = self.complete_ontology_entry('expects')
+        channel_name_entry = self.complete_ontology_entry('channel_name')
+        s = f"""
+            SELECT ?chan ?chan_name WHERE {{
+                {{ ?input_req a {input_req_entry} . }}
+                FILTER(STR(?input_req) = "{id_entry}") .
+                ?input_req {expects_entry} ?chan .
+                ?chan {channel_name_entry} ?chan_name .
+            }}
+            """
+        return [(row['chan']['value'], row['chan_name']['value']) for row in
+                self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_suspect_component_name_by_channel(self, channel_id: str, verbose: bool = False) -> List[Tuple[str, str]]:
+        """
+        Queries the suspect component ('hasChannel') for the specified channel.
+
+        :param channel_id: ID of channel
+        :param verbose: if true, logging is activated
+        :return: suspect component (via 'hasChannel')
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: suspect component ('hasChannel') for the specified channel:", channel_id)
+            print("####################################")
+        channel_entry = self.complete_ontology_entry('Channel')
+        id_entry = self.complete_ontology_entry(channel_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        has_chan_entry = self.complete_ontology_entry('hasChannel')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        s = f"""
+            SELECT ?comp ?comp_name WHERE {{
+                ?chan a {channel_entry} .
+                FILTER(STR(?chan) = "{id_entry}") .
+                ?comp {has_chan_entry} ?chan .
+                ?comp {comp_name_entry} ?comp_name .
+            }}
+            """
+        return [(row['comp']['value'], row['comp_name']['value']) for row in
+                self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_models_by_channel(self, channel_id: str, verbose: bool = False) -> List[Tuple[str]]:
+        """
+        Queries the classification models for the specified channel.
+
+        :param channel_id: ID of channel
+        :param verbose: if true, logging is activated
+        :return: models
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: classification models for the specified channel:", channel_id)
+            print("####################################")
+        channel_entry = self.complete_ontology_entry('Channel')
+        id_entry = self.complete_ontology_entry(channel_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        has_req_entry = self.complete_ontology_entry('hasRequirement')
+        expects_entry = self.complete_ontology_entry('expects')
+        model_entry = self.complete_ontology_entry('Model')
+        s = f"""
+            SELECT ?model WHERE {{
+                ?chan a {channel_entry} .
+                FILTER(STR(?chan) = "{id_entry}") .
+                ?model a {model_entry} .
+                ?model {has_req_entry} ?input_req .
+                ?input_req {expects_entry} ?chan .
+            }}
+            """
+        return [row['model']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_suspect_components_by_channel(self, channel_id: str, verbose: bool = False) -> List[Tuple[str, str]]:
+        """
+        Queries the suspect components ('hasCOI') for the specified channel.
+
+        :param channel_id: ID of channel
+        :param verbose: if true, logging is activated
+        :return: suspect components (via 'hasCOI')
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: suspect components ('hasCOI') for the specified channel:", channel_id)
+            print("####################################")
+        channel_entry = self.complete_ontology_entry('Channel')
+        id_entry = self.complete_ontology_entry(channel_id)
+        id_entry = id_entry.replace('<', '').replace('>', '')
+        has_coi_entry = self.complete_ontology_entry('hasCOI')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        s = f"""
+            SELECT ?comp ?comp_name WHERE {{
+                ?chan a {channel_entry} .
+                FILTER(STR(?chan) = "{id_entry}") .
+                ?comp {has_coi_entry} ?chan .
+                ?comp {comp_name_entry} ?comp_name .
+            }}
+            """
+        return [(row['comp']['value'], row['comp_name']['value']) for row in
+                self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_reason_for_classification(self, osci_classification_id: str, verbose: bool = True) -> List[str]:
         """
