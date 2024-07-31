@@ -92,6 +92,16 @@
     
 
 
+    <!-- http://www.semanticweb.org/diag_ontology#elementOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#elementOf">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/diag_ontology#SubComponent"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:label xml:lang="en">elementOf</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/diag_ontology#entails -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/diag_ontology#entails">
@@ -927,6 +937,15 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#ParallelRecOscillogramSet">
         <rdfs:label xml:lang="en">ParallelRecOscillogramSet</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/diag_ontology#SubComponent -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/diag_ontology#SubComponent">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/diag_ontology#SuspectComponent"/>
+        <rdfs:label xml:lang="en">SubComponent</rdfs:label>
     </owl:Class>
     
 
