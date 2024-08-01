@@ -17,6 +17,7 @@ from obd_ontology.dtc_knowledge import DTCKnowledge
 from obd_ontology.fact import Fact
 from obd_ontology.knowledge_graph_query_tool import KnowledgeGraphQueryTool
 from obd_ontology.model_knowledge import ModelKnowledge
+from obd_ontology.sub_component_knowledge import SubComponentKnowledge
 
 
 class ExpertKnowledgeEnhancer:
@@ -466,6 +467,52 @@ class ExpertKnowledgeEnhancer:
 
         return fact_list
 
+    def generate_sub_component_facts(self, sub_comp_knowledge_list: List[SubComponentKnowledge]) -> List[Fact]:
+        """
+        Generates the `SubComponent`-related facts to be entered into the knowledge graph.
+
+        :param sub_comp_knowledge_list: list of parsed subcomponents
+        :return: generated fact list
+        """
+        fact_list = []
+        for sub_comp_knowledge in sub_comp_knowledge_list:
+            sub_comp_name = sub_comp_knowledge.sub_component
+            sub_comp_uuid = "sub_comp_" + uuid.uuid4().hex
+            # check whether subcomponent to be added is already part of the KG
+            sub_comp_instance = self.knowledge_graph_query_tool.query_sub_component_by_name(sub_comp_name)
+            if len(sub_comp_instance) > 0:
+                print("Specified subcomponent (" + sub_comp_name + ") already present in KG")
+                sub_comp_uuid = sub_comp_instance[0].split("#")[1]
+            else:
+                fact_list.append(Fact((sub_comp_uuid, RDF.type, self.onto_namespace["SubComponent"].toPython())))
+                fact_list.append(
+                    Fact((sub_comp_uuid, self.onto_namespace.component_name, sub_comp_name), property_fact=True)
+                )
+            fact_list.append(
+                Fact((sub_comp_uuid, self.onto_namespace.use_oscilloscope, sub_comp_knowledge.oscilloscope),
+                     property_fact=True)
+            )
+            # connect to associated suspect component
+            suspect_comp_instance = self.knowledge_graph_query_tool.query_suspect_component_by_name(
+                sub_comp_knowledge.associated_suspect_component
+            )
+            suspect_comp_uuid = suspect_comp_instance[0].split("#")[1]
+            fact_list.append(Fact((sub_comp_uuid, self.onto_namespace.elementOf, suspect_comp_uuid)))
+
+            # draw channel connections - assumes that the channels are already part of the KG
+            associated_chan_instance = self.knowledge_graph_query_tool.query_channel_by_name(
+                sub_comp_knowledge.associated_chan
+            )
+            associated_chan_uuid = associated_chan_instance[0].split("#")[1]
+            fact_list.append(Fact((sub_comp_uuid, self.onto_namespace.hasChannel, associated_chan_uuid)))
+            channel_instance = self.knowledge_graph_query_tool.query_channel_by_name(
+                sub_comp_knowledge.chan_of_interest
+            )
+            channel_uuid = channel_instance[0].split("#")[1]
+            fact_list.append(Fact((sub_comp_uuid, self.onto_namespace.hasCOI, channel_uuid)))
+
+        return fact_list
+
     def generate_component_set_facts(self, comp_set_knowledge: ComponentSetKnowledge) -> List[Fact]:
         """
         Generates vehicle component set facts to be entered into the knowledge graph.
@@ -625,6 +672,41 @@ class ExpertKnowledgeEnhancer:
                                                      affected_by=affected_by, associated_chan=associated_chan,
                                                      chan_of_interest=chan_of_interest)
         fact_list = self.generate_suspect_component_facts([new_component_knowledge])
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
+    def add_sub_component_to_knowledge_graph(
+            self,
+            sub_component: str,
+            suspect_component: str,
+            oscilloscope: bool,
+            associated_chan: str = "",
+            chan_of_interest: str = ""
+    ) -> None:
+        """
+        Adds a `SubComponent` instance with the given properties to the knowledge graph.
+
+        Although subcomponents can have multiple COI and associated channels based on the ontology (inherited),
+        we restrict it to exactly one channel (hasCOI == hasChannel) for the moment.
+
+        :param sub_component: subcomponent to be added
+        :param suspect_component: corresponding suspect component
+        :param oscilloscope: whether oscilloscope measurement possible / reasonable
+        :param associated_chan: channel associated with the subcomponent (via 'hasChannel')
+        :param chan_of_interest: channel associated with the subcomponent (via 'hasCOI')
+        """
+        assert isinstance(sub_component, str)
+        assert isinstance(suspect_component, str)
+        assert isinstance(oscilloscope, bool)
+        assert isinstance(associated_chan, str)
+        assert isinstance(chan_of_interest, str)
+        new_sub_component_knowledge = SubComponentKnowledge(
+            sub_component=sub_component,
+            associated_suspect_component=suspect_component,
+            oscilloscope=oscilloscope,
+            associated_chan=associated_chan,
+            chan_of_interest=chan_of_interest
+        )
+        fact_list = self.generate_sub_component_facts([new_sub_component_knowledge])
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def add_component_set_to_knowledge_graph(self, component_set: str, includes: List[str],
