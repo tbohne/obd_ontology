@@ -306,13 +306,14 @@ def knowledge_snapshot_model_perspective() -> None:
             print(colored("\t\t- channel name: " + chan_name, "blue", "on_grey", ["bold"]))
 
             # 'hasChannel' relation -- not available for every channel
-            has_chan_res = qt.query_suspect_component_name_by_channel(chan_uuid)
+            has_chan_res = qt.query_suspect_components_name_by_channel(chan_uuid)
             if len(has_chan_res) > 0:
-                comp_instance, comp_name = has_chan_res[0]
-                comp_instance_uuid = comp_instance.split("#")[1]
-                print(colored("\t\t\t- associated with component ('hasChannel'): " + comp_instance_uuid, "yellow",
-                              "on_grey", ["bold"]))
-                print(colored("\t\t\t- comp name: " + comp_name, "yellow", "on_grey", ["bold"]))
+                for chan_res in has_chan_res:
+                    comp_instance, comp_name = chan_res
+                    comp_instance_uuid = comp_instance.split("#")[1]
+                    print(colored("\t\t\t- associated with component ('hasChannel'): " + comp_instance_uuid, "yellow",
+                                  "on_grey", ["bold"]))
+                    print(colored("\t\t\t- comp name: " + comp_name, "yellow", "on_grey", ["bold"]))
 
             # 'hasCOI' relation -- not available for every channel
             has_coi_res = qt.query_suspect_components_by_channel(chan_uuid)
@@ -339,16 +340,17 @@ def knowledge_snapshot_channel_perspective() -> None:
         models = qt.query_models_by_channel(chan_uuid)
         for m in models:
             print(colored("\t- input for model: " + str(m).split("#")[1], "blue", "on_grey", ["bold"]))
-        has_chan_res = qt.query_suspect_component_name_by_channel(chan_uuid)
-        has_chan_str = "belongs to component:"
+        has_chan_res = qt.query_suspect_components_name_by_channel(chan_uuid)
+        has_chan_str = "belongs to component(s):"
         if len(has_chan_res) > 0:
-            print(colored("\t- " + has_chan_str + " " + has_chan_res[0][1], "blue", "on_grey", ["bold"]))
+            components = "; ".join([chan_res[1] for chan_res in has_chan_res])
+            print(colored("\t- " + has_chan_str + " " + components, "blue", "on_grey", ["bold"]))
         else:
             print(colored("\t- " + has_chan_str + " ---", "blue", "on_grey", ["bold"]))
         has_coi_res = qt.query_suspect_components_by_channel(chan_uuid)
         if len(has_coi_res) > 0:
-            for coi in has_coi_res:
-                print(colored("\t- is of interest for component:" + " " + coi[1], "blue", "on_grey", ["bold"]))
+            cois = "; ".join([coi[1] for coi in has_coi_res])
+            print(colored("\t- is of interest for component(s):" + " " + cois, "blue", "on_grey", ["bold"]))
     print("\n----------------------------------------------------------------------\n")
 
 
