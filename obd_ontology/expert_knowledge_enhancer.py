@@ -603,7 +603,7 @@ class ExpertKnowledgeEnhancer:
             suspect_component: str,
             affected_by: List[str],
             oscilloscope: bool,
-            associated_chan: str = "",
+            associated_chan: List[str] = [],
             chan_of_interest: List[str] = []
     ) -> None:
         """
@@ -613,13 +613,13 @@ class ExpertKnowledgeEnhancer:
         :param affected_by: list of components whose misbehavior could affect the correct functioning of the component
                             under consideration
         :param oscilloscope: whether oscilloscope measurement possible / reasonable
-        :param associated_chan: channel associated with the component (via 'hasChannel')
+        :param associated_chan: channels associated with the component (via 'hasChannel')
         :param chan_of_interest: list of channels associated with the component (via 'hasCOI')
         """
         assert isinstance(suspect_component, str)
         assert isinstance(affected_by, list)
         assert isinstance(oscilloscope, bool)
-        assert isinstance(associated_chan, str)
+        assert isinstance(associated_chan, list)
         assert isinstance(chan_of_interest, list)
         new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
                                                      affected_by=affected_by, associated_chan=associated_chan,
@@ -690,10 +690,13 @@ if __name__ == '__main__':
     expert_knowledge_enhancer.add_channel_to_knowledge_graph("chan1")
     expert_knowledge_enhancer.add_channel_to_knowledge_graph("chan2")
 
+    # example: the component itself has one channel, but two more are of interest
     expert_knowledge_enhancer.add_component_to_knowledge_graph(
-        "TestComp", [], True, "chan0", ["chan1", "chan2"]
+        "TestComp", [], True, ["chan0"], ["chan0", "chan1", "chan2"]
     )
 
+    # we don't classify the union of `hasChannel` and `hasCOI`, we only classify COI
+    # (`hasChannel` is only providing the information of "where" (component) a channel is supposed to be recorded)
     # create model
     expert_knowledge_enhancer.add_model_to_knowledge_graph(
         42, "z-norm", "measure x", "42qq#34",
