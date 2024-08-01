@@ -1846,17 +1846,17 @@ class KnowledgeGraphQueryTool:
         return [(row['chan']['value'], row['chan_name']['value']) for row in
                 self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_suspect_component_name_by_channel(self, channel_id: str, verbose: bool = False) -> List[Tuple[str, str]]:
+    def query_suspect_component_names_by_channel(self, channel_id: str, verbose: bool = False) -> List[Tuple[str, str]]:
         """
-        Queries the suspect component ('hasChannel') for the specified channel.
+        Queries the suspect component(s) ('hasChannel') for the specified channel.
 
         :param channel_id: ID of channel
         :param verbose: if true, logging is activated
-        :return: suspect component (via 'hasChannel')
+        :return: suspect component(s) (via 'hasChannel')
         """
         if verbose:
             print("####################################")
-            print("QUERY: suspect component ('hasChannel') for the specified channel:", channel_id)
+            print("QUERY: suspect component(s) ('hasChannel') for the specified channel:", channel_id)
             print("####################################")
         channel_entry = self.complete_ontology_entry('Channel')
         id_entry = self.complete_ontology_entry(channel_id)
