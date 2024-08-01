@@ -345,6 +345,27 @@ class KnowledgeGraphQueryTool:
             """
         return [row['comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
+    def query_sub_component_by_name(self, sub_component_name: str) -> List[str]:
+        """
+        Queries a subcomponent by its name.
+
+        :param sub_component_name: name to query subcomponent for
+        :return: subcomponent
+        """
+        print("########################################################################")
+        print(colored("QUERY: subcomponents by name - " + sub_component_name, "green", "on_grey", ["bold"]))
+        print("########################################################################")
+        sub_comp_entry = self.complete_ontology_entry('SubComponent')
+        component_name_entry = self.complete_ontology_entry('component_name')
+        s = f"""
+            SELECT ?sub_comp WHERE {{
+                ?sub_comp a {sub_comp_entry} .
+                ?sub_comp {component_name_entry} ?comp_name .
+                FILTER(STR(?comp_name) = "{sub_component_name}")
+            }}
+            """
+        return [row['sub_comp']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
+
     def query_channel_by_name(self, chan_name: str) -> List[str]:
         """
         Queries an oscilloscope channel by its name.
