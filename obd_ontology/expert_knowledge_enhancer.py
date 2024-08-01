@@ -679,32 +679,27 @@ class ExpertKnowledgeEnhancer:
             sub_component: str,
             suspect_component: str,
             oscilloscope: bool,
-            associated_chan: str = "",
-            chan_of_interest: str = ""
     ) -> None:
         """
         Adds a `SubComponent` instance with the given properties to the knowledge graph.
 
         Although subcomponents can have multiple COI and associated channels based on the ontology (inherited),
         we restrict it to exactly one channel (hasCOI == hasChannel) for the moment.
+        Also, the name of the subcomponent is always the channel name atm.
 
         :param sub_component: subcomponent to be added
         :param suspect_component: corresponding suspect component
         :param oscilloscope: whether oscilloscope measurement possible / reasonable
-        :param associated_chan: channel associated with the subcomponent (via 'hasChannel')
-        :param chan_of_interest: channel associated with the subcomponent (via 'hasCOI')
         """
         assert isinstance(sub_component, str)
         assert isinstance(suspect_component, str)
         assert isinstance(oscilloscope, bool)
-        assert isinstance(associated_chan, str)
-        assert isinstance(chan_of_interest, str)
         new_sub_component_knowledge = SubComponentKnowledge(
             sub_component=sub_component,
             associated_suspect_component=suspect_component,
             oscilloscope=oscilloscope,
-            associated_chan=associated_chan,
-            chan_of_interest=chan_of_interest
+            associated_chan=sub_component,
+            chan_of_interest=sub_component
         )
         fact_list = self.generate_sub_component_facts([new_sub_component_knowledge])
         self.fuseki_connection.extend_knowledge_graph(fact_list)
