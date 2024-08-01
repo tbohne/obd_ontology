@@ -24,16 +24,18 @@ if __name__ == '__main__':
 
     # add components (in this case, we assume that the associated channels and the COI are equal)
     expert_knowledge_enhancer.add_component_to_knowledge_graph(
-        "Saugrohrdrucksensor", [], True,
-        channels[4:8], channels[4:8]
+        "Saugrohrdrucksensor", [], True, channels[4:8], channels[4:8]
     )
     expert_knowledge_enhancer.add_component_to_knowledge_graph(
-        "Lambdasonde", ["Saugrohrdrucksensor"], True,
-        channels[0:4], channels[0:4]
+        "Lambdasonde", ["Saugrohrdrucksensor"], True, channels[0:4], channels[0:4]
     )
 
     # add subcomponents
-    # TODO
+    # in this case, we have one subcomponent for each channel, this is not necessarily always the case
+    for chan in channels[0:4]:
+        expert_knowledge_enhancer.add_sub_component_to_knowledge_graph(chan, "Lambdasonde", True)
+    for chan in channels[4:]:
+        expert_knowledge_enhancer.add_sub_component_to_knowledge_graph(chan, "Saugrohrdrucksensor", True)
 
     # add DTC
     expert_knowledge_enhancer.add_dtc_to_knowledge_graph(
