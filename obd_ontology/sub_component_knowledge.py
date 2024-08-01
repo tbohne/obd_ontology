@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 # @author Tim Bohne
 
-from typing import List
-
 
 class SubComponentKnowledge:
     """
@@ -11,15 +9,18 @@ class SubComponentKnowledge:
     """
 
     def __init__(self, sub_component: str, associated_suspect_component: str, oscilloscope: bool,
-                 associated_chan: List[str] = [], chan_of_interest: List[str] = []) -> None:
+                 associated_chan: str = "", chan_of_interest: str = "") -> None:
         """
         Initializes the subcomponent knowledge.
+
+        Although subcomponents can have multiple COI and associated channels based on the ontology (inherited),
+        we restrict it to exactly one channel (hasCOI == hasChannel) for the moment.
 
         :param sub_component: subcomponent name
         :param associated_suspect_component: component the subcomponent is element of
         :param oscilloscope: whether oscilloscope measurement possible / reasonable
-        :param associated_chan: channels associated with the component, i.e., 'hasChannel' relation
-        :param chan_of_interest: proposed channels of interest, i.e., 'hasCOI' relation
+        :param associated_chan: channel associated with the component, i.e., 'hasChannel' relation
+        :param chan_of_interest: proposed channel of interest, i.e., 'hasCOI' relation
         """
         self.sub_component = sub_component
         self.associated_suspect_component = associated_suspect_component
@@ -37,6 +38,6 @@ class SubComponentKnowledge:
                 "SubComponent: " + self.sub_component
                 + "\nAssociated suspect component: " + self.associated_suspect_component
                 + "\nUse Oscilloscope: " + str(self.oscilloscope)
-                + "\nAssociated Channels: " + str(self.associated_chan)
-                + "\nCOI: " + str(self.chan_of_interest)
+                + "\nAssociated Channel: " + self.associated_chan
+                + "\nCOI: " + self.chan_of_interest
         )
