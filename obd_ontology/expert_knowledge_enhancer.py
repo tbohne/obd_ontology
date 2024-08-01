@@ -450,10 +450,10 @@ class ExpertKnowledgeEnhancer:
             )
 
             # draw channel connections - assumes that the channels are already part of the KG
-            associated_chan_instance = self.knowledge_graph_query_tool.query_channel_by_name(
-                comp_knowledge.associated_chan)
-            associated_chan_uuid = associated_chan_instance[0].split("#")[1]
-            fact_list.append(Fact((comp_uuid, self.onto_namespace.hasChannel, associated_chan_uuid)))
+            for chan in comp_knowledge.associated_chan:
+                associated_chan_instance = self.knowledge_graph_query_tool.query_channel_by_name(chan)
+                associated_chan_uuid = associated_chan_instance[0].split("#")[1]
+                fact_list.append(Fact((comp_uuid, self.onto_namespace.hasChannel, associated_chan_uuid)))
             for coi in comp_knowledge.chan_of_interest:
                 channel_instance = self.knowledge_graph_query_tool.query_channel_by_name(coi)
                 channel_uuid = channel_instance[0].split("#")[1]
