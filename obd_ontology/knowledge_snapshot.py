@@ -306,7 +306,7 @@ def knowledge_snapshot_model_perspective() -> None:
             print(colored("\t\t- channel name: " + chan_name, "blue", "on_grey", ["bold"]))
 
             # 'hasChannel' relation -- not available for every channel
-            has_chan_res = qt.query_suspect_components_name_by_channel(chan_uuid)
+            has_chan_res = qt.query_suspect_component_names_by_channel(chan_uuid)
             if len(has_chan_res) > 0:
                 for chan_res in has_chan_res:
                     comp_instance, comp_name = chan_res
@@ -340,7 +340,7 @@ def knowledge_snapshot_channel_perspective() -> None:
         models = qt.query_models_by_channel(chan_uuid)
         for m in models:
             print(colored("\t- input for model: " + str(m).split("#")[1], "blue", "on_grey", ["bold"]))
-        has_chan_res = qt.query_suspect_components_name_by_channel(chan_uuid)
+        has_chan_res = qt.query_suspect_component_names_by_channel(chan_uuid)
         has_chan_str = "belongs to component(s):"
         if len(has_chan_res) > 0:
             components = "; ".join([chan_res[1] for chan_res in has_chan_res])
