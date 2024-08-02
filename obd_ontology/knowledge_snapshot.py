@@ -101,6 +101,10 @@ def knowledge_snapshot_component_perspective() -> None:
               qt.query_affected_by_relations_by_suspect_component(comp, False))
         print(colored("\t- verifies:", "blue", "on_grey", ["bold"]),
               qt.query_verifies_relation_by_suspect_component(comp, False))
+        print(colored("\t- has subcomponents:", "blue", "on_grey", ["bold"]))
+        for sub_comp in qt.query_sub_components_by_component(comp, False):
+            print(colored("\t\t- " + sub_comp, "blue", "on_grey", ["bold"]))
+
     print("\n----------------------------------------------------------------------\n")
 
 
