@@ -41,3 +41,7 @@ if __name__ == '__main__':
     expert_knowledge_enhancer.add_dtc_to_knowledge_graph(
         "P0172", [], "Gemisch zu fett (Bank 1)", [], ["Lambdasonde"]
     )
+
+    # TODO: add the model knowledge once trained
+    #   - there should be 10 models (one for each channel in isolation + "Lambdasonde" + "Saugrohrdrucksensor")
+    # expert_knowledge_enhancer.add_model_to_knowledge_graph()
