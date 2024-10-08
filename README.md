@@ -5,7 +5,7 @@
 
 > Ontology for capturing knowledge about automotive [on-board diagnostics](https://en.wikipedia.org/wiki/On-board_diagnostics) (OBD), particularly [diagnostic trouble codes](https://en.wikipedia.org/wiki/OBD-II_PIDs) (DTCs). The objective is to build up a knowledge graph based on this ontology by populating it with large amounts of instance data (cf. `knowledge_base/live_kg_backups/`) as well as functionalities for knowledge acquisition, enhancement and retrieval.
 
-![](img/obd_ontology_v17.svg)
+![](img/obd_ontology_v18.svg)
 
 ## Three Levels of Abstraction
 
