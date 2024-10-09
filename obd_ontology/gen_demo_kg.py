@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # adding the two multichannel ANNs
     lambda_model = {
         'exp_normalization_method': 'z-normalization',
-        'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binäre Klassifizierung von'
+        'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binären Klassifizierung von'
                                  ' Lambdasonden-Anomalien in multivariaten Zeitreihen',
         'architecture': 'XCM',
         'model_id': 'Lambdasonde_XCM_v1_fRLed6zx6AGCEvszx2bT6F',
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     )
     pressure_model = {
         'exp_normalization_method': 'z-normalization',
-        'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binäre Klassifizierung von'
+        'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binären Klassifizierung von'
                                  ' Saugrohrdrucksensor-Anomalien in multivariaten Zeitreihen',
         'architecture': 'XCM',
         'model_id': 'Saugrohrdrucksensor_XCM_v1_H5bqdN5pjTmTs6RGaCPEqL',
