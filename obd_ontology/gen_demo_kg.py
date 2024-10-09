@@ -44,4 +44,44 @@ if __name__ == '__main__':
 
     # TODO: add the model knowledge once trained
     #   - there should be 10 models (one for each channel in isolation + "Lambdasonde" + "Saugrohrdrucksensor")
-    # expert_knowledge_enhancer.add_model_to_knowledge_graph()
+
+    # TODO: how do we apply the rule-based models?
+
+    # adding the two multichannel ANNs
+    lambda_model = {
+        'exp_normalization_method': 'z-normalization',
+        'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binäre Klassifizierung von'
+                                 ' Lambdasonden-Anomalien in multivariaten Zeitreihen',
+        'architecture': 'XCM',
+        'model_id': 'Lambdasonde_XCM_v1_fRLed6zx6AGCEvszx2bT6F',
+        'input_length': 500,
+        'assesses': 'Lambdasonde',
+        'hasRequirement': [(i, chan) for i, chan in enumerate(channels[0:4])],
+        # TODO: the following three are not (yet) part of the ontology
+        'format': 'pth',
+        'test_acc': 0.9565,
+        'output': 'bool'
+    }
+    expert_knowledge_enhancer.add_model_to_knowledge_graph(
+        lambda_model['input_length'], lambda_model['exp_normalization_method'], lambda_model['measuring_instruction'],
+        lambda_model['model_id'], lambda_model['assesses'], lambda_model['hasRequirement'], lambda_model['architecture']
+    )
+    pressure_model = {
+        'exp_normalization_method': 'z-normalization',
+        'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binäre Klassifizierung von'
+                                 ' Saugrohrdrucksensor-Anomalien in multivariaten Zeitreihen',
+        'architecture': 'XCM',
+        'model_id': 'Saugrohrdrucksensor_XCM_v1_H5bqdN5pjTmTs6RGaCPEqL',
+        'input_length': 500,
+        'assesses': 'Saugrohrdrucksensor',
+        'hasRequirement': [(i, chan) for i, chan in enumerate(channels[4:])],
+        # TODO: the following three are not (yet) part of the ontology
+        'format': 'pth',
+        'test_acc': 1.0,
+        'output': 'bool'
+    }
+    expert_knowledge_enhancer.add_model_to_knowledge_graph(
+        pressure_model['input_length'], pressure_model['exp_normalization_method'],
+        pressure_model['measuring_instruction'], pressure_model['model_id'], pressure_model['assesses'],
+        pressure_model['hasRequirement'], pressure_model['architecture']
+    )
