@@ -964,6 +964,33 @@ class KnowledgeGraphQueryTool:
             """
         return [row['sub_comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
 
+    def query_super_component(self, sub_component: str, verbose: bool = True) -> List[str]:
+        """
+        Queries the super component for the specified sub component.
+
+        :param sub_component: sub component to query super component for
+        :param verbose: if true, logging is activated
+        :return: super component
+        """
+        if verbose:
+            print("########################################################################")
+            print(colored("QUERY: super component by sub component " + sub_component, "green", "on_grey", ["bold"]))
+            print("########################################################################")
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        name_entry = self.complete_ontology_entry('component_name')
+        sub_comp_entry = self.complete_ontology_entry('SubComponent')
+        element_of_entry = self.complete_ontology_entry('elementOf')
+        s = f"""
+            SELECT ?comp_name WHERE {{
+                ?sub_comp a {sub_comp_entry} .
+                ?sub_comp {name_entry} "{sub_component}" .
+                ?comp a {comp_entry} .
+                ?comp {name_entry} ?comp_name .
+                ?sub_comp {element_of_entry} ?comp .
+            }}
+            """
+        return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, False)]
+
     def query_verifies_relations_by_component_set(self, set_name: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect components that can verify the specified component set.
