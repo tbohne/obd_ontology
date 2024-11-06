@@ -34,15 +34,22 @@ $ pip install .
 $ ./fuseki-server
 ```
 
-**<u>Launch knowledge graph from RDF serialization (e.g. `.nt` / `.owl` / `.ttl` file):</u>**
+**<u>Prepare *Fuseki*:</u>**
 - navigate to `localhost:3030`
 - `manage` -> `new dataset`
     - Dataset name: `OBD`
     - Dataset type: `Persistent (TDB2) – dataset will persist across Fuseki restarts`
 - `create dataset`
+
+**<u>Launch existing knowledge graph from RDF serialization (e.g. `.nt` / `.owl` / `.ttl` file):</u>**
 - `add data` -> `select files`
     - select knowledge graph file, e.g., `knowledge_base/test_kg.nt`
     - `upload now`
+
+**<u>Generate demonstrator knowledge graph (no additional launch required):</u>**
+```
+$ python obd_ontology/gen_demo_kg.py
+```
 
 Now the knowledge graph is hosted on the *Fuseki* server and can be queried, extended or updated via the SPARQL endpoints `/OBD/sparql`, `/OBD/data` and `/OBD/update` respectively.
 
