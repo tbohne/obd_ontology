@@ -1404,6 +1404,88 @@ class KnowledgeGraphQueryTool:
             """
         return [row['model_id']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
+    def query_rule_based_model_meta_info_by_component(
+            self, component: str, verbose: bool = True
+    ) -> List[Tuple[str, str, str]]:
+        """
+        Queries the rule-based model meta info for the specified component.
+        Filters the model architecture based on "rule-based".
+
+        :param component: component to query model meta info for
+        :param verbose: if true, logging is activated
+        :return: normalization method, model id, input length
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: model meta info for the specified component:", component)
+            print("####################################")
+
+        model_entry = self.complete_ontology_entry('Model')
+        input_len_entry = self.complete_ontology_entry('input_length')
+        model_id_entry = self.complete_ontology_entry('model_id')
+        norm_entry = self.complete_ontology_entry('exp_normalization_method')
+        assesses_entry = self.complete_ontology_entry('assesses')
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        archi_entry = self.complete_ontology_entry('architecture')
+        s = f"""
+            SELECT ?norm ?id ?in_len WHERE {{
+                ?model a {model_entry} .
+                ?model {norm_entry} ?norm .
+                ?model {model_id_entry} ?id .
+                ?model {input_len_entry} ?in_len .
+                ?model {archi_entry} ?archi .
+                FILTER(STR(?archi) = "rule-based")
+                ?comp a {comp_entry} .
+                ?model {assesses_entry} ?comp .
+                ?comp {comp_name_entry} ?comp_name .
+                FILTER(STR(?comp_name) = "{component}")
+            }}
+            """
+        return [(row['norm']['value'], row['id']['value'], row['in_len']['value'])
+                for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
+    def query_xcm_model_meta_info_by_component(
+            self, component: str, verbose: bool = True
+    ) -> List[Tuple[str, str, str]]:
+        """
+        Queries the XCM model meta info for the specified component.
+        Filters the model architecture based on "XCM".
+
+        :param component: component to query model meta info for
+        :param verbose: if true, logging is activated
+        :return: normalization method, model id, input length
+        """
+        if verbose:
+            print("####################################")
+            print("QUERY: model meta info for the specified component:", component)
+            print("####################################")
+
+        model_entry = self.complete_ontology_entry('Model')
+        input_len_entry = self.complete_ontology_entry('input_length')
+        model_id_entry = self.complete_ontology_entry('model_id')
+        norm_entry = self.complete_ontology_entry('exp_normalization_method')
+        assesses_entry = self.complete_ontology_entry('assesses')
+        comp_entry = self.complete_ontology_entry('SuspectComponent')
+        comp_name_entry = self.complete_ontology_entry('component_name')
+        archi_entry = self.complete_ontology_entry('architecture')
+        s = f"""
+            SELECT ?norm ?id ?in_len WHERE {{
+                ?model a {model_entry} .
+                ?model {norm_entry} ?norm .
+                ?model {model_id_entry} ?id .
+                ?model {input_len_entry} ?in_len .
+                ?model {archi_entry} ?archi .
+                FILTER(STR(?archi) = "XCM")
+                ?comp a {comp_entry} .
+                ?model {assesses_entry} ?comp .
+                ?comp {comp_name_entry} ?comp_name .
+                FILTER(STR(?comp_name) = "{component}")
+            }}
+            """
+        return [(row['norm']['value'], row['id']['value'], row['in_len']['value'])
+                for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
+
     def query_suspect_component_name_by_id(self, component_id: str, verbose: bool = True) -> List[str]:
         """
         Queries the suspect component name for the specified component ID.
