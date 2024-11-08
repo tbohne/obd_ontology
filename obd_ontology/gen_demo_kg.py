@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     # adding the two multichannel ANNs
     lambda_model = {
-        'exp_normalization_method': 'z-normalization',
+        'exp_normalization_method': 'z_norm',
         'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binären Klassifizierung von'
                                  ' Lambdasonden-Anomalien in multivariaten Zeitreihen',
         'architecture': 'XCM',
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         lambda_model['model_id'], lambda_model['assesses'], lambda_model['hasRequirement'], lambda_model['architecture']
     )
     pressure_model = {
-        'exp_normalization_method': 'z-normalization',
+        'exp_normalization_method': 'z_norm',
         'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binären Klassifizierung von'
                                  ' Saugrohrdrucksensor-Anomalien in multivariaten Zeitreihen',
         'architecture': 'XCM',
@@ -84,4 +84,36 @@ if __name__ == '__main__':
         pressure_model['input_length'], pressure_model['exp_normalization_method'],
         pressure_model['measuring_instruction'], pressure_model['model_id'], pressure_model['assesses'],
         pressure_model['hasRequirement'], pressure_model['architecture']
+    )
+
+    rule_based_lambda_model = {
+        'exp_normalization_method': '',  # raw data expected
+        'measuring_instruction': 'rule-based model -- hand-crafted classification rules for channels',
+        'architecture': 'rule-based',
+        'model_id': 'lambda_rule_based_univariate_ts_classification_model_001',
+        'input_length': 500,
+        'assesses': 'Lambdasonde',
+        'hasRequirement': [(i, chan) for i, chan in enumerate(channels[0:4])]
+    }
+    expert_knowledge_enhancer.add_model_to_knowledge_graph(
+        rule_based_lambda_model['input_length'], rule_based_lambda_model['exp_normalization_method'],
+        rule_based_lambda_model['measuring_instruction'], rule_based_lambda_model['model_id'],
+        rule_based_lambda_model['assesses'], rule_based_lambda_model['hasRequirement'],
+        rule_based_lambda_model['architecture']
+    )
+
+    rule_based_pressure_model = {
+        'exp_normalization_method': '',  # raw data expected
+        'measuring_instruction': 'rule-based model -- hand-crafted classification rules for channels',
+        'architecture': 'rule-based',
+        'model_id': 'pressure_rule_based_univariate_ts_classification_model_001',
+        'input_length': 500,
+        'assesses': 'Saugrohrdrucksensor',
+        'hasRequirement': [(i, chan) for i, chan in enumerate(channels[4:])]
+    }
+    expert_knowledge_enhancer.add_model_to_knowledge_graph(
+        rule_based_pressure_model['input_length'], rule_based_pressure_model['exp_normalization_method'],
+        rule_based_pressure_model['measuring_instruction'], rule_based_pressure_model['model_id'],
+        rule_based_pressure_model['assesses'], rule_based_pressure_model['hasRequirement'],
+        rule_based_pressure_model['architecture']
     )
