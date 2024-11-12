@@ -41,7 +41,7 @@ $ ./fuseki-server
     - Dataset type: `Persistent (TDB2) – dataset will persist across Fuseki restarts`
 - `create dataset`
 
-**<u>Launch existing knowledge graph from RDF serialization (e.g. `.nt` / `.owl` / `.ttl` file):</u>**
+**<u>Launch existing knowledge graph from RDF serialization (e.g., `.nq.gz` / `.nt` / `.owl` / `.ttl` file):</u>**
 - `add data` -> `select files`
     - select knowledge graph file, e.g., `knowledge_base/test_kg.nt`
     - `upload now`
@@ -58,7 +58,7 @@ Now the knowledge graph is hosted on the *Fuseki* server and can be queried, ext
 
 Creates a backup in `fuseki_root/run/backups/`.
 
-The `.nq.gz` file should be extracted and the resulting `data` should be renamed to `data.nt` so that the n-triples file can be interpreted directly, e.g., when launching it on the server (see above). The backups are stored in `knowledge_base/live_kg_backups/`. For automated backups, see below.
+The `.nq.gz` file does not have to be extracted. The n-triples / n-quads file can be interpreted directly, e.g., when launching it on the server (see above). The backups are stored in `knowledge_base/live_kg_backups/`. For automated backups, see below.
 
 ## Expert Knowledge Acquisition Web Interface
 
