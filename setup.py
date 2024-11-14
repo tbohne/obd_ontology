@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-__version__ = '0.0.1'
+__version__ = '0.1.3'
 URL = 'https://github.com/tbohne/obd_ontology'
 
 with open('requirements.txt') as f:
