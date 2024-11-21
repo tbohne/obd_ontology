@@ -12,10 +12,11 @@ if __name__ == '__main__':
         "Plusleitung der Heizung der Lambdasonde",
         "Plusleitung der Lambdasonde",
         "Masseleitung der Lambdasonde",
-        "Signalleitung (Druck) des Saugrohrdrucksensors",
+        "Versorgungsspannung des Saugrohrdrucksensors",
         "Signalleitung (Temperatur) des Saugrohrdrucksensors",
         "Masseleitung des Saugrohrdrucksensors",
-        "Versorgungsspannung des Saugrohrdrucksensors"
+        "Signalleitung (Druck) des Saugrohrdrucksensors"
+
     ]
 
     # add channels
