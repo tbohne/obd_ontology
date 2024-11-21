@@ -1955,9 +1955,9 @@ class KnowledgeGraphQueryTool:
         return [(row['input_chan_req']['value'], row['chan_idx']['value']) for row in
                 self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
-    def query_model_by_model_id(self, model_id: str, verbose: bool = False) -> List[Tuple[str]]:
+    def query_model_by_model_id(self, model_id: str, verbose: bool = False) -> List[str]:
         """
-        Queries the input channel requirements for the specified model.
+        Queries the model for the specified model ID.
 
         :param model_id: model_id attribute of the model
         :param verbose: if true, logging is activated
@@ -1975,8 +1975,7 @@ class KnowledgeGraphQueryTool:
                 ?model {model_id_entry} "{model_id}" .
             }}
             """
-        return [row['model']['value'] for row in
-                self.fuseki_connection.query_knowledge_graph(s, verbose)]
+        return [row['model']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_channel_by_input_req(self, input_req_id: str, verbose: bool = False) -> List[Tuple[str, str]]:
         """
