@@ -1931,7 +1931,7 @@ class KnowledgeGraphQueryTool:
         """
         Queries the input channel requirements for the specified model.
 
-        :param model_id: ID of model instance
+        :param model_id: uuid of model instance (not model_id attribute)
         :param verbose: if true, logging is activated
         :return: input channel requirements
         """
