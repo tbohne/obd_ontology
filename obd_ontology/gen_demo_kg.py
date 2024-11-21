@@ -16,7 +16,6 @@ if __name__ == '__main__':
         "Signalleitung (Temperatur) des Saugrohrdrucksensors",
         "Masseleitung des Saugrohrdrucksensors",
         "Signalleitung (Druck) des Saugrohrdrucksensors"
-
     ]
 
     # add channels
