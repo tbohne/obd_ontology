@@ -191,6 +191,17 @@ class OntologyInstanceGenerator:
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return osci_uuid
 
+    def extend_knowledge_graph_with_overlays_relation(self, heatmap_id: str, osci_id: str) -> None:
+        """
+        Extends the knowledge graph with the semantic fact about an "overlays" relation between a heatmap and an
+        oscillogram.
+
+        :param heatmap_id: ID of the heatmap that overlays the oscillogram
+        :param osci_id: ID of the oscillogram
+        """
+        fact_list = [Fact((heatmap_id, self.onto_namespace.overlays, osci_id))]
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
+
     def extend_knowledge_graph_with_parallel_rec_osci_set(self) -> str:
         """
         Extends the knowledge graph with semantic facts about a set of parallel recorded oscillograms.
