@@ -3,7 +3,7 @@
 # @author Tim Bohne
 
 import uuid
-from typing import List
+from typing import List, Union
 
 from owlready2 import *
 from rdflib import Namespace, RDF
@@ -112,7 +112,8 @@ class OntologyInstanceGenerator:
 
     def extend_knowledge_graph_with_oscillogram_classification(self, prediction: bool, classification_reason: str,
                                                                comp: str, uncertainty: float, model_id: str,
-                                                               osci_id: str, heatmap_id: str) -> str:
+                                                               osci_ids: Union[str, List[str]],
+                                                               heatmap_ids: Union[str, List[str]]) -> str:
         """
         Extends the knowledge graph with semantic facts for an oscillogram classification.
 
@@ -121,8 +122,8 @@ class OntologyInstanceGenerator:
         :param comp: classified component
         :param uncertainty: uncertainty of the prediction
         :param model_id: ID of the used classification model
-        :param osci_id: ID of the classified oscillogram
-        :param heatmap_id: ID of the generated heatmap
+        :param osci_ids: ID(s) of the classified oscillogram(s)
+        :param heatmap_ids: ID(s) of the generated heatmap(s)
         :return ID of oscillogram classification instance
         """
         # either ID of DA or ID of another classification
@@ -138,10 +139,16 @@ class OntologyInstanceGenerator:
             Fact((classification_uuid, self.onto_namespace.uncertainty, uncertainty), property_fact=True),
             Fact((classification_uuid, self.onto_namespace.model_id, model_id), property_fact=True),
             # relations
-            Fact((classification_uuid, self.onto_namespace.checks, comp_id)),
-            Fact((classification_uuid, self.onto_namespace.classifies, osci_id)),
-            Fact((classification_uuid, self.onto_namespace.produces, heatmap_id))
+            Fact((classification_uuid, self.onto_namespace.checks, comp_id))
         ]
+        if isinstance(osci_ids, str):
+            osci_ids = [osci_ids]
+        if isinstance(heatmap_ids, str):
+            heatmap_ids = [heatmap_ids]
+        for osci_id in osci_ids:
+            fact_list.append(Fact((classification_uuid, self.onto_namespace.classifies, osci_id)))
+        for heatmap_id in heatmap_ids:
+            fact_list.append(Fact((classification_uuid, self.onto_namespace.produces, heatmap_id)))
         if "diag_association_" in classification_reason:
             fact_list.append(Fact((classification_reason, self.onto_namespace.ledTo, classification_uuid)))
         else:  # the reason is a classification instance (manual or osci)
@@ -183,6 +190,17 @@ class OntologyInstanceGenerator:
             fact_list.append(Fact((osci_uuid, self.onto_namespace.partOf, parallel_rec_set_id)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return osci_uuid
+
+    def extend_knowledge_graph_with_overlays_relation(self, heatmap_id: str, osci_id: str) -> None:
+        """
+        Extends the knowledge graph with the semantic fact about an "overlays" relation between a heatmap and an
+        oscillogram.
+
+        :param heatmap_id: ID of the heatmap that overlays the oscillogram
+        :param osci_id: ID of the oscillogram
+        """
+        fact_list = [Fact((heatmap_id, self.onto_namespace.overlays, osci_id))]
+        self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def extend_knowledge_graph_with_parallel_rec_osci_set(self) -> str:
         """
