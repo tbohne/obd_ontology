@@ -112,8 +112,8 @@ class OntologyInstanceGenerator:
 
     def extend_knowledge_graph_with_oscillogram_classification(self, prediction: bool, classification_reason: str,
                                                                comp: str, uncertainty: float, model_id: str,
-                                                               osci_id: Union[str, List[str]],
-                                                               heatmap_id: Union[str, List[str]]) -> str:
+                                                               osci_ids: Union[str, List[str]],
+                                                               heatmap_ids: Union[str, List[str]]) -> str:
         """
         Extends the knowledge graph with semantic facts for an oscillogram classification.
 
@@ -122,8 +122,8 @@ class OntologyInstanceGenerator:
         :param comp: classified component
         :param uncertainty: uncertainty of the prediction
         :param model_id: ID of the used classification model
-        :param osci_id: ID(s) of the classified oscillogram(s)
-        :param heatmap_id: ID(s) of the generated heatmap(s)
+        :param osci_ids: ID(s) of the classified oscillogram(s)
+        :param heatmap_ids: ID(s) of the generated heatmap(s)
         :return ID of oscillogram classification instance
         """
         # either ID of DA or ID of another classification
@@ -141,14 +141,14 @@ class OntologyInstanceGenerator:
             # relations
             Fact((classification_uuid, self.onto_namespace.checks, comp_id))
         ]
-        if isinstance(osci_id, str):
-            osci_id = [osci_id]
-        if isinstance(heatmap_id, str):
-            heatmap_id = [heatmap_id]
-        for osci in osci_id:
-            fact_list.append(Fact((classification_uuid, self.onto_namespace.classifies, osci)))
-        for heatmap in heatmap_id:
-            fact_list.append(Fact((classification_uuid, self.onto_namespace.produces, heatmap)))
+        if isinstance(osci_ids, str):
+            osci_ids = [osci_ids]
+        if isinstance(heatmap_ids, str):
+            heatmap_ids = [heatmap_ids]
+        for osci_id in osci_ids:
+            fact_list.append(Fact((classification_uuid, self.onto_namespace.classifies, osci_id)))
+        for heatmap_id in heatmap_ids:
+            fact_list.append(Fact((classification_uuid, self.onto_namespace.produces, heatmap_id)))
         if "diag_association_" in classification_reason:
             fact_list.append(Fact((classification_reason, self.onto_namespace.ledTo, classification_uuid)))
         else:  # the reason is a classification instance (manual or osci)
