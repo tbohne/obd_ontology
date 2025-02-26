@@ -21,7 +21,7 @@ if __name__ == '__main__':
     """
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
     # initially, add all components to the KG without affected_by relations (satisfy requirements)
-    # [odd ones: use_oscilloscope := True; even odes: use_oscilloscope := False] - to also include manual inspections
+    # [odd ones: use_oscilloscope := True; even ones: use_oscilloscope := False] - to also include manual inspections
     for i in range(1, NUM_OF_COMP):
         comp = "C" + str(i)
         expert_knowledge_enhancer.add_component_to_knowledge_graph(comp, [], i % 2 != 0, [], [])
