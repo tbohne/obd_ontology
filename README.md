@@ -46,9 +46,18 @@ $ ./fuseki-server
     - select knowledge graph file, e.g., `knowledge_base/test_kg.nt`
     - `upload now`
 
-**<u>Generate demonstrator knowledge graph (no additional launch required):</u>**
+**<u>Generate demonstrator knowledge graph:</u>**
+
+Launch raw OBD ontology, i.e., `obd_ontology/knowledge_base/raw_obd_ontology.owl`, then:
 ```
 $ python obd_ontology/gen_demo_kg.py
+```
+
+**<u>Generate unit test knowledge graph (required for unit tests in [vehicle_diag_smach](https://github.com/tbohne/vehicle_diag_smach)):</u>**
+
+Launch raw OBD ontology, i.e., `obd_ontology/knowledge_base/raw_obd_ontology.owl`, then:
+```
+$ python obd_ontology/gen_unit_test_kg.py
 ```
 
 Now the knowledge graph is hosted on the *Fuseki* server and can be queried, extended or updated via the SPARQL endpoints `/OBD/sparql`, `/OBD/data` and `/OBD/update` respectively.
