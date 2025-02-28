@@ -1,0 +1,321 @@
+###########################################################################
+###########################################################################
+#################### EXPERT KNOWLEDGE STORED IN THE KG ####################
+###########################################################################
+###########################################################################
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - DTC PERSPECTIVE
+###########################################################################
+
+P0172
+	- occurs with: []
+	- category: system too rich
+	- code type: generic
+	- fault condition: Gemisch zu fett (Bank 1)
+	- vehicle occurrences:
+	- symptoms: []
+	- indicates subsystem: fuel and air metering
+	- indicates vehicle part(s): ['powertrain (engine, transmission, and associated accessories)']
+	- ordered suspect components:
+		- Lambdasonde
+			use oscilloscope: True
+			affected by: ['Saugrohrdrucksensor']
+			verifies: []
+			contained in subsystem: ['fuel and air metering']
+
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - SUBSYSTEM PERSPECTIVE
+###########################################################################
+
+fuel and air metering
+	- contains: ['Lambdasonde']
+	- vehicle part(s): ['powertrain (engine, transmission, and associated accessories)']
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - COMPONENT PERSPECTIVE
+###########################################################################
+
+Lambdasonde
+	- oscilloscope: True
+	- affected by: ['Saugrohrdrucksensor']
+	- verifies: []
+	- has subcomponents:
+		- Masseleitung der Heizung der Lambdasonde
+		- Plusleitung der Lambdasonde
+		- Plusleitung der Heizung der Lambdasonde
+		- Masseleitung der Lambdasonde
+Saugrohrdrucksensor
+	- oscilloscope: True
+	- affected by: []
+	- verifies: []
+	- has subcomponents:
+		- Signalleitung (Temperatur) des Saugrohrdrucksensors
+		- Signalleitung (Druck) des Saugrohrdrucksensors
+		- Versorgungsspannung des Saugrohrdrucksensors
+		- Masseleitung des Saugrohrdrucksensors
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - COMPONENT SET PERSPECTIVE
+###########################################################################
+
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - MODEL PERSPECTIVE
+###########################################################################
+
+model_e3f25c70183b4ad5abbc09d2606e40d6
+	- input len: 500
+	- exp. norm. meth.: 
+	- measuring inst.: rule-based model -- hand-crafted classification rules for channels
+	- model ID: pressure_rule_based_univariate_ts_classification_model_001
+	- architecture: rule-based
+	- assesses: Saugrohrdrucksensor
+	- has requirement: input_chan_req_8f94263ab3e54ce1a9c9fd1f3976be36
+		- chan idx: 0
+		- expected channel: channel_4c870f7a5d474dd3a60e879311dc8809
+		- channel name: Versorgungsspannung des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasChannel'): sub_comp_8a0740cd5ba14b798da38b07724bcce6
+			- comp name: Versorgungsspannung des Saugrohrdrucksensors
+			- associated with component ('hasCOI'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+	- has requirement: input_chan_req_d271837041e645829a29b87565be5172
+		- chan idx: 2
+		- expected channel: channel_fd644ed8db314bedaa1707127f53b7ab
+		- channel name: Masseleitung des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasChannel'): sub_comp_749fcb329cd242f1a723e82a0a7759dc
+			- comp name: Masseleitung des Saugrohrdrucksensors
+			- associated with component ('hasCOI'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+	- has requirement: input_chan_req_6fc538ad209a452f9484cfb25501be3b
+		- chan idx: 3
+		- expected channel: channel_095fd50cb14a41318bf13dd8267a2f15
+		- channel name: Signalleitung (Druck) des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasChannel'): sub_comp_b8038dd7d03b4a7f95168b4aa3a0ce02
+			- comp name: Signalleitung (Druck) des Saugrohrdrucksensors
+			- associated with component ('hasCOI'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+	- has requirement: input_chan_req_5a1ff9785b514d89a90e24c6265ec271
+		- chan idx: 1
+		- expected channel: channel_1613ae68818749d0a254543d6d551ccc
+		- channel name: Signalleitung (Temperatur) des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): sub_comp_543248265ca44dca8b9461af87987b6b
+			- comp name: Signalleitung (Temperatur) des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasCOI'): sub_comp_543248265ca44dca8b9461af87987b6b
+			- comp name: Signalleitung (Temperatur) des Saugrohrdrucksensors
+model_a414b78049954ba09de25d7ef59224b7
+	- input len: 500
+	- exp. norm. meth.: z_norm
+	- measuring inst.: Explainable Convolutional Neural Network (XCM) zur binären Klassifizierung von Lambdasonden-Anomalien in multivariaten Zeitreihen
+	- model ID: Lambdasonde_XCM_v1_fRLed6zx6AGCEvszx2bT6F
+	- architecture: XCM
+	- assesses: Lambdasonde
+	- has requirement: input_chan_req_730e4b6c434e4636b2da14aa38917470
+		- chan idx: 0
+		- expected channel: channel_2dee898953694e3cbce16c99ad757cd7
+		- channel name: Masseleitung der Heizung der Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_d432716c33d3455ea767edca014eb079
+			- comp name: Masseleitung der Heizung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasCOI'): sub_comp_d432716c33d3455ea767edca014eb079
+			- comp name: Masseleitung der Heizung der Lambdasonde
+	- has requirement: input_chan_req_26e1bc51e51c444d85baa8f60fb6dbd3
+		- chan idx: 2
+		- expected channel: channel_8a484eba880d420895c743b83197bf54
+		- channel name: Plusleitung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_564cc4b9be704440984d17b6b90fc9e5
+			- comp name: Plusleitung der Lambdasonde
+			- associated with component ('hasCOI'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+	- has requirement: input_chan_req_edc7f960d33149eaa62832597894c754
+		- chan idx: 1
+		- expected channel: channel_3eebd4c8d5a642bb82aed0f7f48c235f
+		- channel name: Plusleitung der Heizung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_fefa239f6c2c4a19b9b99b32262bfa6c
+			- comp name: Plusleitung der Heizung der Lambdasonde
+			- associated with component ('hasCOI'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+	- has requirement: input_chan_req_bb772c7b2f7e4672b26b0e886b03311b
+		- chan idx: 3
+		- expected channel: channel_6604a7b40aa5456f81b5a7e8f54ba839
+		- channel name: Masseleitung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_d144339ce6dd4820ba5ec71b3fe7e515
+			- comp name: Masseleitung der Lambdasonde
+			- associated with component ('hasCOI'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+model_da1b088b809943cf95ba76ddbf486098
+	- input len: 500
+	- exp. norm. meth.: 
+	- measuring inst.: rule-based model -- hand-crafted classification rules for channels
+	- model ID: lambda_rule_based_univariate_ts_classification_model_001
+	- architecture: rule-based
+	- assesses: Lambdasonde
+	- has requirement: input_chan_req_4fa095754618424aaa691f4429b6de97
+		- chan idx: 1
+		- expected channel: channel_3eebd4c8d5a642bb82aed0f7f48c235f
+		- channel name: Plusleitung der Heizung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_fefa239f6c2c4a19b9b99b32262bfa6c
+			- comp name: Plusleitung der Heizung der Lambdasonde
+			- associated with component ('hasCOI'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+	- has requirement: input_chan_req_396187206d164658a258d98f16681abb
+		- chan idx: 2
+		- expected channel: channel_8a484eba880d420895c743b83197bf54
+		- channel name: Plusleitung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_564cc4b9be704440984d17b6b90fc9e5
+			- comp name: Plusleitung der Lambdasonde
+			- associated with component ('hasCOI'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+	- has requirement: input_chan_req_165442be2e4a4499932ec379da35e483
+		- chan idx: 3
+		- expected channel: channel_6604a7b40aa5456f81b5a7e8f54ba839
+		- channel name: Masseleitung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_d144339ce6dd4820ba5ec71b3fe7e515
+			- comp name: Masseleitung der Lambdasonde
+			- associated with component ('hasCOI'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+	- has requirement: input_chan_req_90cf2c1758be4433a9d2d22eff119916
+		- chan idx: 0
+		- expected channel: channel_2dee898953694e3cbce16c99ad757cd7
+		- channel name: Masseleitung der Heizung der Lambdasonde
+			- associated with component ('hasChannel'): sub_comp_d432716c33d3455ea767edca014eb079
+			- comp name: Masseleitung der Heizung der Lambdasonde
+			- associated with component ('hasChannel'): comp_3776934774524f7a80b03002c39f9450
+			- comp name: Lambdasonde
+			- associated with component ('hasCOI'): sub_comp_d432716c33d3455ea767edca014eb079
+			- comp name: Masseleitung der Heizung der Lambdasonde
+model_6b81bc8ad3c743e58d808ca572124256
+	- input len: 500
+	- exp. norm. meth.: z_norm
+	- measuring inst.: Explainable Convolutional Neural Network (XCM) zur binären Klassifizierung von Saugrohrdrucksensor-Anomalien in multivariaten Zeitreihen
+	- model ID: Saugrohrdrucksensor_XCM_v1_H5bqdN5pjTmTs6RGaCPEqL
+	- architecture: XCM
+	- assesses: Saugrohrdrucksensor
+	- has requirement: input_chan_req_3046f96c6cf04170b8532fdc16ff8964
+		- chan idx: 2
+		- expected channel: channel_fd644ed8db314bedaa1707127f53b7ab
+		- channel name: Masseleitung des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasChannel'): sub_comp_749fcb329cd242f1a723e82a0a7759dc
+			- comp name: Masseleitung des Saugrohrdrucksensors
+			- associated with component ('hasCOI'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+	- has requirement: input_chan_req_ebc2b03b24864d199fe233dfb3ece042
+		- chan idx: 0
+		- expected channel: channel_4c870f7a5d474dd3a60e879311dc8809
+		- channel name: Versorgungsspannung des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasChannel'): sub_comp_8a0740cd5ba14b798da38b07724bcce6
+			- comp name: Versorgungsspannung des Saugrohrdrucksensors
+			- associated with component ('hasCOI'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+	- has requirement: input_chan_req_f8ac2a2ac3014abf84c4784957ee504c
+		- chan idx: 1
+		- expected channel: channel_1613ae68818749d0a254543d6d551ccc
+		- channel name: Signalleitung (Temperatur) des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): sub_comp_543248265ca44dca8b9461af87987b6b
+			- comp name: Signalleitung (Temperatur) des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasCOI'): sub_comp_543248265ca44dca8b9461af87987b6b
+			- comp name: Signalleitung (Temperatur) des Saugrohrdrucksensors
+	- has requirement: input_chan_req_8943ca450d33470f863bf012f51ca1bd
+		- chan idx: 3
+		- expected channel: channel_095fd50cb14a41318bf13dd8267a2f15
+		- channel name: Signalleitung (Druck) des Saugrohrdrucksensors
+			- associated with component ('hasChannel'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+			- associated with component ('hasChannel'): sub_comp_b8038dd7d03b4a7f95168b4aa3a0ce02
+			- comp name: Signalleitung (Druck) des Saugrohrdrucksensors
+			- associated with component ('hasCOI'): comp_fcf8af3cc225433e95dbf60c2b1bdd09
+			- comp name: Saugrohrdrucksensor
+
+----------------------------------------------------------------------
+
+###########################################################################
+KNOWLEDGE SNAPSHOT - CHANNEL PERSPECTIVE
+###########################################################################
+
+channel_2dee898953694e3cbce16c99ad757cd7
+	- chan name: Masseleitung der Heizung der Lambdasonde
+	- input for model: model_a414b78049954ba09de25d7ef59224b7
+	- input for model: model_da1b088b809943cf95ba76ddbf486098
+	- belongs to component(s): Masseleitung der Heizung der Lambdasonde; Lambdasonde
+	- is of interest for component(s): Masseleitung der Heizung der Lambdasonde; Lambdasonde
+channel_8a484eba880d420895c743b83197bf54
+	- chan name: Plusleitung der Lambdasonde
+	- input for model: model_a414b78049954ba09de25d7ef59224b7
+	- input for model: model_da1b088b809943cf95ba76ddbf486098
+	- belongs to component(s): Lambdasonde; Plusleitung der Lambdasonde
+	- is of interest for component(s): Lambdasonde; Plusleitung der Lambdasonde
+channel_fd644ed8db314bedaa1707127f53b7ab
+	- chan name: Masseleitung des Saugrohrdrucksensors
+	- input for model: model_6b81bc8ad3c743e58d808ca572124256
+	- input for model: model_e3f25c70183b4ad5abbc09d2606e40d6
+	- belongs to component(s): Saugrohrdrucksensor; Masseleitung des Saugrohrdrucksensors
+	- is of interest for component(s): Saugrohrdrucksensor; Masseleitung des Saugrohrdrucksensors
+channel_4c870f7a5d474dd3a60e879311dc8809
+	- chan name: Versorgungsspannung des Saugrohrdrucksensors
+	- input for model: model_e3f25c70183b4ad5abbc09d2606e40d6
+	- input for model: model_6b81bc8ad3c743e58d808ca572124256
+	- belongs to component(s): Saugrohrdrucksensor; Versorgungsspannung des Saugrohrdrucksensors
+	- is of interest for component(s): Saugrohrdrucksensor; Versorgungsspannung des Saugrohrdrucksensors
+channel_6604a7b40aa5456f81b5a7e8f54ba839
+	- chan name: Masseleitung der Lambdasonde
+	- input for model: model_a414b78049954ba09de25d7ef59224b7
+	- input for model: model_da1b088b809943cf95ba76ddbf486098
+	- belongs to component(s): Lambdasonde; Masseleitung der Lambdasonde
+	- is of interest for component(s): Lambdasonde; Masseleitung der Lambdasonde
+channel_3eebd4c8d5a642bb82aed0f7f48c235f
+	- chan name: Plusleitung der Heizung der Lambdasonde
+	- input for model: model_da1b088b809943cf95ba76ddbf486098
+	- input for model: model_a414b78049954ba09de25d7ef59224b7
+	- belongs to component(s): Lambdasonde; Plusleitung der Heizung der Lambdasonde
+	- is of interest for component(s): Lambdasonde; Plusleitung der Heizung der Lambdasonde
+channel_1613ae68818749d0a254543d6d551ccc
+	- chan name: Signalleitung (Temperatur) des Saugrohrdrucksensors
+	- input for model: model_e3f25c70183b4ad5abbc09d2606e40d6
+	- input for model: model_6b81bc8ad3c743e58d808ca572124256
+	- belongs to component(s): Signalleitung (Temperatur) des Saugrohrdrucksensors; Saugrohrdrucksensor
+	- is of interest for component(s): Signalleitung (Temperatur) des Saugrohrdrucksensors; Saugrohrdrucksensor
+channel_095fd50cb14a41318bf13dd8267a2f15
+	- chan name: Signalleitung (Druck) des Saugrohrdrucksensors
+	- input for model: model_e3f25c70183b4ad5abbc09d2606e40d6
+	- input for model: model_6b81bc8ad3c743e58d808ca572124256
+	- belongs to component(s): Saugrohrdrucksensor; Signalleitung (Druck) des Saugrohrdrucksensors
+	- is of interest for component(s): Saugrohrdrucksensor; Signalleitung (Druck) des Saugrohrdrucksensors
+
+----------------------------------------------------------------------
+
