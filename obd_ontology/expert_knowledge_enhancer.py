@@ -3,8 +3,7 @@
 # @author Tim Bohne
 
 import uuid
-from typing import List
-from typing import Tuple
+from typing import List, Tuple
 
 from dtc_parser.parser import DTCParser
 from rdflib import Namespace, RDF
@@ -35,7 +34,7 @@ class ExpertKnowledgeEnhancer:
         """
         Initializes the expert knowledge enhancer.
 
-        :param kg_url: URL for the knowledge graph server
+        :param kg_url: URL of the knowledge graph server
         """
         # establish connection to 'Apache Jena Fuseki' server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
@@ -91,7 +90,7 @@ class ExpertKnowledgeEnhancer:
         Generates a `generation_method` fact (RDF) based on the provided properties.
 
         :param heatmap_uuid: UUID of the heatmap to generate fact for
-        :param gen_method: heatmap generation method (e.g. tf-keras-gradcam)
+        :param gen_method: heatmap generation method (e.g., tf-keras-gradcam)
         :param prop: determines whether it's a property fact
         :return: generated fact
         """
@@ -282,9 +281,11 @@ class ExpertKnowledgeEnhancer:
                 subsystem_uuid = "vehicle_subsystem_" + uuid.uuid4().hex
                 fact_list.append(Fact((subsystem_uuid, RDF.type, self.onto_namespace["VehicleSubsystem"].toPython())))
                 fact_list.append(
-                    Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_name), property_fact=True))
+                    Fact((subsystem_uuid, self.onto_namespace.subsystem_name, subsystem_name), property_fact=True)
+                )
                 fact_list.append(
-                    Fact((subsystem_uuid, self.onto_namespace.vehicle_part, vehicle_part), property_fact=True))
+                    Fact((subsystem_uuid, self.onto_namespace.vehicle_part, vehicle_part), property_fact=True)
+                )
             fact_list.append(Fact((dtc_uuid, self.onto_namespace.indicates, subsystem_uuid)))
 
         for code in dtc_knowledge.occurs_with:
@@ -332,8 +333,8 @@ class ExpertKnowledgeEnhancer:
         if len(fault_cond_instance) > 0:
             print("Specified fault condition (" + fault_cond + ") already present in KG, updating description")
             fault_cond_uuid = fault_cond_instance[0].split("#")[1]
-            fact_list.append(Fact(
-                (fault_cond_uuid, self.onto_namespace.condition_description, fault_cond), property_fact=True)
+            fact_list.append(
+                Fact((fault_cond_uuid, self.onto_namespace.condition_description, fault_cond), property_fact=True)
             )
         else:
             fact_list = [
@@ -373,8 +374,9 @@ class ExpertKnowledgeEnhancer:
                 fact_list.append(Fact((fault_cond_uuid, self.onto_namespace.manifestedBy, symptom_uuid)))
         return fact_list
 
-    def generate_facts_to_connect_components_and_dtc(self, dtc_uuid: str, subsystem_uuid: str,
-                                                     dtc_knowledge: DTCKnowledge) -> List[Fact]:
+    def generate_facts_to_connect_components_and_dtc(
+            self, dtc_uuid: str, subsystem_uuid: str, dtc_knowledge: DTCKnowledge
+    ) -> List[Fact]:
         """
         Generates the facts that connect the present DTC with associated suspect components, i.e., generating
         the diagnostic associations.
@@ -391,7 +393,7 @@ class ExpertKnowledgeEnhancer:
             # ensure that all the suspect components considered here are already part of the KG
             assert len(component_by_name) == 1
             comp_uuid = component_by_name[0].split("#")[1]
-            # making sure that there is only one diagnostic association, i.e. one priority ID, between any pair
+            # making sure that there is only one diagnostic association, i.e., one priority ID, between any pair
             # of DTC and suspect component
             diag_association = self.knowledge_graph_query_tool.query_priority_id_by_dtc_and_sus_comp(
                 dtc_knowledge.dtc, comp
@@ -489,8 +491,10 @@ class ExpertKnowledgeEnhancer:
                     Fact((sub_comp_uuid, self.onto_namespace.component_name, sub_comp_name), property_fact=True)
                 )
             fact_list.append(
-                Fact((sub_comp_uuid, self.onto_namespace.use_oscilloscope, sub_comp_knowledge.oscilloscope),
-                     property_fact=True)
+                Fact(
+                    (sub_comp_uuid, self.onto_namespace.use_oscilloscope, sub_comp_knowledge.oscilloscope),
+                    property_fact=True
+                )
             )
             # connect to associated suspect component
             suspect_comp_instance = self.knowledge_graph_query_tool.query_suspect_component_by_name(
@@ -563,10 +567,14 @@ class ExpertKnowledgeEnhancer:
         fact_list = [
             Fact((model_uuid, RDF.type, self.onto_namespace["Model"].toPython())),
             Fact((model_uuid, self.onto_namespace.input_length, model_knowledge.input_len), property_fact=True),
-            Fact((model_uuid, self.onto_namespace.exp_normalization_method, model_knowledge.exp_norm_method),
-                 property_fact=True),
-            Fact((model_uuid, self.onto_namespace.measuring_instruction, model_knowledge.measuring_instruction),
-                 property_fact=True),
+            Fact(
+                (model_uuid, self.onto_namespace.exp_normalization_method, model_knowledge.exp_norm_method),
+                property_fact=True
+            ),
+            Fact(
+                (model_uuid, self.onto_namespace.measuring_instruction, model_knowledge.measuring_instruction),
+                property_fact=True
+            ),
             Fact((model_uuid, self.onto_namespace.model_id, model_knowledge.model_id), property_fact=True),
             Fact((model_uuid, self.onto_namespace.architecture, model_knowledge.architecture), property_fact=True)
         ]
@@ -617,13 +625,16 @@ class ExpertKnowledgeEnhancer:
         _, fault_cat_facts = self.generate_fault_cat_facts(dtc_uuid, dtc_knowledge)
         fault_cond_uuid, fault_cond_facts = self.generate_fault_cond_facts(dtc_uuid, dtc_knowledge)
         symptom_facts = self.generate_symptom_facts(fault_cond_uuid, dtc_knowledge)
-        diag_association_facts = self.generate_facts_to_connect_components_and_dtc(dtc_uuid, subsystem_uuid,
-                                                                                   dtc_knowledge)
+        diag_association_facts = self.generate_facts_to_connect_components_and_dtc(
+            dtc_uuid, subsystem_uuid, dtc_knowledge
+        )
         fact_list = dtc_facts + fault_cat_facts + fault_cond_facts + symptom_facts + diag_association_facts
         return fact_list
 
-    def add_dtc_to_knowledge_graph(self, dtc: str, occurs_with: List[str], fault_condition: str, symptoms: List[str],
-                                   suspect_components: List[str]) -> None:
+    def add_dtc_to_knowledge_graph(
+            self, dtc: str, occurs_with: List[str], fault_condition: str, symptoms: List[str],
+            suspect_components: List[str]
+    ) -> None:
         """
         Adds a DTC instance with the given properties to the knowledge graph.
 
@@ -640,17 +651,15 @@ class ExpertKnowledgeEnhancer:
         assert isinstance(symptoms, list)
         assert isinstance(suspect_components, list)
 
-        new_dtc_knowledge = DTCKnowledge(dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition,
-                                         symptoms=symptoms, suspect_components=suspect_components)
+        new_dtc_knowledge = DTCKnowledge(
+            dtc=dtc, occurs_with=occurs_with, fault_condition=fault_condition, symptoms=symptoms,
+            suspect_components=suspect_components
+        )
         fact_list = self.generate_dtc_related_facts(new_dtc_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def add_component_to_knowledge_graph(
-            self,
-            suspect_component: str,
-            affected_by: List[str],
-            oscilloscope: bool,
-            associated_chan: List[str] = [],
+            self, suspect_component: str, affected_by: List[str], oscilloscope: bool, associated_chan: List[str] = [],
             chan_of_interest: List[str] = []
     ) -> None:
         """
@@ -668,17 +677,15 @@ class ExpertKnowledgeEnhancer:
         assert isinstance(oscilloscope, bool)
         assert isinstance(associated_chan, list)
         assert isinstance(chan_of_interest, list)
-        new_component_knowledge = ComponentKnowledge(suspect_component=suspect_component, oscilloscope=oscilloscope,
-                                                     affected_by=affected_by, associated_chan=associated_chan,
-                                                     chan_of_interest=chan_of_interest)
+        new_component_knowledge = ComponentKnowledge(
+            suspect_component=suspect_component, oscilloscope=oscilloscope, affected_by=affected_by,
+            associated_chan=associated_chan, chan_of_interest=chan_of_interest
+        )
         fact_list = self.generate_suspect_component_facts([new_component_knowledge])
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
     def add_sub_component_to_knowledge_graph(
-            self,
-            sub_component: str,
-            suspect_component: str,
-            oscilloscope: bool,
+            self, sub_component: str, suspect_component: str, oscilloscope: bool
     ) -> None:
         """
         Adds a `SubComponent` instance with the given properties to the knowledge graph.
@@ -704,8 +711,9 @@ class ExpertKnowledgeEnhancer:
         fact_list = self.generate_sub_component_facts([new_sub_component_knowledge])
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def add_component_set_to_knowledge_graph(self, component_set: str, includes: List[str],
-                                             verified_by: List[str]) -> None:
+    def add_component_set_to_knowledge_graph(
+            self, component_set: str, includes: List[str], verified_by: List[str]
+    ) -> None:
         """
         Adds a component set instance to the knowledge graph.
 
@@ -717,14 +725,16 @@ class ExpertKnowledgeEnhancer:
         assert isinstance(includes, list)
         assert isinstance(verified_by, list)
 
-        new_comp_set_knowledge = ComponentSetKnowledge(component_set=component_set, includes=includes,
-                                                       verified_by=verified_by)
+        new_comp_set_knowledge = ComponentSetKnowledge(
+            component_set=component_set, includes=includes, verified_by=verified_by
+        )
         fact_list = self.generate_component_set_facts(new_comp_set_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def add_model_to_knowledge_graph(self, input_len: int, exp_norm_method: str, measuring_instruction: str,
-                                     model_id: str, classified_comp: str, input_chan_req: List[Tuple[int, str]],
-                                     architecture: str):
+    def add_model_to_knowledge_graph(
+            self, input_len: int, exp_norm_method: str, measuring_instruction: str, model_id: str, classified_comp: str,
+            input_chan_req: List[Tuple[int, str]], architecture: str
+    ) -> None:
         """
         Adds a model instance to the knowledge graph.
 
@@ -743,12 +753,13 @@ class ExpertKnowledgeEnhancer:
         assert isinstance(classified_comp, str)
         assert isinstance(architecture, str)
 
-        new_model_knowledge = ModelKnowledge(input_len, exp_norm_method, measuring_instruction, model_id,
-                                             classified_comp, input_chan_req, architecture)
+        new_model_knowledge = ModelKnowledge(
+            input_len, exp_norm_method, measuring_instruction, model_id, classified_comp, input_chan_req, architecture
+        )
         fact_list = self.generate_model_facts(new_model_knowledge)
         self.fuseki_connection.extend_knowledge_graph(fact_list)
 
-    def add_channel_to_knowledge_graph(self, channel_name: str):
+    def add_channel_to_knowledge_graph(self, channel_name: str) -> None:
         """
         Adds a channel instance to the knowledge graph.
 

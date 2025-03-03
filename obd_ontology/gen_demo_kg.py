@@ -5,6 +5,10 @@
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 
 if __name__ == '__main__':
+    """
+    Generates the KG for the final multivariate demonstrator scenario in the project.
+    """
+
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
 
     channels = [  # we have 8 recorded channels in total
@@ -18,8 +22,7 @@ if __name__ == '__main__':
         "Signalleitung (Druck) des Saugrohrdrucksensors"
     ]
 
-    # add channels
-    for chan in channels:
+    for chan in channels:  # add channels
         expert_knowledge_enhancer.add_channel_to_knowledge_graph(chan)
 
     # add components (in this case, we assume that the associated channels and the COI are equal)
@@ -42,12 +45,10 @@ if __name__ == '__main__':
         "P0172", [], "Gemisch zu fett (Bank 1)", [], ["Lambdasonde"]
     )
 
-    # TODO: add the model knowledge once trained
-    #   - there should be 10 models (one for each channel in isolation + "Lambdasonde" + "Saugrohrdrucksensor")
+    # add the trained model knowledge
+    #   - one for each channel in isolation + "Lambdasonde" + "Saugrohrdrucksensor"
 
-    # TODO: how do we apply the rule-based models?
-
-    # adding the two multichannel ANNs
+    # add the two multichannel ANNs
     lambda_model = {
         'exp_normalization_method': 'z_norm',
         'measuring_instruction': 'Explainable Convolutional Neural Network (XCM) zur binären Klassifizierung von'
@@ -57,7 +58,7 @@ if __name__ == '__main__':
         'input_length': 500,
         'assesses': 'Lambdasonde',
         'hasRequirement': [(i, chan) for i, chan in enumerate(channels[0:4])],
-        # TODO: the following three are not (yet) part of the ontology
+        # the following three are not (yet) part of the ontology
         'format': 'pth',
         'test_acc': 0.9565,
         'output': 'bool'
@@ -75,7 +76,7 @@ if __name__ == '__main__':
         'input_length': 500,
         'assesses': 'Saugrohrdrucksensor',
         'hasRequirement': [(i, chan) for i, chan in enumerate(channels[4:])],
-        # TODO: the following three are not (yet) part of the ontology
+        # the following three are not (yet) part of the ontology
         'format': 'pth',
         'test_acc': 1.0,
         'output': 'bool'
@@ -86,6 +87,7 @@ if __name__ == '__main__':
         pressure_model['hasRequirement'], pressure_model['architecture']
     )
 
+    # add the rule-based models for channel evaluation
     rule_based_lambda_model = {
         'exp_normalization_method': '',  # raw data expected
         'measuring_instruction': 'rule-based model -- hand-crafted classification rules for channels',
@@ -101,7 +103,6 @@ if __name__ == '__main__':
         rule_based_lambda_model['assesses'], rule_based_lambda_model['hasRequirement'],
         rule_based_lambda_model['architecture']
     )
-
     rule_based_pressure_model = {
         'exp_normalization_method': '',  # raw data expected
         'measuring_instruction': 'rule-based model -- hand-crafted classification rules for channels',

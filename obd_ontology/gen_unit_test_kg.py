@@ -11,7 +11,7 @@ AFFECTED_BY_MAPPING = {
     "C30": ["C31"], "C31": ["C32", "C33"], "C32": ["C34"], "C33": ["C34"], "C34": ["C35", "C36"]
 }
 DTC_MAPPING = {
-    "P0125": "C1", "P0126": "C14", "P0127": "C22", "P0128": "C30",
+    "P0125": "C1", "P0126": "C14", "P0127": "C22", "P0128": "C30"
 }
 NUM_OF_COMP = 37
 
@@ -19,7 +19,9 @@ if __name__ == '__main__':
     """
     Generates the KG required for the smach unit tests.
     """
+
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
+
     # initially, add all components to the KG without affected_by relations (satisfy requirements)
     # [odd ones: use_oscilloscope := True; even ones: use_oscilloscope := False] - to also include manual inspections
     for i in range(1, NUM_OF_COMP):

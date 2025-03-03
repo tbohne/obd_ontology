@@ -10,8 +10,10 @@ class DTCKnowledge:
     Representation of DTC-related expert knowledge that is not automatically generated based on the DTC parser.
     """
 
-    def __init__(self, dtc: str, occurs_with: List[str], fault_condition: str, symptoms: List[str],
-                 suspect_components: List[str]) -> None:
+    def __init__(
+            self, dtc: str, occurs_with: List[str], fault_condition: str, symptoms: List[str],
+            suspect_components: List[str]
+    ) -> None:
         """
         Initializes the DTC knowledge.
 
