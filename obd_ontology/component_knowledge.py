@@ -10,8 +10,10 @@ class ComponentKnowledge:
     Representation of vehicle-component-related expert knowledge.
     """
 
-    def __init__(self, suspect_component: str, oscilloscope: bool, affected_by: List[str],
-                 associated_chan: List[str] = [], chan_of_interest: List[str] = []) -> None:
+    def __init__(
+            self, suspect_component: str, oscilloscope: bool, affected_by: List[str], associated_chan: List[str] = [],
+            chan_of_interest: List[str] = []
+    ) -> None:
         """
         Initializes the component knowledge.
 

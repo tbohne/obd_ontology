@@ -42,8 +42,10 @@ class ConnectionController:
         if verbose:
             print("query knowledge graph..")
             print(query)
-        res = requests.post(self.fuseki_url + SPARQL_ENDPOINT, query.encode(),
-                            headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'})
+        res = requests.post(
+            self.fuseki_url + SPARQL_ENDPOINT, query.encode(),
+            headers={'Content-Type': 'application/sparql-query', 'Accept': 'application/json'}
+        )
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
         return res.json()["results"]["bindings"]
@@ -57,15 +59,17 @@ class ConnectionController:
         print(colored("\nextending knowledge graph..", "green", "on_grey", ["bold"]))
         graph = Graph()
         for fact in facts:
-            # for very long facts, only print the first segment (e.g. heatmaps)
+            # for very long facts, only print the first segment (e.g., heatmaps)
             print("fact:", str(fact)[:200] + "..." if len(str(fact)) > 0 else fact)
             if fact.property_fact:
                 graph.add((self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), Literal(fact.triple[2])))
             else:
                 graph.add((self.get_uri(fact.triple[0]), self.get_uri(fact.triple[1]), self.get_uri(fact.triple[2])))
 
-        res = requests.post(self.fuseki_url + DATA_ENDPOINT, data=graph.serialize(format="ttl").encode(),
-                            headers={'Content-Type': 'text/turtle'})
+        res = requests.post(
+            self.fuseki_url + DATA_ENDPOINT, data=graph.serialize(format="ttl").encode(),
+            headers={'Content-Type': 'text/turtle'}
+        )
         if res.status_code != 200:
             print("HTTP status code:", res.status_code)
 

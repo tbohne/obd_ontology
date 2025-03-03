@@ -53,7 +53,7 @@ if __name__ == '__main__':
     This script is used to reduce the size of the currently hosted KG by removing the largest aspects of the diagnostic
     knowledge, i.e., the generated heatmaps and oscillogram recordings.
     Although it makes sense to store these facts in general, it also makes sense to be able to obtain a reduced version
-    of the KG without these gigantic arrays (e.g. for testing purposes).
+    of the KG without these gigantic arrays (e.g., for testing purposes).
     """
     expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
     knowledge_graph_query_tool = KnowledgeGraphQueryTool()
