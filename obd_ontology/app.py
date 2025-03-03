@@ -60,7 +60,7 @@ def get_session_values() -> wrappers.Response:
     })
 
 
-def get_session_variable_list(name: str) -> List:
+def get_session_variable_list(name: str) -> List[str]:
     """
     Returns the session variable for a given name, or, if not existent, an empty list. It is expected to be only used
     on session variables that should either contain lists or 'None', but no other data type.
@@ -130,7 +130,7 @@ def remove_deprecated_component_facts() -> None:
     EXPERT_KNOWLEDGE_ENHANCER.fuseki_connection.remove_outdated_facts_from_knowledge_graph(facts_to_be_removed)
 
 
-def add_component_to_kg(form: SuspectComponentsForm, entered_affecting_comps: List) -> None:
+def add_component_to_kg(form: SuspectComponentsForm, entered_affecting_comps: List[str]) -> None:
     """
     Adds a new component to the knowledge graph.
 
@@ -197,7 +197,8 @@ def display_component_info(form: SuspectComponentsForm) -> None:
         flash("Keine Daten verfügbar")
     else:
         existing_affecting_components = KG_QUERY_TOOL.query_affected_by_relations_by_suspect_component(
-            existing_component_name)
+            existing_component_name
+        )
         session["affecting_components"] = existing_affecting_components
         form.component_name.data = existing_component_name
         oscilloscope_useful = KG_QUERY_TOOL.query_oscilloscope_usage_by_suspect_component(existing_component_name)[0]
@@ -252,7 +253,8 @@ def component_form() -> Union[str, wrappers.Response]:
                 #   - the name of the component does not exist in the KG yet, or a warning has already been flashed
                 #   - there is at least one affecting component specified, or a related warning has already been flashed
                 if (not comp_part_of_kg or warning_already_shown) and (
-                        entered_affecting_comps or session.get("affecting_components_empty_warning_received")):
+                        entered_affecting_comps or session.get("affecting_components_empty_warning_received")
+                ):
                     if warning_already_shown:  # replacement confirmation given
                         remove_deprecated_component_facts()
                     add_component_to_kg(form, entered_affecting_comps)
@@ -279,8 +281,10 @@ def component_form() -> Union[str, wrappers.Response]:
     form.affecting_components.choices = make_tuple_list(sorted(KG_QUERY_TOOL.query_all_component_instances()))
     form.existing_components.choices = make_tuple_list(sorted(KG_QUERY_TOOL.query_all_component_instances()))
 
-    return render_template('component_form.html', form=form,
-                           affecting_components_variable_list=get_session_variable_list("affecting_components"))
+    return render_template(
+        'component_form.html', form=form,
+        affecting_components_variable_list=get_session_variable_list("affecting_components")
+    )
 
 
 def dtc_sanity_check(dtc: str) -> bool:
@@ -503,7 +507,7 @@ def show_dtc_exists_warning_msg(form: DTCForm) -> None:
 
 def remove_deprecated_dtc_facts() -> None:
     """
-    Removes deprecated DTC facts form the KG.
+    Removes deprecated DTC facts from the KG.
     """
     dtc_name = session.get("dtc_name")
     # construct all the facts that should be removed
@@ -530,7 +534,8 @@ def add_dtc_to_kg(form: DTCForm) -> None:
         occurs_with=get_session_variable_list("occurs_with_list"),
         fault_condition=form.fault_condition.data,
         symptoms=get_session_variable_list("symptom_list"),
-        suspect_components=get_session_variable_list("component_list"))
+        suspect_components=get_session_variable_list("component_list")
+    )
 
 
 def reset_dtc_lists() -> None:
@@ -552,7 +557,7 @@ def show_dtc_success_msg(form: DTCForm) -> None:
     if form.dtc_name.data == session.get("dtc_name"):
         flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich überschrieben.")
     else:
-        flash(f"The DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
+        flash(f"Der DTC {form.dtc_name.data} wurde erfolgreich hinzugefügt.")
 
 
 def add_components(form: DTCForm) -> None:

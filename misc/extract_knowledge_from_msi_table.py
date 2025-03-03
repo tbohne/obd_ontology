@@ -4,7 +4,7 @@
 
 import argparse
 import re
-from typing import List
+from typing import List, Dict
 
 import numpy as np
 import pandas
@@ -12,7 +12,7 @@ import pandas
 from obd_ontology.config import VALID_SPECIAL_CHARACTERS, DTC_REGEX
 from obd_ontology.expert_knowledge_enhancer import ExpertKnowledgeEnhancer
 
-expert_knowledge_enhancer = ExpertKnowledgeEnhancer()
+EXPERT_KNOWLEDGE_ENHANCER = ExpertKnowledgeEnhancer()
 
 
 def remove_dtc_from_fault_cond(fault_cond: str, dtc: str) -> str:
@@ -36,13 +36,13 @@ def remove_dtc_from_fault_cond(fault_cond: str, dtc: str) -> str:
     return fault_cond.lstrip(" -")
 
 
-def create_dtc_dictionary(path: str) -> dict:
+def create_dtc_dictionary(path: str) -> Dict[str, List]:
     """
     Reads the MSI Excel file and extracts the relevant information concerning DTCs and components.
 
     :param path: path to the Excel file
     :return: dictionary with DTCs as keys and a list containing fault condition and tuples of position (priority of the
-     component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
+     component) and component as values, e.g., [fault_cond, (1, comp1), (2, comp2)]
     """
     dtc_dict = {}
     data = pandas.read_excel(path, sheet_name="DTC - Element ID - Baum")
@@ -75,7 +75,7 @@ def create_dtc_dictionary(path: str) -> dict:
                 elif british_fault_cond != "nan":
                     available_fault_cond = british_fault_cond
                 else:
-                    available_fault_cond = "Bitte Fehlerzustands-Beschreibung für {} eingeben".format(dtc)
+                    available_fault_cond = "Bitte Fehlerzustandsbeschreibung für {} eingeben".format(dtc)
                 available_fault_cond = remove_invalid_characters(available_fault_cond)
                 cleaned_fault_cond = remove_dtc_from_fault_cond(available_fault_cond, dtc)
                 existing_fault_conds = get_existing_fault_conditions()
@@ -107,12 +107,12 @@ def remove_invalid_characters(item: str) -> str:
     return temp_item
 
 
-def add_components_to_knowledge_graph(dtc_dict: dict) -> None:
+def add_components_to_knowledge_graph(dtc_dict: Dict[str, List]) -> None:
     """
     Extracts all components from the DTC dictionary and adds them to the knowledge graph.
 
     :param dtc_dict: dictionary with DTCs as keys and a list containing fault condition and tuples of position
-    (priority of the component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
+    (priority of the component) and component as values, e.g., [fault_cond, (1, comp1), (2, comp2)]
     """
     counter = 0
     all_comps = []
@@ -122,7 +122,7 @@ def add_components_to_knowledge_graph(dtc_dict: dict) -> None:
                 all_comps.append(comp_tuple[1])
     all_comps = set(all_comps)
     for comp in all_comps:
-        expert_knowledge_enhancer.add_component_to_knowledge_graph(comp, [], False)
+        EXPERT_KNOWLEDGE_ENHANCER.add_component_to_knowledge_graph(comp, [], False)
         counter += 1
     print("Added {} components to the knowledge graph.".format(counter))
 
@@ -141,14 +141,14 @@ def remove_duplicates_from_list(some_list: List[str]) -> List[str]:
     return list_without_duplicates
 
 
-def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
+def add_dtcs_to_knowledge_graph(dtc_dict: Dict[str, List]) -> None:
     """
     Adds DTCs from the DTC dictionary to the knowledge graph.
 
     Only DTCs with a fault condition and at least one linked component are added.
 
     :param dtc_dict: dictionary with DTCs as keys and a list containing fault condition and tuples of position
-    (priority of the component) and component as values, e.g. [fault_cond, (1, comp1), (2, comp2)]
+    (priority of the component) and component as values, e.g., [fault_cond, (1, comp1), (2, comp2)]
     """
     counter = 0
     for dtc in dtc_dict:
@@ -161,7 +161,7 @@ def add_dtcs_to_knowledge_graph(dtc_dict: dict) -> None:
             ordered_components = remove_duplicates_from_list(ordered_components)
         else:
             ordered_components = []
-        expert_knowledge_enhancer.add_dtc_to_knowledge_graph(dtc, [], fault_cond, [], ordered_components)
+        EXPERT_KNOWLEDGE_ENHANCER.add_dtc_to_knowledge_graph(dtc, [], fault_cond, [], ordered_components)
         counter += 1
     print("Added {} DTCs to the knowledge graph.".format(counter))
 
