@@ -20,7 +20,7 @@ class KnowledgeGraphQueryTool:
         """
         Initializes the KG query tool.
 
-        :param kg_url: URL for the server hosting the knowledge graph
+        :param kg_url: URL of the server hosting the knowledge graph
         """
         self.ontology_prefix = ONTOLOGY_PREFIX
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
@@ -480,7 +480,7 @@ class KnowledgeGraphQueryTool:
 
         :param dtc: diagnostic trouble code to query vehicles for
         :param verbose: if true, logging is activated
-        :return: vehicles
+        :return: vehicles (model, HSN, TSN, VIN)
         """
         if verbose:
             print("########################################################################")
@@ -627,7 +627,8 @@ class KnowledgeGraphQueryTool:
         return [row['dtc']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, True)]
 
     def query_dtcs_by_suspect_comp_and_vehicle_subsystem(
-            self, comp: str, subsystem: str, verbose: bool = True) -> List[str]:
+            self, comp: str, subsystem: str, verbose: bool = True
+    ) -> List[str]:
         """
         Queries the DTCs associated with the specified suspect component and vehicle subsystem.
 
@@ -668,7 +669,8 @@ class KnowledgeGraphQueryTool:
         return [row['code']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_diag_association_instance_by_dtc_and_sus_comp(
-            self, dtc: str, comp: str, verbose: bool = True) -> List[str]:
+            self, dtc: str, comp: str, verbose: bool = True
+    ) -> List[str]:
         """
         Queries the diagnostic association instance for the specified code and suspect component.
 
@@ -1155,7 +1157,7 @@ class KnowledgeGraphQueryTool:
         Queries all vehicle instances stored in the knowledge graph.
 
         :param verbose: if true, logging is activated
-        :return: all vehicles stored in the knowledge graph
+        :return: all vehicles stored in the knowledge graph (vehicle, HSN, TSN, VIN, model)
         """
         if verbose:
             print("####################################")
@@ -1186,7 +1188,7 @@ class KnowledgeGraphQueryTool:
         Queries all model instances stored in the knowledge graph.
 
         :param verbose: if true, logging is activated
-        :return: all models stored in the knowledge graph
+        :return: all models stored in the knowledge graph (model, in_len, norm_meth, measuring_inst, id, architecture)
         """
         if verbose:
             print("####################################")
@@ -1413,13 +1415,12 @@ class KnowledgeGraphQueryTool:
 
         :param component: component to query model meta info for
         :param verbose: if true, logging is activated
-        :return: normalization method, model id, input length
+        :return: (normalization method, model id, input length)
         """
         if verbose:
             print("####################################")
             print("QUERY: model meta info for the specified component:", component)
             print("####################################")
-
         model_entry = self.complete_ontology_entry('Model')
         input_len_entry = self.complete_ontology_entry('input_length')
         model_id_entry = self.complete_ontology_entry('model_id')
@@ -1454,13 +1455,12 @@ class KnowledgeGraphQueryTool:
 
         :param component: component to query model meta info for
         :param verbose: if true, logging is activated
-        :return: normalization method, model id, input length
+        :return: (normalization method, model id, input length)
         """
         if verbose:
             print("####################################")
             print("QUERY: model meta info for the specified component:", component)
             print("####################################")
-
         model_entry = self.complete_ontology_entry('Model')
         input_len_entry = self.complete_ontology_entry('input_length')
         model_id_entry = self.complete_ontology_entry('model_id')
@@ -1512,7 +1512,8 @@ class KnowledgeGraphQueryTool:
         return [row['comp_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_uncertainty_by_osci_classification_id(
-            self, osci_classification_id: str, verbose: bool = True) -> List[str]:
+            self, osci_classification_id: str, verbose: bool = True
+    ) -> List[str]:
         """
         Queries the uncertainty for the specified oscillogram classification instance.
 
@@ -1847,7 +1848,8 @@ class KnowledgeGraphQueryTool:
         return [row['oscillogram']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     def query_oscillogram_by_classification_instance(
-            self, osci_classification_id: str, verbose: bool = True) -> List[str]:
+            self, osci_classification_id: str, verbose: bool = True
+    ) -> List[str]:
         """
         Queries the oscillogram instance for the specified classification.
 
@@ -1933,7 +1935,7 @@ class KnowledgeGraphQueryTool:
 
         :param model_id: uuid of model instance (not model_id attribute)
         :param verbose: if true, logging is activated
-        :return: input channel requirements
+        :return: (input channel requirements, channel idx)
         """
         if verbose:
             print("####################################")
@@ -2374,7 +2376,7 @@ class KnowledgeGraphQueryTool:
         return [row['set_name']['value'] for row in self.fuseki_connection.query_knowledge_graph(s, verbose)]
 
     @staticmethod
-    def print_res(res: list) -> None:
+    def print_res(res: List[str]) -> None:
         """
         Prints the specified query results.
 
@@ -2386,6 +2388,8 @@ class KnowledgeGraphQueryTool:
 
 if __name__ == '__main__':
     qt = KnowledgeGraphQueryTool()
+
+    # some examples below
     qt.print_res(qt.query_all_dtc_instances())
     error_code = "P2563"
     suspect_comp_name = "Ladedruck-Regelventil"
