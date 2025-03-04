@@ -18,12 +18,12 @@ def knowledge_snapshot_dtc_perspective() -> None:
     print("###########################################################################\n")
     for dtc in qt.query_all_dtc_instances(False):
         print(colored(dtc, "yellow", "on_grey", ["bold"]))
-        print(colored("\t- occurs with:", "blue", "on_grey", ["bold"]),
-              qt.query_co_occurring_trouble_codes(dtc, False))
+        print(colored("\t- occurs with:", "blue", "on_grey", ["bold"]), qt.query_co_occurring_trouble_codes(dtc, False))
         print(colored("\t- category:", "blue", "on_grey", ["bold"]), qt.query_fault_cat_by_dtc(dtc, False)[0])
         print(colored("\t- code type:", "blue", "on_grey", ["bold"]), qt.query_code_type_by_dtc(dtc, False)[0])
-        print(colored("\t- fault condition:", "blue", "on_grey", ["bold"]),
-              qt.query_fault_condition_by_dtc(dtc, False)[0])
+        print(
+            colored("\t- fault condition:", "blue", "on_grey", ["bold"]), qt.query_fault_condition_by_dtc(dtc, False)[0]
+        )
         print(colored("\t- vehicle occurrences:", "blue", "on_grey", ["bold"]))
         vehicle_occurrences = qt.query_vehicle_by_dtc(dtc, False)
         for vehicle_occ in vehicle_occurrences:
@@ -33,23 +33,34 @@ def knowledge_snapshot_dtc_perspective() -> None:
         sub_name = qt.query_indicates_by_dtc(dtc, False)
         sub_name = "" if len(sub_name) == 0 else sub_name[0]
         print(colored("\t- indicates subsystem:", "blue", "on_grey", ["bold"]), sub_name)
-        print(colored("\t- indicates vehicle part(s):", "blue", "on_grey", ["bold"]),
-              qt.query_vehicle_part_by_subsystem(sub_name, False))
+        print(
+            colored("\t- indicates vehicle part(s):", "blue", "on_grey", ["bold"]),
+            qt.query_vehicle_part_by_subsystem(sub_name, False)
+        )
         print(colored("\t- ordered suspect components:", "blue", "on_grey", ["bold"]))
 
         suspect_components = qt.query_suspect_components_by_dtc(dtc, False)
-        ordered_sus_comp = {int(qt.query_priority_id_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp
-                            in suspect_components}
+        ordered_sus_comp = {
+            int(qt.query_priority_id_by_dtc_and_sus_comp(dtc, comp, False)[0]): comp for comp in suspect_components
+        }
         for i in range(len(suspect_components)):
             print(colored("\t\t- " + ordered_sus_comp[i], "yellow", "on_grey", ["bold"]))
-            print(colored("\t\t\tuse oscilloscope:", "blue", "on_grey", ["bold"]),
-                  qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False)[0])
-            print(colored("\t\t\taffected by:", "blue", "on_grey", ["bold"]),
-                  qt.query_affected_by_relations_by_suspect_component(ordered_sus_comp[i], False))
-            print(colored("\t\t\tverifies:", "blue", "on_grey", ["bold"]),
-                  qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False))
-            print(colored("\t\t\tcontained in subsystem:", "blue", "on_grey", ["bold"]),
-                  qt.query_contains_relation_by_suspect_component(ordered_sus_comp[i], False))
+            print(
+                colored("\t\t\tuse oscilloscope:", "blue", "on_grey", ["bold"]),
+                qt.query_oscilloscope_usage_by_suspect_component(ordered_sus_comp[i], False)[0]
+            )
+            print(
+                colored("\t\t\taffected by:", "blue", "on_grey", ["bold"]),
+                qt.query_affected_by_relations_by_suspect_component(ordered_sus_comp[i], False)
+            )
+            print(
+                colored("\t\t\tverifies:", "blue", "on_grey", ["bold"]),
+                qt.query_verifies_relation_by_suspect_component(ordered_sus_comp[i], False)
+            )
+            print(
+                colored("\t\t\tcontained in subsystem:", "blue", "on_grey", ["bold"]),
+                qt.query_contains_relation_by_suspect_component(ordered_sus_comp[i], False)
+            )
         print()
     print("\n----------------------------------------------------------------------\n")
 
@@ -63,10 +74,14 @@ def knowledge_snapshot_subsystem_perspective() -> None:
     print("###########################################################################\n")
     for subsystem in qt.query_all_vehicle_subsystem_instances(False):
         print(colored(subsystem, "yellow", "on_grey", ["bold"]))
-        print(colored("\t- contains:", "blue", "on_grey", ["bold"]),
-              qt.query_contains_relation_by_subsystem(subsystem, False))
-        print(colored("\t- vehicle part(s):", "blue", "on_grey", ["bold"]),
-              qt.query_vehicle_part_by_subsystem(subsystem, False))
+        print(
+            colored("\t- contains:", "blue", "on_grey", ["bold"]),
+            qt.query_contains_relation_by_subsystem(subsystem, False)
+        )
+        print(
+            colored("\t- vehicle part(s):", "blue", "on_grey", ["bold"]),
+            qt.query_vehicle_part_by_subsystem(subsystem, False)
+        )
     print("\n----------------------------------------------------------------------\n")
 
 
@@ -79,10 +94,14 @@ def knowledge_snapshot_component_set_perspective() -> None:
     print("###########################################################################\n")
     for comp_set in qt.query_all_component_set_instances(False):
         print(colored(comp_set, "yellow", "on_grey", ["bold"]))
-        print(colored("\t- verified by:", "blue", "on_grey", ["bold"]),
-              qt.query_verifies_relations_by_component_set(comp_set, False))
-        print(colored("\t- includes:", "blue", "on_grey", ["bold"]),
-              qt.query_includes_relation_by_component_set(comp_set, False))
+        print(
+            colored("\t- verified by:", "blue", "on_grey", ["bold"]),
+            qt.query_verifies_relations_by_component_set(comp_set, False)
+        )
+        print(
+            colored("\t- includes:", "blue", "on_grey", ["bold"]),
+            qt.query_includes_relation_by_component_set(comp_set, False)
+        )
     print("\n----------------------------------------------------------------------\n")
 
 
@@ -95,16 +114,21 @@ def knowledge_snapshot_component_perspective() -> None:
     print("###########################################################################\n")
     for comp in qt.query_all_component_instances(False):
         print(colored(comp, "yellow", "on_grey", ["bold"]))
-        print(colored("\t- oscilloscope:", "blue", "on_grey", ["bold"]),
-              qt.query_oscilloscope_usage_by_suspect_component(comp, False)[0])
-        print(colored("\t- affected by:", "blue", "on_grey", ["bold"]),
-              qt.query_affected_by_relations_by_suspect_component(comp, False))
-        print(colored("\t- verifies:", "blue", "on_grey", ["bold"]),
-              qt.query_verifies_relation_by_suspect_component(comp, False))
+        print(
+            colored("\t- oscilloscope:", "blue", "on_grey", ["bold"]),
+            qt.query_oscilloscope_usage_by_suspect_component(comp, False)[0]
+        )
+        print(
+            colored("\t- affected by:", "blue", "on_grey", ["bold"]),
+            qt.query_affected_by_relations_by_suspect_component(comp, False)
+        )
+        print(
+            colored("\t- verifies:", "blue", "on_grey", ["bold"]),
+            qt.query_verifies_relation_by_suspect_component(comp, False)
+        )
         print(colored("\t- has subcomponents:", "blue", "on_grey", ["bold"]))
         for sub_comp in qt.query_sub_components_by_component(comp, False):
             print(colored("\t\t- " + sub_comp, "blue", "on_grey", ["bold"]))
-
     print("\n----------------------------------------------------------------------\n")
 
 
@@ -149,22 +173,32 @@ def knowledge_snapshot_oscillogram_classification_perspective() -> None:
     for osci_classification in qt.query_all_oscillogram_classifications(False):
         osci_classification_id = osci_classification.split("#")[1]
         print(colored(osci_classification_id, "yellow", "on_grey", ["bold"]))
-        print(colored("\t- model id:", "blue", "on_grey", ["bold"]),
-              qt.query_model_id_by_osci_classification_id(osci_classification_id, False)[0])
-        print(colored("\t- uncertainty:", "blue", "on_grey", ["bold"]),
-              qt.query_uncertainty_by_osci_classification_id(osci_classification_id, False)[0])
+        print(
+            colored("\t- model id:", "blue", "on_grey", ["bold"]),
+            qt.query_model_id_by_osci_classification_id(osci_classification_id, False)[0]
+        )
+        print(
+            colored("\t- uncertainty:", "blue", "on_grey", ["bold"]),
+            qt.query_uncertainty_by_osci_classification_id(osci_classification_id, False)[0]
+        )
         osci_instance = qt.query_oscillogram_by_classification_instance(osci_classification_id, False)
-        print(colored("\t- classifies:", "blue", "on_grey", ["bold"]),
-              osci_instance[0].split("#")[1] if len(osci_instance) > 0 else "")
+        print(
+            colored("\t- classifies:", "blue", "on_grey", ["bold"]),
+            osci_instance[0].split("#")[1] if len(osci_instance) > 0 else ""
+        )
 
         heatmap_instance = qt.query_heatmap_by_classification_instance(osci_classification_id, False)
         heatmap_id = heatmap_instance[0].split("#")[1] if len(heatmap_instance) > 0 else ""
         if len(heatmap_id) > 0:
             print(colored("\t- produces:", "blue", "on_grey", ["bold"]), heatmap_id)
-            print(colored("\t\t- generation_method:", "blue", "on_grey", ["bold"]),
-                  qt.query_generation_method_by_heatmap(heatmap_id, False)[0])
-            print(colored("\t\t- generated heatmap:", "blue", "on_grey", ["bold"]),
-                  qt.query_heatmap_string_by_heatmap(heatmap_id, False)[0])
+            print(
+                colored("\t\t- generation_method:", "blue", "on_grey", ["bold"]),
+                qt.query_generation_method_by_heatmap(heatmap_id, False)[0]
+            )
+            print(
+                colored("\t\t- generated heatmap:", "blue", "on_grey", ["bold"]),
+                qt.query_heatmap_string_by_heatmap(heatmap_id, False)[0]
+            )
 
         suspect_comp_instance = qt.query_suspect_component_by_classification(osci_classification_id, False)
         suspect_comp_id = suspect_comp_instance[0].split("#")[1] if len(suspect_comp_instance) > 0 else ""
@@ -216,8 +250,10 @@ def knowledge_snapshot_diag_log_perspective() -> None:
         diag_log_id = diag_log.split("#")[1]
         print(colored(diag_log_id, "yellow", "on_grey", ["bold"]))
         print(colored("\t- date:", "blue", "on_grey", ["bold"]), qt.query_date_by_diag_log(diag_log_id, False)[0])
-        print(colored("\t- max number of parallel rec:", "blue", "on_grey", ["bold"]),
-              qt.query_max_num_of_parallel_rec_by_diag_log(diag_log_id, False)[0])
+        print(
+            colored("\t- max number of parallel rec:", "blue", "on_grey", ["bold"]),
+            qt.query_max_num_of_parallel_rec_by_diag_log(diag_log_id, False)[0]
+        )
         print(colored("\t- appearing DTCs:", "blue", "on_grey", ["bold"]))
 
         appearing_dtcs = qt.query_dtcs_by_diag_log(diag_log_id, False)
@@ -287,7 +323,6 @@ def knowledge_snapshot_model_perspective() -> None:
     print("###########################################################################")
     print("KNOWLEDGE SNAPSHOT - MODEL PERSPECTIVE")
     print("###########################################################################\n")
-
     model_instances = qt.query_all_model_instances(False)
     for model_instance, input_len, exp_norm_meth, measuring_instruction, model_id, architecture in model_instances:
         model_uuid = model_instance.split("#")[1]
@@ -315,8 +350,10 @@ def knowledge_snapshot_model_perspective() -> None:
                 for chan_res in has_chan_res:
                     comp_instance, comp_name = chan_res
                     comp_instance_uuid = comp_instance.split("#")[1]
-                    print(colored("\t\t\t- associated with component ('hasChannel'): " + comp_instance_uuid, "yellow",
-                                  "on_grey", ["bold"]))
+                    print(colored(
+                        "\t\t\t- associated with component ('hasChannel'): " + comp_instance_uuid,
+                        "yellow", "on_grey", ["bold"]
+                    ))
                     print(colored("\t\t\t- comp name: " + comp_name, "yellow", "on_grey", ["bold"]))
 
             # 'hasCOI' relation -- not available for every channel
@@ -324,8 +361,10 @@ def knowledge_snapshot_model_perspective() -> None:
             if len(has_coi_res) > 0:
                 comp_instance, comp_name = has_coi_res[0]
                 comp_instance_uuid = comp_instance.split("#")[1]
-                print(colored("\t\t\t- associated with component ('hasCOI'): " + comp_instance_uuid, "yellow",
-                              "on_grey", ["bold"]))
+                print(colored(
+                    "\t\t\t- associated with component ('hasCOI'): " + comp_instance_uuid,
+                    "yellow", "on_grey", ["bold"]
+                ))
                 print(colored("\t\t\t- comp name: " + comp_name, "yellow", "on_grey", ["bold"]))
     print("\n----------------------------------------------------------------------\n")
 
@@ -360,8 +399,9 @@ def knowledge_snapshot_channel_perspective() -> None:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Knowledge snapshot - shows current content of KG')
-    parser.add_argument('--perspective', type=str, help='perspective of snapshot [expert | diag]',
-                        required=False, default='expert')
+    parser.add_argument(
+        '--perspective', type=str, help='perspective of snapshot [expert | diag]', required=False, default='expert'
+    )
     args = parser.parse_args()
     qt = KnowledgeGraphQueryTool()
 
