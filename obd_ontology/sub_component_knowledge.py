@@ -8,8 +8,10 @@ class SubComponentKnowledge:
     Representation of vehicle-subcomponent-related expert knowledge.
     """
 
-    def __init__(self, sub_component: str, associated_suspect_component: str, oscilloscope: bool,
-                 associated_chan: str = "", chan_of_interest: str = "") -> None:
+    def __init__(
+            self, sub_component: str, associated_suspect_component: str, oscilloscope: bool,
+            associated_chan: str = "", chan_of_interest: str = ""
+    ) -> None:
         """
         Initializes the subcomponent knowledge.
 
@@ -36,7 +38,7 @@ class SubComponentKnowledge:
         """
         return (
                 "SubComponent: " + self.sub_component
-                + "\nAssociated suspect component: " + self.associated_suspect_component
+                + "\nAssociated Suspect Component: " + self.associated_suspect_component
                 + "\nUse Oscilloscope: " + str(self.oscilloscope)
                 + "\nAssociated Channel: " + self.associated_chan
                 + "\nCOI: " + self.chan_of_interest
