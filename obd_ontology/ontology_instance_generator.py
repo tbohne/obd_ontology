@@ -25,7 +25,7 @@ class OntologyInstanceGenerator:
         """
         Initializes the ontology instance generator.
 
-        :param kg_url: URL for the knowledge graph server
+        :param kg_url: URL of the knowledge graph server
         """
         # establish connection to Apache Jena Fuseki server
         self.fuseki_connection = ConnectionController(namespace=ONTOLOGY_PREFIX, fuseki_url=kg_url)
@@ -75,8 +75,9 @@ class OntologyInstanceGenerator:
         fact_list = [
             Fact((diag_log_uuid, RDF.type, self.onto_namespace["DiagLog"].toPython())),
             Fact((diag_log_uuid, self.onto_namespace.date, diag_date), property_fact=True),
-            Fact((
-                diag_log_uuid, self.onto_namespace.max_num_of_parallel_rec, max_num_of_parallel_rec), property_fact=True
+            Fact(
+                (diag_log_uuid, self.onto_namespace.max_num_of_parallel_rec, max_num_of_parallel_rec),
+                property_fact=True
             )
         ]
         for dtc in dtc_instances:
@@ -110,10 +111,10 @@ class OntologyInstanceGenerator:
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return fault_path_uuid
 
-    def extend_knowledge_graph_with_oscillogram_classification(self, prediction: bool, classification_reason: str,
-                                                               comp: str, uncertainty: float, model_id: str,
-                                                               osci_ids: Union[str, List[str]],
-                                                               heatmap_ids: Union[str, List[str]]) -> str:
+    def extend_knowledge_graph_with_oscillogram_classification(
+            self, prediction: bool, classification_reason: str, comp: str, uncertainty: float, model_id: str,
+            osci_ids: Union[str, List[str]], heatmap_ids: Union[str, List[str]]
+    ) -> str:
         """
         Extends the knowledge graph with semantic facts for an oscillogram classification.
 
@@ -186,15 +187,14 @@ class OntologyInstanceGenerator:
             Fact((osci_uuid, RDF.type, self.onto_namespace["Oscillogram"].toPython())),
             Fact((osci_uuid, self.onto_namespace.time_series, str(time_series)), property_fact=True)
         ]
-        if parallel_rec_set_id != "":  # oscillogram part of parallel recorded set?
+        if parallel_rec_set_id != "":  # oscillogram part of parallelly recorded set?
             fact_list.append(Fact((osci_uuid, self.onto_namespace.partOf, parallel_rec_set_id)))
         self.fuseki_connection.extend_knowledge_graph(fact_list)
         return osci_uuid
 
     def extend_knowledge_graph_with_overlays_relation(self, heatmap_id: str, osci_id: str) -> None:
         """
-        Extends the knowledge graph with the semantic fact about an "overlays" relation between a heatmap and an
-        oscillogram.
+        Extends the knowledge graph with semantic facts for 'overlays' relations between heatmaps and oscillograms.
 
         :param heatmap_id: ID of the heatmap that overlays the oscillogram
         :param osci_id: ID of the oscillogram
@@ -204,7 +204,7 @@ class OntologyInstanceGenerator:
 
     def extend_knowledge_graph_with_parallel_rec_osci_set(self) -> str:
         """
-        Extends the knowledge graph with semantic facts about a set of parallel recorded oscillograms.
+        Extends the knowledge graph with semantic facts for a set of parallel recorded oscillograms.
 
         :return: oscillogram set ID
         """
@@ -245,6 +245,8 @@ class OntologyInstanceGenerator:
 
 if __name__ == '__main__':
     instance_gen = OntologyInstanceGenerator()
+
+    # some examples below
     instance_gen.extend_knowledge_graph_with_vehicle_data(
         "Mazda 3", "847984", "45539", "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     )

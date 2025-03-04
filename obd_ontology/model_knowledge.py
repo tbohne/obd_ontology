@@ -10,8 +10,10 @@ class ModelKnowledge:
     Representation of model-related expert knowledge.
     """
 
-    def __init__(self, input_len: int, exp_norm_method: str, measuring_instruction: str, model_id: str,
-                 classified_comp: str, input_chan_req: List[Tuple[int, str]], architecture: str) -> None:
+    def __init__(
+            self, input_len: int, exp_norm_method: str, measuring_instruction: str, model_id: str, classified_comp: str,
+            input_chan_req: List[Tuple[int, str]], architecture: str
+    ) -> None:
         """
         Initializes the model knowledge.
 
