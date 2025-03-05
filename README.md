@@ -177,7 +177,7 @@ $ python obd_ontology/knowledge_snapshot.py [--perspective {expert | diag}]
 ```
 Exemplary excerpt:
 
-![](img/snapshot_excerpt.png)
+<img src="img/snapshot_excerpt.png" width="580">
 
 ## Automated Backup & Knowledge Graph Snapshot Generation
 
