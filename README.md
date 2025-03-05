@@ -48,14 +48,14 @@ $ ./fuseki-server
 
 **<u>Generate demonstrator knowledge graph:</u>**
 
-Launch raw OBD ontology, i.e., `obd_ontology/knowledge_base/raw_obd_ontology.owl`, then:
+Launch raw OBD ontology, i.e., `knowledge_base/raw_obd_ontology.owl`, then:
 ```
 $ python obd_ontology/gen_demo_kg.py
 ```
 
 **<u>Generate unit test knowledge graph (required for unit tests in [vehicle_diag_smach](https://github.com/tbohne/vehicle_diag_smach)):</u>**
 
-Launch raw OBD ontology, i.e., `obd_ontology/knowledge_base/raw_obd_ontology.owl`, then:
+Launch raw OBD ontology, i.e., `knowledge_base/raw_obd_ontology.owl`, then:
 ```
 $ python obd_ontology/gen_unit_test_kg.py
 ```
