@@ -13,7 +13,7 @@
 - **vehicle-agnostic expert knowledge** regarding on-board diagnostics (OBD, [ISO 15031-6](https://www.iso.org/standard/66369.html))
 - **vehicle-specific diagnosis knowledge** automatically generated based on OBD logs read in workshops and acquired as part of the diagnostic process (recorded sensor data, interpretations, etc., cf. [vehicle_diag_smach ](https://github.com/tbohne/vehicle_diag_smach))
 
-All three levels combined constitute the knowledge graph (`knowledge_base/live_kg_backups/`).
+All three levels combined constitute the knowledge graph (`knowledge_base/live_kg_backups/`, `knowledge_base/knowledge_graphs/`).
 
 ## Dependencies
 
@@ -43,7 +43,7 @@ $ ./fuseki-server
 
 **<u>Launch existing knowledge graph from RDF serialization (e.g., `.nq.gz` / `.nt` / `.owl` / `.ttl` file):</u>**
 - `add data` -> `select files`
-    - select knowledge graph file, e.g., `knowledge_base/test_kg.nt`
+    - select knowledge graph file, e.g., `knowledge_base/knowledge_graphs/final_demo_KG.nq.gz`
     - `upload now`
 
 **<u>Generate demonstrator knowledge graph:</u>**
@@ -81,6 +81,7 @@ Run knowledge acquisition front-end (`Flask` server - runs at `localhost:5000`):
 ```
 $ python obd_ontology/app.py
 ```
+![](img/UI_ex.png)
 
 ## Enhancement of Vehicle-Specific Diagnosis Knowledge
 
@@ -88,21 +89,38 @@ The `OntologyInstanceGenerator`, on the other hand, enhances the knowledge graph
 ```python
 instance_gen = OntologyInstanceGenerator(kg_url='http://127.0.0.1:3030')
 instance_gen.extend_knowledge_graph_with_vehicle_data(
-    "Mazda 3", "123", "456", "ID2342713"
+    model="Mazda 3", hsn="123", tsn="456", vin="ID2342713"
 )
 classification_instances = [
     instance_gen.extend_knowledge_graph_with_oscillogram_classification(
-        True, "diag_association_0", "C_A", 0.45, "test_model_id", "osci_id", "heatmap_id"
+        prediction=True,
+        classification_reason="diag_association_0",
+        comp="C_A",
+        uncertainty=0.45,
+        model_id="test_model_id",
+        osci_ids="osci_id",
+        heatmap_ids="heatmap_id"
     ),
     instance_gen.extend_knowledge_graph_with_oscillogram_classification(
-        True, "oscillogram_classification_0", "C_B", 0.85, "test_model_id", "osci_id", "heatmap_id"
+        prediction=True,
+        classification_reason="oscillogram_classification_0",
+        comp="C_B",
+        uncertainty=0.85,
+        model_id="test_model_id",
+        osci_ids="osci_id",
+        heatmap_ids="heatmap_id"
     ),
     instance_gen.extend_knowledge_graph_with_manual_inspection(
-        False, "oscillogram_classification_1", "C_C"
+        prediction=False, classification_reason="oscillogram_classification_1", comp="C_C"
     )
 ]
 diag_log_uuid = instance_gen.extend_knowledge_graph_with_diag_log(
-    "23.08.2023", 4, ["P2563"], ["fault_path_id"], classification_instances, "vehicle_ID2342713"
+    diag_date="23.08.2023",
+    max_num_of_parallel_rec=4,
+    dtc_instances=["P2563"],
+    fault_path_instances=["fault_path_id"],
+    classification_instances=classification_instances,
+    vehicle_id="vehicle_ID2342713"
 )
 ```
 This is used as part of [vehicle_diag_smach](https://github.com/tbohne/vehicle_diag_smach). All kinds of relevant diagnostic information are gathered and linked so that previously unknown correlations can be discovered by deploying the system in practice.
@@ -112,22 +130,42 @@ This is used as part of [vehicle_diag_smach](https://github.com/tbohne/vehicle_d
 The `KnowledgeGraphQueryTool` provides a library of numerous predefined SPARQL queries and response processing to access information stored in the knowledge graph that is used in the diagnostic process, e.g.:
 ```python
 qt = KnowledgeGraphQueryTool(kg_url='http://127.0.0.1:3030')
-qt.print_res(qt.query_all_dtc_instances())
-dtc = "P2563"
-qt.print_res(qt.query_fault_condition_by_dtc(dtc))
-qt.print_res(qt.query_symptoms_by_dtc(dtc))
-qt.print_res(qt.query_fault_cat_by_dtc(dtc))
-qt.print_res(qt.query_suspect_components_by_dtc(dtc))
-qt.print_res(qt.query_dtc_occurring_with_the_specified_dtc(dtc))
-qt.print_res(qt.query_vehicle_by_dtc(dtc))
+qt.query_all_dtc_instances()
+dtc = "P0172"
+qt.query_fault_condition_by_dtc(dtc)
+qt.query_symptoms_by_dtc(dtc)
+qt.query_fault_cat_by_dtc(dtc)
+qt.query_suspect_components_by_dtc(dtc)
+qt.query_dtc_occurring_with_the_specified_dtc(dtc)
+qt.query_vehicle_by_dtc(dtc)
 ...
-suspect_comp_name = "C_D"
-qt.print_res(qt.query_oscilloscope_usage_by_suspect_component(suspect_comp_name))
-qt.print_res(qt.query_affected_by_relations_by_suspect_component(suspect_comp_name))
+suspect_comp_name = "Lambdasonde"
+qt.query_oscilloscope_usage_by_suspect_component(suspect_comp_name)
+qt.query_affected_by_relations_by_suspect_component(suspect_comp_name)
 ...
 vin = "ID2342713"
-qt.print_res(qt.query_vehicle_instance_by_vin(vin)
+qt.query_vehicle_instance_by_vin(vin)
 ...
+```
+E.g.:
+```
+$ python obd_ontology/knowledge_graph_query_tool.py
+
+########################################################################
+QUERY: suspect components for P0172
+########################################################################
+query knowledge graph..
+
+            SELECT ?comp_name WHERE {
+                ?dtc a <http://www.semanticweb.org/diag_ontology#DTC> .
+                ?comp a <http://www.semanticweb.org/diag_ontology#SuspectComponent> .
+                ?comp <http://www.semanticweb.org/diag_ontology#component_name> ?comp_name .
+                ?da a <http://www.semanticweb.org/diag_ontology#DiagnosticAssociation> .
+                ?dtc <http://www.semanticweb.org/diag_ontology#code> "P0172" .
+                ?da <http://www.semanticweb.org/diag_ontology#pointsTo> ?comp .
+                ?dtc <http://www.semanticweb.org/diag_ontology#hasAssociation> ?da .
+            }
+-->  Lambdasonde
 ```
 This is also used as part of [vehicle_diag_smach](https://github.com/tbohne/vehicle_diag_smach), which essentially guides the diagnostic process based on knowledge graph queries (symbolic reasoning).
 
@@ -137,6 +175,9 @@ The idea of the knowledge snapshot is to output the knowledge currently stored i
 ```
 $ python obd_ontology/knowledge_snapshot.py [--perspective {expert | diag}]
 ```
+Exemplary excerpt:
+
+![](img/snapshot_excerpt.png)
 
 ## Automated Backup & Knowledge Graph Snapshot Generation
 
